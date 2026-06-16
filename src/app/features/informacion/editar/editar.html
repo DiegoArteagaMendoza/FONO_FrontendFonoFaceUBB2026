@@ -1,0 +1,59 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>Editar Información</h2>
+      <p>Modifica los textos o la categoría de este registro.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <p>Cargando datos del registro...</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">Título del artículo</label>
+          <input id="titulo" type="text" formControlName="titulo">
+          <small class="error-text" *ngIf="editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched">
+            El título es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="NI">Niños</option>
+            <option value="PO">Profesores</option>
+            <option value="CA">Cantantes y actores</option>
+            <option value="LO">Locutores</option>
+            <option value="GE">Publico general</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">Contenido</label>
+        <textarea id="contenido" formControlName="contenido" rows="8"></textarea>
+        <small class="error-text" *ngIf="editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched">
+          El contenido es obligatorio.
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Actualizando...' : 'Guardar Cambios' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

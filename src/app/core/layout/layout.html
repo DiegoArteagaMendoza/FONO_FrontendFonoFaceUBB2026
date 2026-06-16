@@ -1,7 +1,9 @@
-<div class="layout-container">
-  <app-sidebar></app-sidebar> 
+<div class="flex h-screen w-full overflow-hidden bg-gray-50">
+  
+  <app-sidebar class="w-0 md:w-64 flex-shrink-0 z-50"></app-sidebar> 
 
-  <main class="content">
+  <main class="flex-1 h-screen overflow-y-auto">
     <router-outlet></router-outlet> 
   </main>
+
 </div>

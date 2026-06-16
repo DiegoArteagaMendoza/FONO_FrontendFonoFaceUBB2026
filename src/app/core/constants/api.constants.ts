@@ -4,9 +4,10 @@ export const API_ENDPOINTS = {
     refresh: '/usuarios/token/refresh/',
     logout: '/usuarios/logout/'
   },
-  usuarios: {
-    lista: '/usuarios/',
-    detalle: (id: number) => `/usuarios/${id}/`
+  informacion: {
+    listar: '/informacion/listar/',
+    crear: '/informacion/crear/',
+    editar: (id: number) => `/informacion/${id}/editar/`,
+    eliminar: (id: number) => `/informacion/${id}/eliminar/`
   }
-  // Aquí irás agregando los endpoints de tus otros componentes a medida que los crees
 };
