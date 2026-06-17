@@ -1,0 +1,93 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>Editar Cuidado</h2>
+      <p>Modifica el contenido, público o la imagen asociada a esta recomendación.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <p>Cargando datos del registro...</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">Título de la recomendación</label>
+          <input id="titulo" type="text" formControlName="titulo">
+          <small class="error-text" *ngIf="editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched">
+            El título es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="publico">Público Objetivo</label>
+          <select id="publico" formControlName="publico">
+            <option value="NIÑOS">Niños</option>
+            <option value="PROFESORES">Profesores</option>
+            <option value="CANTANTES_ACTORES">Cantantes y Actores</option>
+            <option value="LOCUTORES">Locutores</option>
+            <option value="PUBLICO_GENERAL">Público General</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">Contenido y Detalles</label>
+        <textarea id="contenido" formControlName="contenido" rows="6"></textarea>
+        <small class="error-text" *ngIf="editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched">
+          El contenido es obligatorio.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="fuente">Fuente o Referencia (Opcional)</label>
+        <input id="fuente" type="text" formControlName="fuente">
+        <small class="error-text" *ngIf="editarForm.get('fuente')?.invalid && editarForm.get('fuente')?.touched">
+          Debe ser una URL válida (ej. https://...).
+        </small>
+      </div>
+
+      <div class="form-row image-edit-section">
+        
+        <div class="form-group flex-1" *ngIf="imagenActualUrl">
+          <label>Imagen Actual:</label>
+          <div class="current-img-preview">
+            <img [src]="obtenerUrlImagen(imagenActualUrl)" alt="Imagen del cuidado">
+          </div>
+        </div>
+
+        <div class="form-group flex-2 file-upload-section">
+          <label for="img">Reemplazar Imagen (Opcional)</label>
+          <input 
+            id="img" 
+            type="file" 
+            accept="image/*" 
+            (change)="onFileChange($event)"
+            class="file-input"
+          >
+          <small class="help-text">Selecciona un archivo solo si deseas cambiar la imagen actual.</small>
+          
+          <div class="preview-files" *ngIf="nuevaImagenSeleccionada">
+            <p><strong>Nueva imagen a subir:</strong> {{ nuevaImagenSeleccionada.name }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Actualizando...' : 'Guardar Cambios' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

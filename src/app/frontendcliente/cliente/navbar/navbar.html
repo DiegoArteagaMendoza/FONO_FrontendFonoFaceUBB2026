@@ -1,0 +1,31 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    
+    <a routerLink="/portal/inicio" class="navbar-brand" (click)="closeMenu()">
+      FonoFace
+    </a>
+
+    <button class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
+      <svg *ngIf="!isMenuOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+      <svg *ngIf="isMenuOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div class="navbar-links" [class.active]="isMenuOpen">
+      <a routerLink="/portal/inicio" routerLinkActive="active-link" (click)="closeMenu()">Inicio</a>
+      <a routerLink="/portal/informacion" routerLinkActive="active-link" (click)="closeMenu()">Información</a>
+      <a routerLink="/portal/cuidados" routerLinkActive="active-link" (click)="closeMenu()">Cuidados</a>
+      <a routerLink="/portal/noticias" routerLinkActive="active-link" (click)="closeMenu()">Noticias</a>
+      
+      <div class="admin-access">
+        <a routerLink="/login" class="btn-admin" (click)="closeMenu()">Acceso Admin</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<div class="navbar-spacer"></div>

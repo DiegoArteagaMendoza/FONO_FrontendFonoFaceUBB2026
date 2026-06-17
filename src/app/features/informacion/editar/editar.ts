@@ -11,7 +11,7 @@ import { InformacionService, Informacion, ImagenInformacion } from '../../../cor
   templateUrl: './editar.html',
   styleUrls: ['./editar.scss']
 })
-export class Editar implements OnInit {
+export class EditarInformacion implements OnInit {
   editarForm: FormGroup;
   idInformacion: number = 0;
   isSubmitting = false;

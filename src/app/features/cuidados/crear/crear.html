@@ -1,0 +1,85 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>Crear Nuevo Cuidado</h2>
+      <p>Añade una recomendación o cuidado vocal para un público específico.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">Título de la recomendación</label>
+          <input id="titulo" type="text" formControlName="titulo" placeholder="Ej. Calentamiento vocal...">
+          <small class="error-text" *ngIf="crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched">
+            El título es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="publico">Público Objetivo</label>
+          <select id="publico" formControlName="publico">
+            <option value="" disabled selected>Seleccione uno...</option>
+            <option value="NIÑOS">Niños</option>
+            <option value="PROFESORES">Profesores</option>
+            <option value="CANTANTES_ACTORES">Cantantes y Actores</option>
+            <option value="LOCUTORES">Locutores</option>
+            <option value="PUBLICO_GENERAL">Público General</option>
+          </select>
+          <small class="error-text" *ngIf="crearForm.get('publico')?.invalid && crearForm.get('publico')?.touched">
+            Selecciona el público objetivo.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">Contenido y Detalles</label>
+        <textarea id="contenido" formControlName="contenido" rows="5" placeholder="Explica detalladamente el cuidado..."></textarea>
+        <small class="error-text" *ngIf="crearForm.get('contenido')?.invalid && crearForm.get('contenido')?.touched">
+          El contenido es obligatorio.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="fuente">Fuente o Referencia (Opcional)</label>
+        <input id="fuente" type="text" formControlName="fuente" placeholder="https://ejemplo.com/estudio...">
+        <small class="error-text" *ngIf="crearForm.get('fuente')?.invalid && crearForm.get('fuente')?.touched">
+          Debe ser una URL válida (ej. https://...).
+        </small>
+      </div>
+
+      <div class="form-group file-upload-section">
+        <label for="img">Imagen Principal (Opcional)</label>
+        <input 
+          id="img" 
+          type="file" 
+          accept="image/*" 
+          (change)="onFileChange($event)"
+          class="file-input"
+        >
+        <small class="help-text">Sube una imagen ilustrativa para esta recomendación (JPG, PNG).</small>
+        
+        <div class="preview-files" *ngIf="imagenSeleccionada">
+          <p><strong>Archivo seleccionado:</strong></p>
+          <ul>
+            <li>{{ imagenSeleccionada.name }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Guardando...' : 'Guardar Cuidado' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
