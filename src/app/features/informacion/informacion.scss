@@ -238,6 +238,67 @@
   font-style: italic;
 }
 
+/* --- Barra de Filtros --- */
+.filters-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+
+  label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.95rem;
+  }
+
+  select {
+    padding: 0.4rem 2rem 0.4rem 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #0056b3;
+      box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    }
+  }
+}
+
+/* En tu sección de MEDIA QUERIES (Responsive) al final del archivo, agrega: */
+@media (max-width: 768px) {
+  .filters-section {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  
+  .filter-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    select { 
+      width: 100%; 
+    }
+  }
+}
+
+
 /* ======== MEDIA QUERIES (Responsive) ======== */
 @media (max-width: 768px) {
   .page-container {

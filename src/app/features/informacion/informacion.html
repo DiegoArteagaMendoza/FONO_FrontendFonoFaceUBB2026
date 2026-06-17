@@ -9,6 +9,20 @@
     </button>
   </div>
 
+  <div class="filters-section">
+    <div class="filter-group">
+      <label for="filtroCategoria">Filtrar por:</label>
+      <select id="filtroCategoria" (change)="filtrarPorCategoria($event)">
+        <option value="">Todas las categorías</option>
+        <option value="NI">Niños</option>
+        <option value="PO">Profesores</option>
+        <option value="CA">Cantantes y Actores</option>
+        <option value="LO">Locutores</option>
+        <option value="GE">Público General</option>
+      </select>
+    </div>
+  </div>
+
   <div *ngIf="cargando" class="loading-state">
     <p>Cargando registros...</p>
   </div>

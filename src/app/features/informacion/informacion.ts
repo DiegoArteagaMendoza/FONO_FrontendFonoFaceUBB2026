@@ -17,6 +17,8 @@ export class InformacionComponent implements OnInit {
   itemSeleccionado: Informacion | null = null;
   public backendUrl = 'http://127.0.0.1:8000';
 
+  categoriaActual: string = '';
+
   constructor(
     private informacionService: InformacionService,
     private router: Router,
@@ -29,24 +31,49 @@ export class InformacionComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargando = true;
-    this.informacionService.getInformacion().subscribe({
+    
+    // Si categoriaActual tiene un valor, se lo pasamos, si no, pasamos undefined
+    const parametroCategoria = this.categoriaActual ? this.categoriaActual : undefined;
+
+    this.informacionService.getInformacion(parametroCategoria).subscribe({
       next: (datos) => {
-        // Filtramos solo los que tienen estado true (borrado lógico)
         this.listaInformacion = datos.filter(item => item.estado);
         this.cargando = false;
-        
-        // Forzamos la detección de cambios cuando la respuesta es exitosa
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar la información', err);
         this.cargando = false;
-
-        // Forzamos la detección de cambios también en caso de error
         this.cdr.detectChanges();
       }
     });
   }
+
+  filtrarPorCategoria(event: any): void {
+    this.categoriaActual = event.target.value;
+    this.cargarDatos(); // Volvemos a pedir los datos a la API con el nuevo filtro
+  }
+
+  // cargarDatos(): void {
+  //   this.cargando = true;
+  //   this.informacionService.getInformacion().subscribe({
+  //     next: (datos) => {
+  //       // Filtramos solo los que tienen estado true (borrado lógico)
+  //       this.listaInformacion = datos.filter(item => item.estado);
+  //       this.cargando = false;
+        
+  //       // Forzamos la detección de cambios cuando la respuesta es exitosa
+  //       this.cdr.detectChanges();
+  //     },
+  //     error: (err) => {
+  //       console.error('Error al cargar la información', err);
+  //       this.cargando = false;
+
+  //       // Forzamos la detección de cambios también en caso de error
+  //       this.cdr.detectChanges();
+  //     }
+  //   });
+  // }
 
   // MÉTODO NUEVO: Formatea la URL de la imagen de forma segura
   obtenerUrlImagen(rutaImagen: string): string {
@@ -73,7 +100,29 @@ export class InformacionComponent implements OnInit {
   }
 
   eliminarInformacion(id: number): void {
-    console.log('Llamar a endpoint de eliminación lógica con ID:', id);
+    // 1. Solicitamos una confirmación nativa antes de proceder
+    const confirmar = confirm('¿Estás seguro de que deseas eliminar este registro de información?');
+    
+    if (!confirmar) {
+      return; // Si el usuario cancela, no hacemos nada
+    }
+
+    // 2. Llamamos al servicio de eliminación
+    this.informacionService.eliminarInformacion(id).subscribe({
+      next: (respuesta) => {
+        console.log('Respuesta del servidor:', respuesta); // { mensaje: "Información eliminada correctamente" }
+        
+        // 3. Filtramos el arreglo local para remover el ítem eliminado de la tabla de forma inmediata
+        this.listaInformacion = this.listaInformacion.filter(item => item.id_informacion !== id);
+        
+        // 4. Forzamos la detección de cambios para actualizar el HTML al instante
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al intentar eliminar el registro:', err);
+        alert('Ocurrió un error al eliminar la información. Por favor, verifica tus permisos o vuelve a iniciar sesión.');
+      }
+    });
   }
   
   verDetalle(item: Informacion): void {

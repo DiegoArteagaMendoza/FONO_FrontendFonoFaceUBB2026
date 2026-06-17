@@ -7,7 +7,6 @@
   </div>
 
   <div class="form-card">
-    
     <div *ngIf="cargandoDatos" class="loading-state">
       <p>Cargando datos del registro...</p>
     </div>
@@ -30,11 +29,10 @@
         <div class="form-group flex-1">
           <label for="categoria">Categoría</label>
           <select id="categoria" formControlName="categoria">
-            <option value="NI">Niños</option>
-            <option value="PO">Profesores</option>
-            <option value="CA">Cantantes y actores</option>
-            <option value="LO">Locutores</option>
-            <option value="GE">Publico general</option>
+            <option value="SA">Salud Animal</option>
+            <option value="CU">Cuidados Básicos</option>
+            <option value="NU">Nutrición</option>
+            <option value="TI">Tips / Otros</option>
           </select>
         </div>
       </div>
@@ -45,6 +43,20 @@
         <small class="error-text" *ngIf="editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched">
           El contenido es obligatorio.
         </small>
+      </div>
+
+      <div class="form-group image-management-section" *ngIf="imagenesActuales.length > 0">
+        <label>Imágenes Actuales ({{ imagenesActuales.length }})</label>
+        <div class="edit-gallery-grid">
+          <div class="edit-img-wrapper" *ngFor="let img of imagenesActuales">
+            <img [src]="obtenerUrlImagen(img.imagen)" alt="Imagen subida">
+            <button type="button" class="btn-delete-img" (click)="eliminarImagen(img.id)" title="Eliminar imagen">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="form-actions">

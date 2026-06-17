@@ -148,3 +148,83 @@
     }
   }
 }
+
+/* --- Gestión de Imágenes en Edición --- */
+.image-management-section {
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eaeaea;
+}
+
+.edit-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.edit-img-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eaeaea;
+  aspect-ratio: 1 / 1;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  /* Efecto hover sobre la imagen */
+  &:hover {
+    img {
+      transform: scale(1.05);
+    }
+    
+    .btn-delete-img {
+      opacity: 1; /* Muestra el botón al pasar el mouse */
+    }
+  }
+}
+
+.btn-delete-img {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(220, 53, 69, 0.9);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem;
+  cursor: pointer;
+  opacity: 0.8; /* Ligeramente visible por defecto en móvil */
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: rgb(220, 53, 69);
+    transform: scale(1.1);
+  }
+}
+
+/* Ajustes Responsive para la galería */
+@media (max-width: 768px) {
+  .edit-gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+  
+  .btn-delete-img {
+    opacity: 1; /* Siempre visible en pantallas táctiles */
+    padding: 0.5rem; /* Área táctil más grande */
+  }
+}

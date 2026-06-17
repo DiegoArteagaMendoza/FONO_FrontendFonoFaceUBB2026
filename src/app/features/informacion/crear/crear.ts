@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core'; // 1. Importamos ChangeDetectorRef
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -20,7 +20,8 @@ export class Crear {
   constructor(
     private fb: FormBuilder,
     private informacionService: InformacionService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef // 2. Lo inyectamos en el constructor
   ) {
     this.crearForm = this.fb.group({
       titulo: ['', [Validators.required, Validators.maxLength(200)]],
@@ -36,6 +37,7 @@ export class Crear {
 
     if (files.length > 4) {
       this.errorMensaje = 'Solo puedes subir un máximo de 4 imágenes.';
+      this.cdr.detectChanges(); // Forzamos actualización visual aquí también por si acaso
       return;
     }
 
@@ -70,12 +72,35 @@ export class Crear {
       next: (respuesta) => {
         console.log('Información creada con éxito', respuesta);
         this.isSubmitting = false;
-        this.router.navigate(['/informacion']); // Volvemos a la tabla
+        this.router.navigate(['/informacion']); 
       },
       error: (err) => {
-        console.error('Error al crear', err);
+        console.error('Error devuelto por el servidor:', err);
         this.isSubmitting = false;
-        this.errorMensaje = 'Ocurrió un error al guardar la información. Verifica tus datos o tu sesión.';
+
+        // MANEJO DE ERRORES HTTP DETALLADO
+        if (err.status === 400) {
+          let mensajes = [];
+          for (const campo in err.error) {
+            if (err.error.hasOwnProperty(campo)) {
+              const errorDelCampo = Array.isArray(err.error[campo]) ? err.error[campo].join(' ') : err.error[campo];
+              mensajes.push(`• ${campo.toUpperCase()}: ${errorDelCampo}`);
+            }
+          }
+          this.errorMensaje = 'Revisa los siguientes datos:\n' + mensajes.join('\n');
+          
+        } else if (err.status === 401 || err.status === 403) {
+          this.errorMensaje = 'Tu sesión ha expirado o no tienes permisos. Por favor, inicia sesión nuevamente.';
+          
+        } else if (err.status >= 500) {
+          this.errorMensaje = 'Ocurrió un problema en el servidor. Por favor, intenta de nuevo más tarde.';
+          
+        } else {
+          this.errorMensaje = `Ocurrió un error inesperado (Código ${err.status}). Verifica tu conexión a internet.`;
+        }
+
+        // 3. ¡LA MAGIA! Obligamos a Angular a mostrar el error inmediatamente
+        this.cdr.detectChanges();
       }
     });
   }

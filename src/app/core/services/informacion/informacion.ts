@@ -69,4 +69,17 @@ export class InformacionService {
     return this.http.patch(url, datos, { headers });
   }
 
+  eliminarInformacion(id: number): Observable<any> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Requiere validación Bearer
+    });
+
+    // Construye la URL usando la constante centralizada (ej: /api/informacion/1/eliminar/)
+    const url = `${this.apiUrl}${API_ENDPOINTS.informacion.eliminar(id)}`;
+    
+    // Ejecutamos la petición HTTP DELETE
+    return this.http.delete(url, { headers });
+  }
+
 }
