@@ -2,32 +2,43 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth/auth' // <-- Importa tu servicio
+import { AuthService } from '../../../core/services/auth/auth';
 
-//'../../../core/services/auth/auth.service';
+// reCAPTCHA
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RecaptchaModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
 export class Login {
   loginForm: FormGroup;
   isSubmitting = false;
-  errorMessage = ''; // Variable para mostrar errores del backend
+  errorMessage = '';
+
+  captchaToken: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService // <-- Inyecta el servicio aquí
+    private authService: AuthService 
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
+
+  // MÉTODO QUE SE EJECUTA CUANDO EL USUARIO RESUELVE EL CAPTCHA
+  // onCaptchaResolved(captchaResponse: string | null): void {
+  //   this.captchaToken = captchaResponse;
+  //   if (this.captchaToken) {
+  //     this.errorMessage = ''; // Limpiamos el error si ya lo resolvió
+  //   }
+  // }
 
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
@@ -38,25 +49,32 @@ export class Login {
       return;
     }
 
+    // // 1. Verificamos que el captcha esté resuelto
+    // if (!this.captchaToken) {
+    //   this.errorMessage = 'Por favor, verifica que no eres un robot.';
+    //   return;
+    // }
+
     this.isSubmitting = true;
     this.errorMessage = '';
 
-    // Mapeamos los datos: Transformamos 'email' del form a 'correo' para la API
+    // 2.captcha_token a los datos que van al backend
     const credentials = {
       correo: this.loginForm.value.email,
-      password: this.loginForm.value.password
+      password: this.loginForm.value.password,
+      // captcha_token: this.captchaToken 
     };
 
     // Llamamos a tu backend
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        // 1. Guardamos los tokens y el usuario en LocalStorage
+        // Guardamos los tokens y el usuario en LocalStorage
         this.authService.setSession(response);
         
-        // 2. Quitamos el estado de carga
+        // Quitamos el estado de carga
         this.isSubmitting = false;
         
-        // 3. Redirigimos al sistema
+        // Redirigimos al sistema
         this.router.navigate(['/inicio']); 
       },
       error: (err) => {

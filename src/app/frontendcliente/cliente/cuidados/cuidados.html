@@ -1,0 +1,54 @@
+<div class="cliente-page">
+  <div class="page-header text-center">
+    <h1>Guía de Cuidados Vocales</h1>
+    <p>Recomendaciones prácticas, ejercicios y tips diseñados específicamente para tu perfil.</p>
+  </div>
+
+  <div class="filter-pills">
+    <button 
+      *ngFor="let cat of categorias" 
+      class="pill-btn" 
+      [class.active]="categoriaActiva === cat.id"
+      (click)="filtrarPorCategoria(cat.id)">
+      {{ cat.nombre }}
+    </button>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando recomendaciones...</p>
+  </div>
+
+  <div class="articles-grid" *ngIf="!cargando">
+    
+    <div *ngIf="cuidadosFiltrados.length === 0" class="empty-state">
+      <p>No hay cuidados disponibles para este perfil en este momento.</p>
+    </div>
+
+    <article class="article-card" *ngFor="let item of cuidadosFiltrados" (click)="verDetalle(item.id_cuidado)">
+      
+      <div class="card-image">
+        <img *ngIf="item.img" 
+             [src]="obtenerUrlImagen(item.img)" 
+             alt="Imagen del cuidado">
+        
+        <div *ngIf="!item.img" class="no-image">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="40" height="40" opacity="0.5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+          </svg>
+        </div>
+        
+        <span class="category-badge" [ngClass]="getBadgeClass(item.publico)">
+          {{ obtenerNombreCategoria(item.publico) }}
+        </span>
+      </div>
+      
+      <div class="card-content">
+        <h3>{{ item.titulo }}</h3>
+        <p>{{ (item.contenido.length > 100) ? (item.contenido | slice:0:100) + '...' : item.contenido }}</p>
+        <span class="read-more">Ver recomendación →</span>
+      </div>
+
+    </article>
+  </div>
+</div>

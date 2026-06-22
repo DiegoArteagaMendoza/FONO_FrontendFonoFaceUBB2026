@@ -41,12 +41,19 @@
         </div>
       </div>
 
+      <!-- <div class="form-group captcha-wrapper" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+        <re-captcha (resolved)="onCaptchaResolved($event)"></re-captcha>
+      </div> -->
+
       <button 
         type="submit" 
         class="btn-submit" 
         [disabled]="isSubmitting">
         {{ isSubmitting ? 'Ingresando...' : 'Iniciar Sesión' }}
       </button>
+      <div class="login-header">
+        <p>Para registrarse como usuario autorizado contacte con el administrador del sistema</p>
+      </div>
 
     </form>
   </div>

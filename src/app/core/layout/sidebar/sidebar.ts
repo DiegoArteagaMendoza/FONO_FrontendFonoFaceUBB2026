@@ -37,6 +37,6 @@ export class Sidebar {
     this.onClose();
     
     // 3. Redirigimos al componente de Login
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

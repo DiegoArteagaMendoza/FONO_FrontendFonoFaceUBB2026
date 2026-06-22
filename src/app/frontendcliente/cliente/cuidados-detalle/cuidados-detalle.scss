@@ -1,0 +1,139 @@
+.detalle-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: calc(100vh - 70px);
+}
+
+.nav-back {
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #e11d48;
+  }
+}
+
+.article-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.article-header {
+  padding: 3rem 3rem 1.5rem 3rem;
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin: 1rem 0 0 0;
+    letter-spacing: -0.5px;
+  }
+}
+
+.category-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  /* Colores unificados */
+  &.NI { background-color: #d1e7dd; color: #0f5132; } 
+  &.PO { background-color: #fff3cd; color: #856404; } 
+  &.CA { background-color: #e2d9f3; color: #432874; } 
+  &.LO { background-color: #f8d7da; color: #721c24; } 
+  &.GE { background-color: #cff4fc; color: #055160; } 
+}
+
+.hero-image {
+  width: 100%;
+  max-height: 500px;
+  overflow: hidden;
+  background-color: #f1f5f9;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.article-body {
+  padding: 2.5rem 3rem;
+  
+  .content-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #334155;
+    white-space: pre-wrap;
+  }
+}
+
+.article-footer {
+  margin-top: 3rem;
+  
+  hr {
+    border: 0;
+    border-top: 1px solid #f1f5f9;
+    margin-bottom: 1.5rem;
+  }
+
+  .source-text {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+}
+
+/* Estados */
+.loading-state, .error-state {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #64748b;
+}
+
+.spinner {
+  width: 40px; height: 40px;
+  border: 4px solid #ffe4e6;
+  border-top-color: #e11d48;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem auto;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn-primary {
+  background-color: #e11d48;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .detalle-page { padding: 2rem 1rem; }
+  .article-header { padding: 2rem 1.5rem; h1 { font-size: 1.8rem; } }
+  .article-body { padding: 1.5rem; .content-text { font-size: 1.1rem; } }
+}

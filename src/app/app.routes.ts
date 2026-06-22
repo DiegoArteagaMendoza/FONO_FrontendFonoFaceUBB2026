@@ -14,6 +14,8 @@ import { ClienteLayout } from './frontendcliente/cliente/layout/layout';
 import { InicioClienteComponent } from '../app/frontendcliente/cliente/inicio-cliente/inicio-cliente';
 import { InformacionClienteComponent } from '../app/frontendcliente/cliente/informacion/informacion';
 import { InformacionDetalleComponent } from '../app/frontendcliente/cliente/informacion-detalle/informacion-detalle';
+import { CuidadosClienteComponent } from './frontendcliente/cliente/cuidados/cuidados';
+import { CuidadosDetalleComponent } from './frontendcliente/cliente/cuidados-detalle/cuidados-detalle';
 
 export const routes: Routes = [
   { 
@@ -29,7 +31,8 @@ export const routes: Routes = [
       { path: 'inicio', component: InicioClienteComponent },
       { path: 'informacion', component: InformacionClienteComponent },
       { path: 'informacion/:id', component: InformacionDetalleComponent },
-      // { path: 'cuidados', component: CuidadosClienteComponent },
+      { path: 'cuidados', component: CuidadosClienteComponent },
+      { path: 'cuidados/:id', component: CuidadosDetalleComponent },
     ]
   },
 

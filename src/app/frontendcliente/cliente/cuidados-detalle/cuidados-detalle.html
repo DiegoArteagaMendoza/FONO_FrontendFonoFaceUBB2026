@@ -1,0 +1,44 @@
+<div class="detalle-page">
+  
+  <div class="nav-back">
+    <button (click)="volver()" class="btn-back">
+      &larr; Volver a Cuidados
+    </button>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando recomendación...</p>
+  </div>
+
+  <div *ngIf="errorMensaje" class="error-state">
+    <p>{{ errorMensaje }}</p>
+    <button (click)="volver()" class="btn-primary">Regresar</button>
+  </div>
+
+  <article class="article-content" *ngIf="!cargando && cuidado">
+    
+    <header class="article-header">
+      <span class="category-badge" [ngClass]="getBadgeClass(cuidado.publico)">
+        {{ obtenerNombreCategoria(cuidado.publico) }}
+      </span>
+      <h1>{{ cuidado.titulo }}</h1>
+    </header>
+
+    <div class="hero-image" *ngIf="cuidado.img">
+      <img [src]="obtenerUrlImagen(cuidado.img)" alt="Imagen de cuidado vocal">
+    </div>
+
+    <div class="article-body">
+      <div class="content-text">
+        {{ cuidado.contenido }}
+      </div>
+
+      <div class="article-footer" *ngIf="cuidado.fuente">
+        <hr>
+        <p class="source-text"><strong>Fuente:</strong> {{ cuidado.fuente }}</p>
+      </div>
+    </div>
+
+  </article>
+</div>
