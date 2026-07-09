@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth';
 
 // reCAPTCHA
@@ -10,7 +10,7 @@ import { RecaptchaModule } from 'ng-recaptcha';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RecaptchaModule],
+  imports: [CommonModule, ReactiveFormsModule, RecaptchaModule, RouterModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })

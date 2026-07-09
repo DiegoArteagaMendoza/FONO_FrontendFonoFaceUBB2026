@@ -77,6 +77,6 @@ export class InformacionDetalleComponent implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/portal/informacion']);
+    this.router.navigate(['/portal/inicio']);
   }
 }

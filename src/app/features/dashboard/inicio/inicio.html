@@ -1,9 +1,9 @@
-<div class="dashboard-container">
+<div class="page-container dashboard-container">
   
   <div class="welcome-banner">
     <div class="banner-content">
-      <h1>¡Hola, {{ nombreUsuario }}! 👋</h1>
-      <p>Bienvenido al panel de administración. Aquí tienes un resumen de la plataforma al {{ fechaActual | date:'dd/MM/yyyy' }}.</p>
+      <h1>{{ getTituloBienvenida() }}</h1>
+      <p>{{ t().inicio_admin.bienvenida_desc }} {{ fechaActual | date:'dd/MM/yyyy' }}.</p>
     </div>
     <div class="banner-decoration">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@
 
   <div class="dashboard-bottom">
     <div class="quick-actions-section card-box">
-      <h2 class="section-title">Accesos Rápidos</h2>
+      <h2 class="section-title">{{ t().inicio_admin.accesos_titulo }}</h2>
       <div class="actions-grid">
         <a [routerLink]="acceso.ruta" class="action-btn" *ngFor="let acceso of accesosRapidos">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,12 +41,12 @@
     </div>
 
     <div class="recent-activity-section card-box">
-      <h2 class="section-title">Actividad Reciente</h2>
+      <h2 class="section-title">{{ t().inicio_admin.actividad_reciente }}</h2>
       <div class="empty-activity">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <p>Pronto podrás ver aquí los últimos registros añadidos al sistema.</p>
+        <p>{{ t().inicio_admin.actividad_vacia }}</p>
       </div>
     </div>
   </div>

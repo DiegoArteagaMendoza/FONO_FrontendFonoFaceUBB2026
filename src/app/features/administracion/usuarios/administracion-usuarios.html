@@ -1,0 +1,97 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>Gestión de Usuarios</h2>
+      <p>Administra los usuarios registrados en el sistema.</p>
+    </div>
+    <button class="btn-primary" (click)="irAcrear()">
+      + Nuevo Usuario
+    </button>
+  </div>
+
+  <!-- Estado de carga con el Spinner Global -->
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando registros...</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>RUT</th>
+          <th>Email</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="listaUsuarios.length === 0">
+          <td colspan="4" class="empty-state">No hay usuarios disponibles.</td>
+        </tr>
+
+        <tr *ngFor="let item of listaUsuarios">
+          <!-- .td-title ya incluye font-weight: 600 en tu CSS global -->
+          <td class="td-title">
+            {{ item.nombre }}
+          </td>
+          <td>{{ item.rut }}</td>
+          <td>{{ item.email }}</td>
+          
+          <td class="td-actions">
+            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver detalle">Ver</button>
+            <button class="btn-icon edit" (click)="editarUsuario(item.id_usuario)" title="Editar">Editar</button>
+            <button class="btn-icon delete" (click)="eliminarUsuario(item.rut)" title="Eliminar">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DE DETALLE DEL USUARIO               -->
+<!-- ========================================== -->
+<div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
+  
+  <!-- Agregamos la clase modal-sm para que sea un modal proporcionado a textos cortos -->
+  <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>Detalle de Usuario</h3>
+      <button class="btn-close" (click)="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      
+      <!-- Usamos content-text sin estilos en línea -->
+      <div class="content-text">
+        <p>
+          <strong>Nombre Completo:</strong><br>
+          {{ itemSeleccionado.nombre }}
+        </p>
+        <p>
+          <strong>RUT:</strong><br>
+          {{ itemSeleccionado.rut }}
+        </p>
+        <p>
+          <strong>Correo Electrónico:</strong><br>
+          {{ itemSeleccionado.email }}
+        </p>
+        
+        <!-- Ejemplo usando los Badges globales si decides habilitar el rol: -->
+        <!--
+        <p>
+          <strong>Rol del Sistema:</strong><br>
+          <span class="badge" [ngClass]="itemSeleccionado.is_staff ? 'badge-general' : 'badge-default'">
+            {{ itemSeleccionado.is_staff ? 'Administrador' : 'Usuario Regular' }}
+          </span>
+        </p>
+        -->
+      </div>
+      
+    </div>
+
+  </div>
+</div>

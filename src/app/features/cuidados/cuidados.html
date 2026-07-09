@@ -5,7 +5,7 @@
       <p>Administra las recomendaciones y cuidados vocales específicos.</p>
     </div>
     <button class="btn-primary" (click)="irACrear()">
-      + Nuevo Cuidado
+      Nuevo Cuidado
     </button>
   </div>
 
@@ -24,6 +24,7 @@
   </div>
 
   <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
     <p>Cargando registros...</p>
   </div>
 
@@ -55,9 +56,7 @@
               Sin img
             </div>
           </td>
-          <td class="td-title">
-            <strong>{{ item.titulo }}</strong>
-          </td>
+          <td class="td-title">{{ item.titulo }}</td>
           <td>
             <span class="badge" [ngClass]="getBadgeClass(item.publico)">
               {{ item.publico_display }}
@@ -80,14 +79,13 @@
   </div>
 </div>
 
+<!-- Modal -->
 <div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    
     <div class="modal-header">
       <h3>{{ itemSeleccionado.titulo }}</h3>
       <button class="btn-close" (click)="cerrarDetalle()">×</button>
     </div>
-
     <div class="modal-body">
       <div class="meta-info">
         <span class="badge" [ngClass]="getBadgeClass(itemSeleccionado.publico)">
@@ -97,18 +95,15 @@
           <strong>Fuente:</strong> <a [href]="itemSeleccionado.fuente" target="_blank">{{ itemSeleccionado.fuente }}</a>
         </span>
       </div>
-
       <div class="content-text">
         <p>{{ itemSeleccionado.contenido }}</p>
       </div>
-      
       <div class="image-gallery" *ngIf="itemSeleccionado.img">
         <h4>Imagen adjunta</h4>
         <div class="img-wrapper single-img">
           <img [src]="obtenerUrlImagen(itemSeleccionado.img)" alt="Imagen de cuidado">
         </div>
       </div>
-      
       <div *ngIf="!itemSeleccionado.img" class="no-images">
         <p>No hay imagen adjunta a este registro.</p>
       </div>

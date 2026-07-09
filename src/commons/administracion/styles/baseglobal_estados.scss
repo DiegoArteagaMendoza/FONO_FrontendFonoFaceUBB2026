@@ -1,0 +1,63 @@
+/* ==========================================================================
+   LAYOUT BASE GLOBAL, ALERTAS Y ESTADOS
+   ========================================================================== */
+.page-container {
+  padding: 2rem;
+  background-color: #f4f6f8;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .title-section h2, 
+  h1 { 
+    margin: 0 0 0.5rem 0; 
+    color: #1e293b; 
+    font-size: 1.8rem; 
+  }
+  
+  .title-section p, 
+  p { 
+    margin: 0; 
+    color: #64748b; 
+  }
+}
+
+.loading-state, 
+.empty-state { 
+  text-align: center; 
+  padding: 3rem; 
+  color: #666; 
+  font-style: italic;
+}
+
+.spinner {
+  width: 30px; 
+  height: 30px;
+  border: 3px solid #f1f5f9; 
+  border-top-color: #0284c7;
+  border-radius: 50%; 
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin { 
+  to { transform: rotate(360deg); } 
+}
+
+.error-alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #f5c6cb;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+}

@@ -54,7 +54,16 @@
       <div class="login-header">
         <p>Para registrarse como usuario autorizado contacte con el administrador del sistema</p>
       </div>
-
+      <div class="login-header">
+        <p>Para volver al portal cliente presiona en 'Portal Cliente'</p>
+      </div>
+      <button 
+        type="button" 
+        class="btn-submit" 
+        routerLink="/portal/inicio"
+        [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Redirigiendo...' : 'Portal cliente' }}
+      </button>
     </form>
   </div>
 </div>

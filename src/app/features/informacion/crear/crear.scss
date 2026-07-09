@@ -1,169 +1,169 @@
-.page-container {
-  padding: 2rem;
-  background-color: #f4f6f8;
-  min-height: 100%;
-}
+// .page-container {
+//   padding: 2rem;
+//   background-color: #f4f6f8;
+//   min-height: 100%;
+// }
 
-.page-header {
-  margin-bottom: 2rem;
-  h2 { margin: 0; color: #333; font-size: 1.8rem; }
-  p { margin: 0.2rem 0 0 0; color: #666; }
-}
+// .page-header {
+//   margin-bottom: 2rem;
+//   h2 { margin: 0; color: #333; font-size: 1.8rem; }
+//   p { margin: 0.2rem 0 0 0; color: #666; }
+// }
 
-.form-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  max-width: 800px;
-}
+// .form-card {
+//   background: white;
+//   padding: 2rem;
+//   border-radius: 12px;
+//   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+//   max-width: 800px;
+// }
 
-.custom-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+// .custom-form {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1.5rem;
+// }
 
-.form-row {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
+// .form-row {
+//   display: flex;
+//   gap: 1.5rem;
+//   flex-wrap: wrap;
+// }
 
-.flex-1 { flex: 1; min-width: 200px; }
-.flex-2 { flex: 2; min-width: 300px; }
+// .flex-1 { flex: 1; min-width: 200px; }
+// .flex-2 { flex: 2; min-width: 300px; }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+// .form-group {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0.5rem;
 
-  label {
-    font-weight: 600;
-    color: #444;
-    font-size: 0.95rem;
-  }
+//   label {
+//     font-weight: 600;
+//     color: #444;
+//     font-size: 0.95rem;
+//   }
 
-  input[type="text"], select, textarea {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: border-color 0.2s;
+//   input[type="text"], select, textarea {
+//     padding: 0.75rem;
+//     border: 1px solid #ccc;
+//     border-radius: 6px;
+//     font-size: 1rem;
+//     font-family: inherit;
+//     transition: border-color 0.2s;
 
-    &:focus { outline: none; border-color: #0056b3; }
-  }
+//     &:focus { outline: none; border-color: #0056b3; }
+//   }
 
-  textarea { resize: vertical; }
-}
+//   textarea { resize: vertical; }
+// }
 
-.error-text {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: -0.25rem;
-}
+// .error-text {
+//   color: #dc3545;
+//   font-size: 0.85rem;
+//   margin-top: -0.25rem;
+// }
 
-.help-text {
-  color: #6c757d;
-  font-size: 0.85rem;
-}
+// .help-text {
+//   color: #6c757d;
+//   font-size: 0.85rem;
+// }
 
-.file-upload-section {
-  background-color: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px dashed #ced4da;
+// .file-upload-section {
+//   background-color: #f8f9fa;
+//   padding: 1.5rem;
+//   border-radius: 8px;
+//   border: 1px dashed #ced4da;
 
-  .file-input {
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-}
+//   .file-input {
+//     margin-top: 0.5rem;
+//     width: 100%;
+//   }
+// }
 
-.preview-files {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #eaeaea;
+// .preview-files {
+//   margin-top: 1rem;
+//   padding-top: 1rem;
+//   border-top: 1px solid #eaeaea;
   
-  ul {
-    margin: 0.5rem 0 0 0;
-    padding-left: 1.5rem;
-    color: #555;
-    font-size: 0.9rem;
-  }
-}
+//   ul {
+//     margin: 0.5rem 0 0 0;
+//     padding-left: 1.5rem;
+//     color: #555;
+//     font-size: 0.9rem;
+//   }
+// }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #eaeaea;
-}
+// .form-actions {
+//   display: flex;
+//   justify-content: flex-end;
+//   gap: 1rem;
+//   margin-top: 1rem;
+//   padding-top: 1.5rem;
+//   border-top: 1px solid #eaeaea;
+// }
 
-.btn-primary {
-  background-color: #0056b3;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  &:hover:not(:disabled) { background-color: #004494; }
-  &:disabled { background-color: #a0c4e8; cursor: not-allowed; }
-}
+// .btn-primary {
+//   background-color: #0056b3;
+//   color: white;
+//   border: none;
+//   padding: 0.75rem 1.5rem;
+//   border-radius: 6px;
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: background-color 0.2s;
+//   &:hover:not(:disabled) { background-color: #004494; }
+//   &:disabled { background-color: #a0c4e8; cursor: not-allowed; }
+// }
 
-.btn-secondary {
-  background-color: #e9ecef;
-  color: #495057;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  &:hover:not(:disabled) { background-color: #dde0e3; }
-  &:disabled { opacity: 0.7; cursor: not-allowed; }
-}
+// .btn-secondary {
+//   background-color: #e9ecef;
+//   color: #495057;
+//   border: none;
+//   padding: 0.75rem 1.5rem;
+//   border-radius: 6px;
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: background-color 0.2s;
+//   &:hover:not(:disabled) { background-color: #dde0e3; }
+//   &:disabled { opacity: 0.7; cursor: not-allowed; }
+// }
 
-.error-alert {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #f5c6cb;
-  white-space: pre-wrap;
-}
+// .error-alert {
+//   background-color: #f8d7da;
+//   color: #721c24;
+//   padding: 1rem;
+//   border-radius: 6px;
+//   margin-bottom: 1.5rem;
+//   border: 1px solid #f5c6cb;
+//   white-space: pre-wrap;
+// }
 
-/* ======== MEDIA QUERIES (Responsive) ======== */
-@media (max-width: 768px) {
-  .page-container {
-    padding: 1rem;
-  }
+// /* ======== MEDIA QUERIES (Responsive) ======== */
+// @media (max-width: 768px) {
+//   .page-container {
+//     padding: 1rem;
+//   }
 
-  .form-card {
-    padding: 1.25rem;
-  }
+//   .form-card {
+//     padding: 1.25rem;
+//   }
 
-  .form-row {
-    flex-direction: column;
-    gap: 1rem;
-  }
+//   .form-row {
+//     flex-direction: column;
+//     gap: 1rem;
+//   }
 
-  .flex-1, .flex-2 {
-    min-width: 100%;
-  }
+//   .flex-1, .flex-2 {
+//     min-width: 100%;
+//   }
 
-  .form-actions {
-    flex-direction: column-reverse;
+//   .form-actions {
+//     flex-direction: column-reverse;
     
-    button {
-      width: 100%;
-      text-align: center;
-    }
-  }
-}
+//     button {
+//       width: 100%;
+//       text-align: center;
+//     }
+//   }
+// }

@@ -32,10 +32,23 @@ export class AuthService {
     localStorage.setItem('refresh_token', authResult.refresh);
     localStorage.setItem('user_data', JSON.stringify(authResult.user));
   }
+// En core/services/auth/auth.service.ts
 
-  logout(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_data');
-  }
+logout() {
+  // 1. Borra los tokens específicos
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  
+  // 2. Borra cualquier dato del usuario guardado
+  localStorage.removeItem('user_data');
+  
+  // 3. Limpia TODO el localStorage por seguridad
+  localStorage.clear();
+  
+  // 4. Limpia el sessionStorage por si acaso
+  sessionStorage.clear();
+
+  // 5. Si usas cookies, deberías borrarlas aquí también
+  // document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
 }

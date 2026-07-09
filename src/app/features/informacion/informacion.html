@@ -1,63 +1,60 @@
 <div class="page-container">
   <div class="page-header">
     <div class="title-section">
-      <h2>Gestión de Información</h2>
-      <p>Administra los artículos y cuidados básicos del sistema.</p>
+      <h2>{{ t().gestion_informacion.titulo }}</h2>
+      <p>{{ t().gestion_informacion.subtitulo }}</p>
     </div>
     <button class="btn-primary" (click)="irACrear()">
-      + Nueva Información
+      {{ t().gestion_informacion.nueva_informacion }}
     </button>
   </div>
 
   <div class="filters-section">
     <div class="filter-group">
-      <label for="filtroCategoria">Filtrar por:</label>
+      <label for="filtroCategoria">{{ t().tablas.filtrar_tabla }}</label>
       <select id="filtroCategoria" (change)="filtrarPorCategoria($event)">
-        <option value="">Todas las categorías</option>
-        <option value="NI">Niños</option>
-        <option value="PO">Profesores</option>
-        <option value="CA">Cantantes y Actores</option>
-        <option value="LO">Locutores</option>
-        <option value="GE">Público General</option>
+        <option value="">{{ t().gestion_informacion.categorias_todas }}</option>
+        <option value="PO">{{ t().gestion_informacion.categorias_promocion }}</option>
+        <option value="PE">{{ t().gestion_informacion.categorias_prevencion }}</option>
+        <option value="FA">{{ t().gestion_informacion.categorias_farmacos }}</option>
       </select>
     </div>
   </div>
 
   <div *ngIf="cargando" class="loading-state">
-    <p>Cargando registros...</p>
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
   </div>
 
   <div class="table-card" *ngIf="!cargando">
     <table class="data-table">
       <thead>
         <tr>
-          <th>Imagen</th>
-          <th>Título</th>
-          <th>Categoría</th>
-          <th>Última Actualización</th>
-          <th>Acciones</th>
+          <th>{{ t().tablas.imagen_tabla }}</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>{{ t().tablas.categoria_tabla }}</th>
+          <th>{{ t().tablas.ultima_actualizacion }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="listaInformacion.length === 0">
-          <td colspan="5" class="empty-state">No hay registros de información disponibles.</td>
+          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
         </tr>
 
         <tr *ngFor="let item of listaInformacion">
           <td class="td-image">
             <img 
-              *ngIf="item.imagenes.length > 0" 
+              *ngIf="item.imagenes && item.imagenes.length > 0" 
               [src]="obtenerUrlImagen(item.imagenes[0].imagen)" 
               alt="Miniatura"
               class="thumbnail"
             >
-            <div *ngIf="item.imagenes.length === 0" class="no-image-placeholder">
+            <div *ngIf="!item.imagenes || item.imagenes.length === 0" class="no-image-placeholder">
               Sin img
             </div>
           </td>
-          <td class="td-title">
-            <strong>{{ item.titulo }}</strong>
-          </td>
+          <td class="td-title">{{ item.titulo }}</td>
           <td>
             <span class="badge" [ngClass]="item.categoria">
               {{ item.categoria_display }}
@@ -65,15 +62,9 @@
           </td>
           <td>{{ item.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}</td>
           <td class="td-actions">
-            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver detalle">
-              Ver
-            </button>
-            <button class="btn-icon edit" (click)="editarInformacion(item.id_informacion)" title="Editar">
-              Editar
-            </button>
-            <button class="btn-icon delete" (click)="eliminarInformacion(item.id_informacion)" title="Eliminar">
-              Eliminar
-            </button>
+            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver detalle">Ver</button>
+            <button class="btn-icon edit" (click)="editarInformacion(item.id_informacion)" title="Editar">Editar</button>
+            <button class="btn-icon delete" (click)="eliminarInformacion(item.id_informacion)" title="Eliminar">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -81,6 +72,7 @@
   </div>
 </div>
 
+<!-- Modal de Detalle -->
 <div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     
@@ -103,7 +95,7 @@
         <p>{{ itemSeleccionado.contenido }}</p>
       </div>
       
-      <div class="image-gallery" *ngIf="itemSeleccionado.imagenes.length > 0">
+      <div class="image-gallery" *ngIf="itemSeleccionado.imagenes && itemSeleccionado.imagenes.length > 0">
         <h4>Imágenes adjuntas ({{ itemSeleccionado.imagenes.length }})</h4>
         <div class="gallery-grid">
           <div class="img-wrapper" *ngFor="let img of itemSeleccionado.imagenes">
@@ -112,8 +104,8 @@
         </div>
       </div>
       
-      <div *ngIf="itemSeleccionado.imagenes.length === 0" class="no-images">
-        <p>No hay imágenes adjuntas a este registro.</p>
+      <div *ngIf="!itemSeleccionado.imagenes || itemSeleccionado.imagenes.length === 0" class="no-images">
+        <p>{{ t().globales.sin_imagen }}</p>
       </div>
     </div>
 

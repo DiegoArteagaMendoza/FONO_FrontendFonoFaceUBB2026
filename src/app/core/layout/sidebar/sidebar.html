@@ -19,18 +19,57 @@
   </div>
 
   <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-    @for (item of menuItems; track item.path) {
-      <a 
-        [routerLink]="item.path" 
-        routerLinkActive="bg-fonoSecondary text-white shadow-md font-semibold"
-        [routerLinkActiveOptions]="{exact: true}"
-        (click)="onClose()"
-        class="flex items-center px-4 py-3 rounded-lg transition-all duration-200 hover:bg-sky-600 text-sky-100 hover:text-white">
-        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
-        </svg>
-        <span>{{ item.label }}</span>
-      </a>
+    <!-- CORRECCIÓN AQUÍ: Iteramos sobre menuFiltrado() ejecutándolo como función -->
+    @for (item of menuFiltrado(); track item.label) {
+      
+      @if (!item.children) {
+        <a 
+          [routerLink]="item.path" 
+          routerLinkActive="bg-fonoSecondary text-white shadow-md font-semibold"
+          [routerLinkActiveOptions]="{exact: true}"
+          (click)="onClose()"
+          class="flex items-center px-4 py-3 rounded-lg transition-all duration-200 hover:bg-sky-600 text-sky-100 hover:text-white">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+          </svg>
+          <span>{{ item.label }}</span>
+        </a>
+      } 
+      
+      @else {
+        <div class="space-y-1">
+          <button 
+            (click)="toggleMenu(item.label)"
+            class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all duration-200 hover:bg-sky-600 text-sky-100 hover:text-white focus:outline-none">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+              </svg>
+              <span>{{ item.label }}</span>
+            </div>
+            <svg class="w-4 h-4 transition-transform duration-200" 
+                 [class.rotate-180]="expandedMenus[item.label]" 
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          @if (expandedMenus[item.label]) {
+            <div class="pl-11 pr-4 py-1 space-y-1">
+              @for (child of item.children; track child.path) {
+                <a 
+                  [routerLink]="child.path" 
+                  routerLinkActive="bg-fonoSecondary text-white font-semibold"
+                  [routerLinkActiveOptions]="{exact: true}"
+                  (click)="onClose()"
+                  class="block px-3 py-2 text-sm rounded-md transition-colors duration-200 hover:bg-sky-600 text-sky-200 hover:text-white">
+                  {{ child.label }}
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
     }
   </nav>
   

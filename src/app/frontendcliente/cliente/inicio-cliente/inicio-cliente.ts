@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { InicioCarruselComponent } from './inicio-carrusel/inicio-carrusel';
 
 @Component({
   selector: 'app-inicio-cliente',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, InicioCarruselComponent],
   templateUrl: './inicio-cliente.html',
   styleUrls: ['./inicio-cliente.scss']
 })

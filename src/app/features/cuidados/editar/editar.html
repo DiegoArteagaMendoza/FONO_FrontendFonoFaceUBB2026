@@ -8,6 +8,7 @@
 
   <div class="form-card">
     <div *ngIf="cargandoDatos" class="loading-state">
+      <div class="spinner"></div>
       <p>Cargando datos del registro...</p>
     </div>
 
@@ -16,7 +17,6 @@
     </div>
 
     <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
-      
       <div class="form-row">
         <div class="form-group flex-2">
           <label for="titulo">Título de la recomendación</label>
@@ -55,7 +55,6 @@
       </div>
 
       <div class="form-row image-edit-section">
-        
         <div class="form-group flex-1" *ngIf="imagenActualUrl">
           <label>Imagen Actual:</label>
           <div class="current-img-preview">
@@ -78,7 +77,6 @@
             <p><strong>Nueva imagen a subir:</strong> {{ nuevaImagenSeleccionada.name }}</p>
           </div>
         </div>
-
       </div>
 
       <div class="form-actions">
@@ -87,7 +85,6 @@
           {{ isSubmitting ? 'Actualizando...' : 'Guardar Cambios' }}
         </button>
       </div>
-
     </form>
   </div>
 </div>

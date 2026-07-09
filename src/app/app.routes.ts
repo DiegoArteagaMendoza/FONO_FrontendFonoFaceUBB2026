@@ -8,6 +8,10 @@ import { EditarInformacion } from './features/informacion/editar/editar';
 import { Cuidados } from './features/cuidados/cuidados';
 import { CrearCuidado } from './features/cuidados/crear/crear';
 import { EditarCuidado } from './features/cuidados/editar/editar';
+import { AdministracionInicioComponent } from './features/administracion/inicio/administracion-inicio';
+import { AdministracionInicioCrearComponent } from './features/administracion/inicio/crear/administracion-inicio-crear';
+import { AdministracionUsuarioComponent } from './features/administracion/usuarios/administracion-usuarios';
+import { AdministracionUsuarioCrearComponente } from './features/administracion/usuarios/crear/administracion-usuarios-crear';
 
 // IMPORTACIONES DEL PORTAL PÚBLICO
 import { ClienteLayout } from './frontendcliente/cliente/layout/layout';
@@ -16,6 +20,8 @@ import { InformacionClienteComponent } from '../app/frontendcliente/cliente/info
 import { InformacionDetalleComponent } from '../app/frontendcliente/cliente/informacion-detalle/informacion-detalle';
 import { CuidadosClienteComponent } from './frontendcliente/cliente/cuidados/cuidados';
 import { CuidadosDetalleComponent } from './frontendcliente/cliente/cuidados-detalle/cuidados-detalle';
+import { FarmacosClienteComponent } from './frontendcliente/cliente/farmacos/farmacos';
+// import { FarmacosDetalleComponent } from './frontendcliente/cliente/farmacos-detalle/farmacos-detalle';
 
 export const routes: Routes = [
   { 
@@ -29,8 +35,16 @@ export const routes: Routes = [
     component: ClienteLayout,
     children: [
       { path: 'inicio', component: InicioClienteComponent },
-      { path: 'informacion', component: InformacionClienteComponent },
-      { path: 'informacion/:id', component: InformacionDetalleComponent },
+      
+      // RUTAS DE FÁRMACOS
+      { path: 'farmacos', component: FarmacosClienteComponent }, // Quitamos la barra final
+      { path: 'farmacos/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+
+      // RUTAS DE PREVENCIÓN
+      { path: 'prevencion', component: InformacionClienteComponent },
+      { path: 'prevencion/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+
+      // RUTAS DE CUIDADOS
       { path: 'cuidados', component: CuidadosClienteComponent },
       { path: 'cuidados/:id', component: CuidadosDetalleComponent },
     ]
@@ -48,22 +62,31 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [     
+      // INICIO
       { path: 'inicio', component: Inicio },
+      // INFORMACION
       { path: 'informacion', component: InformacionComponent },
       { path: 'informacion/crear', component: CrearInformacion },
       { path: 'informacion/editar/:id', component: EditarInformacion },
+      // CUIDADOS
       { path: 'cuidados', component: Cuidados }, 
       { path: 'cuidados/crear', component: CrearCuidado },
       { path: 'cuidados/editar/:id', component: EditarCuidado },
+      // ADMINISTRACION BANNER
+      { path: 'administracion/inicio', component: AdministracionInicioComponent },
+      { path: 'administracion/inicio/crear', component: AdministracionInicioCrearComponent},
+      // ADMINISTRACION USUARIOS
+      { path: 'administracion/usuario', component: AdministracionUsuarioComponent },
+      { path: 'administracion/usuario/crear', component: AdministracionUsuarioCrearComponente },
       
       { path: 'noticias', redirectTo: 'inicio', pathMatch: 'full' },
-      { path: 'administracion', redirectTo: 'inicio', pathMatch: 'full' }
+      // { path: 'administracion', redirectTo: 'inicio', pathMatch: 'full' }
     ]
   },
 
   // Si digitan cualquier otra cosa, se devuelven a la página de inicio pública
   { 
     path: '**', 
-    redirectTo: '/portal/inicio' 
+    redirectTo: '/inicio' 
   }
 ];

@@ -1,0 +1,83 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; Volver
+      </button>
+      <h2>Crear Elemento del Carrusel</h2>
+      <p>Añade un nuevo bloque de imagen y texto para el inicio del portal.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        <div class="flex-2">
+          <div class="form-group">
+            <label for="titulo">Título Principal</label>
+            <input 
+              id="titulo" 
+              type="text" 
+              formControlName="titulo" 
+              placeholder="Ej: ¿Qué es la voz?"
+              [class.is-invalid]="formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched"
+            >
+            <small class="error-text" *ngIf="formulario.get('titulo')?.hasError('required') && formulario.get('titulo')?.touched">
+              El título es obligatorio.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">Descripción</label>
+            <textarea 
+              id="descripcion" 
+              formControlName="descripcion" 
+              rows="4"
+              placeholder="Describe brevemente de qué trata este elemento..."
+              [class.is-invalid]="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched"
+            ></textarea>
+            <small class="error-text" *ngIf="formulario.get('descripcion')?.hasError('required') && formulario.get('descripcion')?.touched">
+              La descripción es obligatoria.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group flex-1 file-upload-section">
+          <label>Imagen de Fondo</label>
+          <input 
+            #fileInput
+            type="file" 
+            (change)="onFileSelected($event)" 
+            accept="image/*"
+            class="file-input"
+          >
+          <small class="help-text">Formatos recomendados: JPG, PNG, WEBP (Max 2MB).</small>
+
+          <div class="preview-files" *ngIf="imagenPreview">
+            <p><strong>Previsualización:</strong></p>
+            <div class="current-img-preview" style="margin-top: 0.5rem; max-width: 100%; height: 140px;">
+              <img [src]="imagenPreview" alt="Previsualización">
+            </div>
+            <button type="button" class="btn-secondary" style="margin-top: 1rem; width: 100%; padding: 0.5rem;" (click)="removerImagen()">
+              Quitar Imagen
+            </button>
+          </div>
+          
+          <small class="error-text" *ngIf="!archivoSeleccionado && formulario.touched">
+            Debes adjuntar una imagen.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Guardando...' : 'Guardar Elemento' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
