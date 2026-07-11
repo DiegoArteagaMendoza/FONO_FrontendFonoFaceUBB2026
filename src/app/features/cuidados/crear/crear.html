@@ -1,81 +1,71 @@
 <div class="page-container">
   <div class="page-header">
     <div class="title-section">
-      <h2>Crear Nuevo Cuidado</h2>
-      <p>Añade una recomendación o cuidado vocal para un público específico.</p>
+      <h2>{{ t().creacion_cuidados.titulo }}</h2>
+      <p>{{ t().creacion_cuidados.subtitulo }}</p>
     </div>
   </div>
 
   <div class="form-card">
-    <div *ngIf="errorMensaje" class="error-alert">
-      {{ errorMensaje }}
-    </div>
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
 
     <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
       <div class="form-row">
         <div class="form-group flex-2">
-          <label for="titulo">Título de la recomendación</label>
-          <input id="titulo" type="text" formControlName="titulo" placeholder="Ej. Calentamiento vocal...">
+          <label for="titulo">{{ t().creacion_cuidados.label_titulo }}</label>
+          <input id="titulo" type="text" formControlName="titulo" [placeholder]="t().creacion_cuidados.placeholder_titulo">
           <small class="error-text" *ngIf="crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched">
-            El título es obligatorio.
+            {{ t().creacion_cuidados.alerta_titulo }}
           </small>
         </div>
 
         <div class="form-group flex-1">
-          <label for="publico">Público Objetivo</label>
+          <label for="publico">{{ t().creacion_cuidados.label_publico }}</label>
           <select id="publico" formControlName="publico">
-            <option value="" disabled selected>Seleccione uno...</option>
-            <option value="NIÑOS">Niños</option>
-            <option value="PROFESORES">Profesores</option>
-            <option value="CANTANTES_ACTORES">Cantantes y Actores</option>
-            <option value="LOCUTORES">Locutores</option>
-            <option value="PUBLICO_GENERAL">Público General</option>
+            <option value="" disabled selected>{{ t().creacion_cuidados.placeholder_publico }}</option>
+            <option value="NIÑOS">{{ t().cuidados_extras.ninos }}</option>
+            <option value="PROFESORES">{{ t().cuidados_extras.profesores }}</option>
+            <option value="CANTANTES_ACTORES">{{ t().cuidados_extras.cantantes }}</option>
+            <option value="LOCUTORES">{{ t().cuidados_extras.locutores }}</option>
+            <option value="PUBLICO_GENERAL">{{ t().cuidados_extras.publico_general }}</option>
           </select>
           <small class="error-text" *ngIf="crearForm.get('publico')?.invalid && crearForm.get('publico')?.touched">
-            Selecciona el público objetivo.
+            {{ t().creacion_cuidados.alerta_publico }}
           </small>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="contenido">Contenido y Detalles</label>
-        <textarea id="contenido" formControlName="contenido" rows="5" placeholder="Explica detalladamente el cuidado..."></textarea>
+        <label for="contenido">{{ t().creacion_cuidados.label_contenido }}</label>
+        <textarea id="contenido" formControlName="contenido" rows="5" [placeholder]="t().creacion_cuidados.placeholder_contenido"></textarea>
         <small class="error-text" *ngIf="crearForm.get('contenido')?.invalid && crearForm.get('contenido')?.touched">
-          El contenido es obligatorio.
+          {{ t().creacion_cuidados.alerta_contenido }}
         </small>
       </div>
 
       <div class="form-group">
-        <label for="fuente">Fuente o Referencia (Opcional)</label>
-        <input id="fuente" type="text" formControlName="fuente" placeholder="https://ejemplo.com/estudio...">
+        <label for="fuente">{{ t().creacion_cuidados.label_fuente }}</label>
+        <input id="fuente" type="text" formControlName="fuente" [placeholder]="t().creacion_cuidados.placeholder_fuente">
         <small class="error-text" *ngIf="crearForm.get('fuente')?.invalid && crearForm.get('fuente')?.touched">
-          Debe ser una URL válida (ej. https://...).
+          {{ t().creacion_cuidados.alerta_fuente }}
         </small>
       </div>
 
       <div class="form-group file-upload-section">
-        <label for="img">Imagen Principal (Opcional)</label>
-        <input 
-          id="img" 
-          type="file" 
-          accept="image/*" 
-          (change)="onFileChange($event)"
-          class="file-input"
-        >
-        <small class="help-text">Sube una imagen ilustrativa para esta recomendación (JPG, PNG).</small>
+        <label for="img">{{ t().creacion_cuidados.label_imagen }}</label>
+        <input id="img" type="file" accept="image/*" (change)="onFileChange($event)" class="file-input">
+        <small class="help-text">{{ t().creacion_cuidados.help_imagen }}</small>
         
         <div class="preview-files" *ngIf="imagenSeleccionada">
-          <p><strong>Archivo seleccionado:</strong></p>
-          <ul>
-            <li>{{ imagenSeleccionada.name }}</li>
-          </ul>
+          <p><strong>{{ t().creacion_cuidados.archivo_seleccionado }}</strong></p>
+          <ul><li>{{ imagenSeleccionada.name }}</li></ul>
         </div>
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">Cancelar</button>
+        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar || t().globales.boton_cancelar }}</button>
         <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Guardando...' : 'Guardar Cuidado' }}
+          {{ isSubmitting ? t().creacion_cuidados.btn_guardando : t().creacion_cuidados.btn_guardar }}
         </button>
       </div>
     </form>

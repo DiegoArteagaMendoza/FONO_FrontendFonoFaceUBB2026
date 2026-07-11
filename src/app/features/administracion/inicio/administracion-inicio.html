@@ -1,29 +1,29 @@
 <div class="page-container">
   <div class="page-header">
     <div class="title-section">
-      <h2>Carrusel de Inicio</h2>
-      <p>Configura las imágenes y textos del carrusel principal del portal público.</p>
+      <h2>{{ t().gestion_carrusel.titulo }}</h2>
+      <p>{{ t().gestion_carrusel.subtitulo }}</p>
     </div>
-    <button class="btn-primary" (click)="irACrear()">Nuevo Carrusel</button>
+    <button class="btn-primary" (click)="irACrear()">{{ t().gestion_carrusel.nuevo_carrusel }}</button>
   </div>
 
   <div *ngIf="cargando" class="loading-state">
     <div class="spinner"></div>
-    <p>Cargando configuración...</p>
+    <p>{{ t().globales.cargando }}</p>
   </div>
 
   <div class="table-card" *ngIf="!cargando">
     <div *ngIf="listaItems.length === 0" class="empty-state">
-      <p>No hay elementos configurados. El sistema está usando los datos por defecto.</p>
+      <p>{{ t().globales.sin_datos }}</p>
     </div>
 
     <table class="data-table" *ngIf="listaItems.length > 0">
       <thead>
         <tr>
-          <th>Imagen</th>
-          <th>Título</th>
-          <th>Descripción</th>
-          <th class="text-center">Acciones</th>
+          <th>{{ t().tablas.imagen_tabla }}</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>{{ t().tablas.descripcion_tabla }}</th>
+          <th class="text-center">{{ t().tablas.acciones_tabla }}</th>
         </tr>
       </thead>
       <tbody>

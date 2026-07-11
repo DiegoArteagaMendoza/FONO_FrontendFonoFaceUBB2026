@@ -1,17 +1,23 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AdministracionService } from '../../../../core/services/administracion/administracion';
+// Inject the service
+import { TextosService } from '../../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-crear-inicio',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './administracion-inicio-crear.html',
-  styleUrls: ['./administracion-inicio-crear.scss']
+  // styleUrls: ['./administracion-inicio-crear.scss'] // Assuming global styles are used
 })
 export class AdministracionInicioCrearComponent implements OnInit {
+  // Expose the signal
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   formulario!: FormGroup;
   archivoSeleccionado: File | null = null;
   imagenPreview: string | null = null;
@@ -25,14 +31,12 @@ export class AdministracionInicioCrearComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Inicializamos el formulario con sus validaciones
     this.formulario = this.fb.group({
       titulo: ['', [Validators.required, Validators.maxLength(100)]],
       descripcion: ['', [Validators.required, Validators.maxLength(250)]]
     });
   }
 
-  // Captura el archivo cuando el usuario lo selecciona
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -41,14 +45,12 @@ export class AdministracionInicioCrearComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = e => {
         this.imagenPreview = reader.result as string;
-        // Obligamos a Angular a actualizar la vista en este exacto momento
         this.cdr.detectChanges(); 
       };
       reader.readAsDataURL(file);
     }
   }
 
-  // Quitar la imagen seleccionada
   removerImagen(): void {
     this.archivoSeleccionado = null;
     this.imagenPreview = null;

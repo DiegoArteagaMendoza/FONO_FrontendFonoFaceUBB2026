@@ -1,16 +1,22 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AdministracionService, UsuarioItem } from '../../../core/services/administracion/administracion';
+// Inject the service
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
     selector: 'app-administracion',
     standalone: true,
     imports: [CommonModule],
     templateUrl: './administracion-usuarios.html',
-    styleUrls: ['./administracion-usuarios.scss'] // Asegúrate de tener los mismos estilos de modal que en Información
+    // styleUrls: ['./administracion-usuarios.scss'] // Assuming global styles are used
 })
 export class AdministracionUsuarioComponent implements OnInit {
+    // Expose the signal
+    public textosService = inject(TextosService);
+    public t = this.textosService.t;
+
     listaUsuarios: UsuarioItem[] = [];
     cargando = true;
     itemSeleccionado: UsuarioItem | null = null;
@@ -46,16 +52,15 @@ export class AdministracionUsuarioComponent implements OnInit {
         this.router.navigate(['/administracion/usuario/crear']);
     }
 
-    // Navega a la vista de edición enviando el id del usuario
     editarUsuario(id: number | undefined): void {
         if (id) {
             this.router.navigate(['/administracion/usuario/editar', id]);
         }
     }
 
-    // Eliminamos utilizando el RUT (como lo definiste en tus URLs de Django)
     eliminarUsuario(rut: string): void {
-        const confirmar = confirm('¿Estás seguro de que deseas desactivar a este usuario? Esta acción le impedirá iniciar sesión.');
+        // Use the global text for the confirmation message
+        const confirmar = confirm(this.t().globales.confirmacion_eliminar);
         
         if (!confirmar) {
             return; 
@@ -64,19 +69,17 @@ export class AdministracionUsuarioComponent implements OnInit {
         this.adminService.eliminarUsuario(rut).subscribe({
             next: (respuesta) => {
                 console.log('Respuesta del servidor:', respuesta);
-                
-                // Filtramos la lista local para que el usuario desaparezca de la tabla
                 this.listaUsuarios = this.listaUsuarios.filter(item => item.rut !== rut);
                 this.cdr.detectChanges();
             },
             error: (err) => {
                 console.error('Error al intentar eliminar el registro:', err);
-                alert('Ocurrió un error al eliminar al usuario. Por favor, verifica tus permisos o vuelve a iniciar sesión.');
+                // Use the global error message
+                alert(this.t().erorres.error_eliminacion);
             }
         });
     }
 
-    // Control del Modal
     verDetalle(item: UsuarioItem): void {
         this.itemSeleccionado = item;
         this.cdr.detectChanges(); 

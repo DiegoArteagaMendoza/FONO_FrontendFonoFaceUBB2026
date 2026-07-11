@@ -1,77 +1,66 @@
 <div class="page-container">
   <div class="page-header">
     <div class="title-section">
-      <h2>Gestión de Cuidados</h2>
-      <p>Administra las recomendaciones y cuidados vocales específicos.</p>
+      <h2>{{ t().gestion_cuidados.titulo }}</h2>
+      <p>{{ t().gestion_cuidados.subtitulo }}</p>
     </div>
     <button class="btn-primary" (click)="irACrear()">
-      Nuevo Cuidado
+      {{ t().gestion_cuidados.nueva_informacion }}
     </button>
   </div>
 
   <div class="filters-section">
     <div class="filter-group">
-      <label for="filtroPublico">Filtrar por Público:</label>
+      <label for="filtroPublico">{{ t().cuidados_extras.filtrar_publico }}</label>
       <select id="filtroPublico" (change)="filtrarPorPublico($event)">
-        <option value="">Todos</option>
-        <option value="NIÑOS">Niños</option>
-        <option value="PROFESORES">Profesores</option>
-        <option value="CANTANTES_ACTORES">Cantantes y Actores</option>
-        <option value="LOCUTORES">Locutores</option>
-        <option value="PUBLICO_GENERAL">Público General</option>
+        <option value="">{{ t().cuidados_extras.todos }}</option>
+        <option value="NIÑOS">{{ t().cuidados_extras.ninos }}</option>
+        <option value="PROFESORES">{{ t().cuidados_extras.profesores }}</option>
+        <option value="CANTANTES_ACTORES">{{ t().cuidados_extras.cantantes }}</option>
+        <option value="LOCUTORES">{{ t().cuidados_extras.locutores }}</option>
+        <option value="PUBLICO_GENERAL">{{ t().cuidados_extras.publico_general }}</option>
       </select>
     </div>
   </div>
 
   <div *ngIf="cargando" class="loading-state">
     <div class="spinner"></div>
-    <p>Cargando registros...</p>
+    <p>{{ t().globales.cargando }}</p>
   </div>
 
   <div class="table-card" *ngIf="!cargando">
     <table class="data-table">
       <thead>
         <tr>
-          <th>Imagen</th>
-          <th>Título</th>
-          <th>Público Objetivo</th>
-          <th>Fuente</th>
-          <th>Acciones</th>
+          <th>{{ t().tablas.imagen_tabla }}</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>{{ t().cuidados_extras.publico_objetivo }}</th>
+          <th>{{ t().cuidados_extras.fuente }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="listaCuidados.length === 0">
-          <td colspan="5" class="empty-state">No hay cuidados disponibles.</td>
+          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
         </tr>
 
         <tr *ngFor="let item of listaCuidados">
           <td class="td-image">
-            <img 
-              *ngIf="item.img" 
-              [src]="obtenerUrlImagen(item.img)" 
-              alt="Miniatura"
-              class="thumbnail"
-            >
-            <div *ngIf="!item.img" class="no-image-placeholder">
-              Sin img
-            </div>
+            <img *ngIf="item.img" [src]="obtenerUrlImagen(item.img)" class="thumbnail">
+            <div *ngIf="!item.img" class="no-image-placeholder">Sin img</div>
           </td>
           <td class="td-title">{{ item.titulo }}</td>
           <td>
-            <span class="badge" [ngClass]="getBadgeClass(item.publico)">
-              {{ item.publico_display }}
-            </span>
+            <span class="badge" [ngClass]="getBadgeClass(item.publico)">{{ item.publico_display }}</span>
           </td>
           <td>
-            <a *ngIf="item.fuente" [href]="item.fuente" target="_blank" class="link-fuente" title="Visitar fuente">
-              Ver Enlace
-            </a>
+            <a *ngIf="item.fuente" [href]="item.fuente" target="_blank" class="link-fuente">{{ t().cuidados_extras.ver_enlace }}</a>
             <span *ngIf="!item.fuente" class="text-muted">N/A</span>
           </td>
           <td class="td-actions">
-            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver detalle">Ver</button>
-            <button class="btn-icon edit" (click)="editarCuidado(item.id_cuidado)" title="Editar">Editar</button>
-            <button class="btn-icon delete" (click)="eliminarCuidado(item.id_cuidado)" title="Eliminar">Eliminar</button>
+            <button class="btn-icon view" (click)="verDetalle(item)">Ver</button>
+            <button class="btn-icon edit" (click)="editarCuidado(item.id_cuidado)">Editar</button>
+            <button class="btn-icon delete" (click)="eliminarCuidado(item.id_cuidado)">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -79,7 +68,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -92,20 +80,20 @@
           {{ itemSeleccionado.publico_display }}
         </span>
         <span class="source-link" *ngIf="itemSeleccionado.fuente">
-          <strong>Fuente:</strong> <a [href]="itemSeleccionado.fuente" target="_blank">{{ itemSeleccionado.fuente }}</a>
+          <strong>{{ t().cuidados_extras.fuente }}:</strong> <a [href]="itemSeleccionado.fuente" target="_blank">{{ itemSeleccionado.fuente }}</a>
         </span>
       </div>
       <div class="content-text">
         <p>{{ itemSeleccionado.contenido }}</p>
       </div>
       <div class="image-gallery" *ngIf="itemSeleccionado.img">
-        <h4>Imagen adjunta</h4>
+        <h4>{{ t().cuidados_extras.imagen_adjunta }}</h4>
         <div class="img-wrapper single-img">
-          <img [src]="obtenerUrlImagen(itemSeleccionado.img)" alt="Imagen de cuidado">
+          <img [src]="obtenerUrlImagen(itemSeleccionado.img)">
         </div>
       </div>
       <div *ngIf="!itemSeleccionado.img" class="no-images">
-        <p>No hay imagen adjunta a este registro.</p>
+        <p>{{ t().globales.sin_imagen }}</p>
       </div>
     </div>
   </div>

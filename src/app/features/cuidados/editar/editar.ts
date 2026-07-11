@@ -1,24 +1,28 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CuidadosService, Cuidado } from '../../../core/services/cuidados/cuidados';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-editar-cuidado',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './editar.html',
-  styleUrls: ['./editar.scss']
+  // styleUrls: ['./editar.scss'] // O comentado si usas el global
 })
 export class EditarCuidado implements OnInit {
+  // 1. Inyectamos el servicio de textos
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   editarForm: FormGroup;
   idCuidado: number = 0;
   isSubmitting = false;
   cargandoDatos = true;
   errorMensaje = '';
   
-  // Gestión de la imagen actual y nueva
   imagenActualUrl: string | null = null;
   nuevaImagenSeleccionada: File | null = null;
   public backendUrl = 'http://127.0.0.1:8000';
@@ -39,7 +43,6 @@ export class EditarCuidado implements OnInit {
   }
 
   ngOnInit(): void {
-    // 1. Obtenemos el ID de la ruta
     this.idCuidado = Number(this.route.snapshot.paramMap.get('id'));
     if (this.idCuidado) {
       this.cargarDatosActuales();
@@ -54,7 +57,6 @@ export class EditarCuidado implements OnInit {
       next: (datos) => {
         const cuidadoActual = datos.find(item => item.id_cuidado === this.idCuidado);
         if (cuidadoActual) {
-          // Pre-llenamos el formulario con los textos actuales
           this.editarForm.patchValue({
             titulo: cuidadoActual.titulo,
             publico: cuidadoActual.publico,
@@ -64,14 +66,16 @@ export class EditarCuidado implements OnInit {
           this.imagenActualUrl = cuidadoActual.img;
           this.cargandoDatos = false;
         } else {
-          this.errorMensaje = 'No se encontró el cuidado solicitado.';
+          // 2. Usamos el texto de error "no encontrado"
+          this.errorMensaje = this.t().edicion_cuidados.error_no_encontrado;
           this.cargandoDatos = false;
         }
-        this.cdr.detectChanges(); // Forzamos actualización visual inmediata
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Error al cargar datos actuales', err);
-        this.errorMensaje = 'Error al cargar los datos en el servidor.';
+        // 3. Usamos el texto "error cargando datos"
+        this.errorMensaje = this.t().erorres.error_cargando_datos;
         this.cargandoDatos = false;
         this.cdr.detectChanges();
       }
@@ -104,11 +108,9 @@ export class EditarCuidado implements OnInit {
     this.isSubmitting = true;
     this.errorMensaje = '';
 
-    // ESTRATEGIA DE ENVÍO DE DATOS SEGÚN LA DOCUMENTACIÓN
     let payload: any;
 
     if (this.nuevaImagenSeleccionada) {
-      // Si se sube una nueva imagen, es obligatorio usar FormData
       const formData = new FormData();
       formData.append('titulo', this.editarForm.get('titulo')?.value);
       formData.append('publico', this.editarForm.get('publico')?.value);
@@ -120,7 +122,6 @@ export class EditarCuidado implements OnInit {
       
       payload = formData;
     } else {
-      // Si no hay imagen nueva, enviamos un objeto JSON limpio
       payload = this.editarForm.value;
     }
 
@@ -134,6 +135,7 @@ export class EditarCuidado implements OnInit {
         console.error('Error al editar el cuidado:', err);
         this.isSubmitting = false;
 
+        // Formateo de errores
         if (err.status === 400) {
           let mensajes = [];
           for (const campo in err.error) {
@@ -149,7 +151,7 @@ export class EditarCuidado implements OnInit {
           this.errorMensaje = `Error inesperado (Código ${err.status}).`;
         }
         
-        this.cdr.detectChanges(); // Forzamos repintado instantáneo de la alerta
+        this.cdr.detectChanges(); 
       }
     });
   }

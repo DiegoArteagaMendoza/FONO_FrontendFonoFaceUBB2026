@@ -70,6 +70,19 @@ export const TEXTOS_SITIO = {
         subtitulo: "Administra las recomendaciones y cuidados vocales específicos.",
         nueva_informacion: "Nuevo Cuidado",
     },
+    cuidados_extras: {
+        publico_objetivo: "Público Objetivo",
+        fuente: "Fuente",
+        imagen_adjunta: "Imagen adjunta",
+        ver_enlace: "Ver Enlace",
+        todos: "Todos",
+        ninos: "Niños",
+        profesores: "Profesores",
+        cantantes: "Cantantes y Actores",
+        locutores: "Locutores",
+        publico_general: "Público General",
+        filtrar_publico: "Filtrar por Público:",
+    },
     gestion_noticias: {
 
     },
@@ -126,5 +139,94 @@ export const TEXTOS_SITIO = {
         desc_estado: "Si se desmarca, el usuario no podrá entrar.",
         boton_creando: "Creando Usuario...",
         boton_crear: "Crear Usuario"
-    }
+    },
+    
+    // TEXTOS CREACIÓN CARRUSEL DE INICIO
+    creacion_carrusel: {
+        titulo: "Crear Elemento del Carrusel",
+        subtitulo: "Añade un nuevo bloque de imagen y texto para el inicio del portal.",
+        label_titulo: "Título Principal",
+        placeholder_titulo: "Ej: ¿Qué es la voz?",
+        alerta_titulo: "El título es obligatorio.",
+        label_descripcion: "Descripción",
+        placeholder_descripcion: "Describe brevemente de qué trata este elemento...",
+        alerta_descripcion: "La descripción es obligatoria.",
+        label_imagen: "Imagen de Fondo",
+        help_imagen: "Formatos recomendados: JPG, PNG, WEBP (Max 2MB).",
+        previsualizacion: "Previsualización:",
+        boton_quitar_imagen: "Quitar Imagen",
+        alerta_imagen: "Debes adjuntar una imagen.",
+        boton_guardando: "Guardando...",
+        boton_guardar: "Guardar Elemento"
+    },
+    
+    // TEXTOS MODAL USUARIO
+    modal_usuario: {
+        titulo: "Detalle de Usuario",
+        nombre_completo: "Nombre Completo:",
+        rut: "RUT:",
+        correo: "Correo Electrónico:",
+        rol: "Rol del Sistema:",
+        rol_admin: "Administrador",
+        rol_regular: "Usuario Regular"
+    },
+
+    // LOGIN
+    login: {
+        titulo: "Bienvenido a FonoFace",
+        subtitulo: "Ingresa tus credenciales para continuar",
+        label_email: "Correo Electrónico",
+        placeholder_email: "ejemplo@correo.com",
+        alerta_email_req: "El correo es obligatorio.",
+        alerta_email_inv: "El formato del correo no es válido.",
+        label_password: "Contraseña",
+        placeholder_password: "********",
+        alerta_password_req: "La contraseña es obligatoria.",
+        alerta_password_min: "Debe tener al menos 6 caracteres.",
+        btn_ingresando: "Ingresando...",
+        btn_ingresar: "Iniciar Sesión",
+        msg_admin: "Para registrarse como usuario autorizado contacte con el administrador del sistema",
+        msg_portal: "Para volver al portal cliente presiona en 'Portal Cliente'",
+        btn_redirigiendo: "Redirigiendo...",
+        btn_portal: "Portal cliente",
+        error_credenciales: "Correo o contraseña incorrectos.",
+        error_servidor: "Error al conectar con el servidor."
+    },
+
+    // CREACION CUIDADOS
+    creacion_cuidados: {
+        titulo: "Crear Nuevo Cuidado",
+        subtitulo: "Añade una recomendación o cuidado vocal para un público específico.",
+        label_titulo: "Título de la recomendación",
+        placeholder_titulo: "Ej. Calentamiento vocal...",
+        alerta_titulo: "El título es obligatorio.",
+        label_publico: "Público Objetivo",
+        placeholder_publico: "Seleccione uno...",
+        alerta_publico: "Selecciona el público objetivo.",
+        label_contenido: "Contenido y Detalles",
+        placeholder_contenido: "Explica detalladamente el cuidado...",
+        alerta_contenido: "El contenido es obligatorio.",
+        label_fuente: "Fuente o Referencia (Opcional)",
+        placeholder_fuente: "https://ejemplo.com/estudio...",
+        alerta_fuente: "Debe ser una URL válida (ej. https://...).",
+        label_imagen: "Imagen Principal (Opcional)",
+        help_imagen: "Sube una imagen ilustrativa para esta recomendación (JPG, PNG).",
+        archivo_seleccionado: "Archivo seleccionado:",
+        btn_guardando: "Guardando...",
+        btn_guardar: "Guardar Cuidado"
+    },
+
+    // EDICION CUIDADOS
+    edicion_cuidados: {
+        titulo: "Editar Cuidado",
+        subtitulo: "Modifica el contenido, público o la imagen asociada a esta recomendación.",
+        cargando_datos: "Cargando datos del registro...",
+        error_no_encontrado: "No se encontró el cuidado solicitado.",
+        imagen_actual: "Imagen Actual:",
+        label_reemplazar: "Reemplazar Imagen (Opcional)",
+        help_reemplazar: "Selecciona un archivo solo si deseas cambiar la imagen actual.",
+        nueva_imagen: "Nueva imagen a subir:",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
 }

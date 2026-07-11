@@ -63,18 +63,18 @@ export const routes: Routes = [
     component: Layout,
     children: [     
       // INICIO
-      { path: 'inicio', component: Inicio },
+      { path: 'administracion/inicio', component: Inicio },
       // INFORMACION
-      { path: 'informacion', component: InformacionComponent },
-      { path: 'informacion/crear', component: CrearInformacion },
-      { path: 'informacion/editar/:id', component: EditarInformacion },
+      { path: 'administracion/informacion', component: InformacionComponent },
+      { path: 'administracion/informacion/crear', component: CrearInformacion },
+      { path: 'administracion/informacion/editar/:id', component: EditarInformacion },
       // CUIDADOS
-      { path: 'cuidados', component: Cuidados }, 
-      { path: 'cuidados/crear', component: CrearCuidado },
-      { path: 'cuidados/editar/:id', component: EditarCuidado },
+      { path: 'administracion/cuidados', component: Cuidados }, 
+      { path: 'administracion/cuidados/crear', component: CrearCuidado },
+      { path: 'administracion/cuidados/editar/:id', component: EditarCuidado },
       // ADMINISTRACION BANNER
-      { path: 'administracion/inicio', component: AdministracionInicioComponent },
-      { path: 'administracion/inicio/crear', component: AdministracionInicioCrearComponent},
+      { path: 'administracion/carrusel/inicio', component: AdministracionInicioComponent },
+      { path: 'administracion/carrusel/inicio/crear', component: AdministracionInicioCrearComponent},
       // ADMINISTRACION USUARIOS
       { path: 'administracion/usuario', component: AdministracionUsuarioComponent },
       { path: 'administracion/usuario/crear', component: AdministracionUsuarioCrearComponente },
@@ -85,8 +85,8 @@ export const routes: Routes = [
   },
 
   // Si digitan cualquier otra cosa, se devuelven a la página de inicio pública
-  { 
-    path: '**', 
-    redirectTo: '/inicio' 
-  }
+  // { 
+  //   path: '**', 
+  //   redirectTo: '/inicio' 
+  // }
 ];
