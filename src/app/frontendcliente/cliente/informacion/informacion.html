@@ -1,10 +1,10 @@
 <div class="cliente-page">
   <div class="page-header text-center">
-    <h1>Centro de Información</h1>
-    <p>Explora artículos, guías y consejos especializados en el cuidado vocal.</p>
+    <h1>Prevención de la voz</h1>
+    <p>Explora artículos, guías y consejos especializados en la prevención de la voz.</p>
   </div>
 
-  <div class="filter-pills">
+  <!-- <div class="filter-pills">
     <button 
       *ngFor="let cat of categorias" 
       class="pill-btn" 
@@ -12,7 +12,7 @@
       (click)="filtrarPorCategoria(cat.id)">
       {{ cat.nombre }}
     </button>
-  </div>
+  </div> -->
 
   <div *ngIf="cargando" class="loading-state">
     <div class="spinner"></div>
@@ -31,7 +31,7 @@
         <div *ngIf="!item.imagenes || item.imagenes.length === 0" class="no-image">
           <span>Sin Imagen</span>
         </div>
-        <span class="category-badge" [ngClass]="item.categoria">{{ obtenerNombreCategoria(item.categoria) }}</span>
+        <!-- <span class="category-badge" [ngClass]="item.categoria">{{ obtenerNombreCategoria(item.categoria) }}</span> -->
       </div>
       
       <div class="card-content">

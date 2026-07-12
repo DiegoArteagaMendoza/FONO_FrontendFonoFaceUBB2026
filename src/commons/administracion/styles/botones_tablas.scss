@@ -1,0 +1,58 @@
+/* ==========================================================================
+   BOTONES DE ACCIÓN PARA TABLAS
+   ========================================================================== */
+.td-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap; /* En caso de pantallas pequeñas, los botones bajan de línea */
+}
+
+.btn-icon {
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover { 
+    opacity: 0.8; 
+    transform: translateY(-1px);
+  }
+  
+  &.view { 
+    background-color: #17a2b8; 
+    color: #fff; 
+  }
+  
+  &.edit { 
+    background-color: #ffc107; 
+    color: #000; 
+  }
+  
+  &.delete { 
+    background-color: #dc3545; 
+    color: #fff; 
+  }
+
+  /* Variante solo de ícono sin fondo sólido */
+  &.icon-only {
+    background: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+
+    &.edit { 
+      color: #0284c7; 
+      &:hover { background-color: #e0f2fe; color: #0284c7; } 
+    }
+    
+    &.delete { 
+      color: #e11d48; 
+      &:hover { background-color: #ffe4e6; color: #e11d48;} 
+    }
+  }
+}

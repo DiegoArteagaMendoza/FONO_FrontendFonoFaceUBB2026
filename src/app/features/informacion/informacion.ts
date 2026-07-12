@@ -1,8 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { InformacionService, Informacion } from '../../core/services/informacion/informacion';
 import { environment } from '../../../environments/environment';
+
+// IMPORT DE TEXTOS
+import { TextosService } from '../../core/services/textos/textos';
 
 @Component({
   selector: 'app-informacion',
@@ -16,6 +19,10 @@ export class InformacionComponent implements OnInit {
   cargando = true;
   itemSeleccionado: Informacion | null = null;
   public backendUrl = 'http://127.0.0.1:8000';
+
+  public textosService = inject(TextosService)
+
+  public t = this.textosService.t;
 
   categoriaActual: string = '';
 
@@ -54,28 +61,6 @@ export class InformacionComponent implements OnInit {
     this.cargarDatos(); // Volvemos a pedir los datos a la API con el nuevo filtro
   }
 
-  // cargarDatos(): void {
-  //   this.cargando = true;
-  //   this.informacionService.getInformacion().subscribe({
-  //     next: (datos) => {
-  //       // Filtramos solo los que tienen estado true (borrado lógico)
-  //       this.listaInformacion = datos.filter(item => item.estado);
-  //       this.cargando = false;
-        
-  //       // Forzamos la detección de cambios cuando la respuesta es exitosa
-  //       this.cdr.detectChanges();
-  //     },
-  //     error: (err) => {
-  //       console.error('Error al cargar la información', err);
-  //       this.cargando = false;
-
-  //       // Forzamos la detección de cambios también en caso de error
-  //       this.cdr.detectChanges();
-  //     }
-  //   });
-  // }
-
-  // MÉTODO NUEVO: Formatea la URL de la imagen de forma segura
   obtenerUrlImagen(rutaImagen: string): string {
     if (!rutaImagen) return '';
     
@@ -101,7 +86,7 @@ export class InformacionComponent implements OnInit {
 
   eliminarInformacion(id: number): void {
     // 1. Solicitamos una confirmación nativa antes de proceder
-    const confirmar = confirm('¿Estás seguro de que deseas eliminar este registro de información?');
+    const confirmar = confirm(this.textosService.t().globales.confirmacion_eliminar);
     
     if (!confirmar) {
       return; // Si el usuario cancela, no hacemos nada
@@ -120,7 +105,7 @@ export class InformacionComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al intentar eliminar el registro:', err);
-        alert('Ocurrió un error al eliminar la información. Por favor, verifica tus permisos o vuelve a iniciar sesión.');
+        alert(this.textosService.t().erorres.error_eliminacion);
       }
     });
   }

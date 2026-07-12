@@ -1,8 +1,8 @@
 <div class="login-container">
   <div class="login-card">
     <div class="login-header">
-      <h2>Bienvenido a FonoFace</h2>
-      <p>Ingresa tus credenciales para continuar</p>
+      <h2>{{ t().login.titulo }}</h2>
+      <p>{{ t().login.subtitulo }}</p>
     </div>
 
     <div *ngIf="errorMessage" class="server-error">
@@ -10,51 +10,50 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      
       <div class="form-group">
-        <label for="email">Correo Electrónico</label>
+        <label for="email">{{ t().login.label_email }}</label>
         <input 
           id="email" 
           type="email" 
           formControlName="email" 
-          placeholder="ejemplo@correo.com"
+          [placeholder]="t().login.placeholder_email"
           [class.is-invalid]="email?.invalid && (email?.dirty || email?.touched)"
         >
         <div class="error-messages" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
-          <small *ngIf="email?.errors?.['required']">El correo es obligatorio.</small>
-          <small *ngIf="email?.errors?.['email']">El formato del correo no es válido.</small>
+          <small *ngIf="email?.errors?.['required']">{{ t().login.alerta_email_req }}</small>
+          <small *ngIf="email?.errors?.['email']">{{ t().login.alerta_email_inv }}</small>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="password">Contraseña</label>
+        <label for="password">{{ t().login.label_password }}</label>
         <input 
           id="password" 
           type="password" 
           formControlName="password" 
-          placeholder="********"
+          [placeholder]="t().login.placeholder_password"
           [class.is-invalid]="password?.invalid && (password?.dirty || password?.touched)"
         >
         <div class="error-messages" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-          <small *ngIf="password?.errors?.['required']">La contraseña es obligatoria.</small>
-          <small *ngIf="password?.errors?.['minlength']">Debe tener al menos 6 caracteres.</small>
+          <small *ngIf="password?.errors?.['required']">{{ t().login.alerta_password_req }}</small>
+          <small *ngIf="password?.errors?.['minlength']">{{ t().login.alerta_password_min }}</small>
         </div>
       </div>
 
-      <!-- <div class="form-group captcha-wrapper" style="display: flex; justify-content: center; margin-bottom: 1rem;">
-        <re-captcha (resolved)="onCaptchaResolved($event)"></re-captcha>
-      </div> -->
-
-      <button 
-        type="submit" 
-        class="btn-submit" 
-        [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Ingresando...' : 'Iniciar Sesión' }}
+      <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? t().login.btn_ingresando : t().login.btn_ingresar }}
       </button>
-      <div class="login-header">
-        <p>Para registrarse como usuario autorizado contacte con el administrador del sistema</p>
-      </div>
 
+      <div class="login-header" style="margin-top: 1rem;">
+        <p>{{ t().login.msg_admin }}</p>
+      </div>
+      <div class="login-header">
+        <p>{{ t().login.msg_portal }}</p>
+      </div>
+      
+      <button type="button" class="btn-submit" routerLink="/portal/inicio" [disabled]="isSubmitting">
+        {{ isSubmitting ? t().login.btn_redirigiendo : t().login.btn_portal }}
+      </button>
     </form>
   </div>
-</div>
+</div>5

@@ -1,17 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { InicioCliente } from './inicio-cliente';
+import { InicioClienteComponent } from './inicio-cliente';
 
 describe('InicioCliente', () => {
-  let component: InicioCliente;
-  let fixture: ComponentFixture<InicioCliente>;
+  let component: InicioClienteComponent;
+  let fixture: ComponentFixture<InicioClienteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InicioCliente],
+      imports: [InicioClienteComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InicioCliente);
+    fixture = TestBed.createComponent(InicioClienteComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

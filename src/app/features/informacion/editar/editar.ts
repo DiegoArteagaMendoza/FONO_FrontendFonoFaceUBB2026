@@ -1,8 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InformacionService, Informacion, ImagenInformacion } from '../../../core/services/informacion/informacion';
+
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-editar',
@@ -17,6 +19,9 @@ export class EditarInformacion implements OnInit {
   isSubmitting = false;
   cargandoDatos = true;
   errorMensaje = '';
+  public textosService = inject(TextosService)
+
+  public t = this.textosService.t;
   
   // Nuevas variables para las imágenes
   imagenesActuales: ImagenInformacion[] = [];
@@ -61,14 +66,14 @@ export class EditarInformacion implements OnInit {
           this.imagenesActuales = infoActual.imagenes || [];
           this.cargandoDatos = false;
         } else {
-          this.errorMensaje = 'No se encontró la información solicitada.';
+          this.errorMensaje = this.textosService.t().globales.sin_informacion_encontrada;
           this.cargandoDatos = false;
         }
         this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Error al cargar datos', err);
-        this.errorMensaje = 'Error al cargar los datos actuales.';
+        this.errorMensaje = this.textosService.t().erorres.error_cargando_datos;
         this.cargandoDatos = false;
         this.cdr.detectChanges(); 
       }
@@ -84,7 +89,7 @@ export class EditarInformacion implements OnInit {
 
   // Lógica preparada para eliminar la imagen
   eliminarImagen(idImagen: number): void {
-    const confirmar = confirm('¿Estás seguro de que deseas eliminar esta imagen? Esta acción no se puede deshacer.');
+    const confirmar = confirm(this.textosService.t().globales.eliminar_imagen);
     
     if (confirmar) {
       console.log('Solicitando eliminar la imagen con ID:', idImagen);
@@ -93,7 +98,7 @@ export class EditarInformacion implements OnInit {
       /*
       this.informacionService.eliminarImagen(idImagen).subscribe({
         next: () => {
-          // Filtramos la imagen borrada del arreglo para que desaparezca de la vista sin recargar
+          Filtramos la imagen borrada del arreglo para que desaparezca de la vista sin recargar
           this.imagenesActuales = this.imagenesActuales.filter(img => img.id !== idImagen);
           this.cdr.detectChanges();
         },
@@ -126,7 +131,7 @@ export class EditarInformacion implements OnInit {
       error: (err) => {
         console.error('Error al editar', err);
         this.isSubmitting = false;
-        this.errorMensaje = 'Ocurrió un error al actualizar. Verifica tus permisos o sesión.';
+        this.errorMensaje = this.textosService.t().erorres.error_actualizar;
         this.cdr.detectChanges();
       }
     });

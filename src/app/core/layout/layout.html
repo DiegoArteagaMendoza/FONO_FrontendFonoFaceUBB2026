@@ -1,7 +1,15 @@
-<div class="flex h-screen w-full overflow-hidden bg-gray-50">
+<div class="admin-theme flex h-screen w-full overflow-hidden bg-gray-50">
+  
   <app-sidebar class="w-0 md:w-64 flex-shrink-0 z-50"></app-sidebar> 
 
-  <main class="flex-1 h-screen overflow-y-auto">
-    <router-outlet></router-outlet> 
-  </main>
+  <div class="flex-1 flex flex-col h-screen overflow-y-auto">
+    
+    <main class="flex-1 w-full">
+      <router-outlet></router-outlet> 
+    </main>
+
+    <app-footer></app-footer>
+    
+  </div>
+
 </div>

@@ -1,0 +1,84 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; {{ t().globales.boton_volver }}
+      </button>
+      <h2>{{ t().creacion_carrusel.titulo }}</h2>
+      <p>{{ t().creacion_carrusel.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        <div class="flex-2">
+          <div class="form-group">
+            <label for="titulo">{{ t().creacion_carrusel.label_titulo }}</label>
+            <input 
+              id="titulo" 
+              type="text" 
+              formControlName="titulo" 
+              [placeholder]="t().creacion_carrusel.placeholder_titulo"
+              [class.is-invalid]="formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched"
+            >
+            <small class="error-text" *ngIf="formulario.get('titulo')?.hasError('required') && formulario.get('titulo')?.touched">
+              {{ t().creacion_carrusel.alerta_titulo }}
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">{{ t().creacion_carrusel.label_descripcion }}</label>
+            <textarea 
+              id="descripcion" 
+              formControlName="descripcion" 
+              rows="4"
+              [placeholder]="t().creacion_carrusel.placeholder_descripcion"
+              [class.is-invalid]="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched"
+            ></textarea>
+            <small class="error-text" *ngIf="formulario.get('descripcion')?.hasError('required') && formulario.get('descripcion')?.touched">
+              {{ t().creacion_carrusel.alerta_descripcion }}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group flex-1 file-upload-section">
+          <label>{{ t().creacion_carrusel.label_imagen }}</label>
+          <input 
+            #fileInput
+            type="file" 
+            (change)="onFileSelected($event)" 
+            accept="image/*"
+            class="file-input"
+          >
+          <small class="help-text">{{ t().creacion_carrusel.help_imagen }}</small>
+
+          <div class="preview-files" *ngIf="imagenPreview">
+            <p><strong>{{ t().creacion_carrusel.previsualizacion }}</strong></p>
+            <div class="current-img-preview" style="margin-top: 0.5rem; max-width: 100%; height: 140px;">
+              <img [src]="imagenPreview" alt="Previsualización">
+            </div>
+            <button type="button" class="btn-secondary" style="margin-top: 1rem; width: 100%; padding: 0.5rem;" (click)="removerImagen()">
+              {{ t().creacion_carrusel.boton_quitar_imagen }}
+            </button>
+          </div>
+          
+          <small class="error-text" *ngIf="!archivoSeleccionado && formulario.touched">
+            {{ t().creacion_carrusel.alerta_imagen }}
+          </small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <!-- Reemplazando boton_candelar por boton_cancelar (asegúrate de corregirlo en textos.ts) -->
+        <button type="button" class="btn-secondary" (click)="volver()">{{ t().globales.boton_cancelar || t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_carrusel.boton_guardando : t().creacion_carrusel.boton_guardar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth';
-
-// reCAPTCHA
 import { RecaptchaModule } from 'ng-recaptcha';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RecaptchaModule],
+  imports: [CommonModule, ReactiveFormsModule, RecaptchaModule, RouterModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  styleUrls: ['./login.scss'] // O vacío si pasaste todo al global
 })
 export class Login {
+  // 1. Inyectamos el servicio de textos
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   loginForm: FormGroup;
   isSubmitting = false;
   errorMessage = '';
@@ -32,14 +35,6 @@ export class Login {
     });
   }
 
-  // MÉTODO QUE SE EJECUTA CUANDO EL USUARIO RESUELVE EL CAPTCHA
-  // onCaptchaResolved(captchaResponse: string | null): void {
-  //   this.captchaToken = captchaResponse;
-  //   if (this.captchaToken) {
-  //     this.errorMessage = ''; // Limpiamos el error si ya lo resolvió
-  //   }
-  // }
-
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
 
@@ -49,41 +44,28 @@ export class Login {
       return;
     }
 
-    // // 1. Verificamos que el captcha esté resuelto
-    // if (!this.captchaToken) {
-    //   this.errorMessage = 'Por favor, verifica que no eres un robot.';
-    //   return;
-    // }
-
     this.isSubmitting = true;
     this.errorMessage = '';
 
-    // 2.captcha_token a los datos que van al backend
     const credentials = {
       correo: this.loginForm.value.email,
       password: this.loginForm.value.password,
-      // captcha_token: this.captchaToken 
     };
 
-    // Llamamos a tu backend
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        // Guardamos los tokens y el usuario en LocalStorage
         this.authService.setSession(response);
-        
-        // Quitamos el estado de carga
         this.isSubmitting = false;
-        
-        // Redirigimos al sistema
         this.router.navigate(['/inicio']); 
       },
       error: (err) => {
         this.isSubmitting = false;
-        // Manejo de errores (ej. credenciales incorrectas)
+        
+        // 2. Usamos los textos dinámicos para los errores
         if (err.status === 401 || err.status === 400) {
-          this.errorMessage = 'Correo o contraseña incorrectos.';
+          this.errorMessage = this.t().login.error_credenciales;
         } else {
-          this.errorMessage = 'Error al conectar con el servidor.';
+          this.errorMessage = this.t().login.error_servidor;
         }
         console.error('Error de autenticación:', err);
       }

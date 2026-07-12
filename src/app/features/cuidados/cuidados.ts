@@ -1,22 +1,26 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CuidadosService, Cuidado } from '../../core/services/cuidados/cuidados';
+import { TextosService } from '../../core/services/textos/textos';
 
 @Component({
   selector: 'app-cuidados',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './cuidados.html',
-  styleUrls: ['./cuidados.scss']
+  // styleUrls: ['./cuidados.scss'] // O comentado si usas el global
 })
 export class Cuidados implements OnInit {
+  // 1. Inyectamos el servicio de textos
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   listaCuidados: Cuidado[] = [];
   cargando = true;
   itemSeleccionado: Cuidado | null = null;
   public backendUrl = 'http://127.0.0.1:8000';
   
-  // Variable para el filtro por Público
   publicoActual: string = '';
 
   constructor(
@@ -32,14 +36,12 @@ export class Cuidados implements OnInit {
   cargarDatos(): void {
     this.cargando = true;
 
-    // Dependiendo de si hay un filtro seleccionado, llamamos a un endpoint u otro
     const peticion = this.publicoActual 
       ? this.cuidadosService.getCuidadosPorPublico(this.publicoActual)
       : this.cuidadosService.getCuidados();
 
     peticion.subscribe({
       next: (datos) => {
-        // Filtramos solo los que tienen estado true (borrado lógico)
         this.listaCuidados = datos.filter(item => item.estado);
         this.cargando = false;
         this.cdr.detectChanges();
@@ -63,8 +65,6 @@ export class Cuidados implements OnInit {
     return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
   }
 
-  // --- MÉTODOS DE ACCIÓN ---
-
   irACrear(): void {
     this.router.navigate(['/cuidados/crear']);
   }
@@ -74,7 +74,8 @@ export class Cuidados implements OnInit {
   }
 
   eliminarCuidado(id: number): void {
-    const confirmar = confirm('¿Estás seguro de que deseas eliminar este cuidado?');
+    // 2. Usamos el texto de confirmación global
+    const confirmar = confirm(this.t().globales.confirmacion_eliminar);
     if (!confirmar) return;
 
     this.cuidadosService.eliminarCuidado(id).subscribe({
@@ -85,13 +86,12 @@ export class Cuidados implements OnInit {
       },
       error: (err) => {
         console.error('Error al eliminar', err);
-        alert('Ocurrió un error al eliminar el cuidado.');
+        // 3. Usamos el texto de error de eliminación
+        alert(this.t().erorres.error_eliminacion);
       }
     });
   }
   
-  // --- MÉTODOS DEL MODAL ---
-
   verDetalle(item: Cuidado): void {
     this.itemSeleccionado = item;
     this.cdr.detectChanges(); 
@@ -102,7 +102,6 @@ export class Cuidados implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Método auxiliar para evitar problemas con la "Ñ" en las clases CSS
   getBadgeClass(publico: string): string {
     const map: any = {
       'NIÑOS': 'badge-ninos',

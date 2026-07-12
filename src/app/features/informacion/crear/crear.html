@@ -26,11 +26,9 @@
           <label for="categoria">Categoría</label>
           <select id="categoria" formControlName="categoria">
             <option value="" disabled selected>Seleccione una...</option>
-            <option value="NI">Niños</option>
-            <option value="PO">Profesores</option>
-            <option value="CA">Cantantes y actores</option>
-            <option value="LO">Locutores</option>
-            <option value="GE">Publico general</option>
+            <option value="PO">Promoción</option>
+            <option value="PE">Prevención</option>
+            <option value="FA">Farmacos</option>
           </select>
           <small class="error-text" *ngIf="crearForm.get('categoria')?.invalid && crearForm.get('categoria')?.touched">
             Selecciona una categoría.

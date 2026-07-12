@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -6,6 +6,9 @@ import { forkJoin } from 'rxjs';
 // Importamos los servicios que ya creamos
 import { InformacionService } from '../../../core/services/informacion/informacion';
 import { CuidadosService } from '../../../core/services/cuidados/cuidados';
+
+// IMPORT DE TEXTOS
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-inicio',
@@ -18,25 +21,29 @@ export class Inicio implements OnInit {
   nombreUsuario: string = 'Administrador';
   fechaActual: Date = new Date();
   cargandoStats = true;
+  public textosService = inject(TextosService)
+
+  public t = this.textosService.t;
 
   // Inicializamos los valores en 0
   estadisticas = [
     { 
-      titulo: 'Información Publicada', 
+      // titulo: 'Información Publicada', 
+      titulo: this.textosService.t().inicio_admin.informacion_publicada,
       valor: 0, 
       icono: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
       colorClass: 'text-blue-600',
       bgClass: 'bg-blue-100'
     },
     { 
-      titulo: 'Cuidados Activos', 
+      titulo: this.textosService.t().inicio_admin.cuidados_activos, 
       valor: 0, 
       icono: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
       colorClass: 'text-rose-600',
       bgClass: 'bg-rose-100'
     },
     { 
-      titulo: 'Noticias Recientes', 
+      titulo: this.textosService.t().inicio_admin.noticias_recientes, 
       valor: 0, 
       icono: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15',
       colorClass: 'text-amber-600',
@@ -45,9 +52,9 @@ export class Inicio implements OnInit {
   ];
 
   accesosRapidos = [
-    { titulo: 'Nueva Información', ruta: '/informacion/crear', icono: 'M12 4v16m8-8H4' },
-    { titulo: 'Nuevo Cuidado', ruta: '/cuidados/crear', icono: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-    { titulo: 'Publicar Noticia (PROXIMAMENTE)', ruta: '/noticias', icono: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' }
+    { titulo: this.textosService.t().inicio_admin.nueva_informacion, ruta: '/informacion/crear', icono: 'M12 4v16m8-8H4' },
+    { titulo: this.textosService.t().inicio_admin.nuevo_cuidado, ruta: '/cuidados/crear', icono: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+    { titulo: this.textosService.t().inicio_admin.noticias_proximamente, ruta: '/noticias', icono: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' }
   ];
 
   constructor(
@@ -59,6 +66,13 @@ export class Inicio implements OnInit {
   ngOnInit(): void {
     this.cargarDatosUsuario();
     this.cargarEstadisticas();
+  }
+
+  getTituloBienvenida(): string {
+    return this.textosService.reemplazarVariables(
+      this.t().inicio_admin.bienvenida_titulo, 
+      { nombre: this.nombreUsuario }
+    );
   }
 
   cargarDatosUsuario(): void {

@@ -1,19 +1,24 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CuidadosService } from '../../../core/services/cuidados/cuidados'; // Ajusta tu ruta
+import { CuidadosService } from '../../../core/services/cuidados/cuidados';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-crear-cuidado',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './crear.html',
-  styleUrls: ['./crear.scss']
+  // styleUrls: ['./crear.scss'] // O comentado si usas el global
 })
 export class CrearCuidado {
+  // 1. Inyectamos el servicio de textos
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   crearForm: FormGroup;
-  imagenSeleccionada: File | null = null; // En cuidados es solo una imagen
+  imagenSeleccionada: File | null = null;
   isSubmitting = false;
   errorMensaje = '';
 
@@ -27,11 +32,10 @@ export class CrearCuidado {
       titulo: ['', [Validators.required, Validators.maxLength(200)]],
       publico: ['', Validators.required],
       contenido: ['', Validators.required],
-      fuente: ['', Validators.pattern('https?://.+')] // Valida que sea una URL si se ingresa
+      fuente: ['', Validators.pattern('https?://.+')] 
     });
   }
 
-  // Captura la selección de un único archivo
   onFileChange(event: any): void {
     const files: FileList = event.target.files;
     this.errorMensaje = '';
@@ -52,34 +56,31 @@ export class CrearCuidado {
     this.isSubmitting = true;
     this.errorMensaje = '';
 
-    // 1. Preparamos el FormData
     const formData = new FormData();
     formData.append('titulo', this.crearForm.get('titulo')?.value);
     formData.append('publico', this.crearForm.get('publico')?.value);
     formData.append('contenido', this.crearForm.get('contenido')?.value);
 
-    // Adjuntamos la fuente si el usuario la ingresó
     const fuenteValue = this.crearForm.get('fuente')?.value;
     if (fuenteValue) {
       formData.append('fuente', fuenteValue);
     }
 
-    // 2. Adjuntamos la imagen seleccionada
     if (this.imagenSeleccionada) {
       formData.append('img', this.imagenSeleccionada);
     }
 
-    // 3. Enviamos al backend
     this.cuidadosService.crearCuidado(formData).subscribe({
       next: (respuesta) => {
         console.log('Cuidado creado con éxito', respuesta);
         this.isSubmitting = false;
-        this.router.navigate(['/cuidados']); // Volvemos a la tabla
+        this.router.navigate(['/cuidados']); 
       },
       error: (err) => {
         console.error('Error devuelto por el servidor:', err);
         this.isSubmitting = false;
 
+        // Formateo de errores de DRF
         if (err.status === 400) {
           let mensajes = [];
           for (const campo in err.error) {
