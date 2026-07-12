@@ -229,4 +229,20 @@ export const TEXTOS_SITIO = {
         btn_actualizando: "Actualizando...",
         btn_actualizar: "Guardar Cambios"
     },
-}
+    footer: {
+        descripcion: "Sistema integral de administración FonoFace. Simplificando la gestión y el cuidado paso a paso.",
+        contacto_email: "contacto@fonoface.cl",
+        contacto_telefono: "+56 9 1234 5678",
+        derechos: "Todos los derechos reservados.",
+        enlaces: [
+        { label: "Inicio", path: "/administracion/inicio" },
+        { label: "Información", path: "/administracion/informacion" },
+        { label: "Cuidados", path: "/administracion/cuidados" },
+        { label: "Noticias", path: "/administracion/noticias" }
+        ],
+        legales: [
+        { label: "Términos de Servicio", path: "/terminos" },
+        { label: "Privacidad", path: "/privacidad" }
+        ]
+    }
+};

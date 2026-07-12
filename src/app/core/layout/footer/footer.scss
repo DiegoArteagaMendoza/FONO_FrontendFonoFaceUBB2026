@@ -1,0 +1,49 @@
+// footer.scss
+
+// Definimos el comportamiento de los bloques en pantallas pequeñas (móviles)
+.footer-container {
+  // Asegura que el footer no se superponga si hay contenido absoluto cerca
+  position: relative;
+  z-index: 10;
+  
+  .footer-section {
+    // Si estás usando directivas de Tailwind dentro de SCSS
+    @apply flex flex-col; 
+
+    // Media query tradicional para ajustes finos en dispositivos móviles (< 768px)
+    @media (max-width: 767px) {
+      text-align: center; // Centramos los textos en móvil
+      
+      // Centramos los iconos SVG en la lista de enlaces cuando estamos en móvil
+      ul li a {
+        justify-content: center;
+      }
+      
+      // Añadimos un poco más de separación entre secciones en móvil
+      &:not(:last-child) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  // Pequeña animación para los enlaces del footer
+  a {
+    position: relative;
+    
+    // Subrayado animado al hacer hover (opcional para darle un toque premium)
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 0;
+      background-color: currentColor;
+      transition: width 0.3s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+}

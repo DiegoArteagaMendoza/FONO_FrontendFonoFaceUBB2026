@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Sidebar } from './sidebar/sidebar';
+import { Footer } from './footer/footer';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterModule, Sidebar],
+  imports: [RouterModule, Sidebar, Footer],
   templateUrl: './layout.html',
 })
 export class Layout {
