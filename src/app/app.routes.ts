@@ -8,6 +8,9 @@ import { EditarInformacion } from './features/informacion/editar/editar';
 import { Cuidados } from './features/cuidados/cuidados';
 import { CrearCuidado } from './features/cuidados/crear/crear';
 import { EditarCuidado } from './features/cuidados/editar/editar';
+import { NoticiasAdminComponent } from './features/noticias/noticias';
+import { CrearNoticia } from './features/noticias/crear/crear';
+import { EditarNoticia } from './features/noticias/editar/editar';
 import { AdministracionInicioComponent } from './features/administracion/inicio/administracion-inicio';
 import { AdministracionInicioCrearComponent } from './features/administracion/inicio/crear/administracion-inicio-crear';
 import { AdministracionUsuarioComponent } from './features/administracion/usuarios/administracion-usuarios';
@@ -21,6 +24,8 @@ import { InformacionDetalleComponent } from '../app/frontendcliente/cliente/info
 import { CuidadosClienteComponent } from './frontendcliente/cliente/cuidados/cuidados';
 import { CuidadosDetalleComponent } from './frontendcliente/cliente/cuidados-detalle/cuidados-detalle';
 import { FarmacosClienteComponent } from './frontendcliente/cliente/farmacos/farmacos';
+import { PromocionClienteComponent } from './frontendcliente/cliente/promocion/promocion';
+import { NoticiasClienteComponent } from './frontendcliente/cliente/noticias/noticias';
 // import { FarmacosDetalleComponent } from './frontendcliente/cliente/farmacos-detalle/farmacos-detalle';
 
 export const routes: Routes = [
@@ -43,6 +48,13 @@ export const routes: Routes = [
       // RUTAS DE PREVENCIÓN
       { path: 'prevencion', component: InformacionClienteComponent },
       { path: 'prevencion/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+
+      // RUTAS DE PROMOCIÓN
+      { path: 'promocion', component: PromocionClienteComponent },
+      { path: 'promocion/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+
+      // RUTA DE NOTICIAS
+      { path: 'noticias', component: NoticiasClienteComponent },
 
       // RUTAS DE CUIDADOS
       { path: 'cuidados', component: CuidadosClienteComponent },
@@ -69,9 +81,13 @@ export const routes: Routes = [
       { path: 'administracion/informacion/crear', component: CrearInformacion },
       { path: 'administracion/informacion/editar/:id', component: EditarInformacion },
       // CUIDADOS
-      { path: 'administracion/cuidados', component: Cuidados }, 
+      { path: 'administracion/cuidados', component: Cuidados },
       { path: 'administracion/cuidados/crear', component: CrearCuidado },
       { path: 'administracion/cuidados/editar/:id', component: EditarCuidado },
+      // NOTICIAS
+      { path: 'administracion/noticias', component: NoticiasAdminComponent },
+      { path: 'administracion/noticias/crear', component: CrearNoticia },
+      { path: 'administracion/noticias/editar/:id', component: EditarNoticia },
       // ADMINISTRACION BANNER
       { path: 'administracion/carrusel/inicio', component: AdministracionInicioComponent },
       { path: 'administracion/carrusel/inicio/crear', component: AdministracionInicioCrearComponent},
@@ -79,7 +95,6 @@ export const routes: Routes = [
       { path: 'administracion/usuario', component: AdministracionUsuarioComponent },
       { path: 'administracion/usuario/crear', component: AdministracionUsuarioCrearComponente },
       
-      { path: 'noticias', redirectTo: 'inicio', pathMatch: 'full' },
       // { path: 'administracion', redirectTo: 'inicio', pathMatch: 'full' }
     ]
   },

@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { TextosService } from '../../../core/services/textos/textos';
@@ -13,7 +13,7 @@ import { TextosService } from '../../../core/services/textos/textos';
   templateUrl: './login.html',
   styleUrls: ['./login.scss'] // O vacío si pasaste todo al global
 })
-export class Login {
+export class Login implements OnInit {
   // 1. Inyectamos el servicio de textos
   public textosService = inject(TextosService);
   public t = this.textosService.t;
@@ -27,12 +27,20 @@ export class Login {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService 
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+  }
+
+  ngOnInit(): void {
+    // Si el interceptor nos redirigió por sesión expirada, mostramos el aviso
+    if (this.route.snapshot.queryParamMap.get('expirada')) {
+      this.errorMessage = this.t().login.alerta_sesion_expirada;
+    }
   }
 
   get email() { return this.loginForm.get('email'); }
@@ -56,7 +64,7 @@ export class Login {
       next: (response) => {
         this.authService.setSession(response);
         this.isSubmitting = false;
-        this.router.navigate(['/inicio']); 
+        this.router.navigate(['/administracion/inicio']);
       },
       error: (err) => {
         this.isSubmitting = false;

@@ -11,10 +11,19 @@ export const API_ENDPOINTS = {
     eliminar: (id: number) => `/informacion/${id}/eliminar/`
   },
   cuidados: {
-    listar: '/cuidados/listar/', 
-    porPublico: (tipoPublico: string) => `/cuidados/publico/${tipoPublico}/`, 
-    crear: '/cuidados/crear/', 
-    editar: (id: number) => `/cuidados/${id}/editar/`, 
-    eliminar: (id: number) => `/cuidados/${id}/eliminar/` 
+    listar: '/cuidados/listar/',
+    porPublico: (tipoPublico: string) => `/cuidados/publico/${tipoPublico}/`,
+    crear: '/cuidados/crear/',
+    editar: (id: number) => `/cuidados/${id}/editar/`,
+    eliminar: (id: number) => `/cuidados/${id}/eliminar/`
+  },
+  noticias: {
+    listar: '/noticias/listar/',
+    crear: '/noticias/crear/',
+    editar: (id: number) => `/noticias/${id}/editar/`,
+    eliminar: (id: number) => `/noticias/${id}/eliminar/`,
+    imagenAgregar: (idNoticia: number) => `/noticias/${idNoticia}/imagenes/agregar/`,
+    imagenEliminar: (idImagen: number) => `/noticias/imagenes/${idImagen}/eliminar/`,
+    newsletterSuscribir: '/noticias/newsletter/suscribir/'
   }
 };

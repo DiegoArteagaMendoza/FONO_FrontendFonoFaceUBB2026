@@ -84,7 +84,9 @@ export const TEXTOS_SITIO = {
         filtrar_publico: "Filtrar por Público:",
     },
     gestion_noticias: {
-
+        titulo: "Gestión de Noticias",
+        subtitulo: "Administra las noticias y novedades que se publican en el portal.",
+        nueva_noticia: "Nueva Noticia",
     },
     gestion_carrusel: {
         titulo: "Gestión del Carrusel de Inicio",
@@ -190,7 +192,43 @@ export const TEXTOS_SITIO = {
         btn_redirigiendo: "Redirigiendo...",
         btn_portal: "Portal cliente",
         error_credenciales: "Correo o contraseña incorrectos.",
-        error_servidor: "Error al conectar con el servidor."
+        error_servidor: "Error al conectar con el servidor.",
+        alerta_sesion_expirada: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+    },
+
+    // CREACION NOTICIAS
+    creacion_noticias: {
+        titulo: "Crear Nueva Noticia",
+        subtitulo: "Completa los campos para publicar una nueva noticia en el portal.",
+        label_titulo: "Título de la noticia",
+        placeholder_titulo: "Ej. Taller de cuidado vocal para profesores...",
+        alerta_titulo: "El título es obligatorio.",
+        label_contenido: "Cuerpo de la noticia",
+        placeholder_contenido: "Desarrolla el contenido de la noticia aquí...",
+        alerta_contenido: "El contenido es obligatorio.",
+        label_imagenes: "Imágenes (Opcional - Máximo 4)",
+        help_imagenes: "Puedes seleccionar varias imágenes al mismo tiempo (JPG, PNG).",
+        max_imagenes: "Solo puedes subir un máximo de 4 imágenes.",
+        archivos_seleccionados: "Archivos seleccionados:",
+        boton_guardando: "Guardando...",
+        boton_guardar: "Publicar Noticia"
+    },
+
+    // EDICION NOTICIAS
+    edicion_noticias: {
+        titulo: "Editar Noticia",
+        subtitulo: "Modifica el título, el contenido o las imágenes de esta noticia.",
+        label_titulo: "Título de la noticia",
+        alerta_titulo: "El título es obligatorio.",
+        label_contenido: "Cuerpo de la noticia",
+        alerta_contenido: "El contenido es obligatorio.",
+        imagenes_actuales: "Imágenes Actuales",
+        label_agregar_imagenes: "Agregar Imágenes Nuevas (Opcional)",
+        help_agregar_imagenes: "Entre las actuales y las nuevas no pueden superar las 4 imágenes.",
+        max_imagenes_total: "Una noticia puede tener un máximo de 4 imágenes en total.",
+        archivos_seleccionados: "Archivos seleccionados:",
+        boton_actualizando: "Actualizando...",
+        boton_actualizar: "Guardar Cambios"
     },
 
     // CREACION CUIDADOS
@@ -244,5 +282,52 @@ export const TEXTOS_SITIO = {
         { label: "Términos de Servicio", path: "/terminos" },
         { label: "Privacidad", path: "/privacidad" }
         ]
+    },
+
+    // ===================== PORTAL CLIENTE =====================
+
+    // FOOTER DEL PORTAL CLIENTE
+    portal_footer: {
+        descripcion: "Plataforma de información y cuidados de la voz de la Universidad del Bío-Bío. Recursos especializados para niños, profesores, cantantes, locutores y público general.",
+        titulo_enlaces: "Enlaces Rápidos",
+        titulo_contacto: "Contacto",
+        contacto_email: "contacto@fonoface.cl",
+        contacto_direccion: "Universidad del Bío-Bío, Concepción, Chile",
+        derechos: "FonoFace — Universidad del Bío-Bío. Todos los derechos reservados.",
+        enlaces: [
+        { label: "Inicio", path: "/portal/inicio" },
+        { label: "Efectos Farmacológicos", path: "/portal/farmacos" },
+        { label: "Prevención de la voz", path: "/portal/prevencion" },
+        { label: "Promoción", path: "/portal/promocion" },
+        { label: "Cuidados", path: "/portal/cuidados" },
+        { label: "Noticias", path: "/portal/noticias" }
+        ]
+    },
+
+    // VISTA PROMOCIÓN DEL PORTAL CLIENTE
+    portal_promocion: {
+        titulo: "Promoción de la voz",
+        subtitulo: "Descubre artículos y recursos para promover una voz sana en tu vida diaria.",
+        cargando: "Cargando artículos...",
+        vacio: "No hay artículos disponibles en esta categoría.",
+        leer_mas: "Leer artículo completo →"
+    },
+
+    // VISTA NOTICIAS DEL PORTAL CLIENTE
+    portal_noticias: {
+        titulo: "Noticias",
+        subtitulo: "Mantente al día con las novedades, eventos y actualizaciones de nuestra plataforma.",
+        cargando: "Cargando noticias...",
+        vacio: "Aún no hay noticias publicadas. ¡Vuelve pronto!",
+        ultimas_titulo: "Últimas noticias",
+        sin_imagen: "Sin Imagen",
+        newsletter_titulo: "Suscríbete a nuestro newsletter",
+        newsletter_subtitulo: "Recibe en tu correo las últimas noticias y consejos para el cuidado de tu voz.",
+        newsletter_placeholder: "ejemplo@correo.com",
+        newsletter_boton: "Suscribirme",
+        newsletter_boton_enviando: "Enviando...",
+        newsletter_error_email: "Ingresa un correo electrónico válido.",
+        newsletter_error_servidor: "No pudimos registrar tu suscripción. Inténtalo más tarde.",
+        newsletter_exito: "¡Gracias por suscribirte! Pronto recibirás nuestras novedades."
     }
 };
