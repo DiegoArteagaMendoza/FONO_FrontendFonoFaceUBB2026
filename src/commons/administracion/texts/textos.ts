@@ -284,6 +284,20 @@ export const TEXTOS_SITIO = {
         ]
     },
 
+    // EDITCIÓN DE CARRUSEL DE INICIO
+    edicion_carrusel: {
+        titulo: "Editar Elemento del Carrusel",
+        subtitulo: "Modifica el texto o la imagen de este bloque del inicio.",
+        cargando_datos: "Cargando datos del elemento...",
+        error_no_encontrado: "No se encontró el elemento solicitado.",
+        imagen_actual: "Imagen Actual:",
+        label_reemplazar: "Reemplazar Imagen (Opcional)",
+        help_reemplazar: "Selecciona un archivo solo si deseas cambiar la imagen actual (Max 2MB).",
+        nueva_imagen: "Nueva imagen a subir:",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
+
     // ===================== PORTAL CLIENTE =====================
 
     // FOOTER DEL PORTAL CLIENTE

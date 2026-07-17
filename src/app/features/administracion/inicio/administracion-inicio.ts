@@ -2,23 +2,21 @@ import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AdministracionService, CarruselItem } from '../../../core/services/administracion/administracion';
-// Inject the service
 import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-administracion',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './administracion-inicio.html',
-  // styleUrls: ['./administracion-inicio.scss'] // Assuming global styles are used
+  templateUrl: './administracion-inicio.html'
 })
 export class AdministracionInicioComponent implements OnInit {
-  // Expose the signal
   public textosService = inject(TextosService);
   public t = this.textosService.t;
 
   listaItems: CarruselItem[] = [];
   cargando = true;
+  itemSeleccionado: CarruselItem | null = null; // <- Nueva variable para el modal
   public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
@@ -63,13 +61,11 @@ export class AdministracionInicioComponent implements OnInit {
   }
 
   editarItem(id: number): void {
-    this.router.navigate(['/administracion/carrusel/inicio/editar', id]);
+    this.router.navigate(['/administracion/carrusel/inicio/editar', id]); // <- Corrección de ruta absoluta añadida aquí
   }
 
   eliminarItem(id: number | undefined): void {
     if (!id) return;
-    
-    // Use the global text for the confirmation message
     if (confirm(this.t().globales.confirmacion_eliminar)) {
       this.adminService.eliminarInicio(id).subscribe({
         next: () => {
@@ -78,10 +74,20 @@ export class AdministracionInicioComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al eliminar', err);
-          // Use the global error message
           alert(this.t().erorres.error_eliminacion);
         }
       });
     }
+  }
+
+  // --- MÉTODOS DEL MODAL ---
+  verDetalle(item: CarruselItem): void {
+    this.itemSeleccionado = item;
+    this.cdr.detectChanges(); 
+  }
+
+  cerrarDetalle(): void {
+    this.itemSeleccionado = null;
+    this.cdr.detectChanges();
   }
 }
