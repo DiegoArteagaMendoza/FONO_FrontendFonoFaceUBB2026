@@ -1,0 +1,80 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().edicion_noticias.titulo }}</h2>
+      <p>{{ t().edicion_noticias.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().globales.cargando }}</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+
+      <div class="form-group">
+        <label for="titulo">{{ t().edicion_noticias.label_titulo }}</label>
+        <input id="titulo" type="text" formControlName="titulo">
+        <small class="error-text" *ngIf="editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched">
+          {{ t().edicion_noticias.alerta_titulo }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">{{ t().edicion_noticias.label_contenido }}</label>
+        <textarea id="contenido" formControlName="contenido" rows="8"></textarea>
+        <small class="error-text" *ngIf="editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched">
+          {{ t().edicion_noticias.alerta_contenido }}
+        </small>
+      </div>
+
+      <div class="form-group image-management-section" *ngIf="imagenesActuales.length > 0">
+        <label>{{ t().edicion_noticias.imagenes_actuales }} ({{ imagenesActuales.length }})</label>
+        <div class="edit-gallery-grid">
+          <div class="edit-img-wrapper" *ngFor="let img of imagenesActuales">
+            <img [src]="obtenerUrlImagen(img.imagen)" alt="Imagen subida">
+            <button type="button" class="btn-icon icon-only delete btn-delete-img" (click)="eliminarImagen(img.id)" title="Eliminar imagen">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group file-upload-section">
+        <label for="imagenesNuevas">{{ t().edicion_noticias.label_agregar_imagenes }}</label>
+        <input
+          id="imagenesNuevas"
+          type="file"
+          multiple
+          accept="image/*"
+          (change)="onFileChange($event)"
+          class="file-input"
+        >
+        <small class="help-text">{{ t().edicion_noticias.help_agregar_imagenes }}</small>
+
+        <div class="preview-files" *ngIf="imagenesNuevas.length > 0">
+          <p><strong>{{ t().edicion_noticias.archivos_seleccionados }}</strong> {{ imagenesNuevas.length }}</p>
+          <ul>
+            <li *ngFor="let file of imagenesNuevas">{{ file.name }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().edicion_noticias.boton_actualizando : t().edicion_noticias.boton_actualizar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

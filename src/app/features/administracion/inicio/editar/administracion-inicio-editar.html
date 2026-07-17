@@ -1,0 +1,101 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; {{ t().globales.boton_volver }}
+      </button>
+      <h2>{{ t().edicion_carrusel.titulo }}</h2>
+      <p>{{ t().edicion_carrusel.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().edicion_carrusel.cargando_datos }}</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        <div class="flex-2">
+          <div class="form-group">
+            <label for="titulo">{{ t().creacion_carrusel.label_titulo }}</label>
+            <input 
+              id="titulo" 
+              type="text" 
+              formControlName="titulo" 
+              [placeholder]="t().creacion_carrusel.placeholder_titulo"
+              [class.is-invalid]="editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched"
+            >
+            <small class="error-text" *ngIf="editarForm.get('titulo')?.hasError('required') && editarForm.get('titulo')?.touched">
+              {{ t().creacion_carrusel.alerta_titulo }}
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">{{ t().creacion_carrusel.label_descripcion }}</label>
+            <textarea 
+              id="descripcion" 
+              formControlName="descripcion" 
+              rows="4"
+              [placeholder]="t().creacion_carrusel.placeholder_descripcion"
+              [class.is-invalid]="editarForm.get('descripcion')?.invalid && editarForm.get('descripcion')?.touched"
+            ></textarea>
+            <small class="error-text" *ngIf="editarForm.get('descripcion')?.hasError('required') && editarForm.get('descripcion')?.touched">
+              {{ t().creacion_carrusel.alerta_descripcion }}
+            </small>
+          </div>
+        </div>
+
+        <!-- SECCIÓN DE IMAGEN -->
+        <div class="form-group flex-1">
+          
+          <!-- Vista de la imagen actual -->
+          <div *ngIf="imagenActualUrl" style="margin-bottom: 1.5rem;">
+            <label>{{ t().edicion_carrusel.imagen_actual }}</label>
+            <div class="current-img-preview" style="margin-top: 0.5rem; max-width: 100%; height: 120px; overflow: hidden; border-radius: 8px;">
+              <img [src]="obtenerUrlImagen(imagenActualUrl)" alt="Imagen del carrusel" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+
+          <!-- Input para reemplazar la imagen -->
+          <div class="file-upload-section">
+            <label for="img">{{ t().edicion_carrusel.label_reemplazar }}</label>
+            <input 
+              id="img" 
+              type="file" 
+              accept="image/*"
+              (change)="onFileChange($event)"
+              class="file-input"
+            >
+            <small class="help-text">{{ t().edicion_carrusel.help_reemplazar }}</small>
+
+            <div class="preview-files" *ngIf="nuevaImagenSeleccionada">
+              <p><strong>{{ t().edicion_carrusel.nueva_imagen }}</strong></p>
+              <ul style="margin: 0; padding-left: 1.2rem;">
+                <li>{{ nuevaImagenSeleccionada.name }}</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">
+          {{ t().globales.boton_cancelar }}
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().edicion_carrusel.btn_actualizando : t().edicion_carrusel.btn_actualizar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

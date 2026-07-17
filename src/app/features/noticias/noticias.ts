@@ -1,33 +1,29 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { InformacionService, Informacion } from '../../core/services/informacion/informacion';
-import { environment } from '../../../environments/environment';
+import { NoticiasService, Noticia } from '../../core/services/noticias/noticias';
 
 // IMPORT DE TEXTOS
 import { TextosService } from '../../core/services/textos/textos';
 
 @Component({
-  selector: 'app-informacion',
+  selector: 'app-noticias-admin',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './informacion.html',
-  styleUrls: ['./informacion.scss']
+  templateUrl: './noticias.html',
+  styleUrls: ['./noticias.scss']
 })
-export class InformacionComponent implements OnInit {
-  listaInformacion: Informacion[] = [];
+export class NoticiasAdminComponent implements OnInit {
+  listaNoticias: Noticia[] = [];
   cargando = true;
-  itemSeleccionado: Informacion | null = null;
+  itemSeleccionado: Noticia | null = null;
   public backendUrl = 'http://127.0.0.1:8000';
 
-  public textosService = inject(TextosService)
-
+  public textosService = inject(TextosService);
   public t = this.textosService.t;
 
-  categoriaActual: string = '';
-
   constructor(
-    private informacionService: InformacionService,
+    private noticiasService: NoticiasService,
     private router: Router,
     private cdr: ChangeDetectorRef,
   ) {}
@@ -38,68 +34,61 @@ export class InformacionComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargando = true;
-    
-    // Si categoriaActual tiene un valor, se lo pasamos, si no, pasamos undefined
-    const parametroCategoria = this.categoriaActual ? this.categoriaActual : undefined;
 
-    this.informacionService.getInformacion(parametroCategoria).subscribe({
+    this.noticiasService.getNoticias().subscribe({
       next: (datos) => {
-        this.listaInformacion = datos.filter(item => item.estado);
+        // El backend ya devuelve solo las noticias activas
+        this.listaNoticias = datos;
         this.cargando = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error al cargar la información', err);
+        console.error('Error al cargar las noticias', err);
         this.cargando = false;
         this.cdr.detectChanges();
       }
     });
   }
 
-  filtrarPorCategoria(event: any): void {
-    this.categoriaActual = event.target.value;
-    this.cargarDatos(); // Volvemos a pedir los datos a la API con el nuevo filtro
-  }
-
   obtenerUrlImagen(rutaImagen: string): string {
     if (!rutaImagen) return '';
-    
+
     // Si la API ya devuelve la URL con http/https, la retornamos tal cual
     if (rutaImagen.startsWith('http')) {
       return rutaImagen;
     }
-    
+
     // Si no, concatenamos evitando dobles slashes
-    return rutaImagen.startsWith('/') 
-      ? this.backendUrl + rutaImagen 
+    return rutaImagen.startsWith('/')
+      ? this.backendUrl + rutaImagen
       : `${this.backendUrl}/${rutaImagen}`;
   }
 
   // Métodos de navegación
   irACrear(): void {
-    this.router.navigate(['administracion/informacion/crear']);
+    this.router.navigate(['/administracion/noticias/crear']);
   }
 
-  editarInformacion(id: number): void {
-    this.router.navigate(['administracion/informacion/editar', id]);
+  editarNoticia(id: number): void {
+    this.router.navigate(['/administracion/noticias/editar', id]);
   }
 
-  eliminarInformacion(id: number): void {
+  eliminarNoticia(id: number): void {
     // 1. Solicitamos una confirmación nativa antes de proceder
     const confirmar = confirm(this.textosService.t().globales.confirmacion_eliminar);
-    
+
     if (!confirmar) {
       return; // Si el usuario cancela, no hacemos nada
     }
 
-    // 2. Llamamos al servicio de eliminación
-    this.informacionService.eliminarInformacion(id).subscribe({
+    // 2. Llamamos al servicio de eliminación (borrado lógico en el backend)
+    this.noticiasService.eliminarNoticia(id).subscribe({
       next: (respuesta) => {
-        console.log('Respuesta del servidor:', respuesta); // { mensaje: "Información eliminada correctamente" }
-        
+        console.log('Respuesta del servidor:', respuesta); // { mensaje: "Noticia eliminada correctamente" }
+
         // 3. Filtramos el arreglo local para remover el ítem eliminado de la tabla de forma inmediata
-        this.listaInformacion = this.listaInformacion.filter(item => item.id_informacion !== id);
-        
+        this.listaNoticias = this.listaNoticias.filter(item => item.id_noticia !== id);
+
         // 4. Forzamos la detección de cambios para actualizar el HTML al instante
         this.cdr.detectChanges();
       },
@@ -109,10 +98,10 @@ export class InformacionComponent implements OnInit {
       }
     });
   }
-  
-  verDetalle(item: Informacion): void {
+
+  verDetalle(item: Noticia): void {
     this.itemSeleccionado = item;
-    this.cdr.detectChanges(); 
+    this.cdr.detectChanges();
   }
 
   cerrarDetalle(): void {

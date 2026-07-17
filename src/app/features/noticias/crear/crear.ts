@@ -1,17 +1,23 @@
-import { Component, ChangeDetectorRef } from '@angular/core'; // 1. Importamos ChangeDetectorRef
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { InformacionService } from '../../../core/services/informacion/informacion';
+import { NoticiasService } from '../../../core/services/noticias/noticias';
+
+// IMPORT DE TEXTOS
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
-  selector: 'app-crear',
+  selector: 'app-crear-noticia',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './crear.html',
   styleUrls: ['./crear.scss']
 })
-export class CrearInformacion {
+export class CrearNoticia {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   crearForm: FormGroup;
   imagenesSeleccionadas: File[] = [];
   isSubmitting = false;
@@ -19,13 +25,12 @@ export class CrearInformacion {
 
   constructor(
     private fb: FormBuilder,
-    private informacionService: InformacionService,
+    private noticiasService: NoticiasService,
     private router: Router,
-    private cdr: ChangeDetectorRef // 2. Lo inyectamos en el constructor
+    private cdr: ChangeDetectorRef
   ) {
     this.crearForm = this.fb.group({
-      titulo: ['', [Validators.required, Validators.maxLength(200)]],
-      categoria: ['', Validators.required],
+      titulo: ['', [Validators.required, Validators.maxLength(150)]],
       contenido: ['', Validators.required]
     });
   }
@@ -36,8 +41,8 @@ export class CrearInformacion {
     this.errorMensaje = '';
 
     if (files.length > 4) {
-      this.errorMensaje = 'Solo puedes subir un máximo de 4 imágenes.';
-      this.cdr.detectChanges(); // Forzamos actualización visual aquí también por si acaso
+      this.errorMensaje = this.t().creacion_noticias.max_imagenes;
+      this.cdr.detectChanges();
       return;
     }
 
@@ -56,10 +61,9 @@ export class CrearInformacion {
     this.isSubmitting = true;
     this.errorMensaje = '';
 
-    // 1. Preparamos el FormData
+    // 1. Preparamos el FormData (el backend espera multipart/form-data)
     const formData = new FormData();
     formData.append('titulo', this.crearForm.get('titulo')?.value);
-    formData.append('categoria', this.crearForm.get('categoria')?.value);
     formData.append('contenido', this.crearForm.get('contenido')?.value);
 
     // 2. Adjuntamos las imágenes seleccionadas
@@ -68,11 +72,11 @@ export class CrearInformacion {
     });
 
     // 3. Enviamos al backend
-    this.informacionService.crearInformacion(formData).subscribe({
+    this.noticiasService.crearNoticia(formData).subscribe({
       next: (respuesta) => {
-        console.log('Información creada con éxito', respuesta);
+        console.log('Noticia creada con éxito', respuesta);
         this.isSubmitting = false;
-        this.router.navigate(['administracion/informacion']); 
+        this.router.navigate(['/administracion/noticias']);
       },
       error: (err) => {
         console.error('Error devuelto por el servidor:', err);
@@ -88,24 +92,23 @@ export class CrearInformacion {
             }
           }
           this.errorMensaje = 'Revisa los siguientes datos:\n' + mensajes.join('\n');
-          
+
         } else if (err.status === 401 || err.status === 403) {
           this.errorMensaje = 'Tu sesión ha expirado o no tienes permisos. Por favor, inicia sesión nuevamente.';
-          
+
         } else if (err.status >= 500) {
           this.errorMensaje = 'Ocurrió un problema en el servidor. Por favor, intenta de nuevo más tarde.';
-          
+
         } else {
           this.errorMensaje = `Ocurrió un error inesperado (Código ${err.status}). Verifica tu conexión a internet.`;
         }
 
-        // 3. ¡LA MAGIA! Obligamos a Angular a mostrar el error inmediatamente
         this.cdr.detectChanges();
       }
     });
   }
 
   cancelar(): void {
-    this.router.navigate(['/informacion']);
+    this.router.navigate(['/administracion/noticias']);
   }
 }

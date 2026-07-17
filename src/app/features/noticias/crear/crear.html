@@ -1,0 +1,61 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().creacion_noticias.titulo }}</h2>
+      <p>{{ t().creacion_noticias.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
+
+      <div class="form-group">
+        <label for="titulo">{{ t().creacion_noticias.label_titulo }}</label>
+        <input id="titulo" type="text" formControlName="titulo" [placeholder]="t().creacion_noticias.placeholder_titulo">
+        <small class="error-text" *ngIf="crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched">
+          {{ t().creacion_noticias.alerta_titulo }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">{{ t().creacion_noticias.label_contenido }}</label>
+        <textarea id="contenido" formControlName="contenido" rows="8" [placeholder]="t().creacion_noticias.placeholder_contenido"></textarea>
+        <small class="error-text" *ngIf="crearForm.get('contenido')?.invalid && crearForm.get('contenido')?.touched">
+          {{ t().creacion_noticias.alerta_contenido }}
+        </small>
+      </div>
+
+      <div class="form-group file-upload-section">
+        <label for="imagenes">{{ t().creacion_noticias.label_imagenes }}</label>
+        <input
+          id="imagenes"
+          type="file"
+          multiple
+          accept="image/*"
+          (change)="onFileChange($event)"
+          class="file-input"
+        >
+        <small class="help-text">{{ t().creacion_noticias.help_imagenes }}</small>
+
+        <div class="preview-files" *ngIf="imagenesSeleccionadas.length > 0">
+          <p><strong>{{ t().creacion_noticias.archivos_seleccionados }}</strong> {{ imagenesSeleccionadas.length }}/4</p>
+          <ul>
+            <li *ngFor="let file of imagenesSeleccionadas">{{ file.name }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_noticias.boton_guardando : t().creacion_noticias.boton_guardar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
