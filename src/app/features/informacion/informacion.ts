@@ -77,11 +77,11 @@ export class InformacionComponent implements OnInit {
 
   // Métodos de navegación
   irACrear(): void {
-    this.router.navigate(['/informacion/crear']);
+    this.router.navigate(['administracion/informacion/crear']);
   }
 
   editarInformacion(id: number): void {
-    this.router.navigate(['/informacion/editar', id]);
+    this.router.navigate(['administracion/informacion/editar', id]);
   }
 
   eliminarInformacion(id: number): void {

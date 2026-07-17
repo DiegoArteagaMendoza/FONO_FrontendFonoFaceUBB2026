@@ -66,11 +66,11 @@ export class Cuidados implements OnInit {
   }
 
   irACrear(): void {
-    this.router.navigate(['/cuidados/crear']);
+    this.router.navigate(['administracion/cuidados/crear']);
   }
 
   editarCuidado(id: number): void {
-    this.router.navigate(['/cuidados/editar', id]);
+    this.router.navigate(['administracion/cuidados/editar', id]);
   }
 
   eliminarCuidado(id: number): void {
