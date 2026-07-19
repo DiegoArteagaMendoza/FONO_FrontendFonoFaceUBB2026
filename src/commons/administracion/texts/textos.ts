@@ -298,6 +298,19 @@ export const TEXTOS_SITIO = {
         btn_actualizar: "Guardar Cambios"
     },
 
+    // EDITAR USUARIO
+    // TEXTOS EDICIÓN USUARIOS
+    edicion_usuarios: {
+        titulo: "Editar Permisos de Usuario",
+        subtitulo: "Modifica el acceso, rol o actualiza la contraseña de este usuario.",
+        label_password: "Nueva Contraseña (Opcional)",
+        placeholder_password: "Min. 6 caracteres",
+        help_password: "Déjalo en blanco si no deseas cambiar la contraseña actual.",
+        permisos_titulo: "Permisos del Sistema",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
+
     // ===================== PORTAL CLIENTE =====================
 
     // FOOTER DEL PORTAL CLIENTE
