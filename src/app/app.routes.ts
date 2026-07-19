@@ -16,6 +16,7 @@ import { AdministracionInicioCrearComponent } from './features/administracion/in
 import { AdministracionUsuarioComponent } from './features/administracion/usuarios/administracion-usuarios';
 import { AdministracionUsuarioCrearComponente } from './features/administracion/usuarios/crear/administracion-usuarios-crear';
 import { AdministracionInicioEditarComponent } from './features/administracion/inicio/editar/administracion-inicio-editar';
+import { AdministracionUsuarioEditarComponent } from './features/administracion/usuarios/editar/administracion-usuarios-editar';
 
 // IMPORTACIONES DEL PORTAL PÚBLICO
 import { ClienteLayout } from './frontendcliente/cliente/layout/layout';
@@ -96,6 +97,7 @@ export const routes: Routes = [
       // ADMINISTRACION USUARIOS
       { path: 'administracion/usuario', component: AdministracionUsuarioComponent },
       { path: 'administracion/usuario/crear', component: AdministracionUsuarioCrearComponente },
+      { path: 'administracion/usuario/editar/:id', component: AdministracionUsuarioEditarComponent },
     ]
   },
 ];

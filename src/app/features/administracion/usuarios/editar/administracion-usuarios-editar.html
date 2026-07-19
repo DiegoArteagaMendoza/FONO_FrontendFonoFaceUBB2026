@@ -1,0 +1,82 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; {{ t().globales.boton_volver }}
+      </button>
+      <h2>{{ t().edicion_usuarios.titulo }}</h2>
+      <p>{{ t().edicion_usuarios.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().globales.cargando }}</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        
+        <!-- COLUMNA IZQUIERDA: CONTRASEÑA -->
+        <div class="flex-2" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="password">{{ t().edicion_usuarios.label_password }}</label>
+            <input 
+              id="password" 
+              type="text" 
+              formControlName="password" 
+              [placeholder]="t().edicion_usuarios.placeholder_password"
+              [class.is-invalid]="editarForm.get('password')?.invalid && editarForm.get('password')?.touched"
+            >
+            <small class="help-text">{{ t().edicion_usuarios.help_password }}</small>
+            <small class="error-text" *ngIf="editarForm.get('password')?.hasError('minlength') && editarForm.get('password')?.touched">
+              {{ t().creacion_usuarios.alerta_password }}
+            </small>
+          </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: CONFIGURACIÓN DEL SISTEMA -->
+        <div class="flex-1" style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; height: fit-content;">
+          <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; color: #1e293b;">{{ t().edicion_usuarios.permisos_titulo }}</h3>
+          
+          <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
+            <div>
+              <label for="is_staff" style="margin: 0;">{{ t().creacion_usuarios.label_admin }}</label>
+              <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal;">{{ t().creacion_usuarios.desc_admin }}</p>
+            </div>
+            <input id="is_staff" type="checkbox" formControlName="is_staff" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 0;">
+            <div>
+              <label for="estado" style="margin: 0;">{{ t().creacion_usuarios.label_estado }}</label>
+              <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal;">{{ t().creacion_usuarios.desc_estado }}</p>
+            </div>
+            <input id="estado" type="checkbox" formControlName="estado" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">
+            {{ t().globales.boton_cancelar }}
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().edicion_usuarios.btn_actualizando : t().edicion_usuarios.btn_actualizar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
