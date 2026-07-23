@@ -74,7 +74,7 @@ export class CrearCuidado {
       next: (respuesta) => {
         console.log('Cuidado creado con éxito', respuesta);
         this.isSubmitting = false;
-        this.router.navigate(['/cuidados']); 
+        this.router.navigate(['administracion/cuidados']); 
       },
       error: (err) => {
         console.error('Error devuelto por el servidor:', err);

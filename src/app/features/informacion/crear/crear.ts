@@ -76,7 +76,7 @@ export class CrearInformacion {
       next: (respuesta) => {
         console.log('Información creada con éxito', respuesta);
         this.isSubmitting = false;
-        this.router.navigate(['/informacion']); 
+        this.router.navigate(['administracion/informacion']); 
       },
       error: (err) => {
         console.error('Error devuelto por el servidor:', err);

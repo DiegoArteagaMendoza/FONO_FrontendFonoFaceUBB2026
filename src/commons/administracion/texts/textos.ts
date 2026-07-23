@@ -318,6 +318,33 @@ export const TEXTOS_SITIO = {
         ]
     },
 
+    // EDITCIÓN DE CARRUSEL DE INICIO
+    edicion_carrusel: {
+        titulo: "Editar Elemento del Carrusel",
+        subtitulo: "Modifica el texto o la imagen de este bloque del inicio.",
+        cargando_datos: "Cargando datos del elemento...",
+        error_no_encontrado: "No se encontró el elemento solicitado.",
+        imagen_actual: "Imagen Actual:",
+        label_reemplazar: "Reemplazar Imagen (Opcional)",
+        help_reemplazar: "Selecciona un archivo solo si deseas cambiar la imagen actual (Max 2MB).",
+        nueva_imagen: "Nueva imagen a subir:",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
+
+    // EDITAR USUARIO
+    // TEXTOS EDICIÓN USUARIOS
+    edicion_usuarios: {
+        titulo: "Editar Permisos de Usuario",
+        subtitulo: "Modifica el acceso, rol o actualiza la contraseña de este usuario.",
+        label_password: "Nueva Contraseña (Opcional)",
+        placeholder_password: "Min. 6 caracteres",
+        help_password: "Déjalo en blanco si no deseas cambiar la contraseña actual.",
+        permisos_titulo: "Permisos del Sistema",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
+
     // ===================== PORTAL CLIENTE =====================
 
     // NAVBAR DEL PORTAL CLIENTE

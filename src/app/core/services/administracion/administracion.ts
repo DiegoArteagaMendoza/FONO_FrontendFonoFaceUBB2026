@@ -12,11 +12,11 @@ export interface ImagenBanner {
 
 // 2. Interfaz carrusel
 export interface CarruselItem {
-  id_banner?: number; // Django usa id_banner
-  id?: number;        // Lo dejamos opcional por si lo usas en el HTML
+  id_banner?: number; 
+  id?: number;        
   titulo: string;
   descripcion: string;
-  imagenes: ImagenBanner[]; // Ahora es un arreglo de imágenes
+  imagenes: ImagenBanner[]; 
   fecha_creacion?: string;
   estado?: boolean;
 }
@@ -27,6 +27,8 @@ export interface UsuarioItem {
   nombre: string;
   rut: string;
   email: string;
+  estado?: boolean;     // Agregado para leerlo en el componente de edición
+  is_staff?: boolean;   // Agregado para leerlo en el componente de edición
 }
 
 @Injectable({
@@ -56,7 +58,9 @@ export class AdministracionService {
   }
 
   /*
+    ===================================================
     METODOS PARA OBTENER LO RELACIONADO CON USUARIO
+    ===================================================
   */
 
   // 1. Listar (GET)
@@ -64,13 +68,13 @@ export class AdministracionService {
     return this.http.get<UsuarioItem[]>(
       `${this.apiUrl}/usuarios/listar/`,
       { headers: this.getAuthHeaders() }
-    )
+    );
   }
 
-  // 2. Crear (POST)
-  crearUsuario(datos: FormData): Observable<any> {
+  // 2. Crear (POST) - En tu componente vimos que envías JSON, si cambiaste a FormData mantenlo así
+  crearUsuario(datos: any): Observable<any> {
     const url = `${this.apiUrl}/usuarios/crear/`;
-
+    // Nota: El login original tuyo no pedía token para crear (AllowAny), pero si lo cambiaste, agrega el header
     return this.http.post(url, datos);
   } 
 
@@ -82,9 +86,19 @@ export class AdministracionService {
     );
   }
 
+  // 4. Editar (PATCH) - Actualiza contraseña, estado o is_staff
+  editarUsuario(rut: string, datos: any): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/usuarios/${rut}/editar/`, 
+      datos,
+      { headers: this.getAuthHeaders() }
+    );
+  }
 
   /*
+    ===================================================
     METODOS PARA OBTENER LO RELACIONADO CON BANNER
+    ===================================================
   */
 
   // 1. Listar (GET)
@@ -95,14 +109,13 @@ export class AdministracionService {
     );
   }
 
-  // 2. Crear (POST) - Usamos FormData porque hay subida de imágenes
+  // 2. Crear (POST)
   crearInicio(datos: FormData): Observable<any> {
     const url = `${this.apiUrl}/usuarios/banners/crear/`;
-    
     return this.http.post(url, datos, { headers: this.getAuthHeaders() });
   }
 
-  // 3. Eliminar (DELETE) - URL corregida según tu urls.py
+  // 3. Eliminar (DELETE)
   eliminarInicio(id_banner: number): Observable<any> {
     return this.http.delete(
       `${this.apiUrl}/usuarios/banners/${id_banner}/eliminar/`, 
@@ -110,7 +123,7 @@ export class AdministracionService {
     );
   }
 
-  // 4. Editar (PATCH) - Agregado para tu futura vista de edición
+  // 4. Editar (PATCH)
   editarInicio(id_banner: number, datos: any | FormData): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/usuarios/banners/${id_banner}/editar/`, 

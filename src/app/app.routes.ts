@@ -15,6 +15,8 @@ import { AdministracionInicioComponent } from './features/administracion/inicio/
 import { AdministracionInicioCrearComponent } from './features/administracion/inicio/crear/administracion-inicio-crear';
 import { AdministracionUsuarioComponent } from './features/administracion/usuarios/administracion-usuarios';
 import { AdministracionUsuarioCrearComponente } from './features/administracion/usuarios/crear/administracion-usuarios-crear';
+import { AdministracionInicioEditarComponent } from './features/administracion/inicio/editar/administracion-inicio-editar';
+import { AdministracionUsuarioEditarComponent } from './features/administracion/usuarios/editar/administracion-usuarios-editar';
 
 // IMPORTACIONES DEL PORTAL PÚBLICO
 import { ClienteLayout } from './frontendcliente/cliente/layout/layout';
@@ -93,17 +95,11 @@ export const routes: Routes = [
       // ADMINISTRACION BANNER
       { path: 'administracion/carrusel/inicio', component: AdministracionInicioComponent },
       { path: 'administracion/carrusel/inicio/crear', component: AdministracionInicioCrearComponent},
+      { path: 'administracion/carrusel/inicio/editar/:id', component: AdministracionInicioEditarComponent },
       // ADMINISTRACION USUARIOS
       { path: 'administracion/usuario', component: AdministracionUsuarioComponent },
       { path: 'administracion/usuario/crear', component: AdministracionUsuarioCrearComponente },
-      
-      // { path: 'administracion', redirectTo: 'inicio', pathMatch: 'full' }
+      { path: 'administracion/usuario/editar/:id', component: AdministracionUsuarioEditarComponent },
     ]
   },
-
-  // Si digitan cualquier otra cosa, se devuelven a la página de inicio pública
-  // { 
-  //   path: '**', 
-  //   redirectTo: '/inicio' 
-  // }
 ];
