@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NoticiasService, Noticia } from '../../../core/services/noticias/noticias';
 import { TextosService } from '../../../core/services/textos/textos';
 
@@ -35,7 +36,8 @@ export class NoticiasClienteComponent implements OnInit, OnDestroy {
   constructor(
     private noticiasService: NoticiasService,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.newsletterForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -86,6 +88,10 @@ export class NoticiasClienteComponent implements OnInit, OnDestroy {
       return `${this.backendUrl}/media/${limpia}`;
     }
     return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+  }
+
+  verDetalle(idNoticia: number): void {
+    this.router.navigate(['/portal/noticias', idNoticia]);
   }
 
   // ================== CARRUSEL ==================

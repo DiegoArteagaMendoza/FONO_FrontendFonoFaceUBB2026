@@ -38,15 +38,15 @@
               class="thumbnail"
             >
             <div *ngIf="!item.imagenes || item.imagenes.length === 0" class="no-image-placeholder">
-              Sin img
+              {{ t().tablas.sin_img }}
             </div>
           </td>
           <td class="td-title">{{ item.titulo }}</td>
           <td>{{ item.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}</td>
           <td class="td-actions">
-            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver detalle">Ver</button>
-            <button class="btn-icon edit" (click)="editarNoticia(item.id_noticia)" title="Editar">Editar</button>
-            <button class="btn-icon delete" (click)="eliminarNoticia(item.id_noticia)" title="Eliminar">Eliminar</button>
+            <button class="btn-icon view" (click)="verDetalle(item)" [title]="t().tablas.boton_ver">{{ t().tablas.boton_ver }}</button>
+            <button class="btn-icon edit" (click)="editarNoticia(item.id_noticia)" [title]="t().tablas.boton_editar">{{ t().tablas.boton_editar }}</button>
+            <button class="btn-icon delete" (click)="eliminarNoticia(item.id_noticia)" [title]="t().tablas.boton_eliminar">{{ t().tablas.boton_eliminar }}</button>
           </td>
         </tr>
       </tbody>
@@ -66,7 +66,7 @@
     <div class="modal-body">
       <div class="meta-info">
         <span class="date">
-          <strong>Última actualización:</strong> {{ itemSeleccionado.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}
+          <strong>{{ t().globales.ultima_actualizacion_label }}</strong> {{ itemSeleccionado.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}
         </span>
       </div>
 
@@ -75,7 +75,7 @@
       </div>
 
       <div class="image-gallery" *ngIf="itemSeleccionado.imagenes && itemSeleccionado.imagenes.length > 0">
-        <h4>Imágenes adjuntas ({{ itemSeleccionado.imagenes.length }})</h4>
+        <h4>{{ t().globales.imagenes_adjuntas }} ({{ itemSeleccionado.imagenes.length }})</h4>
         <div class="gallery-grid">
           <div class="img-wrapper" *ngFor="let img of itemSeleccionado.imagenes">
             <img [src]="obtenerUrlImagen(img.imagen)" alt="Imagen de noticia">

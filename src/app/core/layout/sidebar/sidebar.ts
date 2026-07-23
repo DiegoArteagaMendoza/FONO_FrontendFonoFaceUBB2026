@@ -3,6 +3,7 @@ import { RouterModule, Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth/auth";
 import { AdministracionService } from "../../../core/services/administracion/administracion";
+import { TextosService } from "../../services/textos/textos";
 
 export interface MenuItem {
   path?: string;
@@ -25,6 +26,9 @@ export class Sidebar implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private adminService = inject(AdministracionService);
+
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
 
   ngOnInit() {
     if (localStorage.getItem('access_token')) {

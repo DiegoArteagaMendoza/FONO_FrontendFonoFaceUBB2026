@@ -1,0 +1,45 @@
+<div class="detalle-page">
+
+  <div class="nav-back">
+    <button (click)="volver()" class="btn-back">
+      {{ t().portal_noticia_detalle.volver }}
+    </button>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().portal_noticia_detalle.cargando }}</p>
+  </div>
+
+  <div *ngIf="errorMensaje" class="error-state">
+    <p>{{ errorMensaje }}</p>
+    <button (click)="volver()" class="btn-primary">{{ t().portal_noticia_detalle.regresar }}</button>
+  </div>
+
+  <article class="article-content" *ngIf="!cargando && noticia">
+
+    <header class="article-header">
+      <span class="article-date">
+        {{ t().portal_noticia_detalle.publicada }} {{ noticia.fecha_creacion | date:'dd/MM/yyyy' }}
+      </span>
+      <h1>{{ noticia.titulo }}</h1>
+    </header>
+
+    <div class="hero-image" *ngIf="noticia.imagenes && noticia.imagenes.length > 0">
+      <img [src]="obtenerUrlImagen(noticia.imagenes[0].imagen)" [alt]="noticia.titulo">
+    </div>
+
+    <div class="article-body">
+      <p>{{ noticia.contenido }}</p>
+    </div>
+
+    <div class="article-gallery" *ngIf="noticia.imagenes && noticia.imagenes.length > 1">
+      <div class="gallery-grid">
+        <ng-container *ngFor="let img of noticia.imagenes; let i = index">
+          <img *ngIf="i > 0" [src]="obtenerUrlImagen(img.imagen)" [alt]="noticia.titulo">
+        </ng-container>
+      </div>
+    </div>
+
+  </article>
+</div>

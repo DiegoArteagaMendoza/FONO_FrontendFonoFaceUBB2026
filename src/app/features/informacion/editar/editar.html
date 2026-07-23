@@ -61,9 +61,9 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">Cancelar</button>
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
         <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Actualizando...' : 'Guardar Cambios' }}
+          {{ isSubmitting ? t().edicion_informacion.boton_actualizando : t().edicion_informacion.boton_actualizar }}
         </button>
       </div>
 

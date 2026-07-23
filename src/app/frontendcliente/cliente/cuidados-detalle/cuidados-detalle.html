@@ -1,23 +1,23 @@
 <div class="detalle-page">
-  
+
   <div class="nav-back">
     <button (click)="volver()" class="btn-back">
-      &larr; Volver a Cuidados
+      {{ t().portal_cuidados_detalle.volver }}
     </button>
   </div>
 
   <div *ngIf="cargando" class="loading-state">
     <div class="spinner"></div>
-    <p>Cargando recomendación...</p>
+    <p>{{ t().portal_cuidados_detalle.cargando }}</p>
   </div>
 
   <div *ngIf="errorMensaje" class="error-state">
     <p>{{ errorMensaje }}</p>
-    <button (click)="volver()" class="btn-primary">Regresar</button>
+    <button (click)="volver()" class="btn-primary">{{ t().portal_cuidados_detalle.regresar }}</button>
   </div>
 
   <article class="article-content" *ngIf="!cargando && cuidado">
-    
+
     <header class="article-header">
       <span class="category-badge" [ngClass]="getBadgeClass(cuidado.publico)">
         {{ obtenerNombreCategoria(cuidado.publico) }}
@@ -36,7 +36,7 @@
 
       <div class="article-footer" *ngIf="cuidado.fuente">
         <hr>
-        <p class="source-text"><strong>Fuente:</strong> {{ cuidado.fuente }}</p>
+        <p class="source-text"><strong>{{ t().portal_cuidados_detalle.fuente }}</strong> {{ cuidado.fuente }}</p>
       </div>
     </div>
 

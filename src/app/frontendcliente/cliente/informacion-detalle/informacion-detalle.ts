@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InformacionService, Informacion } from '../../../core/services/informacion/informacion';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-informacion-detalle',
@@ -11,6 +12,9 @@ import { InformacionService, Informacion } from '../../../core/services/informac
   styleUrls: ['./informacion-detalle.scss']
 })
 export class InformacionDetalleComponent implements OnInit {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   articulo: Informacion | null = null;
   cargando = true;
   errorMensaje = '';

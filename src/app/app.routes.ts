@@ -28,6 +28,7 @@ import { CuidadosDetalleComponent } from './frontendcliente/cliente/cuidados-det
 import { FarmacosClienteComponent } from './frontendcliente/cliente/farmacos/farmacos';
 import { PromocionClienteComponent } from './frontendcliente/cliente/promocion/promocion';
 import { NoticiasClienteComponent } from './frontendcliente/cliente/noticias/noticias';
+import { NoticiasDetalleComponent } from './frontendcliente/cliente/noticias-detalle/noticias-detalle';
 // import { FarmacosDetalleComponent } from './frontendcliente/cliente/farmacos-detalle/farmacos-detalle';
 
 export const routes: Routes = [
@@ -55,8 +56,9 @@ export const routes: Routes = [
       { path: 'promocion', component: PromocionClienteComponent },
       { path: 'promocion/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
 
-      // RUTA DE NOTICIAS
+      // RUTAS DE NOTICIAS
       { path: 'noticias', component: NoticiasClienteComponent },
+      { path: 'noticias/:id', component: NoticiasDetalleComponent },
 
       // RUTAS DE CUIDADOS
       { path: 'cuidados', component: CuidadosClienteComponent },
