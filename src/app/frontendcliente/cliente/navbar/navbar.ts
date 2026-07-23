@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-navbar',
@@ -10,6 +11,9 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navbar.scss']
 })
 export class NavbarComponent {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   isMenuOpen: boolean = false;
 
   // Alterna el estado del menú en móviles

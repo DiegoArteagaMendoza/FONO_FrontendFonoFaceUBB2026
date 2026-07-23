@@ -2,9 +2,13 @@ export const TEXTOS_SITIO = {
     // TEXTOS GLOBALES
     
     globales: {
+        marca: "FonoFace",
         boton_guardar: "Guardar Cambios",
         boton_cancelar: "Cancelar",
         boton_volver: "Volver",
+        cerrar_sesion: "Cerrar Sesión",
+        ultima_actualizacion_label: "Última actualización:",
+        imagenes_adjuntas: "Imágenes adjuntas",
         cargando: "Cargando registros...",
         sin_datos: "No hay registros disponibles",
         proximamente: "PROXIMAMENTE",
@@ -31,10 +35,14 @@ export const TEXTOS_SITIO = {
         ultima_actualizacion: "	Última Actualización",
         acciones_tabla: "Acciones",
         filtrar_tabla: "Filtrar",
-        descripcion_tabla: "Descripción", 
+        descripcion_tabla: "Descripción",
         nombre_tabla: "Nombre",
         rut_tabla: "Rut",
-        email_tabla: "Email", 
+        email_tabla: "Email",
+        boton_ver: "Ver",
+        boton_editar: "Editar",
+        boton_eliminar: "Eliminar",
+        sin_img: "Sin img",
     },
 
     // INICIO PORTAL ADMINISTRACION
@@ -112,6 +120,32 @@ export const TEXTOS_SITIO = {
         contenido: "Contenido",
         contenido_obligatorio_alerta: "El contenido es obligatorio.",
         imagenes_actuales: "Imágenes Actuales",
+        boton_actualizando: "Actualizando...",
+        boton_actualizar: "Guardar Cambios",
+    },
+
+    // TEXTOS CREACIÓN INFORMACIÓN
+    creacion_informacion: {
+        titulo: "Crear Nueva Información",
+        subtitulo: "Completa los campos para publicar un nuevo artículo o cuidado.",
+        label_titulo: "Título del artículo",
+        placeholder_titulo: "Ej. Síntomas de parvovirus...",
+        alerta_titulo: "El título es obligatorio.",
+        label_categoria: "Categoría",
+        placeholder_categoria: "Seleccione una...",
+        alerta_categoria: "Selecciona una categoría.",
+        categorias_promocion: "Promoción",
+        categorias_prevencion: "Prevención",
+        categorias_farmacos: "Farmacos",
+        label_contenido: "Contenido",
+        placeholder_contenido: "Desarrolla el contenido aquí...",
+        alerta_contenido: "El contenido es obligatorio.",
+        label_imagenes: "Imágenes (Opcional - Máximo 4)",
+        help_imagenes: "Puedes seleccionar varias imágenes al mismo tiempo (JPG, PNG).",
+        max_imagenes: "Solo puedes subir un máximo de 4 imágenes.",
+        archivos_seleccionados: "Archivos seleccionados:",
+        boton_guardando: "Guardando...",
+        boton_guardar: "Guardar Información"
     },
 
     // TEXTOS CREACIÓN USUARIOS
@@ -286,6 +320,75 @@ export const TEXTOS_SITIO = {
 
     // ===================== PORTAL CLIENTE =====================
 
+    // NAVBAR DEL PORTAL CLIENTE
+    portal_navbar: {
+        marca: "FonoFace",
+        inicio: "Inicio",
+        la_voz: "La Voz",
+        menu_informacion: "Información",
+        farmacos: "Efectos Farmacológicos",
+        prevencion: "Prevención de la voz",
+        promocion: "Promoción de la voz",
+        cuidados: "Cuidados",
+        noticias: "Noticias",
+        acceso_admin: "Acceso Admin"
+    },
+
+    // VISTA INICIO DEL PORTAL CLIENTE
+    portal_inicio: {
+        seccion_titulo: "¿Qué puedes encontrar aquí?",
+        ver_mas: "Ver más →",
+        card_informacion_titulo: "Información Fonoaudiologica",
+        card_informacion_desc: "Explora nuestra biblioteca de informacion sobre niños, profesores, cantantes y actores, locutores y publico general.",
+        card_cuidados_titulo: "Cuidados Vocales",
+        card_cuidados_desc: "Recomendaciones específicas para profesores, cantantes, locutores y público en general.",
+        card_noticias_titulo: "Últimas Noticias",
+        card_noticias_desc: "Mantente al día con las novedades, eventos y actualizaciones de nuestra plataforma."
+    },
+
+    // VISTA PREVENCIÓN DEL PORTAL CLIENTE
+    portal_prevencion: {
+        titulo: "Prevención de la voz",
+        subtitulo: "Explora artículos, guías y consejos especializados en la prevención de la voz.",
+        cargando: "Cargando artículos...",
+        vacio: "No hay artículos disponibles en esta categoría.",
+        leer_mas: "Leer artículo completo →"
+    },
+
+    // VISTA FÁRMACOS DEL PORTAL CLIENTE
+    portal_farmacos: {
+        titulo: "Efectos Farmacológicos en la Voz",
+        subtitulo: "Descubre cómo diferentes medicamentos y tratamientos pueden impactar tu salud vocal y qué precauciones tomar.",
+        cargando: "Cargando información...",
+        vacio: "Aún no hay artículos disponibles sobre efectos farmacológicos.",
+        badge: "Fármacos",
+        leer_mas: "Leer artículo completo →"
+    },
+
+    // VISTA CUIDADOS DEL PORTAL CLIENTE
+    portal_cuidados: {
+        titulo: "Guía de Cuidados Vocales",
+        subtitulo: "Recomendaciones prácticas, ejercicios y tips diseñados específicamente para tu perfil.",
+        cargando: "Cargando recomendaciones...",
+        vacio: "No hay cuidados disponibles para este perfil en este momento.",
+        ver_mas: "Ver recomendación →"
+    },
+
+    // VISTA DETALLE DE INFORMACIÓN DEL PORTAL CLIENTE
+    portal_informacion_detalle: {
+        volver: "← Volver a Información",
+        cargando: "Cargando artículo...",
+        regresar: "Regresar"
+    },
+
+    // VISTA DETALLE DE CUIDADO DEL PORTAL CLIENTE
+    portal_cuidados_detalle: {
+        volver: "← Volver a Cuidados",
+        cargando: "Cargando recomendación...",
+        regresar: "Regresar",
+        fuente: "Fuente:"
+    },
+
     // FOOTER DEL PORTAL CLIENTE
     portal_footer: {
         descripcion: "Plataforma de información y cuidados de la voz de la Universidad del Bío-Bío. Recursos especializados para niños, profesores, cantantes, locutores y público general.",
@@ -313,6 +416,16 @@ export const TEXTOS_SITIO = {
         leer_mas: "Leer artículo completo →"
     },
 
+    // VISTA DETALLE DE NOTICIA DEL PORTAL CLIENTE
+    portal_noticia_detalle: {
+        volver: "← Volver a Noticias",
+        cargando: "Cargando noticia...",
+        no_encontrada: "La noticia no existe o ya no está disponible.",
+        error_conexion: "Error de conexión. Inténtalo más tarde.",
+        regresar: "Regresar",
+        publicada: "Publicada el"
+    },
+
     // VISTA NOTICIAS DEL PORTAL CLIENTE
     portal_noticias: {
         titulo: "Noticias",
@@ -321,6 +434,7 @@ export const TEXTOS_SITIO = {
         vacio: "Aún no hay noticias publicadas. ¡Vuelve pronto!",
         ultimas_titulo: "Últimas noticias",
         sin_imagen: "Sin Imagen",
+        leer_mas: "Leer noticia completa →",
         newsletter_titulo: "Suscríbete a nuestro newsletter",
         newsletter_subtitulo: "Recibe en tu correo las últimas noticias y consejos para el cuidado de tu voz.",
         newsletter_placeholder: "ejemplo@correo.com",

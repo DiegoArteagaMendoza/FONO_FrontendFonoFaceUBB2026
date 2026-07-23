@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 // 1. Importamos la interfaz Cuidado junto con el servicio
 import { CuidadosService, Cuidado } from '../../../core/services/cuidados/cuidados';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-cuidados-cliente',
@@ -12,6 +13,9 @@ import { CuidadosService, Cuidado } from '../../../core/services/cuidados/cuidad
   styleUrls: ['./cuidados.scss']
 })
 export class CuidadosClienteComponent implements OnInit {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   // 2. Usamos la interfaz correcta
   cuidados: Cuidado[] = []; 
   cuidadosFiltrados: Cuidado[] = [];

@@ -18,7 +18,8 @@
 
         <div class="carousel-slide"
              *ngFor="let noticia of destacadas; let i = index"
-             [class.active]="i === currentIndex">
+             [class.active]="i === currentIndex"
+             (click)="verDetalle(noticia.id_noticia)">
 
           <img *ngIf="obtenerUrlImagen(noticia)" [src]="obtenerUrlImagen(noticia)" [alt]="noticia.titulo" class="slide-image">
           <div *ngIf="!obtenerUrlImagen(noticia)" class="slide-placeholder"></div>
@@ -54,7 +55,7 @@
       </div>
 
       <div class="articles-grid" *ngIf="noticias.length > 0">
-        <article class="article-card" *ngFor="let noticia of noticias">
+        <article class="article-card" *ngFor="let noticia of noticias" (click)="verDetalle(noticia.id_noticia)">
           <div class="card-image">
             <img *ngIf="obtenerUrlImagen(noticia)" [src]="obtenerUrlImagen(noticia)" alt="Imagen de la noticia">
             <div *ngIf="!obtenerUrlImagen(noticia)" class="no-image">
@@ -66,6 +67,7 @@
             <span class="card-date">{{ noticia.fecha_creacion | date:'dd/MM/yyyy' }}</span>
             <h3>{{ noticia.titulo }}</h3>
             <p>{{ (noticia.contenido.length > 120) ? (noticia.contenido | slice:0:120) + '...' : noticia.contenido }}</p>
+            <span class="read-more">{{ t().portal_noticias.leer_mas }}</span>
           </div>
         </article>
       </div>

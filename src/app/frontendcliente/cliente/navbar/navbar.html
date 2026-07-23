@@ -2,7 +2,7 @@
   <div class="navbar-container">
 
     <a routerLink="/portal/inicio" class="navbar-brand" (click)="closeMenu()">
-      FonoFace
+      {{ t().portal_navbar.marca }}
     </a>
 
     <button class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
@@ -16,30 +16,30 @@
 
     <div class="navbar-links" [class.active]="isMenuOpen">
       <!-- Asegúrate de usar [routerLinkActiveOptions]="{exact: true}" para el inicio -->
-      <a routerLink="/portal/inicio" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Inicio</a>
-      <a routerLink="/portal/lavoz" routerLinkActive="active-link" (click)="closeMenu()">La Voz</a>
+      <a routerLink="/portal/inicio" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">{{ t().portal_navbar.inicio }}</a>
+      <a routerLink="/portal/lavoz" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.la_voz }}</a>
 
       <!-- INICIO DEL MENÚ DESPLEGABLE (DROPDOWN) -->
       <div class="dropdown">
         <span class="dropdown-trigger">
-          Información
+          {{ t().portal_navbar.menu_informacion }}
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </span>
         <div class="dropdown-menu">
-          <a routerLink="/portal/farmacos" routerLinkActive="active-link" (click)="closeMenu()">Efectos Farmacológicos</a>
-          <a routerLink="/portal/prevencion" routerLinkActive="active-link" (click)="closeMenu()">Prevención de la voz</a>
-          <a routerLink="/portal/promocion" routerLinkActive="active-link" (click)="closeMenu()">Promoción de la voz</a>
+          <a routerLink="/portal/farmacos" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.farmacos }}</a>
+          <a routerLink="/portal/prevencion" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.prevencion }}</a>
+          <a routerLink="/portal/promocion" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.promocion }}</a>
         </div>
       </div>
       <!-- FIN DEL MENÚ DESPLEGABLE -->
 
-      <a routerLink="/portal/cuidados" routerLinkActive="active-link" (click)="closeMenu()">Cuidados</a>
-      <a routerLink="/portal/noticias" routerLinkActive="active-link" (click)="closeMenu()">Noticias</a>
+      <a routerLink="/portal/cuidados" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.cuidados }}</a>
+      <a routerLink="/portal/noticias" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.noticias }}</a>
 
       <div class="admin-access">
-        <a routerLink="/login" class="btn-admin" (click)="closeMenu()">Acceso Admin</a>
+        <a routerLink="/login" class="btn-admin" (click)="closeMenu()">{{ t().portal_navbar.acceso_admin }}</a>
       </div>
     </div>
 

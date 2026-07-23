@@ -1,8 +1,9 @@
-import { Component, ChangeDetectorRef } from '@angular/core'; // 1. Importamos ChangeDetectorRef
+import { Component, ChangeDetectorRef, inject } from '@angular/core'; // 1. Importamos ChangeDetectorRef
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InformacionService } from '../../../core/services/informacion/informacion';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-crear',
@@ -12,6 +13,9 @@ import { InformacionService } from '../../../core/services/informacion/informaci
   styleUrls: ['./crear.scss']
 })
 export class CrearInformacion {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   crearForm: FormGroup;
   imagenesSeleccionadas: File[] = [];
   isSubmitting = false;
@@ -36,7 +40,7 @@ export class CrearInformacion {
     this.errorMensaje = '';
 
     if (files.length > 4) {
-      this.errorMensaje = 'Solo puedes subir un máximo de 4 imágenes.';
+      this.errorMensaje = this.t().creacion_informacion.max_imagenes;
       this.cdr.detectChanges(); // Forzamos actualización visual aquí también por si acaso
       return;
     }

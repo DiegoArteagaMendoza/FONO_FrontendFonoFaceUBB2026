@@ -2,18 +2,18 @@
   
   <div class="nav-back">
     <button (click)="volver()" class="btn-back">
-      &larr; Volver a Información
+      {{ t().portal_informacion_detalle.volver }}
     </button>
   </div>
 
   <div *ngIf="cargando" class="loading-state">
     <div class="spinner"></div>
-    <p>Cargando artículo...</p>
+    <p>{{ t().portal_informacion_detalle.cargando }}</p>
   </div>
 
   <div *ngIf="errorMensaje" class="error-state">
     <p>{{ errorMensaje }}</p>
-    <button (click)="volver()" class="btn-primary">Regresar</button>
+    <button (click)="volver()" class="btn-primary">{{ t().portal_informacion_detalle.regresar }}</button>
   </div>
 
   <article class="article-content" *ngIf="!cargando && articulo">

@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CuidadosService, Cuidado } from '../../../core/services/cuidados/cuidados';
+import { TextosService } from '../../../core/services/textos/textos';
 
 @Component({
   selector: 'app-cuidados-detalle',
@@ -11,6 +12,9 @@ import { CuidadosService, Cuidado } from '../../../core/services/cuidados/cuidad
   styleUrls: ['./cuidados-detalle.scss']
 })
 export class CuidadosDetalleComponent implements OnInit {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   cuidado: Cuidado | null = null;
   cargando = true;
   errorMensaje = '';

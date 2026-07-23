@@ -38,9 +38,9 @@
           <td>{{ item.email }}</td>
           
           <td class="td-actions">
-            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver detalle">Ver</button>
-            <button class="btn-icon edit" (click)="editarUsuario(item.id_usuario)" title="Editar">Editar</button>
-            <button class="btn-icon delete" (click)="eliminarUsuario(item.rut)" title="Eliminar">Eliminar</button>
+            <button class="btn-icon view" (click)="verDetalle(item)" [title]="t().tablas.boton_ver">{{ t().tablas.boton_ver }}</button>
+            <button class="btn-icon edit" (click)="editarUsuario(item.id_usuario)" [title]="t().tablas.boton_editar">{{ t().tablas.boton_editar }}</button>
+            <button class="btn-icon delete" (click)="eliminarUsuario(item.rut)" [title]="t().tablas.boton_eliminar">{{ t().tablas.boton_eliminar }}</button>
           </td>
         </tr>
       </tbody>
