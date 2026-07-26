@@ -50,7 +50,8 @@ export class Sidebar implements OnInit {
       children: [
         { path: '/administracion/carrusel/inicio', label: 'Carrusel de Inicio', icon: '' },
         // Y lo agregamos de manera exclusiva al hijo que queremos proteger
-        { path: '/administracion/usuario', label: 'Gestion de Usuarios', icon: '', requiresAdmin: true }
+        { path: '/administracion/usuario', label: 'Gestion de Usuarios', icon: '', requiresAdmin: true },
+        { path: '/administracion/informacion/inicio', label: 'Gestión de Información de Inicio', icon: '' }
       ]
     },
   ];

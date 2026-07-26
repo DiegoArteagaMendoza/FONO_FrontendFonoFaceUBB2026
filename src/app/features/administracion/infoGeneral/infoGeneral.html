@@ -1,22 +1,20 @@
 <div class="page-container">
   <div class="page-header">
     <div class="title-section">
-      <h2>{{ t().gestion_usuarios.titulo }}</h2>
-      <p>{{ t().gestion_usuarios.subtitulo }}</p>
+      <h2>{{ t().tablas.gestion_info_general.titulo }}</h2>
+      <p>{{ t().tablas.gestion_info_general.subtitulo }}</p>
     </div>
-    <button class="btn-primary" (click)="irAcrear()">
-      + {{ t().gestion_usuarios.nuevo_usuario }}
+    <button class="btn-primary" (click)="irACrear()">
+      + {{ t().tablas.gestion_info_general.nuevo_texto }}
     </button>
   </div>
 
-  <!-- SECCIÓN DE FILTROS -->
   <div class="filters-section" *ngIf="!cargando">
     <div class="filter-group">
-      <label for="filtroEstado">{{ t().gestion_usuarios.filtrar_estado }}</label>
-      <select id="filtroEstado" (change)="alCambiarFiltro($event)" [value]="filtroEstado">
-        <option value="todos">{{ t().gestion_usuarios.estado_todos }}</option>
-        <option value="activos">{{ t().gestion_usuarios.estado_activos }}</option>
-        <option value="inactivos">{{ t().gestion_usuarios.estado_inactivos }}</option>
+      <label for="filtroSeccion">{{ t().tablas.gestion_info_general.filtrar_seccion }}</label>
+      <select id="filtroSeccion" (change)="alCambiarFiltro($event)" [value]="filtroActual">
+        <option value="todas">{{ t().tablas.gestion_info_general.seccion_todas }}</option>
+        <option *ngFor="let sec of seccionesUnicas" [value]="sec">{{ sec }}</option>
       </select>
     </div>
   </div>
@@ -30,28 +28,22 @@
     <table class="data-table">
       <thead>
         <tr>
-          <th>{{ t().tablas.nombre_tabla }}</th>
-          <th>{{ t().tablas.rut_tabla }}</th>
-          <th>{{ t().tablas.email_tabla }}</th>
-          <th>{{ t().tablas.estado_usuario || 'Estado' }}</th>
+          <th>Sección</th>
+          <th>Clave Única</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>Estado</th>
           <th>{{ t().tablas.acciones_tabla }}</th>
         </tr>
       </thead>
-
       <tbody>
-        <!-- Verificamos la lista filtrada, no la original -->
-        <tr *ngIf="usuariosFiltrados.length === 0">
+        <tr *ngIf="listaFiltrada.length === 0">
           <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
         </tr>
 
-        <!-- Iteramos sobre usuariosFiltrados -->
-        <tr *ngFor="let item of usuariosFiltrados">
-          <td class="td-title">
-            {{ item.nombre }}
-          </td>
-          <td>{{ item.rut }}</td>
-          <td>{{ item.email }}</td>
-          
+        <tr *ngFor="let item of listaFiltrada">
+          <td class="td-title"><strong>{{ item.seccion }}</strong></td>
+          <td><span class="badge" style="background: #f1f5f9; color: #475569;">{{ item.clave }}</span></td>
+          <td>{{ item.titulo || 'Sin título' }}</td>
           <td>
             <span class="badge" 
                   [ngStyle]="{
@@ -65,12 +57,10 @@
               {{ item.estado ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
-          
           <td class="td-actions">
-            <!-- Asumiendo que agregaste 'boton_ver', 'boton_editar' y 'boton_eliminar' en tablas -->
-            <button class="btn-icon view" (click)="verDetalle(item)" [title]="t().tablas.boton_ver || 'Ver'">Ver</button>
-            <button class="btn-icon edit" (click)="editarUsuario(item.id_usuario)" [title]="t().tablas.boton_editar || 'Editar'">Editar</button>
-            <button class="btn-icon delete" (click)="eliminarUsuario(item.rut)" [title]="t().tablas.boton_eliminar || 'Eliminar'">Eliminar</button>
+            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver">Ver</button>
+            <button class="btn-icon edit" (click)="editarItem(item.id_info!)" title="Editar">Editar</button>
+            <button class="btn-icon delete" (click)="eliminarItem(item.id_info!)" title="Eliminar">Eliminar</button>
           </td>
         </tr>
       </tbody>
@@ -78,31 +68,37 @@
   </div>
 </div>
 
-<!-- MODAL DE DETALLE DEL USUARIO -->
+<!-- ========================================== -->
+<!-- MODAL DE DETALLE DEL TEXTO                 -->
+<!-- ========================================== -->
 <div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
   <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
     
     <div class="modal-header">
-      <h3>{{ t().modal_usuario.titulo }}</h3>
+      <h3>Detalle del Texto</h3>
       <button class="btn-close" (click)="cerrarDetalle()">×</button>
     </div>
 
     <div class="modal-body">
       <div class="content-text">
         <p>
-          <strong>{{ t().modal_usuario.nombre_completo }}</strong><br>
-          {{ itemSeleccionado.nombre }}
+          <strong>Sección / Clave:</strong><br>
+          {{ itemSeleccionado.seccion }} / {{ itemSeleccionado.clave }}
+        </p>
+        <p *ngIf="itemSeleccionado.titulo">
+          <strong>{{ t().tablas.titulo_tabla }}:</strong><br>
+          {{ itemSeleccionado.titulo }}
+        </p>
+        <p *ngIf="itemSeleccionado.descripcion">
+          <strong>{{ t().tablas.descripcion_tabla }}:</strong><br>
+          {{ itemSeleccionado.descripcion }}
+        </p>
+        <p *ngIf="itemSeleccionado.enlace">
+          <strong>Enlace configurado:</strong><br>
+          <a [routerLink]="itemSeleccionado.enlace" style="color: #0284c7;">{{ itemSeleccionado.enlace }}</a>
         </p>
         <p>
-          <strong>{{ t().modal_usuario.rut }}</strong><br>
-          {{ itemSeleccionado.rut }}
-        </p>
-        <p>
-          <strong>{{ t().modal_usuario.correo }}</strong><br>
-          {{ itemSeleccionado.email }}
-        </p>
-        <p>
-          <strong>{{ t().tablas.estado_usuario || 'Estado' }}:</strong><br>
+          <strong>Estado:</strong><br>
           <span class="badge" 
                 style="display: inline-block; margin-top: 0.3rem;"
                 [ngStyle]="{
