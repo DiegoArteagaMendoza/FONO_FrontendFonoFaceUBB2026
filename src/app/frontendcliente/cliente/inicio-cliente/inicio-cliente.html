@@ -5,21 +5,50 @@
   <main class="main-content">
     <section class="intro-section">
       <h2>{{ t().portal_inicio.seccion_titulo }}</h2>
-      <div class="features-grid">
+      
+      <!-- ESTADO DE CARGA -->
+      <div *ngIf="cargando" style="text-align: center; padding: 3rem; color: #64748b;">
+        <p>{{ t().globales.cargando }}</p>
+      </div>
 
-        <div class="feature-card" *ngFor="let item of caracteristicas">
+      <!-- GRILLA DE TEXTOS DINÁMICOS -->
+      <div class="features-grid" *ngIf="!cargando && textosDinamicos.length > 0">
+        
+        <div class="feature-card" *ngFor="let item of textosDinamicos">
           <div class="icon-wrapper">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" [attr.d]="item.icono"></path>
+              <!-- El ícono se inyecta dinámicamente usando la función -->
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" [attr.d]="obtenerIcono(item.clave)"></path>
             </svg>
           </div>
           <h3>{{ item.titulo }}</h3>
           <p>{{ item.descripcion }}</p>
-          <a [routerLink]="item.ruta" class="link-action">{{ t().portal_inicio.ver_mas }}</a>
+          
+          <!-- Si es un ENLACE INTERNO (ej: /portal/farmacos) usamos routerLink -->
+          <a *ngIf="item.enlace && !esEnlaceExterno(item.enlace)" 
+            [routerLink]="item.enlace" 
+            class="link-action">
+            {{ t().portal_inicio.ver_mas }}
+          </a>
+
+          <!-- Si es un ENLACE EXTERNO (ej: https://gemini.google.com) usamos href -->
+          <!-- Agregamos target="_blank" para que abra en una pestaña nueva -->
+          <a *ngIf="item.enlace && esEnlaceExterno(item.enlace)" 
+            [href]="item.enlace" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="link-action">
+            {{ t().portal_inicio.ver_mas }}
+          </a>
         </div>
 
       </div>
-    </section>
 
-    </main>
+      <!-- ESTADO VACÍO -->
+      <div *ngIf="!cargando && textosDinamicos.length === 0" style="text-align: center; padding: 2rem; color: #64748b;">
+        <p>No hay información disponible en este momento.</p>
+      </div>
+
+    </section>
+  </main>
 </div>

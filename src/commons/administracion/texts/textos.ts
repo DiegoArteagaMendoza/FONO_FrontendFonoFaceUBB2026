@@ -43,6 +43,14 @@ export const TEXTOS_SITIO = {
         boton_editar: "Editar",
         boton_eliminar: "Eliminar",
         sin_img: "Sin img",
+        estado_usuario: "Estado",
+        gestion_info_general: {
+            titulo: "Gestión de Textos Dinámicos",
+            subtitulo: "Administra los textos, títulos y enlaces que se muestran en el portal público.",
+            nuevo_texto: "Nuevo Texto",
+            filtrar_seccion: "Filtrar por Sección:",
+            seccion_todas: "Todas las secciones"
+        },
     },
 
     // INICIO PORTAL ADMINISTRACION
@@ -104,7 +112,11 @@ export const TEXTOS_SITIO = {
     gestion_usuarios: {
         titulo: "Gestión de Usuarios",
         subtitulo: "Administra los usuarios registrados en el sistema.",
-        nuevo_usuario: "Nuevo Usuario"
+        nuevo_usuario: "Nuevo Usuario",
+        filtrar_estado: "Filtrar por Estado:",
+        estado_todos: "Todos",
+        estado_activos: "Activos",
+        estado_inactivos: "Inactivos"
     },
 
     // TEXTOS EDICION
@@ -343,6 +355,36 @@ export const TEXTOS_SITIO = {
         permisos_titulo: "Permisos del Sistema",
         btn_actualizando: "Actualizando...",
         btn_actualizar: "Guardar Cambios"
+    },
+
+    // CREACIÓN DE INFORMACIÓN GENERAL (TEXTOS DINÁMICOS)
+    creacion_info_general: {
+        titulo: "Crear Texto Dinámico",
+        subtitulo: "Añade un nuevo bloque de texto para una sección del portal público.",
+        label_seccion: "Sección",
+        placeholder_seccion: "Ej: inicio, footer, nosotros",
+        alerta_seccion: "La sección es obligatoria.",
+        label_clave: "Clave Única",
+        placeholder_clave: "Ej: inicio_bienvenida",
+        alerta_clave: "La clave es obligatoria y sin espacios.",
+        label_titulo_texto: "Título a mostrar (Opcional)",
+        placeholder_titulo_texto: "Ej: Bienvenido al portal",
+        label_descripcion: "Contenido / Descripción (Opcional)",
+        placeholder_descripcion: "Cuerpo del texto...",
+        label_enlace: "Enlace o URL (Opcional)",
+        placeholder_enlace: "Ej: /portal/cuidados",
+        boton_guardando: "Guardando...",
+        boton_guardar: "Guardar Texto"
+    },
+
+    // EDICIÓN DE INFORMACIÓN GENERAL
+    edicion_info_general: {
+        titulo: "Editar Texto Dinámico",
+        subtitulo: "Modifica el contenido o la configuración de este bloque de texto.",
+        label_estado: "Bloque Activo",
+        desc_estado: "Si se desmarca, este texto dejará de aparecer en el portal público.",
+        boton_actualizando: "Actualizando...",
+        boton_actualizar: "Guardar Cambios"
     },
 
     // ===================== PORTAL CLIENTE =====================

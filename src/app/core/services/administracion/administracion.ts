@@ -27,8 +27,19 @@ export interface UsuarioItem {
   nombre: string;
   rut: string;
   email: string;
-  estado?: boolean;     // Agregado para leerlo en el componente de edición
-  is_staff?: boolean;   // Agregado para leerlo en el componente de edición
+  estado: boolean;     
+  is_staff?: boolean;   
+}
+
+// 4. Interfaz Información General (Textos Dinámicos)
+export interface InfoGeneralItem {
+  id_info?: number;
+  seccion: string;
+  clave: string;
+  titulo?: string;
+  descripcion?: string;
+  enlace?: string;
+  estado?: boolean;
 }
 
 @Injectable({
@@ -71,10 +82,9 @@ export class AdministracionService {
     );
   }
 
-  // 2. Crear (POST) - En tu componente vimos que envías JSON, si cambiaste a FormData mantenlo así
+  // 2. Crear (POST)
   crearUsuario(datos: any): Observable<any> {
     const url = `${this.apiUrl}/usuarios/crear/`;
-    // Nota: El login original tuyo no pedía token para crear (AllowAny), pero si lo cambiaste, agrega el header
     return this.http.post(url, datos);
   } 
 
@@ -86,7 +96,7 @@ export class AdministracionService {
     );
   }
 
-  // 4. Editar (PATCH) - Actualiza contraseña, estado o is_staff
+  // 4. Editar (PATCH)
   editarUsuario(rut: string, datos: any): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/usuarios/${rut}/editar/`, 
@@ -130,5 +140,54 @@ export class AdministracionService {
       datos,
       { headers: this.getAuthHeaders() }
     );
+  }
+
+  /*
+    ===================================================
+    MÉTODOS PARA INFORMACIÓN GENERAL (TEXTOS DINÁMICOS)
+    ===================================================
+  */
+
+  // 1. Listar para Admin (GET) - Trae todos, incluyendo inactivos
+  getInfoGeneralListarAdmin(): Observable<InfoGeneralItem[]> {
+    return this.http.get<InfoGeneralItem[]>(
+      `${this.apiUrl}/info-general/listar/`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // 2. Crear (POST)
+  crearInfoGeneral(datos: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/info-general/crear/`,
+      datos,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // 3. Editar (PATCH)
+  editarInfoGeneral(id_info: number, datos: any): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/info-general/${id_info}/editar/`,
+      datos,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // 4. Eliminar (DELETE) - Borrado lógico
+  eliminarInfoGeneral(id_info: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/info-general/${id_info}/eliminar/`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // 5. Endpoint Público (GET) - Para que lo consuma el cliente sin token
+  getInfoGeneralPublico(seccion?: string): Observable<InfoGeneralItem[]> {
+    let url = `${this.apiUrl}/info-general/publico/`;
+    if (seccion) {
+      url += `?seccion=${seccion}`;
+    }
+    return this.http.get<InfoGeneralItem[]>(url); 
   }
 }

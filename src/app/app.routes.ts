@@ -17,6 +17,9 @@ import { AdministracionUsuarioComponent } from './features/administracion/usuari
 import { AdministracionUsuarioCrearComponente } from './features/administracion/usuarios/crear/administracion-usuarios-crear';
 import { AdministracionInicioEditarComponent } from './features/administracion/inicio/editar/administracion-inicio-editar';
 import { AdministracionUsuarioEditarComponent } from './features/administracion/usuarios/editar/administracion-usuarios-editar';
+import { AdministracionInformacionGeneralComponent } from './features/administracion/infoGeneral/infoGeneral';
+import { AdministracionInfoGeneralCrearComponent } from './features/administracion/infoGeneral/crear/infoGeneral-crear';
+import { AdministracionInfoGeneralEditarComponent } from './features/administracion/infoGeneral/editar/infoGeneral-editar';
 
 // IMPORTACIONES DEL PORTAL PÚBLICO
 import { ClienteLayout } from './frontendcliente/cliente/layout/layout';
@@ -45,16 +48,16 @@ export const routes: Routes = [
       { path: 'inicio', component: InicioClienteComponent },
       
       // RUTAS DE FÁRMACOS
-      { path: 'farmacos', component: FarmacosClienteComponent }, // Quitamos la barra final
-      { path: 'farmacos/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+      { path: 'farmacos', component: FarmacosClienteComponent }, 
+      { path: 'farmacos/:id', component: InformacionDetalleComponent }, 
 
       // RUTAS DE PREVENCIÓN
       { path: 'prevencion', component: InformacionClienteComponent },
-      { path: 'prevencion/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+      { path: 'prevencion/:id', component: InformacionDetalleComponent }, 
 
       // RUTAS DE PROMOCIÓN
       { path: 'promocion', component: PromocionClienteComponent },
-      { path: 'promocion/:id', component: InformacionDetalleComponent }, // Reutilizamos el detalle
+      { path: 'promocion/:id', component: InformacionDetalleComponent }, 
 
       // RUTAS DE NOTICIAS
       { path: 'noticias', component: NoticiasClienteComponent },
@@ -100,6 +103,10 @@ export const routes: Routes = [
       { path: 'administracion/usuario', component: AdministracionUsuarioComponent },
       { path: 'administracion/usuario/crear', component: AdministracionUsuarioCrearComponente },
       { path: 'administracion/usuario/editar/:id', component: AdministracionUsuarioEditarComponent },
+      // ADMINISTRACION INFORMACIÓN GENERAL
+      { path: 'administracion/informacion/inicio', component: AdministracionInformacionGeneralComponent },
+      { path: 'administracion/informacion/inicio/crear', component: AdministracionInfoGeneralCrearComponent },
+      { path: 'administracion/informacion/inicio/editar/:id', component: AdministracionInfoGeneralEditarComponent }
     ]
   },
 ];
