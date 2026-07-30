@@ -28,15 +28,15 @@ import { AdministracionInfoGeneralEditarComponent } from '../proyectos/administr
 import { ClienteLayout } from '../proyectos/cliente/layout/layout';
 import { InicioClienteComponent } from '../proyectos/cliente/inicio-cliente/inicio-cliente';
 import { InformacionClienteComponent } from '../proyectos/cliente/informacion/informacion';
-import { InformacionDetalleComponent } from '../proyectos/cliente/informacion-detalle/informacion-detalle';
+import { InformacionDetalleComponent } from '../proyectos/cliente/informacion/informacion-detalle/informacion-detalle';
 import { CuidadosClienteComponent } from '../proyectos/cliente/cuidados/cuidados';
-import { CuidadosDetalleComponent } from '../proyectos/cliente/cuidados-detalle/cuidados-detalle';
+import { CuidadosDetalleComponent } from '../proyectos/cliente/cuidados/cuidados-detalle/cuidados-detalle';
 import { VozClienteComponent } from '../proyectos/cliente/voz/voz';
-import { VozDetalleComponent } from '../proyectos/cliente/voz-detalle/voz-detalle';
+import { VozDetalleComponent } from '../proyectos/cliente/voz/voz-detalle/voz-detalle';
 import { FarmacosClienteComponent } from '../proyectos/cliente/farmacos/farmacos';
 import { PromocionClienteComponent } from '../proyectos/cliente/promocion/promocion';
 import { NoticiasClienteComponent } from '../proyectos/cliente/noticias/noticias';
-import { NoticiasDetalleComponent } from '../proyectos/cliente/noticias-detalle/noticias-detalle';
+import { NoticiasDetalleComponent } from '../proyectos/cliente/noticias/noticias-detalle/noticias-detalle';
 // import { FarmacosDetalleComponent } from '../proyectos/cliente/farmacos-detalle/farmacos-detalle';
 
 export const routes: Routes = [

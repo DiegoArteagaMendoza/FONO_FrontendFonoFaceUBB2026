@@ -97,6 +97,7 @@ src/
     │       ├── dashboard/inicio/        #   inicio/resumen del panel
     │       ├── informacion/             #   CRUD de información (fármacos/prevención/promoción)
     │       ├── cuidados/                #   CRUD de cuidados vocales
+    │       ├── voz/                     #   CRUD de contenidos de "La Voz" (definición, anatomía, etc.)
     │       ├── noticias/                #   CRUD de noticias
     │       └── administracion/          #   gestión de: carrusel de inicio, usuarios, textos
     │           ├── inicio/              #     carrusel del inicio del portal público
@@ -105,15 +106,25 @@ src/
     │
     └── cliente/                          # PORTAL PÚBLICO (rutas /portal/*)
         ├── layout/                       # shell con navbar superior, propio del portal
-        ├── navbar/                       # barra de navegación pública
-        ├── footer/                       # pie de página público
-        ├── inicio-cliente/               # home del portal (incluye inicio-carrusel/)
-        ├── informacion/ + informacion-detalle/   # listado y detalle de "Prevención"
-        ├── farmacos/                     # listado de "Efectos Farmacológicos" (reusa InformacionService)
-        ├── promocion/                    # listado de "Promoción de la voz" (reusa InformacionService)
-        ├── cuidados/ + cuidados-detalle/ # listado y detalle de cuidados vocales
-        └── noticias/ + noticias-detalle/ # listado y detalle de noticias
+        │   ├── layout.ts                 #   define el <router-outlet> del portal
+        │   ├── navbar/                   #   barra de navegación (solo la usa layout)
+        │   └── footer/                   #   pie de página (solo lo usa layout)
+        ├── inicio-cliente/               # home del portal
+        │   └── inicio-carrusel/          #   carrusel de la home (solo lo usa inicio-cliente)
+        ├── informacion/                  # listado de "Prevención" (usa InformacionService)
+        │   └── informacion-detalle/      #   detalle, compartido también por farmacos/ y promocion/
+        ├── farmacos/                     # listado de "Efectos Farmacológicos"
+        │                                 #   (reusa InformacionService e informacion/informacion-detalle)
+        ├── promocion/                    # listado de "Promoción de la voz" (misma lógica que farmacos/)
+        ├── cuidados/                     # listado de cuidados vocales
+        │   └── cuidados-detalle/         #   detalle (solo lo usa cuidados/)
+        ├── voz/                          # listado de contenidos de "La Voz"
+        │   └── voz-detalle/              #   detalle (solo lo usa voz/)
+        └── noticias/                     # listado de noticias
+            └── noticias-detalle/         #   detalle (solo lo usa noticias/)
 ```
+
+Dentro de `cliente/`, cada componente "detalle" con un único padre natural (cuidados, voz, noticias) quedó anidado dentro de ese padre, igual que `inicio-carrusel` dentro de `inicio-cliente`. `informacion-detalle` quedó anidado en `informacion/` por ser el nombre más afín, aunque `farmacos/` y `promocion/` también enrutan hacia él directamente desde `app.routes.ts` (no hay import cruzado entre features: sólo el archivo de rutas conoce esa ruta compartida).
 
 ### ¿Por qué esta separación?
 
