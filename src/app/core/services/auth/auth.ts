@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment'; // <-- Importar entorno genérico
 import { API_ENDPOINTS } from '../../constants/api.constants'; // <-- Importar constantes
+import { CLAVE_TEMA } from '../tema/tema';
 
 export interface LoginResponse {
   refresh: string;
@@ -38,13 +39,19 @@ logout() {
   // 1. Borra los tokens específicos
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
-  
+
   // 2. Borra cualquier dato del usuario guardado
   localStorage.removeItem('user_data');
-  
-  // 3. Limpia TODO el localStorage por seguridad
+
+  // 3. Limpia TODO el localStorage por seguridad.
+  //    La preferencia de tema no es un dato de sesión, así que la conservamos
+  //    para que al cerrar sesión no se pierda el modo claro/oscuro elegido.
+  const temaGuardado = localStorage.getItem(CLAVE_TEMA);
   localStorage.clear();
-  
+  if (temaGuardado) {
+    localStorage.setItem(CLAVE_TEMA, temaGuardado);
+  }
+
   // 4. Limpia el sessionStorage por si acaso
   sessionStorage.clear();
 

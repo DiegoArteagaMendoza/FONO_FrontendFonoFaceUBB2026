@@ -3,9 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variables de tema claro/oscuro (deben cargarse antes que el resto) */
+@import './commons/estilos/tema.scss';
+
 body {
-  background-color: theme('colors.fonoBg');
-  color: theme('colors.fonoText');
+  background-color: var(--fono-fondo-portal);
+  color: var(--fono-texto-cuerpo);
   margin: 0;
 }
 
@@ -13,8 +16,8 @@ body {
    2. ESPACIO DE NOMBRES PARA LA ADMINISTRACIÓN (.admin-theme)
    ========================================================================== */
 .admin-theme {
-  
-  /* Sass procesará todos estos archivos y les añadirá automáticamente 
+
+  /* Sass procesará todos estos archivos y les añadirá automáticamente
      el prefijo .admin-theme a cada clase por nosotros. */
   @import './commons/administracion/styles/baseglobal_estados.scss';
   @import './commons/administracion/styles/botones_accion.scss';
@@ -32,5 +35,5 @@ body {
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
 }

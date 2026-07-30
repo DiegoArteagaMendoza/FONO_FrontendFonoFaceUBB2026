@@ -7,11 +7,11 @@
 
 .page-header {
   margin-bottom: 3rem;
-  color: #1e293b;
+  color: var(--fono-texto);
 
   &.text-center { text-align: center; }
   h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
-  p { font-size: 1.1rem; color: #64748b; }
+  p { font-size: 1.1rem; color: var(--fono-texto-suave); }
 }
 
 /* --- Filtros tipo Píldoras --- */
@@ -24,8 +24,8 @@
 }
 
 .pill-btn {
-  background-color: white;
-  border: 1px solid #e2e8f0;
+  background-color: var(--fono-superficie);
+  border: 1px solid var(--fono-borde);
   color: #475569;
   padding: 0.6rem 1.2rem;
   border-radius: 50px;
@@ -34,14 +34,14 @@
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #cbd5e1;
-    background-color: #f8fafc;
+    border-color: var(--fono-borde);
+    background-color: var(--fono-superficie-2);
   }
 
   &.active {
     background-color: #0284c7;
-    color: white;
-    border-color: #0284c7;
+    color: var(--fono-texto-inverso);
+    border-color: var(--fono-primario);
     box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
   }
 }
@@ -54,7 +54,7 @@
 }
 
 .article-card {
-  background: white;
+  background: var(--fono-superficie);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
@@ -67,7 +67,7 @@
     transform: translateY(-5px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
 
-    .read-more { color: #0284c7; transform: translateX(5px); }
+    .read-more { color: var(--fono-primario); transform: translateX(5px); }
   }
 }
 
@@ -75,7 +75,7 @@
   width: 100%;
   height: 200px;
   position: relative;
-  background-color: #f1f5f9;
+  background-color: var(--fono-superficie-3);
 
   img {
     width: 100%;
@@ -89,7 +89,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94a3b8;
+    color: var(--fono-texto-tenue);
     font-size: 0.9rem;
   }
 }
@@ -103,13 +103,13 @@
   h3 {
     margin: 0 0 0.75rem 0;
     font-size: 1.25rem;
-    color: #1e293b;
+    color: var(--fono-texto);
     line-height: 1.4;
   }
 
   p {
     margin: 0;
-    color: #64748b;
+    color: var(--fono-texto-suave);
     font-size: 0.95rem;
     line-height: 1.6;
     flex-grow: 1;
@@ -120,7 +120,7 @@
   display: inline-block;
   margin-top: 1.5rem;
   font-weight: 600;
-  color: #0ea5e9;
+  color: var(--fono-acento);
   font-size: 0.95rem;
   transition: all 0.2s ease;
 }
@@ -149,14 +149,14 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem;
-  color: #64748b;
+  color: var(--fono-texto-suave);
   font-size: 1.1rem;
 }
 
 .spinner {
   width: 40px; height: 40px;
   border: 4px solid #e0f2fe;
-  border-top-color: #0284c7;
+  border-top-color: var(--fono-primario);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem auto;

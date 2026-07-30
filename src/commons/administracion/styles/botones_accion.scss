@@ -3,7 +3,7 @@
    ========================================================================== */
 .btn-primary {
   background-color: #0056b3;
-  color: white;
+  color: var(--fono-texto-inverso);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
@@ -22,8 +22,8 @@
 }
 
 .btn-secondary {
-  background-color: #e9ecef;
-  color: #495057;
+  background-color: var(--fono-superficie-3);
+  color: var(--fono-texto-cuerpo);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
@@ -44,7 +44,7 @@
 .btn-back {
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--fono-texto-suave);
   font-weight: 600;
   cursor: pointer;
   margin-bottom: 1rem;

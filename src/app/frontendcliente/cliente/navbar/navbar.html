@@ -39,6 +39,8 @@
       <a routerLink="/portal/noticias" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.noticias }}</a>
 
       <div class="admin-access">
+        <!-- Alternar tema claro / oscuro -->
+        <app-boton-tema class="boton-tema-navbar"></app-boton-tema>
         <a routerLink="/login" class="btn-admin" (click)="closeMenu()">{{ t().portal_navbar.acceso_admin }}</a>
       </div>
     </div>

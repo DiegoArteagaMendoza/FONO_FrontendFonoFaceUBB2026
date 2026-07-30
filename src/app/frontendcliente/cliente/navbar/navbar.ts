@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TextosService } from '../../../core/services/textos/textos';
+import { BotonTemaComponent } from '../../../core/components/boton-tema/boton-tema';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, BotonTemaComponent],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })

@@ -2,11 +2,11 @@
    FORMULARIOS DE CREACIÓN Y EDICIÓN
    ========================================================================== */
 .form-card {
-  background: white;
+  background: var(--fono-superficie);
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--fono-borde-suave);
   max-width: 800px;
 }
 
@@ -39,29 +39,39 @@
 
   label {
     font-weight: 600;
-    color: #444;
+    color: var(--fono-texto-cuerpo);
     font-size: 0.95rem;
   }
 
-  input[type="text"], 
-  select, 
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="url"],
+  input[type="date"],
+  select,
   textarea {
     padding: 0.75rem 1rem;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--fono-borde);
     border-radius: 6px;
     font-size: 1rem;
     font-family: inherit;
-    transition: border-color 0.2s;
+    /* Fondo y texto siguen el tema activo (claro u oscuro) */
+    background-color: var(--fono-campo);
+    color: var(--fono-texto-cuerpo);
+    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
 
-    &:focus { outline: none; border-color: #0056b3; }
-    &.is-invalid { border-color: #dc3545; background-color: #fff1f2; }
+    &::placeholder { color: var(--fono-texto-tenue); }
+
+    &:focus { outline: none; border-color: var(--fono-primario); }
+    &.is-invalid { border-color: var(--fono-error); background-color: var(--fono-error-fondo); }
   }
 
   textarea { resize: vertical; }
 }
 
 .error-text {
-  color: #dc3545;
+  color: var(--fono-error);
   font-size: 0.8rem;
   margin-top: 0.2rem;
   font-weight: 500;
@@ -73,5 +83,5 @@
   gap: 1rem;
   margin-top: 1rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--fono-borde);
 }
