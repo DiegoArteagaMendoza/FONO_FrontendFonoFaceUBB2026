@@ -1,0 +1,74 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().creacion_voz.titulo }}</h2>
+      <p>{{ t().creacion_voz.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">{{ t().creacion_voz.label_titulo }}</label>
+          <input id="titulo" type="text" formControlName="titulo" [placeholder]="t().creacion_voz.placeholder_titulo">
+          <small class="error-text" *ngIf="crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched">
+            {{ t().creacion_voz.alerta_titulo }}
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="categoria">{{ t().creacion_voz.label_categoria }}</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="" disabled selected>{{ t().creacion_voz.placeholder_categoria }}</option>
+            <option value="DEFINICION">{{ t().voz_extras.definicion }}</option>
+            <option value="ANATOMIA">{{ t().voz_extras.anatomia }}</option>
+            <option value="FISIOLOGIA">{{ t().voz_extras.fisiologia }}</option>
+            <option value="TRASTORNOS">{{ t().voz_extras.trastornos }}</option>
+            <option value="IMPORTANCIA">{{ t().voz_extras.importancia }}</option>
+            <option value="CURIOSIDADES">{{ t().voz_extras.curiosidades }}</option>
+          </select>
+          <small class="error-text" *ngIf="crearForm.get('categoria')?.invalid && crearForm.get('categoria')?.touched">
+            {{ t().creacion_voz.alerta_categoria }}
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">{{ t().creacion_voz.label_contenido }}</label>
+        <textarea id="contenido" formControlName="contenido" rows="5" [placeholder]="t().creacion_voz.placeholder_contenido"></textarea>
+        <small class="error-text" *ngIf="crearForm.get('contenido')?.invalid && crearForm.get('contenido')?.touched">
+          {{ t().creacion_voz.alerta_contenido }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="fuente">{{ t().creacion_voz.label_fuente }}</label>
+        <input id="fuente" type="text" formControlName="fuente" [placeholder]="t().creacion_voz.placeholder_fuente">
+        <small class="error-text" *ngIf="crearForm.get('fuente')?.invalid && crearForm.get('fuente')?.touched">
+          {{ t().creacion_voz.alerta_fuente }}
+        </small>
+      </div>
+
+      <div class="form-group file-upload-section">
+        <label for="img">{{ t().creacion_voz.label_imagen }}</label>
+        <input id="img" type="file" accept="image/*" (change)="onFileChange($event)" class="file-input">
+        <small class="help-text">{{ t().creacion_voz.help_imagen }}</small>
+
+        <div class="preview-files" *ngIf="imagenSeleccionada">
+          <p><strong>{{ t().creacion_voz.archivo_seleccionado }}</strong></p>
+          <ul><li>{{ imagenSeleccionada.name }}</li></ul>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_voz.btn_guardando : t().creacion_voz.btn_guardar }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

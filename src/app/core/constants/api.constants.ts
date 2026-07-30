@@ -17,6 +17,13 @@ export const API_ENDPOINTS = {
     editar: (id: number) => `/cuidados/${id}/editar/`,
     eliminar: (id: number) => `/cuidados/${id}/eliminar/`
   },
+  voz: {
+    listar: '/voz/listar/',
+    porCategoria: (tipoCategoria: string) => `/voz/categoria/${tipoCategoria}/`,
+    crear: '/voz/crear/',
+    editar: (id: number) => `/voz/${id}/editar/`,
+    eliminar: (id: number) => `/voz/${id}/eliminar/`
+  },
   noticias: {
     listar: '/noticias/listar/',
     crear: '/noticias/crear/',
