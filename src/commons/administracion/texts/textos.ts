@@ -101,6 +101,25 @@ export const TEXTOS_SITIO = {
         publico_general: "Público General",
         filtrar_publico: "Filtrar por Público:",
     },
+    gestion_voz: {
+        titulo: "Gestión de La Voz",
+        subtitulo: "Administra el contenido informativo sobre la voz: definición, anatomía, fisiología y más.",
+        nueva_informacion: "Nuevo Contenido",
+    },
+    voz_extras: {
+        categoria_tema: "Categoría",
+        fuente: "Fuente",
+        imagen_adjunta: "Imagen adjunta",
+        ver_enlace: "Ver Enlace",
+        todas: "Todas",
+        definicion: "Definición",
+        anatomia: "Anatomía",
+        fisiologia: "Fisiología",
+        trastornos: "Trastornos de la Voz",
+        importancia: "Importancia del Cuidado",
+        curiosidades: "Curiosidades",
+        filtrar_categoria: "Filtrar por Categoría:",
+    },
     gestion_noticias: {
         titulo: "Gestión de Noticias",
         subtitulo: "Administra las noticias y novedades que se publican en el portal.",
@@ -315,6 +334,43 @@ export const TEXTOS_SITIO = {
         btn_actualizando: "Actualizando...",
         btn_actualizar: "Guardar Cambios"
     },
+
+    // CREACION VOZ
+    creacion_voz: {
+        titulo: "Crear Nuevo Contenido de Voz",
+        subtitulo: "Añade contenido informativo sobre la voz para una categoría específica.",
+        label_titulo: "Título del contenido",
+        placeholder_titulo: "Ej. ¿Cómo se produce la voz?...",
+        alerta_titulo: "El título es obligatorio.",
+        label_categoria: "Categoría",
+        placeholder_categoria: "Seleccione una...",
+        alerta_categoria: "Selecciona una categoría.",
+        label_contenido: "Contenido y Detalles",
+        placeholder_contenido: "Desarrolla el contenido aquí...",
+        alerta_contenido: "El contenido es obligatorio.",
+        label_fuente: "Fuente o Referencia (Opcional)",
+        placeholder_fuente: "https://ejemplo.com/estudio...",
+        alerta_fuente: "Debe ser una URL válida (ej. https://...).",
+        label_imagen: "Imagen Principal (Opcional)",
+        help_imagen: "Sube una imagen ilustrativa para este contenido (JPG, PNG).",
+        archivo_seleccionado: "Archivo seleccionado:",
+        btn_guardando: "Guardando...",
+        btn_guardar: "Guardar Contenido"
+    },
+
+    // EDICION VOZ
+    edicion_voz: {
+        titulo: "Editar Contenido de Voz",
+        subtitulo: "Modifica el contenido, la categoría o la imagen asociada a este registro.",
+        cargando_datos: "Cargando datos del registro...",
+        error_no_encontrado: "No se encontró el contenido de voz solicitado.",
+        imagen_actual: "Imagen Actual:",
+        label_reemplazar: "Reemplazar Imagen (Opcional)",
+        help_reemplazar: "Selecciona un archivo solo si deseas cambiar la imagen actual.",
+        nueva_imagen: "Nueva imagen a subir:",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
     footer: {
         descripcion: "Sistema integral de administración FonoFace. Simplificando la gestión y el cuidado paso a paso.",
         contacto_email: "contacto@fonoface.cl",
@@ -324,6 +380,7 @@ export const TEXTOS_SITIO = {
         { label: "Inicio", path: "/administracion/inicio" },
         { label: "Información", path: "/administracion/informacion" },
         { label: "Cuidados", path: "/administracion/cuidados" },
+        { label: "La Voz", path: "/administracion/voz" },
         { label: "Noticias", path: "/administracion/noticias" }
         ],
         legales: [
@@ -460,6 +517,23 @@ export const TEXTOS_SITIO = {
         fuente: "Fuente:"
     },
 
+    // VISTA LA VOZ DEL PORTAL CLIENTE
+    portal_voz: {
+        titulo: "La Voz",
+        subtitulo: "Conoce su definición, anatomía, fisiología, trastornos y curiosidades.",
+        cargando: "Cargando contenido...",
+        vacio: "No hay contenido disponible para esta categoría en este momento.",
+        ver_mas: "Ver contenido →"
+    },
+
+    // VISTA DETALLE DE LA VOZ DEL PORTAL CLIENTE
+    portal_voz_detalle: {
+        volver: "← Volver a La Voz",
+        cargando: "Cargando contenido...",
+        regresar: "Regresar",
+        fuente: "Fuente:"
+    },
+
     // FOOTER DEL PORTAL CLIENTE
     portal_footer: {
         descripcion: "Plataforma de información y cuidados de la voz de la Universidad del Bío-Bío. Recursos especializados para niños, profesores, cantantes, locutores y público general.",
@@ -470,6 +544,7 @@ export const TEXTOS_SITIO = {
         derechos: "FonoFace — Universidad del Bío-Bío. Todos los derechos reservados.",
         enlaces: [
         { label: "Inicio", path: "/portal/inicio" },
+        { label: "La Voz", path: "/portal/lavoz" },
         { label: "Efectos Farmacológicos", path: "/portal/farmacos" },
         { label: "Prevención de la voz", path: "/portal/prevencion" },
         { label: "Promoción", path: "/portal/promocion" },

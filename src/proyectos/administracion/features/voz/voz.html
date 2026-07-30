@@ -1,0 +1,101 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().gestion_voz.titulo }}</h2>
+      <p>{{ t().gestion_voz.subtitulo }}</p>
+    </div>
+    <button class="btn-primary" (click)="irACrear()">
+      {{ t().gestion_voz.nueva_informacion }}
+    </button>
+  </div>
+
+  <div class="filters-section">
+    <div class="filter-group">
+      <label for="filtroCategoria">{{ t().voz_extras.filtrar_categoria }}</label>
+      <select id="filtroCategoria" (change)="filtrarPorCategoria($event)">
+        <option value="">{{ t().voz_extras.todas }}</option>
+        <option value="DEFINICION">{{ t().voz_extras.definicion }}</option>
+        <option value="ANATOMIA">{{ t().voz_extras.anatomia }}</option>
+        <option value="FISIOLOGIA">{{ t().voz_extras.fisiologia }}</option>
+        <option value="TRASTORNOS">{{ t().voz_extras.trastornos }}</option>
+        <option value="IMPORTANCIA">{{ t().voz_extras.importancia }}</option>
+        <option value="CURIOSIDADES">{{ t().voz_extras.curiosidades }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().tablas.imagen_tabla }}</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>{{ t().voz_extras.categoria_tema }}</th>
+          <th>{{ t().voz_extras.fuente }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="listaVoz.length === 0">
+          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+
+        <tr *ngFor="let item of listaVoz">
+          <td class="td-image">
+            <img *ngIf="item.img" [src]="obtenerUrlImagen(item.img)" class="thumbnail">
+            <div *ngIf="!item.img" class="no-image-placeholder">{{ t().tablas.sin_img }}</div>
+          </td>
+          <td class="td-title">{{ item.titulo }}</td>
+          <td>
+            <span class="badge" [ngClass]="getBadgeClass(item.categoria)">{{ item.categoria_display }}</span>
+          </td>
+          <td>
+            <a *ngIf="item.fuente" [href]="item.fuente" target="_blank" class="link-fuente">{{ t().voz_extras.ver_enlace }}</a>
+            <span *ngIf="!item.fuente" class="text-muted">N/A</span>
+          </td>
+          <td class="td-actions">
+            <button class="btn-icon view" (click)="verDetalle(item)">{{ t().tablas.boton_ver }}</button>
+            <button class="btn-icon edit" (click)="editarVoz(item.id_voz)">{{ t().tablas.boton_editar }}</button>
+            <button class="btn-icon delete" (click)="eliminarVoz(item.id_voz)">{{ t().tablas.boton_eliminar }}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ itemSeleccionado.titulo }}</h3>
+      <button class="btn-close" (click)="cerrarDetalle()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="meta-info">
+        <span class="badge" [ngClass]="getBadgeClass(itemSeleccionado.categoria)">
+          {{ itemSeleccionado.categoria_display }}
+        </span>
+        <span class="source-link" *ngIf="itemSeleccionado.fuente">
+          <strong>{{ t().voz_extras.fuente }}:</strong> <a [href]="itemSeleccionado.fuente" target="_blank">{{ itemSeleccionado.fuente }}</a>
+        </span>
+      </div>
+      <div class="content-text">
+        <p>{{ itemSeleccionado.contenido }}</p>
+      </div>
+      <div class="image-gallery" *ngIf="itemSeleccionado.img">
+        <h4>{{ t().voz_extras.imagen_adjunta }}</h4>
+        <div class="img-wrapper single-img">
+          <img [src]="obtenerUrlImagen(itemSeleccionado.img)">
+        </div>
+      </div>
+      <div *ngIf="!itemSeleccionado.img" class="no-images">
+        <p>{{ t().globales.sin_imagen }}</p>
+      </div>
+    </div>
+  </div>
+</div>

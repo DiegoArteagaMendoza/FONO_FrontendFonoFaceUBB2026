@@ -8,6 +8,9 @@ import { EditarInformacion } from '../proyectos/administracion/features/informac
 import { Cuidados } from '../proyectos/administracion/features/cuidados/cuidados';
 import { CrearCuidado } from '../proyectos/administracion/features/cuidados/crear/crear';
 import { EditarCuidado } from '../proyectos/administracion/features/cuidados/editar/editar';
+import { VozAdminComponent } from '../proyectos/administracion/features/voz/voz';
+import { CrearVoz } from '../proyectos/administracion/features/voz/crear/crear';
+import { EditarVoz } from '../proyectos/administracion/features/voz/editar/editar';
 import { NoticiasAdminComponent } from '../proyectos/administracion/features/noticias/noticias';
 import { CrearNoticia } from '../proyectos/administracion/features/noticias/crear/crear';
 import { EditarNoticia } from '../proyectos/administracion/features/noticias/editar/editar';
@@ -28,6 +31,8 @@ import { InformacionClienteComponent } from '../proyectos/cliente/informacion/in
 import { InformacionDetalleComponent } from '../proyectos/cliente/informacion-detalle/informacion-detalle';
 import { CuidadosClienteComponent } from '../proyectos/cliente/cuidados/cuidados';
 import { CuidadosDetalleComponent } from '../proyectos/cliente/cuidados-detalle/cuidados-detalle';
+import { VozClienteComponent } from '../proyectos/cliente/voz/voz';
+import { VozDetalleComponent } from '../proyectos/cliente/voz-detalle/voz-detalle';
 import { FarmacosClienteComponent } from '../proyectos/cliente/farmacos/farmacos';
 import { PromocionClienteComponent } from '../proyectos/cliente/promocion/promocion';
 import { NoticiasClienteComponent } from '../proyectos/cliente/noticias/noticias';
@@ -46,7 +51,11 @@ export const routes: Routes = [
     component: ClienteLayout,
     children: [
       { path: 'inicio', component: InicioClienteComponent },
-      
+
+      // RUTAS DE LA VOZ
+      { path: 'lavoz', component: VozClienteComponent },
+      { path: 'lavoz/:id', component: VozDetalleComponent },
+
       // RUTAS DE FÁRMACOS
       { path: 'farmacos', component: FarmacosClienteComponent }, 
       { path: 'farmacos/:id', component: InformacionDetalleComponent }, 
@@ -91,6 +100,10 @@ export const routes: Routes = [
       { path: 'administracion/cuidados', component: Cuidados },
       { path: 'administracion/cuidados/crear', component: CrearCuidado },
       { path: 'administracion/cuidados/editar/:id', component: EditarCuidado },
+      // LA VOZ
+      { path: 'administracion/voz', component: VozAdminComponent },
+      { path: 'administracion/voz/crear', component: CrearVoz },
+      { path: 'administracion/voz/editar/:id', component: EditarVoz },
       // NOTICIAS
       { path: 'administracion/noticias', component: NoticiasAdminComponent },
       { path: 'administracion/noticias/crear', component: CrearNoticia },
