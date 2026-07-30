@@ -7,11 +7,11 @@
 
 .page-header {
   margin-bottom: 3rem;
-  color: #1e293b;
+  color: var(--fono-texto);
 
   &.text-center { text-align: center; }
   h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
-  p { font-size: 1.1rem; color: #64748b; max-width: 700px; margin: 0 auto; }
+  p { font-size: 1.1rem; color: var(--fono-texto-suave); max-width: 700px; margin: 0 auto; }
 }
 
 /* --- Grid de Artículos --- */
@@ -22,7 +22,7 @@
 }
 
 .article-card {
-  background: white;
+  background: var(--fono-superficie);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
@@ -43,7 +43,7 @@
   width: 100%;
   height: 200px;
   position: relative;
-  background-color: #f1f5f9;
+  background-color: var(--fono-superficie-3);
 
   img {
     width: 100%;
@@ -57,7 +57,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94a3b8;
+    color: var(--fono-texto-tenue);
   }
 }
 
@@ -70,13 +70,13 @@
   h3 {
     margin: 0 0 0.75rem 0;
     font-size: 1.25rem;
-    color: #1e293b;
+    color: var(--fono-texto);
     line-height: 1.4;
   }
 
   p {
     margin: 0;
-    color: #64748b;
+    color: var(--fono-texto-suave);
     font-size: 0.95rem;
     line-height: 1.6;
     flex-grow: 1;
@@ -113,7 +113,7 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem;
-  color: #64748b;
+  color: var(--fono-texto-suave);
   font-size: 1.1rem;
 }
 

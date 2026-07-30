@@ -26,7 +26,7 @@
   
   &.view { 
     background-color: #17a2b8; 
-    color: #fff; 
+    color: var(--fono-texto-inverso); 
   }
   
   &.edit { 
@@ -36,7 +36,7 @@
   
   &.delete { 
     background-color: #dc3545; 
-    color: #fff; 
+    color: var(--fono-texto-inverso); 
   }
 
   /* Variante solo de ícono sin fondo sólido */
@@ -46,8 +46,8 @@
     border-radius: 6px;
 
     &.edit { 
-      color: #0284c7; 
-      &:hover { background-color: #e0f2fe; color: #0284c7; } 
+      color: var(--fono-primario); 
+      &:hover { background-color: var(--fono-primario-claro); color: var(--fono-primario); } 
     }
     
     &.delete { 

@@ -13,7 +13,7 @@
 .btn-back {
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--fono-texto-suave);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -22,12 +22,12 @@
   transition: color 0.2s;
 
   &:hover {
-    color: #0284c7;
+    color: var(--fono-primario);
   }
 }
 
 .article-content {
-  background: white;
+  background: var(--fono-superficie);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   overflow: hidden;
@@ -40,7 +40,7 @@
   h1 {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--fono-texto-fuerte);
     line-height: 1.2;
     margin: 1rem 0 0 0;
     letter-spacing: -0.5px;
@@ -68,7 +68,7 @@
   width: 100%;
   max-height: 450px;
   overflow: hidden;
-  background-color: #f1f5f9;
+  background-color: var(--fono-superficie-3);
 
   img {
     width: 100%;
@@ -83,7 +83,7 @@
   p {
     font-size: 1.15rem;
     line-height: 1.8;
-    color: #334155;
+    color: var(--fono-texto-cuerpo);
     white-space: pre-wrap;
     margin: 0;
   }
@@ -94,9 +94,9 @@
 
   h3 {
     font-size: 1.5rem;
-    color: #1e293b;
+    color: var(--fono-texto);
     margin-bottom: 1.5rem;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--fono-borde-suave);
     padding-top: 2rem;
   }
 
@@ -119,13 +119,13 @@
 .loading-state, .error-state {
   text-align: center;
   padding: 5rem 2rem;
-  color: #64748b;
+  color: var(--fono-texto-suave);
 }
 
 .spinner {
   width: 40px; height: 40px;
   border: 4px solid #e0f2fe;
-  border-top-color: #0284c7;
+  border-top-color: var(--fono-primario);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem auto;
@@ -142,7 +142,7 @@
 /* Fecha de publicación en el encabezado del detalle de noticia */
 .article-date {
   display: inline-block;
-  color: #0284c7;
+  color: var(--fono-primario);
   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;

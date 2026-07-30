@@ -1,9 +1,9 @@
 /* --- Variables basadas en el diseño de FonoFace --- */
-$primary: #0284c7;
-$primary-hover: #0369a1;
-$text-dark: #0f172a;
-$text-muted: #64748b;
-$bg-color: #f1f5f9;
+$primary: var(--fono-primario);
+$primary-hover: var(--fono-primario-hover);
+$text-dark: var(--fono-texto-fuerte);
+$text-muted: var(--fono-texto-suave);
+$bg-color: var(--fono-fondo);
 $error-color: #e11d48;
 $error-bg: #ffe4e6;
 
@@ -19,7 +19,7 @@ $error-bg: #ffe4e6;
 
 /* Tarjeta del formulario */
 .login-card {
-  background: #ffffff;
+  background: var(--fono-superficie);
   padding: 3rem 2.5rem;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
@@ -79,17 +79,17 @@ $error-bg: #ffe4e6;
 
     input {
       padding: 0.75rem 1rem;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--fono-borde);
       border-radius: 8px;
       font-size: 1rem;
       color: $text-dark;
       transition: all 0.2s ease;
-      background-color: #f8fafc;
+      background-color: var(--fono-superficie-2);
 
       &:focus {
         outline: none;
         border-color: $primary;
-        background-color: #ffffff;
+        background-color: var(--fono-superficie);
         box-shadow: 0 0 0 3px rgba($primary, 0.1);
       }
 
@@ -130,7 +130,7 @@ $error-bg: #ffe4e6;
   .btn-submit {
     padding: 0.8rem;
     background-color: $primary;
-    color: white;
+    color: var(--fono-texto-inverso);
     border: 2px solid $primary;
     border-radius: 8px;
     font-size: 1rem;

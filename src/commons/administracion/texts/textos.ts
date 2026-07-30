@@ -7,6 +7,8 @@ export const TEXTOS_SITIO = {
         boton_cancelar: "Cancelar",
         boton_volver: "Volver",
         cerrar_sesion: "Cerrar Sesión",
+        activar_tema_oscuro: "Activar modo oscuro",
+        activar_tema_claro: "Activar modo claro",
         ultima_actualizacion_label: "Última actualización:",
         imagenes_adjuntas: "Imágenes adjuntas",
         cargando: "Cargando registros...",

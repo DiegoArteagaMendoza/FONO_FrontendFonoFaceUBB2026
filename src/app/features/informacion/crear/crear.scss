@@ -1,17 +1,17 @@
 // .page-container {
 //   padding: 2rem;
-//   background-color: #f4f6f8;
+//   background-color: var(--fono-fondo);
 //   min-height: 100%;
 // }
 
 // .page-header {
 //   margin-bottom: 2rem;
-//   h2 { margin: 0; color: #333; font-size: 1.8rem; }
-//   p { margin: 0.2rem 0 0 0; color: #666; }
+//   h2 { margin: 0; color: var(--fono-texto-cuerpo); font-size: 1.8rem; }
+//   p { margin: 0.2rem 0 0 0; color: var(--fono-texto-suave); }
 // }
 
 // .form-card {
-//   background: white;
+//   background: var(--fono-superficie);
 //   padding: 2rem;
 //   border-radius: 12px;
 //   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -40,13 +40,13 @@
 
 //   label {
 //     font-weight: 600;
-//     color: #444;
+//     color: var(--fono-texto-cuerpo);
 //     font-size: 0.95rem;
 //   }
 
 //   input[type="text"], select, textarea {
 //     padding: 0.75rem;
-//     border: 1px solid #ccc;
+//     border: 1px solid var(--fono-borde);
 //     border-radius: 6px;
 //     font-size: 1rem;
 //     font-family: inherit;
@@ -65,15 +65,15 @@
 // }
 
 // .help-text {
-//   color: #6c757d;
+//   color: var(--fono-texto-suave);
 //   font-size: 0.85rem;
 // }
 
 // .file-upload-section {
-//   background-color: #f8f9fa;
+//   background-color: var(--fono-superficie-2);
 //   padding: 1.5rem;
 //   border-radius: 8px;
-//   border: 1px dashed #ced4da;
+//   border: 1px dashed var(--fono-borde);
 
 //   .file-input {
 //     margin-top: 0.5rem;
@@ -84,12 +84,12 @@
 // .preview-files {
 //   margin-top: 1rem;
 //   padding-top: 1rem;
-//   border-top: 1px solid #eaeaea;
+//   border-top: 1px solid var(--fono-borde);
   
 //   ul {
 //     margin: 0.5rem 0 0 0;
 //     padding-left: 1.5rem;
-//     color: #555;
+//     color: var(--fono-texto-suave);
 //     font-size: 0.9rem;
 //   }
 // }
@@ -100,12 +100,12 @@
 //   gap: 1rem;
 //   margin-top: 1rem;
 //   padding-top: 1.5rem;
-//   border-top: 1px solid #eaeaea;
+//   border-top: 1px solid var(--fono-borde);
 // }
 
 // .btn-primary {
 //   background-color: #0056b3;
-//   color: white;
+//   color: var(--fono-texto-inverso);
 //   border: none;
 //   padding: 0.75rem 1.5rem;
 //   border-radius: 6px;
@@ -117,8 +117,8 @@
 // }
 
 // .btn-secondary {
-//   background-color: #e9ecef;
-//   color: #495057;
+//   background-color: var(--fono-superficie-3);
+//   color: var(--fono-texto-cuerpo);
 //   border: none;
 //   padding: 0.75rem 1.5rem;
 //   border-radius: 6px;

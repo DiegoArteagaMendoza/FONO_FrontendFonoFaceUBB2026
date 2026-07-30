@@ -15,7 +15,7 @@
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: var(--fono-superficie);
   border-radius: 12px;
   width: 90%;
   max-width: 650px; /* Ancho por defecto */
@@ -37,15 +37,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--fono-borde);
   position: sticky;
   top: 0;
-  background: white;
+  background: var(--fono-superficie);
   z-index: 10;
 
   h3 {
     margin: 0;
-    color: #333;
+    color: var(--fono-texto-cuerpo);
     font-size: 1.4rem;
   }
 }
@@ -54,7 +54,7 @@
   background: none;
   border: none;
   font-size: 1.8rem;
-  color: #666;
+  color: var(--fono-texto-suave);
   cursor: pointer;
   line-height: 1;
 
@@ -72,12 +72,12 @@
   align-items: center;
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--fono-texto-suave);
   flex-wrap: wrap;
 }
 
 .content-text p {
-  color: #444;
+  color: var(--fono-texto-cuerpo);
   line-height: 1.6;
   font-size: 1.05rem;
   white-space: pre-wrap;

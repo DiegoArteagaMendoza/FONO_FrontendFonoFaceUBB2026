@@ -13,7 +13,7 @@
 .btn-back {
   background: none;
   border: none;
-  color: #64748b;
+  color: var(--fono-texto-suave);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -27,7 +27,7 @@
 }
 
 .article-content {
-  background: white;
+  background: var(--fono-superficie);
   border-radius: 16px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
   overflow: hidden;
@@ -39,7 +39,7 @@
   h1 {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--fono-texto-fuerte);
     line-height: 1.2;
     margin: 1rem 0 0 0;
     letter-spacing: -0.5px;
@@ -67,7 +67,7 @@
   width: 100%;
   max-height: 500px;
   overflow: hidden;
-  background-color: #f1f5f9;
+  background-color: var(--fono-superficie-3);
 
   img {
     width: 100%;
@@ -82,7 +82,7 @@
   .content-text {
     font-size: 1.2rem;
     line-height: 1.8;
-    color: #334155;
+    color: var(--fono-texto-cuerpo);
     white-space: pre-wrap;
   }
 }
@@ -92,12 +92,12 @@
   
   hr {
     border: 0;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--fono-borde-suave);
     margin-bottom: 1.5rem;
   }
 
   .source-text {
-    color: #94a3b8;
+    color: var(--fono-texto-tenue);
     font-size: 0.95rem;
     font-style: italic;
   }
@@ -107,7 +107,7 @@
 .loading-state, .error-state {
   text-align: center;
   padding: 5rem 2rem;
-  color: #64748b;
+  color: var(--fono-texto-suave);
 }
 
 .spinner {
@@ -123,7 +123,7 @@
 
 .btn-primary {
   background-color: #e11d48;
-  color: white;
+  color: var(--fono-texto-inverso);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;

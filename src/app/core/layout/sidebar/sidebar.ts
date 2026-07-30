@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { AuthService } from "../../services/auth/auth";
 import { AdministracionService } from "../../../core/services/administracion/administracion";
 import { TextosService } from "../../services/textos/textos";
+import { BotonTemaComponent } from "../../components/boton-tema/boton-tema";
 
 export interface MenuItem {
   path?: string;
@@ -16,7 +17,7 @@ export interface MenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, BotonTemaComponent],
   templateUrl: './sidebar.html',
 })
 export class Sidebar implements OnInit {

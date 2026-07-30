@@ -1,7 +1,7 @@
 /* --- Variables de color heredadas del diseño del portal --- */
-$primary-color: #0284c7;
-$footer-bg: #0c4a6e;
-$footer-border: #075985;
+$primary-color: var(--fono-primario);
+$footer-bg: var(--fono-footer-fondo);
+$footer-border: var(--fono-footer-borde);
 $text-light: #e0f2fe;
 $text-muted: #7dd3fc;
 
@@ -28,7 +28,7 @@ $text-muted: #7dd3fc;
   h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: white;
+    color: var(--fono-texto-inverso);
     margin: 0 0 1rem 0;
   }
 }
@@ -38,7 +38,7 @@ $text-muted: #7dd3fc;
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.5px;
-  color: white;
+  color: var(--fono-texto-inverso);
   margin-bottom: 1rem;
 }
 
@@ -74,7 +74,7 @@ $text-muted: #7dd3fc;
     }
 
     &:hover {
-      color: white;
+      color: var(--fono-texto-inverso);
     }
   }
 }

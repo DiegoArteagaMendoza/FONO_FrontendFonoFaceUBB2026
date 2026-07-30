@@ -1,13 +1,13 @@
 .cliente-layout {
   font-family: 'Inter', system-ui, sans-serif;
-  color: #334155;
-  background-color: #f8fafc;
+  color: var(--fono-texto-cuerpo);
+  background-color: var(--fono-superficie-2);
   min-height: 100vh;
 }
 
 .hero-section {
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: white;
+  color: var(--fono-texto-inverso);
   padding: 6rem 2rem;
   text-align: center;
   position: relative;
@@ -36,8 +36,8 @@
 }
 
 .btn-primary-hero {
-  background-color: white;
-  color: #0369a1;
+  background-color: var(--fono-superficie);
+  color: var(--fono-primario-hover);
   border: none;
   padding: 1rem 2rem;
   font-size: 1.1rem;
@@ -64,7 +64,7 @@
 
   h2 {
     font-size: 2rem;
-    color: #1e293b;
+    color: var(--fono-texto);
     margin-bottom: 3rem;
   }
 }
@@ -76,7 +76,7 @@
 }
 
 .feature-card {
-  background: white;
+  background: var(--fono-superficie);
   padding: 2.5rem 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
@@ -92,7 +92,7 @@
     width: 60px;
     height: 60px;
     background-color: #f0f9ff;
-    color: #0284c7;
+    color: var(--fono-primario);
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -107,26 +107,26 @@
 
   h3 {
     font-size: 1.3rem;
-    color: #0f172a;
+    color: var(--fono-texto-fuerte);
     margin-bottom: 1rem;
   }
 
   p {
-    color: #64748b;
+    color: var(--fono-texto-suave);
     line-height: 1.6;
     margin-bottom: 1.5rem;
   }
 }
 
 .link-action {
-  color: #0284c7;
+  color: var(--fono-primario);
   font-weight: 600;
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.2s;
 
   &:hover {
-    color: #0369a1;
+    color: var(--fono-primario-hover);
     text-decoration: underline;
   }
 }
@@ -136,14 +136,14 @@
 }
 
 .cta-box {
-  background-color: #f1f5f9;
+  background-color: var(--fono-superficie-3);
   padding: 3rem 2rem;
   border-radius: 16px;
   text-align: center;
 
   h3 {
     font-size: 1.8rem;
-    color: #1e293b;
+    color: var(--fono-texto);
     margin-bottom: 1rem;
   }
 
@@ -160,8 +160,8 @@
 .btn-outline {
   display: inline-block;
   background-color: transparent;
-  color: #0284c7;
-  border: 2px solid #0284c7;
+  color: var(--fono-primario);
+  border: 2px solid var(--fono-primario);
   padding: 0.8rem 2rem;
   font-weight: 600;
   border-radius: 50px;
@@ -170,7 +170,7 @@
 
   &:hover {
     background-color: #0284c7;
-    color: white;
+    color: var(--fono-texto-inverso);
   }
 }
 
