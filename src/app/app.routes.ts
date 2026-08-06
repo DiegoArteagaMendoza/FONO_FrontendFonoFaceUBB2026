@@ -39,6 +39,23 @@ import { NoticiasClienteComponent } from '../proyectos/cliente/noticias/noticias
 import { NoticiasDetalleComponent } from '../proyectos/cliente/noticias/noticias-detalle/noticias-detalle';
 // import { FarmacosDetalleComponent } from '../proyectos/cliente/farmacos-detalle/farmacos-detalle';
 
+// IMPORTACIONES DEL PORTAL MÉDICO (profesionales fonoaudiólogos, backend FonoAppPortalMedico)
+import { PortalMedicoLayout } from '../proyectos/portalMedico/layout/layout';
+import { PortalMedicoInicioComponent } from '../proyectos/portalMedico/features/inicio/inicio';
+import { PortalMedicoLoginComponent } from '../proyectos/portalMedico/features/auth/login/login';
+import { PortalMedicoRegistroComponent } from '../proyectos/portalMedico/features/auth/registro/registro';
+import { PortalMedicoDirectorioComponent } from '../proyectos/portalMedico/features/directorio/directorio';
+import { PortalMedicoPerfilComponent } from '../proyectos/portalMedico/features/perfil/perfil';
+import { PortalMedicoDocumentosComponent } from '../proyectos/portalMedico/features/documentos/documentos';
+import { PortalMedicoEspecialidadesComponent } from '../proyectos/portalMedico/features/especialidades/especialidades';
+import { PortalMedicoAcreditacionComponent } from '../proyectos/portalMedico/features/acreditacion/acreditacion';
+// Panel de administración del Portal Médico: se renderiza dentro del Layout de
+// administracion/ (mismo sidebar/sesión de FonoApp), por eso se registra como hijo
+// de ese Layout más abajo en vez de dentro del bloque 'portalmedico/*'.
+import { PmAdminProfesionalesComponent } from '../proyectos/portalMedico/features/admin/profesionales/admin-profesionales';
+import { PmAdminProfesionalDetalleComponent } from '../proyectos/portalMedico/features/admin/profesionales/detalle/admin-profesional-detalle';
+import { PmAdminEspecialidadesComponent } from '../proyectos/portalMedico/features/admin/especialidades/admin-especialidades';
+
 export const routes: Routes = [
   { 
     path: 'login', 
@@ -78,11 +95,31 @@ export const routes: Routes = [
     ]
   },
 
+  // 1.b PORTAL MÉDICO: autoservicio de profesionales fonoaudiólogos (registro, login,
+  // perfil, documentos de respaldo, especialidades y estado de acreditación).
+  // Es una identidad distinta a la del portal público y a la del panel admin: usa su
+  // propia sesión JWT (ver PortalMedicoService) y su propio layout con navbar.
+  {
+    path: 'portalmedico',
+    component: PortalMedicoLayout,
+    children: [
+      { path: 'inicio', component: PortalMedicoInicioComponent },
+      { path: 'login', component: PortalMedicoLoginComponent },
+      { path: 'registro', component: PortalMedicoRegistroComponent },
+      { path: 'directorio', component: PortalMedicoDirectorioComponent },
+      { path: 'perfil', component: PortalMedicoPerfilComponent },
+      { path: 'documentos', component: PortalMedicoDocumentosComponent },
+      { path: 'especialidades', component: PortalMedicoEspecialidadesComponent },
+      { path: 'acreditacion', component: PortalMedicoAcreditacionComponent },
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+    ]
+  },
+
   // Redirección inicial por defecto hacia el inicio público
-  { 
-    path: '', 
-    redirectTo: '/portal/inicio', 
-    pathMatch: 'full' 
+  {
+    path: '',
+    redirectTo: '/portal/inicio',
+    pathMatch: 'full'
   },
 
   // 2. PANEL DE ADMINISTRACIÓN: Envuelto en el Layout con Sidebar lateral
@@ -119,7 +156,14 @@ export const routes: Routes = [
       // ADMINISTRACION INFORMACIÓN GENERAL
       { path: 'administracion/informacion/inicio', component: AdministracionInformacionGeneralComponent },
       { path: 'administracion/informacion/inicio/crear', component: AdministracionInfoGeneralCrearComponent },
-      { path: 'administracion/informacion/inicio/editar/:id', component: AdministracionInfoGeneralEditarComponent }
+      { path: 'administracion/informacion/inicio/editar/:id', component: AdministracionInfoGeneralEditarComponent },
+      // PORTAL MÉDICO (panel de revisión de acreditaciones): vive físicamente en
+      // proyectos/portalMedico/features/admin, pero se enruta aquí, dentro del mismo
+      // Layout/sidebar de administracion/, porque lo usan los mismos administradores
+      // de FonoApp ya autenticados (comparten el 'access_token' de AuthService).
+      { path: 'administracion/portal-medico/profesionales', component: PmAdminProfesionalesComponent },
+      { path: 'administracion/portal-medico/profesionales/:id', component: PmAdminProfesionalDetalleComponent },
+      { path: 'administracion/portal-medico/especialidades', component: PmAdminEspecialidadesComponent }
     ]
   },
 ];

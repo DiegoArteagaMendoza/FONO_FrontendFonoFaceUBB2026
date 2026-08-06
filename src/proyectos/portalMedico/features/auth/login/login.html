@@ -1,0 +1,53 @@
+<div class="page-container flex items-center justify-center" style="min-height: calc(100vh - 4rem - 3.5rem);">
+  <div class="form-card w-full" style="max-width: 420px;">
+    <div class="text-center mb-6">
+      <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pm_login.titulo }}</h2>
+      <p class="text-sm mt-1" style="color: var(--fono-texto-suave);">{{ t().pm_login.subtitulo }}</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-alert">{{ errorMessage }}</div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="custom-form">
+      <div class="form-group">
+        <label for="identificador">{{ t().pm_login.label_identificador }}</label>
+        <input
+          id="identificador"
+          type="text"
+          formControlName="identificador"
+          [placeholder]="t().pm_login.placeholder_identificador"
+          [class.is-invalid]="identificador?.invalid && identificador?.touched"
+        >
+        <small class="error-text" *ngIf="identificador?.hasError('required') && identificador?.touched">
+          {{ t().pm_login.alerta_identificador }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">{{ t().pm_login.label_password }}</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [placeholder]="t().pm_login.placeholder_password"
+          [class.is-invalid]="password?.invalid && password?.touched"
+        >
+        <small class="error-text" *ngIf="password?.hasError('required') && password?.touched">
+          {{ t().pm_login.alerta_password }}
+        </small>
+      </div>
+
+      <button type="submit" class="btn-primary w-full" [disabled]="isSubmitting">
+        {{ isSubmitting ? t().pm_login.btn_ingresando : t().pm_login.btn_ingresar }}
+      </button>
+    </form>
+
+    <div class="text-center text-sm mt-4" style="color: var(--fono-texto-suave);">
+      <p class="m-0">
+        {{ t().pm_login.msg_sin_cuenta }}
+        <a routerLink="/portalmedico/registro" style="color: var(--fono-primario); font-weight: 600;">
+          {{ t().pm_login.btn_registrarme }}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

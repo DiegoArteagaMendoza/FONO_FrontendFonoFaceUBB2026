@@ -1,0 +1,51 @@
+<div class="page-container">
+
+  <div class="text-center mb-8">
+    <h1 class="text-2xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pm_inicio.titulo }}</h1>
+    <p class="mt-2" style="color: var(--fono-texto-suave); max-width: 640px; margin-left: auto; margin-right: auto;">
+      {{ t().pm_inicio.subtitulo }}
+    </p>
+  </div>
+
+  <div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+
+    <!-- ¿ERES FONOAUDIÓLOGO? -->
+    <div class="form-card" style="max-width: none; display: flex; flex-direction: column;">
+      <h2 class="mt-0 text-xl font-bold" style="color: var(--fono-texto-fuerte);">{{ t().pm_inicio.card_fono_titulo }}</h2>
+      <p style="color: var(--fono-texto-cuerpo); flex-grow: 1;">{{ t().pm_inicio.card_fono_desc }}</p>
+
+      <ul class="my-4" style="padding-left: 1.25rem; color: var(--fono-texto-cuerpo); display: flex; flex-direction: column; gap: 0.4rem;">
+        <li>{{ t().pm_inicio.beneficio_1 }}</li>
+        <li>{{ t().pm_inicio.beneficio_2 }}</li>
+        <li>{{ t().pm_inicio.beneficio_3 }}</li>
+        <li>{{ t().pm_inicio.beneficio_4 }}</li>
+      </ul>
+
+      <p class="text-sm mb-4" style="color: var(--fono-texto-suave);" *ngIf="totalProfesionales !== null && totalEspecialidades !== null">
+        {{ textosService.reemplazarVariables(t().pm_inicio.stat_resumen, { profesionales: totalProfesionales + '', especialidades: totalEspecialidades + '' }) }}
+      </p>
+
+      <div class="flex flex-wrap gap-3 mt-auto">
+        <a routerLink="/portalmedico/registro" class="btn-primary" style="text-decoration: none; display: inline-block;">
+          {{ t().pm_inicio.btn_registro }}
+        </a>
+        <a routerLink="/portalmedico/login" class="btn-secondary" style="text-decoration: none; display: inline-block;">
+          {{ t().pm_inicio.btn_login }}
+        </a>
+      </div>
+    </div>
+
+    <!-- ¿BUSCAS ATENCIÓN FONOAUDIOLÓGICA? -->
+    <div class="form-card" style="max-width: none; display: flex; flex-direction: column;">
+      <h2 class="mt-0 text-xl font-bold" style="color: var(--fono-texto-fuerte);">{{ t().pm_inicio.card_cliente_titulo }}</h2>
+      <p style="color: var(--fono-texto-cuerpo); flex-grow: 1;">{{ t().pm_inicio.card_cliente_desc }}</p>
+
+      <div class="mt-auto">
+        <a routerLink="/portalmedico/directorio" class="btn-primary" style="text-decoration: none; display: inline-block;">
+          {{ t().pm_inicio.btn_directorio }}
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>

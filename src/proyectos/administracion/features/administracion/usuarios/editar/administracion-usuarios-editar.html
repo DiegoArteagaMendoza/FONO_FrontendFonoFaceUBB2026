@@ -47,13 +47,19 @@
         <!-- COLUMNA DERECHA: CONFIGURACIÓN DEL SISTEMA -->
         <div class="flex-1" style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; height: fit-content;">
           <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; color: #1e293b;">{{ t().edicion_usuarios.permisos_titulo }}</h3>
-          
-          <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
-            <div>
-              <label for="is_staff" style="margin: 0;">{{ t().creacion_usuarios.label_admin }}</label>
-              <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal;">{{ t().creacion_usuarios.desc_admin }}</p>
-            </div>
-            <input id="is_staff" type="checkbox" formControlName="is_staff" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="rol">{{ t().creacion_usuarios.label_rol }}</label>
+            <select id="rol" formControlName="rol">
+              <option *ngFor="let opcion of roles" [value]="opcion.valor">{{ opcion.label }}</option>
+            </select>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal; line-height: 1.4;">
+              @switch (editarForm.get('rol')?.value) {
+                @case ('admin') { {{ t().creacion_usuarios.desc_rol_admin }} }
+                @case ('superadmin') { {{ t().creacion_usuarios.desc_rol_superadmin }} }
+                @default { {{ t().creacion_usuarios.desc_rol_usuario }} }
+              }
+            </p>
           </div>
 
           <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 0;">

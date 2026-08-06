@@ -27,9 +27,27 @@ export interface UsuarioItem {
   nombre: string;
   rut: string;
   email: string;
-  estado: boolean;     
-  is_staff?: boolean;   
+  estado: boolean;
+  is_staff?: boolean;
+  // Rol máximo del sistema (superusuario de Django): exclusivo de SuperAdmin,
+  // ver RolSistema y mapearRolAPermisos() más abajo.
+  is_superuser?: boolean;
 }
+
+/**
+ * Modelo de 3 roles del sistema, derivados de la combinación (is_staff,
+ * is_superuser) que ya trae el backend — no es un campo nuevo en la BD, solo
+ * una forma más clara de presentarlo y editarlo en el frontend:
+ *   - 'usuario':    is_staff=false, is_superuser=false. Gestiona el contenido
+ *                   público (información, cuidados, la voz, noticias, carrusel,
+ *                   textos dinámicos).
+ *   - 'admin':      is_staff=true,  is_superuser=false. Todo lo de 'usuario',
+ *                   más el Portal Médico (acreditaciones, documentos,
+ *                   especialidades). No administra otras cuentas.
+ *   - 'superadmin': is_staff=true,  is_superuser=true.  Todo lo anterior, más
+ *                   Gestión de Usuarios (crear/editar/activar cuentas y roles).
+ */
+export type RolSistema = 'usuario' | 'admin' | 'superadmin';
 
 // 4. Interfaz Información General (Textos Dinámicos)
 export interface InfoGeneralItem {
@@ -59,6 +77,37 @@ export class AdministracionService {
     });
   }
 
+  /**
+   * Igual que getAuthHeaders(), pero para endpoints que aceptan tanto peticiones
+   * anónimas como autenticadas (ej: /usuarios/crear/, que es público para el
+   * registro inicial del sistema, pero que además necesita saber si YA hay un
+   * admin autenticado para poder respetar los permisos que este intente asignarle
+   * al usuario nuevo). Si no hay sesión, no manda ningún header: mandar
+   * "Bearer null" haría que el backend intente decodificarlo como JWT y falle
+   * con 401, rompiendo el registro público.
+   */
+  private getAuthHeadersOpcional(): { headers: HttpHeaders } | Record<string, never> {
+    const token = localStorage.getItem('access_token');
+    if (!token) return {};
+    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
+  }
+
+  /** Traduce el rol elegido en el formulario a los flags que espera el backend. */
+  mapearRolAPermisos(rol: RolSistema): { is_staff: boolean; is_superuser: boolean } {
+    switch (rol) {
+      case 'superadmin': return { is_staff: true, is_superuser: true };
+      case 'admin': return { is_staff: true, is_superuser: false };
+      default: return { is_staff: false, is_superuser: false };
+    }
+  }
+
+  /** Inversa de mapearRolAPermisos(): deriva el rol a partir de un usuario ya cargado. */
+  obtenerRolDeUsuario(usuario: { is_staff?: boolean; is_superuser?: boolean } | null | undefined): RolSistema {
+    if (usuario?.is_superuser) return 'superadmin';
+    if (usuario?.is_staff) return 'admin';
+    return 'usuario';
+  }
+
   cargarPerfil(): void {
     this.http.get<any>(`${this.apiUrl}/usuarios/me/`, { headers: this.getAuthHeaders() }).subscribe({
       next: (usuario) => {
@@ -85,8 +134,12 @@ export class AdministracionService {
   // 2. Crear (POST)
   crearUsuario(datos: any): Observable<any> {
     const url = `${this.apiUrl}/usuarios/crear/`;
-    return this.http.post(url, datos);
-  } 
+    // Mandamos el token si hay sesión activa: así el backend sabe si quien crea
+    // el usuario ya es administrador (is_staff) o superusuario, y respeta esos
+    // permisos en la cuenta nueva. Si no hay sesión (registro público inicial),
+    // no se manda header y el usuario nace sin esos permisos (ver usuarios_create).
+    return this.http.post(url, datos, this.getAuthHeadersOpcional());
+  }
 
   // 3. Eliminar (DELETE) CAMBIA EL ESTADO
   eliminarUsuario(rut: string): Observable<any> {

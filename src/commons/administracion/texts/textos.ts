@@ -200,12 +200,14 @@ export const TEXTOS_SITIO = {
         help_password: "El usuario podrá cambiarla después desde su perfil.",
         alerta_password: "La contraseña es obligatoria.",
         permisos_titulo: "Permisos del Sistema",
-        label_admin: "Es Administrador",
-        desc_admin: "Permite acceder a este panel de control.",
+        label_rol: "Rol del Usuario",
+        desc_rol_usuario: "Usuario: gestiona el contenido público del portal (información, cuidados, la voz, noticias, carrusel de inicio y textos dinámicos). Sin acceso al Portal Médico ni a Gestión de Usuarios.",
+        desc_rol_admin: "Admin: todo lo de Usuario, más el Portal Médico completo (aprobar/rechazar acreditaciones de profesionales, validar sus documentos y gestionar el catálogo de especialidades). No puede administrar otras cuentas del sistema.",
+        desc_rol_superadmin: "SuperAdmin: acceso total, incluida la Gestión de Usuarios (crear/editar/activar cuentas y asignar roles). Es el único rol que puede otorgar Admin o SuperAdmin a otra persona.",
         label_tipo: "Cuenta Tipo 1",
-        desc_tipo: "Define el comportamiento especial en la app.",
+        desc_tipo: "Marca interna sin efecto sobre los permisos de acceso; no habilita ni restringe ninguna acción del panel ni del Portal Médico.",
         label_estado: "Cuenta Activa",
-        desc_estado: "Si se desmarca, el usuario no podrá entrar.",
+        desc_estado: "Si se desmarca, el usuario no podrá entrar aunque tenga los demás permisos activados.",
         boton_creando: "Creando Usuario...",
         boton_crear: "Crear Usuario"
     },
@@ -237,7 +239,8 @@ export const TEXTOS_SITIO = {
         correo: "Correo Electrónico:",
         rol: "Rol del Sistema:",
         rol_admin: "Administrador",
-        rol_regular: "Usuario Regular"
+        rol_regular: "Usuario Regular",
+        rol_superadmin: "Superadmin"
     },
 
     // LOGIN
@@ -459,6 +462,7 @@ export const TEXTOS_SITIO = {
         promocion: "Promoción de la voz",
         cuidados: "Cuidados",
         noticias: "Noticias",
+        portal_medico: "Portal Médico",
         acceso_admin: "Acceso Admin"
     },
 
@@ -589,5 +593,278 @@ export const TEXTOS_SITIO = {
         newsletter_error_email: "Ingresa un correo electrónico válido.",
         newsletter_error_servidor: "No pudimos registrar tu suscripción. Inténtalo más tarde.",
         newsletter_exito: "¡Gracias por suscribirte! Pronto recibirás nuestras novedades."
+    },
+
+    // ===================== PORTAL MÉDICO (profesionales fonoaudiólogos) =====================
+
+    // NAVBAR DEL PORTAL MÉDICO
+    pm_navbar: {
+        marca: "Portal Médico",
+        inicio: "Inicio",
+        directorio: "Directorio",
+        mi_perfil: "Mi Perfil",
+        documentos: "Documentos",
+        especialidades: "Especialidades",
+        acreditacion: "Mi Acreditación",
+        iniciar_sesion: "Iniciar Sesión",
+        registrarme: "Registrarme",
+        cerrar_sesion: "Cerrar Sesión",
+        volver_portal: "← Volver al portal público"
+    },
+
+    // INICIO DEL PORTAL MÉDICO (landing: fonoaudiólogo vs. quien busca atención)
+    pm_inicio: {
+        titulo: "Portal Médico FonoFace",
+        subtitulo: "El punto de encuentro entre fonoaudiólogos acreditados y quienes buscan atención personalizada de la voz.",
+
+        card_fono_titulo: "¿Eres fonoaudiólogo/a?",
+        card_fono_desc: "Regístrate para acreditarte, publicar tu perfil profesional en el directorio público y que pacientes puedan encontrarte y contactarte directamente.",
+        beneficio_1: "✓ Aparece en el directorio público una vez acreditado.",
+        beneficio_2: "✓ Sube tus documentos de respaldo y sigue el estado de tu acreditación.",
+        beneficio_3: "✓ Elige las especialidades que ofreces.",
+        beneficio_4: "✓ Gestiona tus datos de contacto en cualquier momento.",
+        stat_resumen: "Ya son {profesionales} profesionales acreditados con {especialidades} especialidades disponibles.",
+        btn_registro: "¿Eres fonoaudiólogo? Regístrate aquí",
+        btn_login: "Ya tengo cuenta, iniciar sesión",
+
+        card_cliente_titulo: "¿Buscas atención fonoaudiológica?",
+        card_cliente_desc: "Explora el directorio de fonoaudiólogos ya acreditados por FonoFace, revisa sus especialidades y datos de contacto, y comunícate directamente con quien prefieras para agendar tu atención personalizada.",
+        btn_directorio: "Ver directorio de profesionales"
+    },
+
+    // ESTADOS DE ACREDITACIÓN (compartido por varias vistas)
+    pm_estados: {
+        PENDIENTE: "Pendiente",
+        EN_REVISION: "En revisión",
+        APROBADO: "Aprobado",
+        RECHAZADO: "Rechazado"
+    },
+
+    // TIPOS DE DOCUMENTO (compartido)
+    pm_tipos_documento: {
+        CEDULA_IDENTIDAD: "Cédula de identidad",
+        CERTIFICADO_TITULO: "Certificado de título",
+        CERTIFICADO_SUPERINTENDENCIA: "Certificado Superintendencia de Salud"
+    },
+
+    // LOGIN DEL PROFESIONAL
+    pm_login: {
+        titulo: "Portal Médico FonoFace",
+        subtitulo: "Ingresa con tu correo o RUT para gestionar tu acreditación",
+        label_identificador: "Correo o RUT",
+        placeholder_identificador: "ejemplo@correo.com o 12345678-9",
+        alerta_identificador: "El correo o RUT es obligatorio.",
+        label_password: "Contraseña",
+        placeholder_password: "********",
+        alerta_password: "La contraseña es obligatoria.",
+        btn_ingresando: "Ingresando...",
+        btn_ingresar: "Iniciar Sesión",
+        msg_sin_cuenta: "¿Aún no tienes una cuenta profesional?",
+        btn_registrarme: "Regístrate aquí",
+        error_credenciales: "Correo/RUT o contraseña incorrectos.",
+        error_servidor: "Error al conectar con el servidor.",
+        alerta_sesion_expirada: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+    },
+
+    // REGISTRO DEL PROFESIONAL
+    pm_registro: {
+        titulo: "Registro de Profesional",
+        subtitulo: "Crea tu cuenta para iniciar el proceso de acreditación como fonoaudiólogo/a.",
+        label_nombres: "Nombres",
+        placeholder_nombres: "Ej: María José",
+        alerta_nombres: "Los nombres son obligatorios.",
+        label_apellidos: "Apellidos",
+        placeholder_apellidos: "Ej: González Soto",
+        alerta_apellidos: "Los apellidos son obligatorios.",
+        label_rut: "RUT",
+        placeholder_rut: "12345678-9",
+        alerta_rut: "Ingresa un RUT chileno válido (ej: 12345678-9).",
+        label_email: "Correo Electrónico",
+        placeholder_email: "ejemplo@correo.com",
+        alerta_email_req: "El correo es obligatorio.",
+        alerta_email_inv: "El formato del correo no es válido.",
+        label_telefono: "Teléfono",
+        placeholder_telefono: "+56912345678",
+        alerta_telefono: "Ingresa un teléfono chileno válido (ej: +56912345678).",
+        label_numero_registro: "Número de Registro de Salud (opcional)",
+        placeholder_numero_registro: "Puedes completarlo más adelante desde tu perfil",
+        label_password: "Contraseña",
+        placeholder_password: "Mín. 8 caracteres",
+        alerta_password: "La contraseña debe tener al menos 8 caracteres.",
+        help_info: "Tras registrarte, tu solicitud de acreditación quedará en estado \"Pendiente\". Sube tus documentos de respaldo desde tu perfil para avanzar en la revisión.",
+        btn_registrando: "Creando cuenta...",
+        btn_registrar: "Crear Cuenta",
+        msg_ya_tengo_cuenta: "¿Ya tienes una cuenta?",
+        btn_ir_login: "Inicia sesión aquí",
+        exito: "Cuenta creada correctamente. Ahora puedes iniciar sesión.",
+        error_servidor: "No se pudo completar el registro. Verifica los datos ingresados."
+    },
+
+    // DIRECTORIO PÚBLICO DE PROFESIONALES
+    pm_directorio: {
+        titulo: "Directorio de Fonoaudiólogos",
+        subtitulo: "Profesionales acreditados y habilitados para prestar servicios.",
+        cargando: "Cargando profesionales...",
+        vacio: "Aún no hay profesionales acreditados publicados en el directorio.",
+        sin_especialidades: "Sin especialidades registradas",
+        contacto_email: "Correo:",
+        contacto_telefono: "Teléfono:",
+        numero_registro: "N° Registro Salud:"
+    },
+
+    // MI PERFIL (profesional)
+    pm_perfil: {
+        titulo: "Mi Perfil Profesional",
+        subtitulo: "Revisa y actualiza tus datos de contacto.",
+        cargando: "Cargando tu perfil...",
+        seccion_datos: "Datos de Contacto",
+        label_nombres: "Nombres",
+        label_apellidos: "Apellidos",
+        label_rut: "RUT",
+        label_email: "Correo Electrónico",
+        label_telefono: "Teléfono",
+        label_numero_registro: "Número de Registro de Salud",
+        placeholder_numero_registro: "Necesario para que tu acreditación pueda aprobarse",
+        btn_guardando: "Guardando...",
+        btn_guardar: "Guardar Cambios",
+        exito_actualizacion: "Perfil actualizado correctamente.",
+
+        seccion_password: "Cambiar Contraseña",
+        label_password_actual: "Contraseña Actual",
+        label_password_nueva: "Contraseña Nueva",
+        placeholder_password_nueva: "Mín. 8 caracteres",
+        btn_cambiando: "Cambiando...",
+        btn_cambiar_password: "Cambiar Contraseña",
+        exito_password: "Contraseña actualizada correctamente.",
+
+        seccion_peligro: "Zona de Peligro",
+        desc_eliminar: "Al desactivar tu cuenta ya no podrás iniciar sesión ni prestar servicios en el directorio.",
+        btn_eliminar_cuenta: "Desactivar mi Cuenta",
+        confirmar_eliminar: "¿Estás seguro de que deseas desactivar tu cuenta? Esta acción no se puede deshacer desde el portal.",
+
+        error_actualizar: "No se pudo actualizar el perfil. Revisa los datos ingresados.",
+        error_password: "No se pudo cambiar la contraseña. Verifica tu contraseña actual."
+    },
+
+    // MIS DOCUMENTOS DE RESPALDO
+    pm_documentos: {
+        titulo: "Mis Documentos de Respaldo",
+        subtitulo: "Sube tus documentos para avanzar en la revisión de tu acreditación.",
+        cargando: "Cargando documentos...",
+        vacio: "Aún no has subido documentos de respaldo.",
+        label_tipo: "Tipo de Documento",
+        placeholder_tipo: "Selecciona un tipo...",
+        label_archivo: "Archivo (PDF, JPG o PNG, máx. 5MB)",
+        alerta_archivo: "Debes seleccionar un archivo.",
+        btn_subiendo: "Subiendo...",
+        btn_subir: "Subir Documento",
+        estado_validado: "Validado",
+        estado_pendiente: "Pendiente de revisión",
+        btn_eliminar: "Eliminar",
+        confirmar_eliminar: "¿Deseas eliminar este documento? Solo es posible si aún no fue validado.",
+        exito_subir: "Documento subido correctamente. Quedó pendiente de revisión.",
+        exito_eliminar: "Documento eliminado correctamente.",
+        error_subir: "No se pudo subir el documento. Verifica el formato y el tamaño del archivo.",
+        error_eliminar: "No se pudo eliminar el documento (puede que ya haya sido validado)."
+    },
+
+    // MIS ESPECIALIDADES
+    pm_especialidades: {
+        titulo: "Mis Especialidades",
+        subtitulo: "Elige las especialidades que ofreces como profesional.",
+        cargando: "Cargando especialidades...",
+        seccion_mias: "Especialidades Asignadas",
+        vacio_mias: "Aún no tienes especialidades asignadas.",
+        seccion_catalogo: "Catálogo Disponible",
+        requiere_certificado: "Requiere certificado validado",
+        btn_asignar: "Asignar",
+        btn_quitar: "Quitar",
+        confirmar_quitar: "¿Deseas quitar esta especialidad de tu perfil?",
+        exito_asignar: "Especialidad asignada correctamente.",
+        exito_quitar: "Especialidad quitada correctamente.",
+        error_asignar: "No se pudo asignar la especialidad (revisa si requiere un documento validado).",
+        error_quitar: "No se pudo quitar la especialidad."
+    },
+
+    // ESTADO DE MI ACREDITACIÓN
+    pm_acreditacion: {
+        titulo: "Estado de mi Acreditación",
+        subtitulo: "Sigue el avance de la revisión de tu solicitud.",
+        cargando: "Consultando el estado de tu acreditación...",
+        sin_solicitud: "No se encontró una solicitud de acreditación asociada a tu cuenta.",
+        fecha_solicitud: "Fecha de solicitud:",
+        fecha_resolucion: "Fecha de resolución:",
+        desc_pendiente: "Tu solicitud fue registrada. Sube tus documentos de respaldo para pasar a revisión.",
+        desc_en_revision: "Un administrador está revisando tus documentos y tus datos.",
+        desc_aprobado: "¡Felicidades! Tu acreditación fue aprobada y ya apareces en el directorio público.",
+        desc_rechazado: "Tu solicitud fue rechazada. Revisa tus documentos y contacta al equipo de soporte."
+    },
+
+    // ===================== PORTAL MÉDICO — PANEL DE ADMINISTRACIÓN =====================
+
+    // LISTADO ADMIN DE PROFESIONALES
+    gestion_pm_profesionales: {
+        titulo: "Profesionales del Portal Médico",
+        subtitulo: "Revisa las solicitudes de acreditación de los fonoaudiólogos registrados.",
+        filtrar_estado: "Filtrar por Estado:",
+        estado_todos: "Todos",
+        boton_ver: "Ver Detalle"
+    },
+
+    // DETALLE ADMIN DE UN PROFESIONAL
+    pm_profesional_detalle: {
+        titulo: "Detalle del Profesional",
+        volver: "Volver al listado",
+        seccion_datos: "Datos del Profesional",
+        label_nombre: "Nombre completo:",
+        label_rut: "RUT:",
+        label_email: "Correo:",
+        label_telefono: "Teléfono:",
+        label_numero_registro: "N° Registro de Salud:",
+        label_registrado_desde: "Registrado desde:",
+
+        seccion_acreditacion: "Acreditación",
+        sin_acreditacion: "Este profesional no tiene solicitudes de acreditación.",
+        btn_aprobar: "Aprobar Acreditación",
+        btn_rechazar: "Rechazar Acreditación",
+        confirmar_aprobar: "¿Confirmas aprobar la acreditación de este profesional? Pasará a aparecer en el directorio público.",
+        confirmar_rechazar: "¿Confirmas rechazar la acreditación de este profesional?",
+        exito_aprobar: "Acreditación aprobada correctamente. El profesional ya aparece en el directorio público.",
+        exito_rechazar: "Acreditación rechazada correctamente.",
+        error_resolver: "No se pudo resolver la acreditación. Verifica que el profesional cumpla los requisitos (N° de registro y al menos un documento validado) y que tengas permisos de administrador (rol Admin o SuperAdmin).",
+        error_permisos: "Requiere el rol Admin o SuperAdmin para realizar esta acción.",
+        ya_resuelta: "Esta solicitud ya fue resuelta.",
+
+        seccion_documentos: "Documentos de Respaldo",
+        sin_documentos: "El profesional aún no ha subido documentos.",
+        btn_marcar_valido: "Marcar como Válido",
+        btn_marcar_invalido: "Quitar Validación",
+        exito_validar: "Documento marcado como válido correctamente.",
+        exito_invalidar: "Se quitó la validación del documento.",
+        error_validar: "No se pudo actualizar el documento. Verifica que tengas permisos de administrador (rol Admin o SuperAdmin).",
+
+        seccion_especialidades: "Especialidades",
+        sin_especialidades: "El profesional no tiene especialidades asignadas."
+    },
+
+    // CATÁLOGO ADMIN DE ESPECIALIDADES
+    gestion_pm_especialidades: {
+        titulo: "Catálogo de Especialidades",
+        subtitulo: "Administra las especialidades que los profesionales pueden asignarse.",
+        nueva_especialidad: "Nueva Especialidad",
+        label_nombre: "Nombre de la Especialidad",
+        placeholder_nombre: "Ej: Terapia de deglución",
+        alerta_nombre: "El nombre es obligatorio.",
+        label_requiere_certificado: "Requiere certificado validado",
+        desc_requiere_certificado: "El profesional necesitará un documento validado para poder asignársela.",
+        btn_guardando: "Guardando...",
+        btn_guardar: "Guardar Especialidad",
+        btn_cancelar: "Cancelar",
+        confirmar_eliminar: "¿Deseas eliminar esta especialidad del catálogo?",
+        exito_crear: "Especialidad creada correctamente.",
+        exito_editar: "Especialidad actualizada correctamente.",
+        exito_eliminar: "Especialidad eliminada correctamente.",
+        error_guardar: "No se pudo guardar la especialidad. Verifica que tengas permisos de administrador (rol Admin o SuperAdmin).",
+        error_eliminar: "No se pudo eliminar la especialidad."
     }
 };

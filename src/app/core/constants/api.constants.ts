@@ -32,5 +32,43 @@ export const API_ENDPOINTS = {
     imagenAgregar: (idNoticia: number) => `/noticias/${idNoticia}/imagenes/agregar/`,
     imagenEliminar: (idImagen: number) => `/noticias/imagenes/${idImagen}/eliminar/`,
     newsletterSuscribir: '/noticias/newsletter/suscribir/'
+  },
+  // Endpoints del backend FonoAppPortalMedico (app PmMedico). Rutas relativas a
+  // environment.apiUrlPortalMedico, no a environment.apiUrl (es otro proyecto Django).
+  portalMedico: {
+    // Profesional: registro, sesión y perfil propio
+    registrar: '/registrar/',
+    login: '/login/',
+    perfil: '/perfil/',
+    perfilEditar: '/perfil/editar/',
+    perfilPassword: '/perfil/password/',
+    perfilEliminar: '/perfil/eliminar/',
+
+    // Profesional: consultas administrativas y directorio público
+    listar: '/listar/',
+    detalle: (idProfesional: number) => `/${idProfesional}/`,
+    directorio: '/directorio/',
+
+    // Documentos de respaldo
+    documentoSubir: '/documentos/subir/',
+    documentoEliminar: (idDocumento: number) => `/documentos/${idDocumento}/eliminar/`,
+    profesionalDocumentosListar: (idProfesional: number) => `/${idProfesional}/documentos/`,
+    documentoValidar: (idDocumento: number) => `/documentos/${idDocumento}/validar/`,
+
+    // Acreditación
+    acreditacionesPendientes: '/acreditaciones/pendientes/',
+    acreditacionEstado: (idProfesional: number) => `/acreditaciones/${idProfesional}/estado/`,
+    acreditacionResolver: (idAcreditacion: number) => `/acreditaciones/${idAcreditacion}/resolver/`,
+
+    // Especialidad (catálogo)
+    especialidadesListar: '/especialidades/listar/',
+    especialidadCrear: '/especialidades/crear/',
+    especialidadEditar: (idEspecialidad: number) => `/especialidades/${idEspecialidad}/editar/`,
+    especialidadEliminar: (idEspecialidad: number) => `/especialidades/${idEspecialidad}/eliminar/`,
+
+    // Especialidades del profesional (autogestión N:M)
+    especialidadAsignar: '/especialidades/asignar/',
+    especialidadQuitar: (idEspecialidad: number) => `/especialidades/${idEspecialidad}/quitar/`,
+    profesionalEspecialidadesListar: (idProfesional: number) => `/${idProfesional}/especialidades/`
   }
 };
