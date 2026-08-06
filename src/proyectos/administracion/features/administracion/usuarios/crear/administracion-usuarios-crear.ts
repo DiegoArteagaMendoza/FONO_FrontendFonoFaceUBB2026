@@ -20,9 +20,18 @@ export class AdministracionUsuarioCrearComponente implements OnInit {
   isSubmitting = false;
   errorMensaje: string | null = null;
 
+  // Modelo de 3 roles del sistema (ver AdministracionService.mapearRolAPermisos):
+  // esta pantalla solo es alcanzable por SuperAdmin (sidebar + backend lo exigen),
+  // así que el selector de rol siempre se muestra, sin condiciones.
+  roles = [
+    { valor: 'usuario', label: 'Usuario' },
+    { valor: 'admin', label: 'Admin' },
+    { valor: 'superadmin', label: 'SuperAdmin' }
+  ];
+
   constructor(
     private fb: FormBuilder,
-    private adminService: AdministracionService,
+    public adminService: AdministracionService,
     private router: Router
   ) {}
 
@@ -34,7 +43,7 @@ export class AdministracionUsuarioCrearComponente implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       tipo: [false],
       estado: [true],
-      is_staff: [false]
+      rol: ['usuario', Validators.required]
     });
   }
 
@@ -48,7 +57,8 @@ export class AdministracionUsuarioCrearComponente implements OnInit {
     }
 
     this.isSubmitting = true;
-    const datosUsuario = this.formulario.value;
+    const { rol, ...resto } = this.formulario.value;
+    const datosUsuario = { ...resto, ...this.adminService.mapearRolAPermisos(rol) };
 
     this.adminService.crearUsuario(datosUsuario).subscribe({
       next: (respuesta) => {

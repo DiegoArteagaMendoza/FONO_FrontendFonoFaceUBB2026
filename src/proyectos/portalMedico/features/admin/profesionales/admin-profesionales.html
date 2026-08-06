@@ -1,0 +1,66 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().gestion_pm_profesionales.titulo }}</h2>
+      <p>{{ t().gestion_pm_profesionales.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="filters-section">
+    <div class="filter-group">
+      <label for="filtroEstado">{{ t().gestion_pm_profesionales.filtrar_estado }}</label>
+      <select id="filtroEstado" (change)="alCambiarFiltro($event)" [value]="filtroEstado">
+        <option value="todos">{{ t().gestion_pm_profesionales.estado_todos }}</option>
+        <option value="PENDIENTE">{{ t().pm_estados.PENDIENTE }}</option>
+        <option value="EN_REVISION">{{ t().pm_estados.EN_REVISION }}</option>
+        <option value="APROBADO">{{ t().pm_estados.APROBADO }}</option>
+        <option value="RECHAZADO">{{ t().pm_estados.RECHAZADO }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().tablas.nombre_tabla }}</th>
+          <th>{{ t().tablas.rut_tabla }}</th>
+          <th>{{ t().tablas.email_tabla }}</th>
+          <th>{{ t().tablas.estado_usuario }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="profesionales.length === 0">
+          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+        <tr *ngFor="let profesional of profesionales">
+          <td class="td-title">{{ profesional.nombres_profesional }} {{ profesional.apellidos_profesional }}</td>
+          <td>{{ profesional.rut_profesional }}</td>
+          <td>{{ profesional.email_profesional }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-general': estadoVigente(profesional) === 'PENDIENTE' || estadoVigente(profesional) === 'EN_REVISION',
+              'badge-ninos': estadoVigente(profesional) === 'APROBADO',
+              'badge-locutores': estadoVigente(profesional) === 'RECHAZADO'
+            }">
+              {{ t().pm_estados[estadoVigente(profesional)] }}
+            </span>
+          </td>
+          <td class="td-actions">
+            <button class="btn-icon view" (click)="verDetalle(profesional.id_profesional)">
+              {{ t().gestion_pm_profesionales.boton_ver }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().pm_directorio.titulo }}</h2>
+      <p>{{ t().pm_directorio.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().pm_directorio.cargando }}</p>
+  </div>
+
+  <div *ngIf="!cargando && profesionales.length === 0" class="empty-state">
+    {{ t().pm_directorio.vacio }}
+  </div>
+
+  <div *ngIf="!cargando && profesionales.length > 0" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+    <div *ngFor="let profesional of profesionales" class="form-card" style="max-width: none; padding: 1.5rem;">
+      <h3 class="m-0 font-bold" style="color: var(--fono-texto-fuerte);">
+        {{ profesional.nombres_profesional }} {{ profesional.apellidos_profesional }}
+      </h3>
+
+      <p class="text-sm mt-1" style="color: var(--fono-texto-suave);" *ngIf="profesional.numero_registro_salud_profesional">
+        {{ t().pm_directorio.numero_registro }} {{ profesional.numero_registro_salud_profesional }}
+      </p>
+
+      <div class="flex flex-wrap gap-2 my-3">
+        <ng-container *ngIf="profesional.especialidades.length > 0; else sinEspecialidades">
+          <span class="badge" *ngFor="let especialidad of profesional.especialidades">
+            {{ especialidad.nombre_especialidad_profesional }}
+          </span>
+        </ng-container>
+        <ng-template #sinEspecialidades>
+          <span class="text-sm italic" style="color: var(--fono-texto-tenue);">{{ t().pm_directorio.sin_especialidades }}</span>
+        </ng-template>
+      </div>
+
+      <p class="text-sm m-0" style="color: var(--fono-texto-suave);">
+        {{ t().pm_directorio.contacto_email }} {{ profesional.email_profesional }}
+      </p>
+      <p class="text-sm m-0" style="color: var(--fono-texto-suave);">
+        {{ t().pm_directorio.contacto_telefono }} {{ profesional.telefono_profesional }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -22,9 +22,17 @@ export class AdministracionUsuarioEditarComponent implements OnInit {
     cargandoDatos = true;
     errorMensaje = '';
 
+    // Esta pantalla solo es alcanzable por SuperAdmin (sidebar + backend lo
+    // exigen), así que el selector de rol siempre se muestra sin condiciones.
+    roles = [
+        { valor: 'usuario', label: 'Usuario' },
+        { valor: 'admin', label: 'Admin' },
+        { valor: 'superadmin', label: 'SuperAdmin' }
+    ];
+
     constructor(
         private fb: FormBuilder,
-        private adminService: AdministracionService,
+        public adminService: AdministracionService,
         private router: Router,
         private route: ActivatedRoute,
         private cdr: ChangeDetectorRef
@@ -33,7 +41,7 @@ export class AdministracionUsuarioEditarComponent implements OnInit {
             // La contraseña no es requerida al editar
             password: ['', [Validators.minLength(6)]],
             estado: [true],
-            is_staff: [false]
+            rol: ['usuario', Validators.required]
         });
     }
 
@@ -55,7 +63,7 @@ export class AdministracionUsuarioEditarComponent implements OnInit {
                     this.rutUsuario = usuarioActual.rut;
                     this.editarForm.patchValue({
                         estado: usuarioActual.estado,
-                        is_staff: usuarioActual.is_staff
+                        rol: this.adminService.obtenerRolDeUsuario(usuarioActual)
                     });
                     this.cargandoDatos = false;
                 } else {
@@ -84,7 +92,7 @@ export class AdministracionUsuarioEditarComponent implements OnInit {
         const formValues = this.editarForm.value;
         const payload: any = {
             estado: formValues.estado,
-            is_staff: formValues.is_staff
+            ...this.adminService.mapearRolAPermisos(formValues.rol)
         };
 
         // Solo enviamos el campo password si el administrador escribió algo

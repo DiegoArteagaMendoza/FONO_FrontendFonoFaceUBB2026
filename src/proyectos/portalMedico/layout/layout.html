@@ -1,0 +1,13 @@
+<div class="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-900">
+  <app-pm-navbar></app-pm-navbar>
+
+  <!-- Reutilizamos los estilos del panel de administración (tablas, formularios,
+       modales, badges) para no duplicar CSS: ver src/styles.scss (.admin-theme). -->
+  <main class="admin-theme flex-1 w-full">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-fonoPrimary dark:bg-slate-800 text-sky-200 text-center text-sm py-4 mt-auto">
+    &copy; {{ anioActual }} {{ t().pm_navbar.marca }} — FonoFace, Universidad del Bío-Bío.
+  </footer>
+</div>

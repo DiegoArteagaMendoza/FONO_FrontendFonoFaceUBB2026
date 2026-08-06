@@ -21,6 +21,8 @@
     </div>
   </div>
 
+  <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
   <div *ngIf="cargando" class="loading-state">
     <div class="spinner"></div>
     <p>{{ t().globales.cargando }}</p>
@@ -33,6 +35,7 @@
           <th>{{ t().tablas.nombre_tabla }}</th>
           <th>{{ t().tablas.rut_tabla }}</th>
           <th>{{ t().tablas.email_tabla }}</th>
+          <th>Rol</th>
           <th>{{ t().tablas.estado_usuario || 'Estado' }}</th>
           <th>{{ t().tablas.acciones_tabla }}</th>
         </tr>
@@ -41,17 +44,23 @@
       <tbody>
         <!-- Verificamos la lista filtrada, no la original -->
         <tr *ngIf="usuariosFiltrados.length === 0">
-          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
+          <td colspan="6" class="empty-state">{{ t().globales.sin_datos }}</td>
         </tr>
 
         <!-- Iteramos sobre usuariosFiltrados -->
         <tr *ngFor="let item of usuariosFiltrados">
-          <td class="td-title">
-            {{ item.nombre }}
-          </td>
+          <td class="td-title">{{ item.nombre }}</td>
           <td>{{ item.rut }}</td>
           <td>{{ item.email }}</td>
-          
+          <td>
+            <span class="badge" [ngStyle]="{
+              'background-color': item.is_superuser ? '#e2d9f3' : (item.is_staff ? '#cff4fc' : '#e2e3e5'),
+              'color': item.is_superuser ? '#432874' : (item.is_staff ? '#055160' : '#383d41')
+            }">
+              {{ etiquetaRol(item) }}
+            </span>
+          </td>
+
           <td>
             <span class="badge" 
                   [ngStyle]="{
@@ -114,6 +123,15 @@
                   'font-weight': '500'
                 }">
             {{ itemSeleccionado.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </p>
+        <p>
+          <strong>{{ t().modal_usuario.rol }}</strong><br>
+          <span class="badge" style="display: inline-block; margin-top: 0.3rem;" [ngStyle]="{
+            'background-color': itemSeleccionado.is_superuser ? '#e2d9f3' : (itemSeleccionado.is_staff ? '#cff4fc' : '#e2e3e5'),
+            'color': itemSeleccionado.is_superuser ? '#432874' : (itemSeleccionado.is_staff ? '#055160' : '#383d41')
+          }">
+            {{ etiquetaRol(itemSeleccionado) }}
           </span>
         </p>
       </div>

@@ -16,15 +16,16 @@ export class AdministracionUsuarioComponent implements OnInit {
 
     listaUsuarios: UsuarioItem[] = []; // Lista original intacta
     usuariosFiltrados: UsuarioItem[] = []; // Lista que se muestra en pantalla
-    
+
     cargando = true;
+    errorMensaje: string | null = null;
     itemSeleccionado: UsuarioItem | null = null;
     public backendUrl = 'http://127.0.0.1:8000';
-    
+
     filtroEstado: string = 'todos'; // Valor por defecto del select
 
     constructor(
-        private adminService: AdministracionService,
+        public adminService: AdministracionService,
         private router: Router,
         private cdr: ChangeDetectorRef
     ) {}
@@ -35,6 +36,7 @@ export class AdministracionUsuarioComponent implements OnInit {
 
     cargarDatos(): void {
         this.cargando = true;
+        this.errorMensaje = null;
         this.adminService.getUsuarios().subscribe({
             next: (datos) => {
                 this.listaUsuarios = datos;
@@ -45,9 +47,18 @@ export class AdministracionUsuarioComponent implements OnInit {
             error: (err) => {
                 console.error('Error al cargar los usuarios', err);
                 this.cargando = false;
+                this.errorMensaje = err.status === 403
+                    ? 'Requiere el rol SuperAdmin para acceder a la Gestión de Usuarios.'
+                    : this.t().erorres.error_cargando_datos;
                 this.cdr.detectChanges();
             }
         });
+    }
+
+    /** Etiqueta legible del rol (Usuario/Admin/SuperAdmin) para mostrar en tabla y modal. */
+    etiquetaRol(item: UsuarioItem): string {
+        const rol = this.adminService.obtenerRolDeUsuario(item);
+        return rol === 'superadmin' ? 'SuperAdmin' : rol === 'admin' ? 'Admin' : 'Usuario';
     }
 
     // Captura el cambio en el selector (select)

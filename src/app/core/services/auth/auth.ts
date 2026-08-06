@@ -46,11 +46,20 @@ logout() {
   // 3. Limpia TODO el localStorage por seguridad.
   //    La preferencia de tema no es un dato de sesión, así que la conservamos
   //    para que al cerrar sesión no se pierda el modo claro/oscuro elegido.
+  //    La sesión del profesional del Portal Médico (pm_*) tampoco es un dato de
+  //    ESTA sesión: es una identidad totalmente distinta (ver PortalMedicoService)
+  //    que puede seguir activa en otra pestaña, así que también se conserva.
   const temaGuardado = localStorage.getItem(CLAVE_TEMA);
+  const pmAccess = localStorage.getItem('pm_access_token');
+  const pmRefresh = localStorage.getItem('pm_refresh_token');
+  const pmProfesional = localStorage.getItem('pm_profesional_data');
   localStorage.clear();
   if (temaGuardado) {
     localStorage.setItem(CLAVE_TEMA, temaGuardado);
   }
+  if (pmAccess) localStorage.setItem('pm_access_token', pmAccess);
+  if (pmRefresh) localStorage.setItem('pm_refresh_token', pmRefresh);
+  if (pmProfesional) localStorage.setItem('pm_profesional_data', pmProfesional);
 
   // 4. Limpia el sessionStorage por si acaso
   sessionStorage.clear();

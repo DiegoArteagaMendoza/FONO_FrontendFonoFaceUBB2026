@@ -1,0 +1,131 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" routerLink="/administracion/portal-medico/profesionales">
+        &larr; {{ t().pm_profesional_detalle.volver }}
+      </button>
+      <h2>{{ t().pm_profesional_detalle.titulo }}</h2>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div *ngIf="mensajeExito" class="error-alert" style="background-color: #dcfce7; color: #166534; border-color: #166534;">
+    {{ mensajeExito }}
+  </div>
+  <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+  <div *ngIf="!cargando && profesional" class="flex flex-col gap-6">
+
+    <!-- DATOS DEL PROFESIONAL -->
+    <div class="form-card" style="max-width: none;">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_datos }}</h3>
+      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_nombre }}</strong><br>{{ profesional.nombres_profesional }} {{ profesional.apellidos_profesional }}</p>
+        <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_rut }}</strong><br>{{ profesional.rut_profesional }}</p>
+        <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_email }}</strong><br>{{ profesional.email_profesional }}</p>
+        <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_telefono }}</strong><br>{{ profesional.telefono_profesional }}</p>
+        <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_numero_registro }}</strong><br>{{ profesional.numero_registro_salud_profesional || '—' }}</p>
+        <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_registrado_desde }}</strong><br>{{ profesional.fecha_creacion | date:'dd/MM/yyyy' }}</p>
+      </div>
+    </div>
+
+    <!-- ACREDITACIÓN -->
+    <div class="form-card" style="max-width: none;">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_acreditacion }}</h3>
+
+      <div *ngIf="!acreditacionVigente" class="empty-state">{{ t().pm_profesional_detalle.sin_acreditacion }}</div>
+
+      <div *ngIf="acreditacionVigente">
+        <span class="badge mb-3" [ngClass]="{
+          'badge-general': acreditacionVigente.estado_verificacion_profesional === 'PENDIENTE' || acreditacionVigente.estado_verificacion_profesional === 'EN_REVISION',
+          'badge-ninos': acreditacionVigente.estado_verificacion_profesional === 'APROBADO',
+          'badge-locutores': acreditacionVigente.estado_verificacion_profesional === 'RECHAZADO'
+        }" style="display: inline-block;">
+          {{ t().pm_estados[acreditacionVigente.estado_verificacion_profesional] }}
+        </span>
+
+        <p class="text-sm" style="color: var(--fono-texto-suave);">
+          {{ t().pm_acreditacion.fecha_solicitud }} {{ acreditacionVigente.fecha_solicitud_profesional | date:'dd/MM/yyyy' }}
+        </p>
+
+        <ng-container *ngIf="acreditacionVigente.estado_verificacion_profesional === 'PENDIENTE' || acreditacionVigente.estado_verificacion_profesional === 'EN_REVISION'">
+          <div class="td-actions" *ngIf="adminService.usuarioActual()?.is_staff">
+            <button class="btn-icon view" [disabled]="procesandoAcreditacion" (click)="resolverAcreditacion('APROBADO')">
+              {{ t().pm_profesional_detalle.btn_aprobar }}
+            </button>
+            <button class="btn-icon delete" [disabled]="procesandoAcreditacion" (click)="resolverAcreditacion('RECHAZADO')">
+              {{ t().pm_profesional_detalle.btn_rechazar }}
+            </button>
+          </div>
+          <p *ngIf="!adminService.usuarioActual()?.is_staff" class="text-sm" style="color: var(--fono-texto-tenue); font-style: italic;">
+            {{ t().pm_profesional_detalle.error_permisos }}
+          </p>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- DOCUMENTOS -->
+    <div class="form-card" style="max-width: none;">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_documentos }}</h3>
+
+      <div *ngIf="profesional.documentos.length === 0" class="empty-state">{{ t().pm_profesional_detalle.sin_documentos }}</div>
+
+      <div class="table-card" *ngIf="profesional.documentos.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{{ t().pm_documentos.label_tipo }}</th>
+              <th>{{ t().tablas.ultima_actualizacion }}</th>
+              <th>{{ t().tablas.estado_usuario }}</th>
+              <th>{{ t().tablas.acciones_tabla }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let documento of profesional.documentos">
+              <td class="td-title">
+                <a [href]="documento.url_documento_profesional" target="_blank" rel="noopener">
+                  {{ t().pm_tipos_documento[documento.tipo_documeto_profesional] }}
+                </a>
+              </td>
+              <td>{{ documento.fecha_subida_documento_profesional | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span class="badge" [ngStyle]="{
+                  'background-color': documento.documento_profesional_valido ? '#dcfce7' : '#fff3cd',
+                  'color': documento.documento_profesional_valido ? '#166534' : '#856404'
+                }">
+                  {{ documento.documento_profesional_valido ? t().pm_documentos.estado_validado : t().pm_documentos.estado_pendiente }}
+                </span>
+              </td>
+              <td class="td-actions">
+                <button *ngIf="adminService.usuarioActual()?.is_staff" class="btn-icon edit" [disabled]="procesandoDocumento === documento.id_documento"
+                        (click)="toggleValidezDocumento(documento.id_documento, documento.documento_profesional_valido)">
+                  {{ documento.documento_profesional_valido ? t().pm_profesional_detalle.btn_marcar_invalido : t().pm_profesional_detalle.btn_marcar_valido }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ESPECIALIDADES -->
+    <div class="form-card" style="max-width: none;">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_especialidades }}</h3>
+
+      <div *ngIf="profesional.especialidades_asignadas.length === 0" class="empty-state">
+        {{ t().pm_profesional_detalle.sin_especialidades }}
+      </div>
+
+      <div class="flex flex-wrap gap-2" *ngIf="profesional.especialidades_asignadas.length > 0">
+        <span class="badge" *ngFor="let relacion of profesional.especialidades_asignadas">
+          {{ relacion.especialidad.nombre_especialidad_profesional }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+</div>
