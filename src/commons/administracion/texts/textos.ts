@@ -69,7 +69,27 @@ export const TEXTOS_SITIO = {
         informacion_publicada: "Información Publicada",
         cuidados_activos: "Cuidados Activos",
         noticias_recientes: "Noticias Recientes",
-        noticias_proximamente: "Noticias Recientes (PROXIMAMENTE)"
+        noticias_proximamente: "Noticias Recientes (PROXIMAMENTE)",
+
+        // ACTIVIDAD RECIENTE
+        actividad_cargando: "Cargando actividad...",
+        actividad_tipo_informacion: "Información",
+        actividad_tipo_cuidado: "Cuidado",
+        actividad_tipo_noticia: "Noticia",
+        actividad_ahora_mismo: "Justo ahora",
+        actividad_hace_minutos: "Hace {n} min",
+        actividad_hace_horas: "Hace {n} h",
+        actividad_ayer: "Ayer",
+        actividad_hace_dias: "Hace {n} días",
+        actividad_fecha_desconocida: "Fecha desconocida",
+
+        // PROFESIONALES PENDIENTES DE APROBACIÓN
+        pendientes_titulo: "Profesionales por aprobar",
+        pendientes_aviso_singular: "1 profesional está esperando revisión de acreditación.",
+        pendientes_aviso_plural: "{n} profesionales están esperando revisión de acreditación.",
+        pendientes_boton_revisar: "Revisar",
+        pendientes_ver_todos: "Ver todos",
+        pendientes_ver_mas: "Ver {n} más"
     },
 
     // GESTION
@@ -677,8 +697,8 @@ export const TEXTOS_SITIO = {
         placeholder_apellidos: "Ej: González Soto",
         alerta_apellidos: "Los apellidos son obligatorios.",
         label_rut: "RUT",
-        placeholder_rut: "12345678-9",
-        alerta_rut: "Ingresa un RUT chileno válido (ej: 12345678-9).",
+        placeholder_rut: "12345678-5",
+        alerta_rut: "Ingresa un RUT chileno válido, con el dígito verificador correcto (ej: 12345678-5).",
         label_email: "Correo Electrónico",
         placeholder_email: "ejemplo@correo.com",
         alerta_email_req: "El correo es obligatorio.",
