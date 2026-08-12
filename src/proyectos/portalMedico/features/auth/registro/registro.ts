@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { PortalMedicoService } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
+import { rutChilenoValidator } from '@core/validators/rut.validator';
 
 @Component({
   selector: 'app-pm-registro',
@@ -28,7 +29,7 @@ export class PortalMedicoRegistroComponent {
     this.formulario = this.fb.group({
       nombres_profesional: ['', [Validators.required, Validators.maxLength(100)]],
       apellidos_profesional: ['', [Validators.required, Validators.maxLength(100)]],
-      rut_profesional: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}-?[0-9kK]$/)]],
+      rut_profesional: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}-?[0-9kK]$/), rutChilenoValidator()]],
       email_profesional: ['', [Validators.required, Validators.email]],
       telefono_profesional: ['', [Validators.required, Validators.pattern(/^(\+?56)?[2-9][0-9]{7,8}$/)]],
       numero_registro_salud_profesional: [''],

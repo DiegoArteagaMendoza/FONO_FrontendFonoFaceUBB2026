@@ -41,12 +41,54 @@
 
     <div class="recent-activity-section card-box">
       <h2 class="section-title">{{ t().inicio_admin.actividad_reciente }}</h2>
-      <div class="empty-activity">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p>{{ t().inicio_admin.actividad_vacia }}</p>
+
+      <div class="empty-activity" *ngIf="cargandoActividad">
+        <p>{{ t().inicio_admin.actividad_cargando }}</p>
       </div>
+
+      <ng-container *ngIf="!cargandoActividad">
+        <!-- Profesionales pendientes de aprobación: se destacan primero porque requieren una acción -->
+        <div class="pending-professionals" *ngIf="profesionalesPendientes.length > 0">
+          <div class="pending-header">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path>
+            </svg>
+            <span>{{ avisoPendientes }}</span>
+          </div>
+
+          <a [routerLink]="pendiente.ruta" class="pending-item" *ngFor="let pendiente of pendientesVisibles">
+            <div class="pending-info">
+              <strong>{{ pendiente.nombreCompleto }}</strong>
+              <span class="pending-registro" *ngIf="pendiente.numeroRegistro">{{ pendiente.numeroRegistro }}</span>
+            </div>
+            <span class="pending-boton">{{ t().inicio_admin.pendientes_boton_revisar }}</span>
+          </a>
+
+          <a routerLink="/administracion/portal-medico/profesionales" class="pending-ver-todos">
+            {{ pendientesOcultos > 0 ? textoVerMasPendientes : t().inicio_admin.pendientes_ver_todos }}
+          </a>
+        </div>
+
+        <!-- Últimos elementos creados en el sitio -->
+        <a [routerLink]="item.ruta" class="activity-item" *ngFor="let item of actividadReciente">
+          <div class="activity-icon" [ngClass]="item.bgClass">
+            <svg [ngClass]="item.colorClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icono"></path>
+            </svg>
+          </div>
+          <div class="activity-info">
+            <p class="activity-titulo">{{ item.titulo }}</p>
+            <span class="activity-meta">{{ etiquetaTipo(item.tipo) }} · {{ formatearTiempoRelativo(item.fecha) }}</span>
+          </div>
+        </a>
+
+        <div class="empty-activity" *ngIf="sinActividad">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p>{{ t().inicio_admin.actividad_vacia }}</p>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

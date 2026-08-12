@@ -13,6 +13,8 @@ export interface Cuidado {
   img: string | null;
   fuente: string | null;
   estado: boolean;
+  // Nullable: los registros creados antes de agregar este campo al backend no lo tienen.
+  fecha_creacion: string | null;
   FonoApp_Administracion: number;
 }
 
