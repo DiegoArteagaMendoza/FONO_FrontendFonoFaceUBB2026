@@ -1,0 +1,116 @@
+<div class="page-container">
+
+  <div class="mb-6" style="max-width: 700px; margin-left: auto; margin-right: auto;">
+    <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_video.titulo }}</h2>
+    <p class="text-sm mt-1" style="color: var(--fono-texto-suave);">{{ t().pmc_video.subtitulo }}</p>
+  </div>
+
+  <!-- ============ FORMULARIO DE SUBIDA ============ -->
+  <div class="form-card mx-auto" style="max-width: 700px;">
+
+    <!-- Video enviado -->
+    <div *ngIf="exito">
+      <div class="success-alert">
+        <strong>{{ t().pmc_video.exito_titulo }}</strong>
+        <p class="mt-1 mb-0">
+          {{ textosService.reemplazarVariables(t().pmc_video.exito_desc, { dias: diasVigencia + '' }) }}
+        </p>
+      </div>
+      <div class="mt-4">
+        <button type="button" class="btn-secondary" (click)="subirOtro()">
+          {{ t().pmc_video.btn_subir_otro }}
+        </button>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!exito">
+      <p class="text-sm mb-4" style="color: var(--fono-texto-suave);">
+        {{ t().pmc_video.identificado_como }} <strong style="color: var(--fono-texto-cuerpo);">{{ nombreCliente }}</strong>
+      </p>
+
+      <!-- Consejos para grabar -->
+      <div class="info-alert mb-4">
+        <strong>{{ t().pmc_video.consejos_titulo }}</strong>
+        <ul class="mt-2 mb-0" style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.25rem;">
+          <li>{{ t().pmc_video.consejo_1 }}</li>
+          <li>{{ t().pmc_video.consejo_2 }}</li>
+          <li>{{ t().pmc_video.consejo_3 }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+      <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+
+        <div class="form-group file-upload-section">
+          <label for="video">{{ t().pmc_video.label_video }}</label>
+          <input id="video" type="file" [accept]="'video/*'" (change)="onFileChange($event)" class="file-input">
+          <small class="help-text">{{ textoAyudaVideo }}</small>
+
+          <div class="preview-files" *ngIf="archivo">
+            <p class="m-0"><strong>{{ t().pmc_video.archivo_seleccionado }}</strong> {{ archivo.name }} ({{ tamanoMb }} MB)</p>
+            <p class="m-0" *ngIf="duracionSegundos !== null">
+              <strong>{{ t().pmc_video.duracion_detectada }}</strong> {{ duracionSegundos }} {{ t().pmc_video.segundos }}
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">{{ t().pmc_video.label_descripcion }}</label>
+          <textarea id="descripcion" formControlName="descripcion" rows="3"
+                    [placeholder]="t().pmc_video.placeholder_descripcion"></textarea>
+        </div>
+
+        <p class="text-sm" style="color: var(--fono-texto-suave);">
+          {{ textosService.reemplazarVariables(t().pmc_video.aviso_privacidad, { dias: diasVigencia + '' }) }}
+        </p>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="!puedeEnviar">
+            {{ subiendo ? t().pmc_video.btn_subiendo : t().pmc_video.btn_subir }}
+          </button>
+        </div>
+      </form>
+    </ng-container>
+
+  </div>
+
+  <!-- ============ MIS VIDEOS ============ -->
+  <div class="mx-auto mt-8" style="max-width: 700px;">
+    <h3 class="text-lg font-bold mb-1" style="color: var(--fono-texto);">{{ t().pmc_mis_videos.titulo }}</h3>
+    <p class="text-sm mt-0 mb-4" style="color: var(--fono-texto-suave);">{{ t().pmc_mis_videos.subtitulo }}</p>
+
+    <div *ngIf="mensajeVideos" class="success-alert">{{ mensajeVideos }}</div>
+
+    <div *ngIf="cargandoVideos" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().pmc_mis_videos.cargando }}</p>
+    </div>
+
+    <div *ngIf="!cargandoVideos && misVideos.length === 0" class="empty-state">
+      {{ t().pmc_mis_videos.vacio }}
+    </div>
+
+    <div *ngFor="let video of misVideos" class="form-card mb-3" style="max-width: none;">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div style="min-width: 0; flex: 1;">
+          <p class="m-0 font-semibold" style="color: var(--fono-texto);">
+            {{ video.descripcion || t().pmc_video.label_descripcion }}
+          </p>
+          <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_mis_videos.subido_el }} {{ video.fecha_subida | date:'dd/MM/yyyy' }}
+            · {{ t().pmc_mis_videos.duracion }} {{ video.duracion_segundos }} {{ t().pmc_video.segundos }}
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="badge badge-pendiente">{{ textoVenceEn(video) }}</span>
+          <button type="button" class="btn-icon delete" (click)="eliminarVideo(video)">
+            {{ t().pmc_mis_videos.btn_eliminar }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

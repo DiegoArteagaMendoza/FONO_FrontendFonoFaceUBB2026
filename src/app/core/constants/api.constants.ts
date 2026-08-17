@@ -70,5 +70,34 @@ export const API_ENDPOINTS = {
     especialidadAsignar: '/especialidades/asignar/',
     especialidadQuitar: (idEspecialidad: number) => `/especialidades/${idEspecialidad}/quitar/`,
     profesionalEspecialidadesListar: (idProfesional: number) => `/${idProfesional}/especialidades/`
+  },
+
+  // Portal Médico — pacientes (app PmCliente del backend FonoAppPortalMedico)
+  portalMedicoClientes: {
+    // Paciente: registro, sesión y perfil propio
+    registrar: '/registrar/',
+    login: '/login/',
+    perfil: '/perfil/',
+    perfilEditar: '/perfil/editar/',
+    perfilPassword: '/perfil/password/',
+
+    // Consultas del profesional o del administrador
+    listar: '/listar/',
+    detalle: (idCliente: number) => `/${idCliente}/`,
+    editar: (idCliente: number) => `/${idCliente}/editar/`,
+    eliminar: (idCliente: number) => `/${idCliente}/eliminar/`
+  },
+
+  // Portal Médico — videos de síntomas (app PmVideo del backend FonoAppPortalMedico)
+  portalMedicoVideos: {
+    // Paciente autenticado
+    subir: '/subir/',
+    misVideos: '/mis-videos/',
+    miVideoEliminar: (idVideo: number) => `/mis-videos/${idVideo}/eliminar/`,
+
+    // Profesional o administrador
+    listar: '/listar/',
+    detalle: (idVideo: number) => `/${idVideo}/`,
+    eliminar: (idVideo: number) => `/${idVideo}/eliminar/`
   }
 };

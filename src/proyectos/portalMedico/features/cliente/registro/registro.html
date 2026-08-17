@@ -1,0 +1,144 @@
+<div class="page-container">
+  <div class="form-card mx-auto" style="max-width: 700px;">
+
+    <div class="mb-6">
+      <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_registro.titulo }}</h2>
+      <p class="text-sm mt-1" style="color: var(--fono-texto-suave);">{{ t().pmc_registro.subtitulo }}</p>
+    </div>
+
+    <!-- ============ REGISTRO COMPLETADO ============ -->
+    <div *ngIf="exito">
+      <div class="success-alert">
+        <strong>{{ textosService.reemplazarVariables(t().pmc_registro.exito_titulo, { nombre: nombreRegistrado }) }}</strong>
+        <p class="mt-1 mb-0">{{ t().pmc_registro.exito_desc }}</p>
+      </div>
+
+      <div class="flex flex-wrap gap-3 mt-4">
+        <button type="button" class="btn-primary" (click)="irALogin()">
+          {{ t().pmc_registro.btn_ir_login }}
+        </button>
+        <a routerLink="/portalmedico/directorio" class="btn-secondary" style="text-decoration: none; display: inline-block;">
+          {{ t().pmc_registro.btn_ver_directorio }}
+        </a>
+      </div>
+    </div>
+
+    <!-- ============ YA TIENE SESIÓN INICIADA ============ -->
+    <div *ngIf="!exito && yaAutenticado">
+      <div class="info-alert">
+        <strong>{{ t().pmc_registro.ya_autenticado_titulo }}</strong>
+        <p class="mt-1 mb-0">
+          {{ textosService.reemplazarVariables(t().pmc_registro.ya_autenticado_desc, { nombre: nombreClienteAutenticado }) }}
+        </p>
+      </div>
+
+      <div class="mt-4">
+        <button type="button" class="btn-primary" (click)="irAlVideo()">
+          {{ t().pmc_registro.btn_ir_video }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ============ FORMULARIO ============ -->
+    <ng-container *ngIf="!exito && !yaAutenticado">
+      <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+      <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="nombres_cliente">{{ t().pmc_registro.label_nombres }}</label>
+            <input id="nombres_cliente" type="text" formControlName="nombres_cliente"
+                   [placeholder]="t().pmc_registro.placeholder_nombres"
+                   [class.is-invalid]="campoInvalido('nombres_cliente')">
+            <small class="error-text" *ngIf="campoInvalido('nombres_cliente')">
+              {{ t().pmc_registro.alerta_nombres }}
+            </small>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="apellidos_clientes">{{ t().pmc_registro.label_apellidos }}</label>
+            <input id="apellidos_clientes" type="text" formControlName="apellidos_clientes"
+                   [placeholder]="t().pmc_registro.placeholder_apellidos"
+                   [class.is-invalid]="campoInvalido('apellidos_clientes')">
+            <small class="error-text" *ngIf="campoInvalido('apellidos_clientes')">
+              {{ t().pmc_registro.alerta_apellidos }}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="rut_cliente">{{ t().pmc_registro.label_rut }}</label>
+            <input id="rut_cliente" type="text" formControlName="rut_cliente"
+                   [placeholder]="t().pmc_registro.placeholder_rut"
+                   [class.is-invalid]="campoInvalido('rut_cliente')">
+            <small class="help-text" *ngIf="!campoInvalido('rut_cliente')">{{ t().pmc_registro.ayuda_rut }}</small>
+            <small class="error-text" *ngIf="campoInvalido('rut_cliente')">
+              {{ t().pmc_registro.alerta_rut }}
+            </small>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="fecha_nacimiento_cliente">{{ t().pmc_registro.label_fecha_nacimiento }}</label>
+            <input id="fecha_nacimiento_cliente" type="date" formControlName="fecha_nacimiento_cliente"
+                   [max]="hoy"
+                   [class.is-invalid]="campoInvalido('fecha_nacimiento_cliente') || fechaEsFutura">
+            <small class="error-text" *ngIf="campoInvalido('fecha_nacimiento_cliente')">
+              {{ t().pmc_registro.alerta_fecha_nacimiento }}
+            </small>
+            <small class="error-text" *ngIf="fechaEsFutura">
+              {{ t().pmc_registro.alerta_fecha_futura }}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email_cliente">{{ t().pmc_registro.label_email }}</label>
+          <input id="email_cliente" type="email" formControlName="email_cliente"
+                 [placeholder]="t().pmc_registro.placeholder_email"
+                 [class.is-invalid]="campoInvalido('email_cliente')">
+          <small class="help-text" *ngIf="!campoInvalido('email_cliente')">{{ t().pmc_registro.ayuda_email }}</small>
+          <small class="error-text" *ngIf="formulario.get('email_cliente')?.errors?.['required'] && formulario.get('email_cliente')?.touched">
+            {{ t().pmc_registro.alerta_email_req }}
+          </small>
+          <small class="error-text" *ngIf="formulario.get('email_cliente')?.errors?.['email'] && formulario.get('email_cliente')?.touched">
+            {{ t().pmc_registro.alerta_email_inv }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono_cliente">{{ t().pmc_registro.label_telefono }}</label>
+          <input id="telefono_cliente" type="text" formControlName="telefono_cliente"
+                 [placeholder]="t().pmc_registro.placeholder_telefono"
+                 [class.is-invalid]="campoInvalido('telefono_cliente')">
+          <small class="help-text" *ngIf="!campoInvalido('telefono_cliente')">{{ t().pmc_registro.ayuda_telefono }}</small>
+          <small class="error-text" *ngIf="campoInvalido('telefono_cliente')">
+            {{ t().pmc_registro.alerta_telefono }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="password">{{ t().pmc_registro.label_password }}</label>
+          <input id="password" type="password" formControlName="password"
+                 [placeholder]="t().pmc_registro.placeholder_password"
+                 [class.is-invalid]="campoInvalido('password')">
+          <small class="help-text" *ngIf="!campoInvalido('password')">{{ t().pmc_registro.ayuda_password }}</small>
+          <small class="error-text" *ngIf="formulario.get('password')?.errors?.['required'] && formulario.get('password')?.touched">
+            {{ t().pmc_registro.alerta_password_req }}
+          </small>
+          <small class="error-text" *ngIf="formulario.get('password')?.errors?.['minlength'] && formulario.get('password')?.touched">
+            {{ t().pmc_registro.alerta_password_min }}
+          </small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? t().pmc_registro.btn_registrando : t().pmc_registro.btn_registrar }}
+          </button>
+        </div>
+      </form>
+    </ng-container>
+
+  </div>
+</div>

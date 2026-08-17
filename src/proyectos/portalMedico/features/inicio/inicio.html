@@ -40,8 +40,18 @@
       <h2 class="mt-0 text-xl font-bold" style="color: var(--fono-texto-fuerte);">{{ t().pm_inicio.card_cliente_titulo }}</h2>
       <p style="color: var(--fono-texto-cuerpo); flex-grow: 1;">{{ t().pm_inicio.card_cliente_desc }}</p>
 
-      <div class="mt-auto">
-        <a routerLink="/portalmedico/directorio" class="btn-primary" style="text-decoration: none; display: inline-block;">
+      <ul class="my-4" style="padding-left: 1.25rem; color: var(--fono-texto-cuerpo); display: flex; flex-direction: column; gap: 0.4rem;">
+        <li>{{ t().pm_inicio.beneficio_cliente_1 }}</li>
+        <li>{{ t().pm_inicio.beneficio_cliente_2 }}</li>
+        <li>{{ t().pm_inicio.beneficio_cliente_3 }}</li>
+        <li>{{ t().pm_inicio.beneficio_cliente_4 }}</li>
+      </ul>
+
+      <div class="flex flex-wrap gap-3 mt-auto">
+        <a routerLink="/portalmedico/paciente/registro" class="btn-primary" style="text-decoration: none; display: inline-block;">
+          {{ t().pm_inicio.btn_registro_cliente }}
+        </a>
+        <a routerLink="/portalmedico/directorio" class="btn-secondary" style="text-decoration: none; display: inline-block;">
           {{ t().pm_inicio.btn_directorio }}
         </a>
       </div>

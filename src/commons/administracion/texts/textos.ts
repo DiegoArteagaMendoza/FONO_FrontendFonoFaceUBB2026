@@ -628,7 +628,12 @@ export const TEXTOS_SITIO = {
         btn_login: "Ya tengo cuenta, iniciar sesión",
 
         card_cliente_titulo: "¿Buscas atención fonoaudiológica?",
-        card_cliente_desc: "Explora el directorio de fonoaudiólogos ya acreditados por FonoFace, revisa sus especialidades y datos de contacto, y comunícate directamente con quien prefieras para agendar tu atención personalizada.",
+        card_cliente_desc: "Regístrate para solicitar atención telemática y graba un video corto mostrando tus síntomas: el fonoaudiólogo podrá revisarlo antes de atenderte. También puedes explorar el directorio de profesionales acreditados.",
+        beneficio_cliente_1: "✓ Registro simple, sin trámites.",
+        beneficio_cliente_2: "✓ Muestra tus síntomas en un video de hasta 30 segundos.",
+        beneficio_cliente_3: "✓ Tu video es privado y se elimina solo a los 30 días.",
+        beneficio_cliente_4: "✓ Revisa el directorio de profesionales acreditados.",
+        btn_registro_cliente: "Registrarme como paciente",
         btn_directorio: "Ver directorio de profesionales"
     },
 
@@ -866,5 +871,145 @@ export const TEXTOS_SITIO = {
         exito_eliminar: "Especialidad eliminada correctamente.",
         error_guardar: "No se pudo guardar la especialidad. Verifica que tengas permisos de administrador (rol Admin o SuperAdmin).",
         error_eliminar: "No se pudo eliminar la especialidad."
+    },
+
+    // =====================================================================
+    // PORTAL MÉDICO — PACIENTES (apps PmCliente y PmVideo del backend)
+    // =====================================================================
+
+    // GUÍA DE PASOS DEL PROFESIONAL (mejora de usabilidad del portal médico)
+    pm_pasos: {
+        titulo: "Tu acreditación paso a paso",
+        subtitulo: "Completa estos pasos para aparecer en el directorio público.",
+        paso_1_titulo: "Crea tu cuenta",
+        paso_1_desc: "Registra tus datos profesionales.",
+        paso_2_titulo: "Sube tus documentos",
+        paso_2_desc: "Cédula de identidad y certificado de título.",
+        paso_3_titulo: "Elige tus especialidades",
+        paso_3_desc: "Indica las áreas en las que atiendes.",
+        paso_4_titulo: "Espera la revisión",
+        paso_4_desc: "Un administrador valida tus antecedentes.",
+        estado_completado: "Listo",
+        estado_actual: "Vas aquí",
+        estado_pendiente: "Pendiente",
+        ir_al_paso: "Continuar"
+    },
+
+    // REGISTRO DEL PACIENTE
+    pmc_registro: {
+        titulo: "Regístrate como paciente",
+        subtitulo: "Completa tus datos para solicitar atención fonoaudiológica telemática. Solo te tomará un minuto.",
+        label_nombres: "Nombres",
+        placeholder_nombres: "Ej: María José",
+        alerta_nombres: "Escribe tus nombres.",
+        label_apellidos: "Apellidos",
+        placeholder_apellidos: "Ej: Soto Rivas",
+        alerta_apellidos: "Escribe tus apellidos.",
+        label_rut: "RUT",
+        placeholder_rut: "12345678-9",
+        ayuda_rut: "Sin puntos y con guion. Ejemplo: 12345678-9",
+        alerta_rut: "Escribe un RUT válido (sin puntos y con guion).",
+        label_fecha_nacimiento: "Fecha de nacimiento",
+        alerta_fecha_nacimiento: "Selecciona tu fecha de nacimiento.",
+        alerta_fecha_futura: "La fecha de nacimiento no puede ser posterior a hoy.",
+        label_email: "Correo electrónico",
+        placeholder_email: "ejemplo@correo.cl",
+        ayuda_email: "Lo usaremos para contactarte sobre tu atención.",
+        alerta_email_req: "Escribe tu correo electrónico.",
+        alerta_email_inv: "El formato del correo no es válido.",
+        label_telefono: "Teléfono",
+        placeholder_telefono: "+56912345678",
+        ayuda_telefono: "Incluye el código del país o parte con 9.",
+        alerta_telefono: "Escribe un teléfono válido.",
+        label_password: "Contraseña",
+        placeholder_password: "Mínimo 8 caracteres",
+        ayuda_password: "La usarás para entrar y revisar tus videos. Evita contraseñas obvias o solo numéricas.",
+        alerta_password_req: "Crea una contraseña.",
+        alerta_password_min: "Debe tener al menos 8 caracteres.",
+        btn_registrando: "Registrando...",
+        btn_registrar: "Crear mi cuenta",
+        exito_titulo: "¡Listo, {nombre}! Tu cuenta quedó creada.",
+        exito_desc: "Inicia sesión para subir tu video de síntomas y revisarlo cuando quieras.",
+        btn_ir_login: "Iniciar sesión",
+        btn_ver_directorio: "Ver fonoaudiólogos disponibles",
+        error_servidor: "No pudimos completar tu registro. Revisa tus datos e inténtalo nuevamente.",
+        ya_autenticado_titulo: "Ya tienes la sesión iniciada",
+        ya_autenticado_desc: "Estás dentro como {nombre}.",
+        btn_ir_video: "Ir a mis videos"
+    },
+
+    // INICIO DE SESIÓN DEL PACIENTE
+    pmc_login: {
+        titulo: "Inicia sesión como paciente",
+        subtitulo: "Entra con tu correo o RUT para subir y revisar tus videos de síntomas.",
+        label_identificador: "Correo o RUT",
+        placeholder_identificador: "ejemplo@correo.cl o 12345678-9",
+        alerta_identificador: "Escribe tu correo o tu RUT.",
+        label_password: "Contraseña",
+        placeholder_password: "Tu contraseña",
+        alerta_password: "Escribe tu contraseña.",
+        btn_ingresando: "Entrando...",
+        btn_ingresar: "Entrar",
+        sin_cuenta: "¿Todavía no tienes cuenta?",
+        btn_registrarme: "Regístrate aquí",
+        error_credenciales: "Correo/RUT o contraseña incorrectos.",
+        error_servidor: "No pudimos iniciar tu sesión. Inténtalo nuevamente.",
+        aviso_sesion_expirada: "Tu sesión expiró. Vuelve a entrar para continuar."
+    },
+
+    // LISTA DE VIDEOS DEL PACIENTE
+    pmc_mis_videos: {
+        titulo: "Mis videos",
+        subtitulo: "Estos son los videos que el profesional podrá revisar.",
+        cargando: "Cargando tus videos...",
+        vacio: "Todavía no has subido ningún video.",
+        subido_el: "Subido el",
+        duracion: "Duración:",
+        vence_en: "Se elimina en {dias} días",
+        btn_eliminar: "Retirar video",
+        confirmar_eliminar: "¿Seguro que quieres retirar este video? No se puede deshacer.",
+        exito_eliminar: "Video retirado correctamente.",
+        error_eliminar: "No pudimos retirar el video. Inténtalo nuevamente."
+    },
+
+    // SUBIDA DEL VIDEO DE SÍNTOMAS
+    pmc_video: {
+        titulo: "Sube tu video de síntomas",
+        subtitulo: "Un video corto ayuda al fonoaudiólogo a entender tu caso antes de la atención.",
+        sin_registro_titulo: "Primero necesitas registrarte",
+        sin_registro_desc: "Para asociar el video a tu ficha, necesitamos tus datos de contacto.",
+        btn_ir_registro: "Ir al registro",
+        identificado_como: "Subiendo como:",
+        label_video: "Tu video",
+        ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}.",
+        alerta_video_req: "Selecciona un video.",
+        alerta_video_formato: "Ese formato no está permitido. Usa {formatos}.",
+        alerta_video_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        alerta_video_duracion: "El video dura {duracion} segundos y el máximo son {maximo}.",
+        archivo_seleccionado: "Archivo seleccionado:",
+        duracion_detectada: "Duración detectada:",
+        segundos: "segundos",
+        label_descripcion: "¿Qué quieres mostrar? (opcional)",
+        placeholder_descripcion: "Ej: Se me entrecorta la voz cuando leo en voz alta.",
+        btn_subiendo: "Subiendo video...",
+        btn_subir: "Enviar mi video",
+        consejos_titulo: "Para que se entienda mejor",
+        consejo_1: "Grábate en un lugar silencioso y bien iluminado.",
+        consejo_2: "Habla o lee en voz alta para que se escuche tu voz.",
+        consejo_3: "Muestra el síntoma que quieres explicar.",
+        exito_titulo: "¡Video enviado!",
+        exito_desc: "El profesional podrá revisarlo. Se guardará por {dias} días y luego se eliminará automáticamente.",
+        btn_subir_otro: "Subir otro video",
+        aviso_privacidad: "Tu video es material clínico: solo lo verán profesionales acreditados y se elimina solo a los {dias} días.",
+        error_servidor: "No pudimos subir tu video. Revisa tu conexión e inténtalo nuevamente."
+    },
+
+    // NAVEGACIÓN DEL PACIENTE (se suma al navbar del portal médico)
+    pmc_navbar: {
+        soy_paciente: "Soy paciente",
+        registrarme: "Registrarme",
+        iniciar_sesion: "Entrar como paciente",
+        mi_video: "Mis videos",
+        cerrar_sesion: "Salir"
     }
 };

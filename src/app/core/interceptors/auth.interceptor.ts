@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth/auth';
 import { PortalMedicoService } from '../services/portal-medico/portal-medico';
+import { PmClienteService } from '../services/portal-medico/pm-cliente';
 
 /**
  * Interceptor de autenticación:
@@ -26,14 +27,16 @@ import { PortalMedicoService } from '../services/portal-medico/portal-medico';
  * endpoints públicos del portal.
  *
  * Distingue de qué sesión era el token que falló comparándolo con lo guardado en
- * localStorage: el admin de FonoApp ('access_token') y el profesional del Portal
- * Médico ('pm_access_token') son dos identidades distintas que pueden convivir en
- * el mismo navegador, así que cada una se cierra y redirige a su propio login.
+ * localStorage: el admin de FonoApp ('access_token'), el profesional del Portal
+ * Médico ('pm_access_token') y el paciente ('pmc_access_token') son tres
+ * identidades distintas que pueden convivir en el mismo navegador, así que cada
+ * una se cierra y redirige a su propio login.
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   const portalMedicoService = inject(PortalMedicoService);
+  const pmClienteService = inject(PmClienteService);
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
@@ -43,10 +46,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (authHeader && sesionInvalida) {
         const token = authHeader.replace('Bearer ', '');
         const esSesionProfesional = token === localStorage.getItem('pm_access_token');
+        const esSesionPaciente = token === localStorage.getItem('pmc_access_token');
 
         if (esSesionProfesional) {
           portalMedicoService.logoutProfesional();
           router.navigate(['/portalmedico/login'], { queryParams: { expirada: '1' } });
+        } else if (esSesionPaciente) {
+          pmClienteService.logoutCliente();
+          router.navigate(['/portalmedico/paciente/login'], { queryParams: { expirada: '1' } });
         } else {
           authService.logout();
           router.navigate(['/login'], { queryParams: { expirada: '1' } });

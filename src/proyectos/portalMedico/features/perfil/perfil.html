@@ -17,7 +17,7 @@
     <div class="form-card">
       <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_perfil.seccion_datos }}</h3>
 
-      <div *ngIf="mensajeDatos" class="error-alert" style="background-color: #dcfce7; color: #166534; border-color: #166534;">
+      <div *ngIf="mensajeDatos" class="success-alert">
         {{ mensajeDatos }}
       </div>
       <div *ngIf="errorDatos" class="error-alert">{{ errorDatos }}</div>
@@ -68,7 +68,7 @@
     <div class="form-card">
       <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_perfil.seccion_password }}</h3>
 
-      <div *ngIf="mensajePassword" class="error-alert" style="background-color: #dcfce7; color: #166534; border-color: #166534;">
+      <div *ngIf="mensajePassword" class="success-alert">
         {{ mensajePassword }}
       </div>
       <div *ngIf="errorPassword" class="error-alert">{{ errorPassword }}</div>

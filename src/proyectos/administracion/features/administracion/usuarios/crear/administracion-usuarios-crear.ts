@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { Router, RouterModule } from "@angular/router";
@@ -14,6 +14,8 @@ import { TextosService } from "@core/services/textos/textos";
 export class AdministracionUsuarioCrearComponente implements OnInit {
   // Inyectamos el servicio de textos y exponemos el Signal
   public textosService = inject(TextosService);
+  // La app es zoneless: hay que refrescar la vista a mano tras cada respuesta.
+  private cdr = inject(ChangeDetectorRef);
   public t = this.textosService.t;
 
   formulario!: FormGroup;
@@ -74,6 +76,7 @@ export class AdministracionUsuarioCrearComponente implements OnInit {
           this.errorMensaje = 'No se pudo conectar con el servidor. Inténtalo más tarde.';
         }
         this.isSubmitting = false;
+        this.cdr.detectChanges();
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -13,6 +13,8 @@ import { TextosService } from '@core/services/textos/textos';
 })
 export class PortalMedicoLoginComponent implements OnInit {
   public textosService = inject(TextosService);
+  // La app es zoneless: hay que refrescar la vista a mano tras cada respuesta.
+  private cdr = inject(ChangeDetectorRef);
   public t = this.textosService.t;
 
   loginForm: FormGroup;
@@ -60,6 +62,7 @@ export class PortalMedicoLoginComponent implements OnInit {
         this.errorMessage = err.status === 401
           ? this.t().pm_login.error_credenciales
           : this.t().pm_login.error_servidor;
+        this.cdr.detectChanges();
       }
     });
   }

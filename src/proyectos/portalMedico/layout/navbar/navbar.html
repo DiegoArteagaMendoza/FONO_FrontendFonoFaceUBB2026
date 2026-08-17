@@ -44,14 +44,37 @@
           </a>
         }
 
+        <!-- Accesos del paciente: solo cuando no hay sesión de profesional,
+             porque son dos usos distintos del portal. -->
+        @if (!portalMedicoService.profesionalActual()) {
+          @if (pmClienteService.clienteActual()) {
+            <a routerLink="/portalmedico/paciente/video" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+               class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+              {{ t().pmc_navbar.mi_video }}
+            </a>
+            <button (click)="cerrarSesionPaciente()"
+                    class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+              {{ t().pmc_navbar.cerrar_sesion }}
+            </button>
+          } @else {
+            <a routerLink="/portalmedico/paciente/login" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+               class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+              {{ t().pmc_navbar.soy_paciente }}
+            </a>
+          }
+        }
+
         <app-boton-tema class="text-white ml-1"></app-boton-tema>
 
+        <!-- El acceso de profesional se ofrece solo si NO hay ninguna sesión
+             activa: con un paciente dentro, invitarlo a "iniciar sesión" como
+             profesional confunde y lo lleva a un formulario que no le sirve. -->
         @if (portalMedicoService.profesionalActual()) {
           <button (click)="cerrarSesion()"
                   class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.cerrar_sesion }}
           </button>
-        } @else {
+        } @else if (!pmClienteService.clienteActual()) {
           <a routerLink="/portalmedico/login"
              class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.iniciar_sesion }}
@@ -73,8 +96,20 @@
           <a routerLink="/portalmedico/acreditacion" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.acreditacion }}</a>
           <button (click)="cerrarSesion()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.cerrar_sesion }}</button>
         } @else {
-          <a routerLink="/portalmedico/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.iniciar_sesion }}</a>
-          <a routerLink="/portalmedico/registro" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.registrarme }}</a>
+          <!-- Acceso de profesional: oculto si hay un paciente con sesión activa -->
+          @if (!pmClienteService.clienteActual()) {
+            <a routerLink="/portalmedico/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.iniciar_sesion }}</a>
+            <a routerLink="/portalmedico/registro" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.registrarme }}</a>
+          }
+
+          <!-- Accesos del paciente -->
+          @if (pmClienteService.clienteActual()) {
+            <a routerLink="/portalmedico/paciente/video" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_video }}</a>
+            <button (click)="cerrarSesionPaciente()" class="text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.cerrar_sesion }}</button>
+          } @else {
+            <a routerLink="/portalmedico/paciente/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.soy_paciente }}</a>
+            <a routerLink="/portalmedico/paciente/registro" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.registrarme }}</a>
+          }
         }
 
         <a routerLink="/portal/inicio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium text-sky-200 hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.volver_portal }}</a>

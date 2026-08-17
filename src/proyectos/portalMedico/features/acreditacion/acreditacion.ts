@@ -1,13 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PortalMedicoService, Acreditacion } from '@core/services/portal-medico/portal-medico';
+import { PortalMedicoService, Acreditacion, ProfesionalPerfil } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
+import { PasosAcreditacionComponent } from '../../components/pasos-acreditacion/pasos-acreditacion';
 
 @Component({
   selector: 'app-pm-acreditacion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PasosAcreditacionComponent],
   templateUrl: './acreditacion.html'
 })
 export class PortalMedicoAcreditacionComponent implements OnInit {
@@ -15,6 +16,8 @@ export class PortalMedicoAcreditacionComponent implements OnInit {
   public t = this.textosService.t;
 
   acreditacion: Acreditacion | null = null;
+  /** Perfil completo: lo necesita la guía de pasos para saber qué falta */
+  perfil: ProfesionalPerfil | null = null;
   cargando = true;
   sinSolicitud = false;
 
@@ -46,6 +49,16 @@ export class PortalMedicoAcreditacionComponent implements OnInit {
         this.cargando = false;
         this.cdr.detectChanges();
       }
+    });
+
+    // El perfil alimenta la guía de pasos (documentos y especialidades cargados).
+    // Va aparte para que un fallo aquí no impida ver el estado de la acreditación.
+    this.portalMedicoService.getPerfil().subscribe({
+      next: (perfil) => {
+        this.perfil = perfil;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error al cargar el perfil para la guía de pasos', err)
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -16,6 +16,8 @@ import { TextosService } from '@core/services/textos/textos';
 export class Login implements OnInit {
   // 1. Inyectamos el servicio de textos
   public textosService = inject(TextosService);
+  // La app es zoneless: hay que refrescar la vista a mano tras cada respuesta.
+  private cdr = inject(ChangeDetectorRef);
   public t = this.textosService.t;
 
   loginForm: FormGroup;
@@ -76,6 +78,7 @@ export class Login implements OnInit {
           this.errorMessage = this.t().login.error_servidor;
         }
         console.error('Error de autenticación:', err);
+        this.cdr.detectChanges();
       }
     });
   }

@@ -1,0 +1,50 @@
+<div class="page-container">
+  <div class="form-card mx-auto" style="max-width: 480px;">
+
+    <div class="mb-6">
+      <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_login.titulo }}</h2>
+      <p class="text-sm mt-1" style="color: var(--fono-texto-suave);">{{ t().pmc_login.subtitulo }}</p>
+    </div>
+
+    <div *ngIf="avisoSesionExpirada" class="info-alert">{{ t().pmc_login.aviso_sesion_expirada }}</div>
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+
+      <div class="form-group">
+        <label for="identificador">{{ t().pmc_login.label_identificador }}</label>
+        <input id="identificador" type="text" formControlName="identificador"
+               [placeholder]="t().pmc_login.placeholder_identificador"
+               [class.is-invalid]="campoInvalido('identificador')">
+        <small class="error-text" *ngIf="campoInvalido('identificador')">
+          {{ t().pmc_login.alerta_identificador }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">{{ t().pmc_login.label_password }}</label>
+        <input id="password" type="password" formControlName="password"
+               [placeholder]="t().pmc_login.placeholder_password"
+               [class.is-invalid]="campoInvalido('password')">
+        <small class="error-text" *ngIf="campoInvalido('password')">
+          {{ t().pmc_login.alerta_password }}
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().pmc_login.btn_ingresando : t().pmc_login.btn_ingresar }}
+        </button>
+      </div>
+    </form>
+
+    <p class="text-sm mt-4 mb-0" style="color: var(--fono-texto-suave);">
+      {{ t().pmc_login.sin_cuenta }}
+      <a routerLink="/portalmedico/paciente/registro"
+         style="color: var(--fono-primario); font-weight: 600; text-decoration: none;">
+        {{ t().pmc_login.btn_registrarme }}
+      </a>
+    </p>
+
+  </div>
+</div>

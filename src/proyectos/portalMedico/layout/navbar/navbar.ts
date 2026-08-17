@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { TextosService } from '@core/services/textos/textos';
 import { PortalMedicoService } from '@core/services/portal-medico/portal-medico';
+import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
 import { BotonTemaComponent } from '@core/components/boton-tema/boton-tema';
 
 @Component({
@@ -15,6 +16,7 @@ export class PortalMedicoNavbar {
   public textosService = inject(TextosService);
   public t = this.textosService.t;
   public portalMedicoService = inject(PortalMedicoService);
+  public pmClienteService = inject(PmClienteService);
 
   private router = inject(Router);
 
@@ -32,5 +34,12 @@ export class PortalMedicoNavbar {
     this.portalMedicoService.logoutProfesional();
     this.closeMenu();
     this.router.navigate(['/portalmedico/login']);
+  }
+
+  /** Cierra la sesión del paciente, que es una identidad aparte de la del profesional */
+  cerrarSesionPaciente(): void {
+    this.pmClienteService.logoutCliente();
+    this.closeMenu();
+    this.router.navigate(['/portalmedico/inicio']);
   }
 }

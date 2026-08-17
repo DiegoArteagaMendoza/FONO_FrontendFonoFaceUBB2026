@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -13,6 +13,8 @@ import { TextosService } from '@core/services/textos/textos';
 })
 export class PortalMedicoRegistroComponent {
   public textosService = inject(TextosService);
+  // La app es zoneless: hay que refrescar la vista a mano tras cada respuesta.
+  private cdr = inject(ChangeDetectorRef);
   public t = this.textosService.t;
 
   formulario: FormGroup;
@@ -55,6 +57,7 @@ export class PortalMedicoRegistroComponent {
       error: (err) => {
         this.isSubmitting = false;
         this.errorMensaje = this.portalMedicoService.extraerMensajeError(err, this.t().pm_registro.error_servidor);
+        this.cdr.detectChanges();
       }
     });
   }

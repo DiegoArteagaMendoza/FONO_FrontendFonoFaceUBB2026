@@ -9,11 +9,11 @@
     </button>
   </div>
 
-  <div *ngIf="!adminService.usuarioActual()?.is_staff" class="error-alert" style="background-color: #fff8e6; color: #8a6d1a; border-color: #f0d999;">
+  <div *ngIf="!adminService.usuarioActual()?.is_staff" class="info-alert">
     {{ t().pm_profesional_detalle.error_permisos }}
   </div>
 
-  <div *ngIf="mensajeExito" class="error-alert" style="background-color: #dcfce7; color: #166534; border-color: #166534;">
+  <div *ngIf="mensajeExito" class="success-alert">
     {{ mensajeExito }}
   </div>
   <div *ngIf="errorMensaje && !modalAbierto" class="error-alert">{{ errorMensaje }}</div>

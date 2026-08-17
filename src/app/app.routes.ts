@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { soloVisitantes } from './core/guards/solo-visitantes.guard';
 import { Layout } from '../proyectos/administracion/layout/layout';
 import { Login } from '../proyectos/administracion/features/auth/login/login';
 import { Inicio } from '../proyectos/administracion/features/dashboard/inicio/inicio';
@@ -49,6 +50,10 @@ import { PortalMedicoPerfilComponent } from '../proyectos/portalMedico/features/
 import { PortalMedicoDocumentosComponent } from '../proyectos/portalMedico/features/documentos/documentos';
 import { PortalMedicoEspecialidadesComponent } from '../proyectos/portalMedico/features/especialidades/especialidades';
 import { PortalMedicoAcreditacionComponent } from '../proyectos/portalMedico/features/acreditacion/acreditacion';
+// Lado paciente del Portal Médico (backend: apps PmCliente y PmVideo)
+import { PmClienteRegistroComponent } from '../proyectos/portalMedico/features/cliente/registro/registro';
+import { PmClienteLoginComponent } from '../proyectos/portalMedico/features/cliente/login/login';
+import { PmClienteVideoComponent } from '../proyectos/portalMedico/features/cliente/video/video';
 // Panel de administración del Portal Médico: se renderiza dentro del Layout de
 // administracion/ (mismo sidebar/sesión de FonoApp), por eso se registra como hijo
 // de ese Layout más abajo en vez de dentro del bloque 'portalmedico/*'.
@@ -57,9 +62,10 @@ import { PmAdminProfesionalDetalleComponent } from '../proyectos/portalMedico/fe
 import { PmAdminEspecialidadesComponent } from '../proyectos/portalMedico/features/admin/especialidades/admin-especialidades';
 
 export const routes: Routes = [
-  { 
-    path: 'login', 
-    component: Login 
+  {
+    path: 'login',
+    component: Login,
+    canActivate: [soloVisitantes('admin')]
   },
   
   // 1. PORTAL PÚBLICO: Envuelto en su propio Layout con Navbar superior
@@ -104,13 +110,21 @@ export const routes: Routes = [
     component: PortalMedicoLayout,
     children: [
       { path: 'inicio', component: PortalMedicoInicioComponent },
-      { path: 'login', component: PortalMedicoLoginComponent },
-      { path: 'registro', component: PortalMedicoRegistroComponent },
+      { path: 'login', component: PortalMedicoLoginComponent, canActivate: [soloVisitantes('profesional')] },
+      { path: 'registro', component: PortalMedicoRegistroComponent, canActivate: [soloVisitantes('profesional')] },
       { path: 'directorio', component: PortalMedicoDirectorioComponent },
       { path: 'perfil', component: PortalMedicoPerfilComponent },
       { path: 'documentos', component: PortalMedicoDocumentosComponent },
       { path: 'especialidades', component: PortalMedicoEspecialidadesComponent },
       { path: 'acreditacion', component: PortalMedicoAcreditacionComponent },
+
+      // LADO PACIENTE: registro, sesión propia y videos de síntomas.
+      // Usa su propia identidad JWT (claim 'id_cliente'), separada de la del
+      // profesional y de la del administrador de FonoApp.
+      { path: 'paciente/registro', component: PmClienteRegistroComponent },
+      { path: 'paciente/login', component: PmClienteLoginComponent, canActivate: [soloVisitantes('paciente')] },
+      { path: 'paciente/video', component: PmClienteVideoComponent },
+
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     ]
   },
