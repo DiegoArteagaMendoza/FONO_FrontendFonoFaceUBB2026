@@ -1,0 +1,96 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; {{ t().globales.boton_volver }}
+      </button>
+      <h2>{{ t().creacion_info_general.titulo }}</h2>
+      <p>{{ t().creacion_info_general.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        
+        <!-- CAMBIO A SELECT -->
+        <div class="form-group flex-1">
+          <label for="seccion">{{ t().creacion_info_general.label_seccion }}</label>
+          <select 
+            id="seccion" 
+            formControlName="seccion" 
+            [class.is-invalid]="crearForm.get('seccion')?.invalid && crearForm.get('seccion')?.touched"
+          >
+            <option value="" disabled selected>Seleccione una sección...</option>
+            <option *ngFor="let sec of seccionesDisponibles" [value]="sec.valor">{{ sec.etiqueta }}</option>
+          </select>
+          <small class="error-text" *ngIf="crearForm.get('seccion')?.hasError('required') && crearForm.get('seccion')?.touched">
+            {{ t().creacion_info_general.alerta_seccion }}
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="clave">{{ t().creacion_info_general.label_clave }}</label>
+          <input 
+            id="clave" 
+            type="text" 
+            formControlName="clave" 
+            [placeholder]="t().creacion_info_general.placeholder_clave"
+            [class.is-invalid]="crearForm.get('clave')?.invalid && crearForm.get('clave')?.touched"
+          >
+          <small class="error-text" *ngIf="crearForm.get('clave')?.invalid && crearForm.get('clave')?.touched">
+            {{ t().creacion_info_general.alerta_clave }}
+          </small>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">{{ t().creacion_info_general.label_titulo_texto }}</label>
+          <input 
+            id="titulo" 
+            type="text" 
+            formControlName="titulo" 
+            [placeholder]="t().creacion_info_general.placeholder_titulo_texto"
+          >
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="enlace">{{ t().creacion_info_general.label_enlace }}</label>
+          <input 
+            id="enlace" 
+            type="text" 
+            formControlName="enlace" 
+            [placeholder]="t().creacion_info_general.placeholder_enlace"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">{{ t().creacion_info_general.label_descripcion }}</label>
+        <textarea 
+          id="descripcion" 
+          formControlName="descripcion" 
+          rows="5"
+          [placeholder]="t().creacion_info_general.placeholder_descripcion"
+        ></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">
+          {{ t().globales.boton_cancelar }}
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_info_general.boton_guardando : t().creacion_info_general.boton_guardar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

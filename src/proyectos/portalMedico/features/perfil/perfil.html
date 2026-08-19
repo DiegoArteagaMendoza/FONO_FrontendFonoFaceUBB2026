@@ -1,0 +1,108 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().pm_perfil.titulo }}</h2>
+      <p>{{ t().pm_perfil.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().pm_perfil.cargando }}</p>
+  </div>
+
+  <div *ngIf="!cargando && perfil" class="flex flex-col gap-6" style="max-width: 800px;">
+
+    <!-- DATOS DE CONTACTO -->
+    <div class="form-card">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_perfil.seccion_datos }}</h3>
+
+      <div *ngIf="mensajeDatos" class="success-alert">
+        {{ mensajeDatos }}
+      </div>
+      <div *ngIf="errorDatos" class="error-alert">{{ errorDatos }}</div>
+
+      <form [formGroup]="formularioDatos" (ngSubmit)="guardarDatos()" class="custom-form">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="nombres_profesional">{{ t().pm_perfil.label_nombres }}</label>
+            <input id="nombres_profesional" type="text" formControlName="nombres_profesional">
+          </div>
+          <div class="form-group flex-1">
+            <label for="apellidos_profesional">{{ t().pm_perfil.label_apellidos }}</label>
+            <input id="apellidos_profesional" type="text" formControlName="apellidos_profesional">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>{{ t().pm_perfil.label_rut }}</label>
+          <input type="text" [value]="perfil.rut_profesional" disabled>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="email_profesional">{{ t().pm_perfil.label_email }}</label>
+            <input id="email_profesional" type="email" formControlName="email_profesional">
+          </div>
+          <div class="form-group flex-1">
+            <label for="telefono_profesional">{{ t().pm_perfil.label_telefono }}</label>
+            <input id="telefono_profesional" type="text" formControlName="telefono_profesional">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="numero_registro_salud_profesional">{{ t().pm_perfil.label_numero_registro }}</label>
+          <input id="numero_registro_salud_profesional" type="text" formControlName="numero_registro_salud_profesional"
+                 [placeholder]="t().pm_perfil.placeholder_numero_registro">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="guardandoDatos">
+            {{ guardandoDatos ? t().pm_perfil.btn_guardando : t().pm_perfil.btn_guardar }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CAMBIO DE CONTRASEÑA -->
+    <div class="form-card">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_perfil.seccion_password }}</h3>
+
+      <div *ngIf="mensajePassword" class="success-alert">
+        {{ mensajePassword }}
+      </div>
+      <div *ngIf="errorPassword" class="error-alert">{{ errorPassword }}</div>
+
+      <form [formGroup]="formularioPassword" (ngSubmit)="cambiarPassword()" class="custom-form">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="password_actual">{{ t().pm_perfil.label_password_actual }}</label>
+            <input id="password_actual" type="password" formControlName="password_actual">
+          </div>
+          <div class="form-group flex-1">
+            <label for="password_nueva">{{ t().pm_perfil.label_password_nueva }}</label>
+            <input id="password_nueva" type="password" formControlName="password_nueva"
+                   [placeholder]="t().pm_perfil.placeholder_password_nueva">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="guardandoPassword">
+            {{ guardandoPassword ? t().pm_perfil.btn_cambiando : t().pm_perfil.btn_cambiar_password }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ZONA DE PELIGRO -->
+    <div class="form-card" style="border-color: #dc3545;">
+      <h3 class="mt-0" style="color: #dc3545;">{{ t().pm_perfil.seccion_peligro }}</h3>
+      <p style="color: var(--fono-texto-suave);">{{ t().pm_perfil.desc_eliminar }}</p>
+      <div *ngIf="errorEliminar" class="error-alert">{{ errorEliminar }}</div>
+      <button type="button" class="btn-icon delete" [disabled]="eliminandoCuenta" (click)="eliminarCuenta()">
+        {{ t().pm_perfil.btn_eliminar_cuenta }}
+      </button>
+    </div>
+
+  </div>
+</div>

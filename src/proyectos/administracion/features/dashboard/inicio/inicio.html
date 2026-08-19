@@ -1,0 +1,94 @@
+<div class="dashboard-container">
+  <div class="welcome-banner">
+    <div class="banner-content">
+      <h1>{{ getTituloBienvenida() }}</h1>
+      <p>{{ t().inicio_admin.bienvenida_desc }} {{ fechaActual | date:'dd/MM/yyyy' }}.</p>
+    </div>
+    <div class="banner-decoration">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of estadisticas">
+      <div class="stat-icon" [ngClass]="stat.bgClass">
+        <svg class="w-8 h-8" [ngClass]="stat.colorClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="stat.icono"></path>
+        </svg>
+      </div>
+      <div class="stat-info">
+        <h3 *ngIf="!cargandoStats">{{ stat.valor }}</h3>
+        <h3 *ngIf="cargandoStats" style="color: #cbd5e1; font-size: 1.2rem;">...</h3>
+        <p>{{ stat.titulo }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-bottom">
+    <div class="quick-actions-section card-box">
+      <h2 class="section-title">{{ t().inicio_admin.accesos_titulo }}</h2>
+      <div class="actions-grid">
+        <a [routerLink]="acceso.ruta" class="action-btn" *ngFor="let acceso of accesosRapidos">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="acceso.icono"></path>
+          </svg>
+          <span>{{ acceso.titulo }}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="recent-activity-section card-box">
+      <h2 class="section-title">{{ t().inicio_admin.actividad_reciente }}</h2>
+
+      <div class="empty-activity" *ngIf="cargandoActividad">
+        <p>{{ t().inicio_admin.actividad_cargando }}</p>
+      </div>
+
+      <ng-container *ngIf="!cargandoActividad">
+        <!-- Profesionales pendientes de aprobación: se destacan primero porque requieren una acción -->
+        <div class="pending-professionals" *ngIf="profesionalesPendientes.length > 0">
+          <div class="pending-header">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path>
+            </svg>
+            <span>{{ avisoPendientes }}</span>
+          </div>
+
+          <a [routerLink]="pendiente.ruta" class="pending-item" *ngFor="let pendiente of pendientesVisibles">
+            <div class="pending-info">
+              <strong>{{ pendiente.nombreCompleto }}</strong>
+              <span class="pending-registro" *ngIf="pendiente.numeroRegistro">{{ pendiente.numeroRegistro }}</span>
+            </div>
+            <span class="pending-boton">{{ t().inicio_admin.pendientes_boton_revisar }}</span>
+          </a>
+
+          <a routerLink="/administracion/portal-medico/profesionales" class="pending-ver-todos">
+            {{ pendientesOcultos > 0 ? textoVerMasPendientes : t().inicio_admin.pendientes_ver_todos }}
+          </a>
+        </div>
+
+        <!-- Últimos elementos creados en el sitio -->
+        <a [routerLink]="item.ruta" class="activity-item" *ngFor="let item of actividadReciente">
+          <div class="activity-icon" [ngClass]="item.bgClass">
+            <svg [ngClass]="item.colorClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icono"></path>
+            </svg>
+          </div>
+          <div class="activity-info">
+            <p class="activity-titulo">{{ item.titulo }}</p>
+            <span class="activity-meta">{{ etiquetaTipo(item.tipo) }} · {{ formatearTiempoRelativo(item.fecha) }}</span>
+          </div>
+        </a>
+
+        <div class="empty-activity" *ngIf="sinActividad">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p>{{ t().inicio_admin.actividad_vacia }}</p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

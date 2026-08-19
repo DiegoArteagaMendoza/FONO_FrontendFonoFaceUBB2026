@@ -1,0 +1,42 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().pm_acreditacion.titulo }}</h2>
+      <p>{{ t().pm_acreditacion.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().pm_acreditacion.cargando }}</p>
+  </div>
+
+  <!-- Guía de avance: responde "¿qué me falta para aparecer en el directorio?" -->
+  <app-pm-pasos-acreditacion *ngIf="!cargando && perfil" [perfil]="perfil"></app-pm-pasos-acreditacion>
+
+  <div *ngIf="!cargando && sinSolicitud" class="empty-state">
+    {{ t().pm_acreditacion.sin_solicitud }}
+  </div>
+
+  <div *ngIf="!cargando && acreditacion" class="form-card" style="max-width: 600px;">
+    <div class="flex items-center justify-between mb-4">
+      <span class="badge" [ngClass]="{
+        'badge-pendiente': acreditacion.estado_verificacion_profesional === 'PENDIENTE',
+        'badge-revision': acreditacion.estado_verificacion_profesional === 'EN_REVISION',
+        'badge-aprobado': acreditacion.estado_verificacion_profesional === 'APROBADO',
+        'badge-rechazado': acreditacion.estado_verificacion_profesional === 'RECHAZADO'
+      }" style="font-size: 1rem; padding: 0.5rem 1rem;">
+        {{ t().pm_estados[acreditacion.estado_verificacion_profesional] }}
+      </span>
+    </div>
+
+    <p style="color: var(--fono-texto-cuerpo);">{{ descripcionEstado }}</p>
+
+    <div class="mt-4 text-sm" style="color: var(--fono-texto-suave);">
+      <p><strong>{{ t().pm_acreditacion.fecha_solicitud }}</strong> {{ acreditacion.fecha_solicitud_profesional | date:'dd/MM/yyyy' }}</p>
+      <p *ngIf="acreditacion.fecha_resolucion_profesional">
+        <strong>{{ t().pm_acreditacion.fecha_resolucion }}</strong> {{ acreditacion.fecha_resolucion_profesional | date:'dd/MM/yyyy' }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+/* --- Variables basadas en el diseño de FonoFace --- */
+$primary: var(--fono-primario);
+$primary-hover: var(--fono-primario-hover);
+$text-dark: var(--fono-texto-fuerte);
+$text-muted: var(--fono-texto-suave);
+$bg-color: var(--fono-fondo);
+$error-color: #e11d48;
+$error-bg: #ffe4e6;
+
+/* Contenedor principal que ocupa toda la pantalla */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: $bg-color;
+  padding: 1rem;
+}
+
+/* Tarjeta del formulario */
+.login-card {
+  background: var(--fono-superficie);
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Header principal */
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    color: $text-dark;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    color: $text-muted;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Alerta de Error del Servidor */
+.server-error {
+  background-color: $error-bg;
+  color: $error-color;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba($error-color, 0.2);
+}
+
+/* Estilos del formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: $text-dark;
+    }
+
+    input {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--fono-borde);
+      border-radius: 8px;
+      font-size: 1rem;
+      color: $text-dark;
+      transition: all 0.2s ease;
+      background-color: var(--fono-superficie-2);
+
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        background-color: var(--fono-superficie);
+        box-shadow: 0 0 0 3px rgba($primary, 0.1);
+      }
+
+      &.is-invalid {
+        border-color: $error-color;
+        background-color: $error-bg;
+        
+        &:focus {
+          box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+        }
+      }
+    }
+
+    .error-messages small {
+      color: $error-color;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: block;
+      margin-top: 0.2rem;
+    }
+  }
+
+  /* * CORRECCIÓN: Estilos específicos para los .login-header 
+   * que están DENTRO del formulario (textos del final)
+   */
+  .login-header {
+    margin-bottom: -0.5rem;
+    margin-top: 0.5rem;
+    
+    p {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+  }
+
+  /* Botones */
+  .btn-submit {
+    padding: 0.8rem;
+    background-color: $primary;
+    color: var(--fono-texto-inverso);
+    border: 2px solid $primary;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-hover;
+      border-color: $primary-hover;
+    }
+
+    &:disabled {
+      background-color: #93c5fd;
+      border-color: #93c5fd;
+      cursor: not-allowed;
+    }
+
+    /* * CORRECCIÓN: Le damos un estilo "Secundario" al último 
+     * botón (Portal Cliente) para que no choque con el principal 
+     */
+    &:last-of-type {
+      background-color: transparent;
+      color: $primary;
+      margin-top: 0; 
+      
+      &:hover:not(:disabled) {
+        background-color: #f0f9ff;
+      }
+    }
+  }
+}

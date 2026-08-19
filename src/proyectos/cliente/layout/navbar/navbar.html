@@ -1,0 +1,52 @@
+<nav class="navbar">
+  <div class="navbar-container">
+
+    <a routerLink="/portal/inicio" class="navbar-brand" (click)="closeMenu()">
+      {{ t().portal_navbar.marca }}
+    </a>
+
+    <button class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
+      <svg *ngIf="!isMenuOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+      <svg *ngIf="isMenuOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div class="navbar-links" [class.active]="isMenuOpen">
+      <!-- Asegúrate de usar [routerLinkActiveOptions]="{exact: true}" para el inicio -->
+      <a routerLink="/portal/inicio" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">{{ t().portal_navbar.inicio }}</a>
+      <a routerLink="/portal/lavoz" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.la_voz }}</a>
+
+      <!-- INICIO DEL MENÚ DESPLEGABLE (DROPDOWN) -->
+      <div class="dropdown">
+        <span class="dropdown-trigger">
+          {{ t().portal_navbar.menu_informacion }}
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </span>
+        <div class="dropdown-menu">
+          <a routerLink="/portal/farmacos" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.farmacos }}</a>
+          <a routerLink="/portal/prevencion" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.prevencion }}</a>
+          <a routerLink="/portal/promocion" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.promocion }}</a>
+        </div>
+      </div>
+      <!-- FIN DEL MENÚ DESPLEGABLE -->
+
+      <a routerLink="/portal/cuidados" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.cuidados }}</a>
+      <a routerLink="/portal/noticias" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.noticias }}</a>
+      <a routerLink="/portalmedico/inicio" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.portal_medico }}</a>
+
+      <div class="admin-access">
+        <!-- Alternar tema claro / oscuro -->
+        <app-boton-tema class="boton-tema-navbar"></app-boton-tema>
+        <a routerLink="/login" class="btn-admin" (click)="closeMenu()">{{ t().portal_navbar.acceso_admin }}</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<div class="navbar-spacer"></div>

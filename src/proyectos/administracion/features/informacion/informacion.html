@@ -1,0 +1,113 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().gestion_informacion.titulo }}</h2>
+      <p>{{ t().gestion_informacion.subtitulo }}</p>
+    </div>
+    <button class="btn-primary" (click)="irACrear()">
+      {{ t().gestion_informacion.nueva_informacion }}
+    </button>
+  </div>
+
+  <div class="filters-section">
+    <div class="filter-group">
+      <label for="filtroCategoria">{{ t().tablas.filtrar_tabla }}</label>
+      <select id="filtroCategoria" (change)="filtrarPorCategoria($event)">
+        <option value="">{{ t().gestion_informacion.categorias_todas }}</option>
+        <option value="PO">{{ t().gestion_informacion.categorias_promocion }}</option>
+        <option value="PE">{{ t().gestion_informacion.categorias_prevencion }}</option>
+        <option value="FA">{{ t().gestion_informacion.categorias_farmacos }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().tablas.imagen_tabla }}</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>{{ t().tablas.categoria_tabla }}</th>
+          <th>{{ t().tablas.ultima_actualizacion }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="listaInformacion.length === 0">
+          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+
+        <tr *ngFor="let item of listaInformacion">
+          <td class="td-image">
+            <img 
+              *ngIf="item.imagenes && item.imagenes.length > 0" 
+              [src]="obtenerUrlImagen(item.imagenes[0].imagen)" 
+              alt="Miniatura"
+              class="thumbnail"
+            >
+            <div *ngIf="!item.imagenes || item.imagenes.length === 0" class="no-image-placeholder">
+              {{ t().tablas.sin_img }}
+            </div>
+          </td>
+          <td class="td-title">{{ item.titulo }}</td>
+          <td>
+            <span class="badge" [ngClass]="item.categoria">
+              {{ item.categoria_display }}
+            </span>
+          </td>
+          <td>{{ item.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="td-actions">
+            <button class="btn-icon view" (click)="verDetalle(item)" [title]="t().tablas.boton_ver">{{ t().tablas.boton_ver }}</button>
+            <button class="btn-icon edit" (click)="editarInformacion(item.id_informacion)" [title]="t().tablas.boton_editar">{{ t().tablas.boton_editar }}</button>
+            <button class="btn-icon delete" (click)="eliminarInformacion(item.id_informacion)" [title]="t().tablas.boton_eliminar">{{ t().tablas.boton_eliminar }}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal de Detalle -->
+<div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>{{ itemSeleccionado.titulo }}</h3>
+      <button class="btn-close" (click)="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="meta-info">
+        <span class="badge" [ngClass]="itemSeleccionado.categoria">
+          {{ itemSeleccionado.categoria_display }}
+        </span>
+        <span class="date">
+          <strong>{{ t().globales.ultima_actualizacion_label }}</strong> {{ itemSeleccionado.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+      </div>
+
+      <div class="content-text">
+        <p>{{ itemSeleccionado.contenido }}</p>
+      </div>
+
+      <div class="image-gallery" *ngIf="itemSeleccionado.imagenes && itemSeleccionado.imagenes.length > 0">
+        <h4>{{ t().globales.imagenes_adjuntas }} ({{ itemSeleccionado.imagenes.length }})</h4>
+        <div class="gallery-grid">
+          <div class="img-wrapper" *ngFor="let img of itemSeleccionado.imagenes">
+            <img [src]="obtenerUrlImagen(img.imagen)" alt="Imagen de información">
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="!itemSeleccionado.imagenes || itemSeleccionado.imagenes.length === 0" class="no-images">
+        <p>{{ t().globales.sin_imagen }}</p>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,110 @@
+// .admin-container {
+//   padding: 2rem;
+//   max-width: 1200px;
+//   margin: 0 auto;
+// }
+
+// .page-header {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   margin-bottom: 2rem;
+
+//   .header-titles {
+//     h1 { margin: 0 0 0.5rem 0; font-size: 1.8rem; color: var(--fono-texto); }
+//     p { margin: 0; color: var(--fono-texto-suave); }
+//   }
+
+//   .btn-primary {
+//     background-color: #0284c7;
+//     color: var(--fono-texto-inverso);
+//     border: none;
+//     padding: 0.75rem 1.5rem;
+//     border-radius: 8px;
+//     font-weight: 600;
+//     cursor: pointer;
+//     transition: background-color 0.2s;
+//     &:hover { background-color: #0369a1; }
+//   }
+// }
+
+// .card-table {
+//   background: var(--fono-superficie);
+//   border-radius: 12px;
+//   box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+//   border: 1px solid var(--fono-borde-suave);
+//   overflow: hidden;
+// }
+
+// .data-table {
+//   width: 100%;
+//   border-collapse: collapse;
+  
+//   th {
+//     background-color: var(--fono-superficie-2);
+//     color: #475569;
+//     font-weight: 600;
+//     text-align: left;
+//     padding: 1rem 1.5rem;
+//     border-bottom: 2px solid var(--fono-borde);
+//     font-size: 0.9rem;
+//     text-transform: uppercase;
+//     letter-spacing: 0.5px;
+    
+//     &.text-center { text-align: center; }
+//   }
+
+//   td {
+//     padding: 1rem 1.5rem;
+//     border-bottom: 1px solid var(--fono-borde-suave);
+//     color: var(--fono-texto-cuerpo);
+//     vertical-align: middle;
+//   }
+
+//   tr:last-child td { border-bottom: none; }
+//   tr:hover { background-color: var(--fono-superficie-2); }
+// }
+
+// /* Celdas específicas */
+// .td-image img {
+//   width: 80px;
+//   height: 50px;
+//   object-fit: cover;
+//   border-radius: 6px;
+//   background-color: var(--fono-superficie-3);
+// }
+
+// .td-title { color: var(--fono-texto-fuerte); }
+// .td-desc { color: var(--fono-texto-suave); font-size: 0.9rem; }
+
+// /* Botones de acción */
+// .td-actions {
+//   display: flex;
+//   justify-content: center;
+//   gap: 0.5rem;
+// }
+
+// .btn-icon {
+//   background: none;
+//   border: none;
+//   padding: 0.5rem;
+//   border-radius: 6px;
+//   cursor: pointer;
+//   transition: all 0.2s;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   &.edit { color: var(--fono-primario); &:hover { background-color: var(--fono-primario-claro); } }
+//   &.delete { color: #e11d48; &:hover { background-color: #ffe4e6; } }
+// }
+
+// /* Estados */
+// .loading-state, .empty-state { text-align: center; padding: 4rem 2rem; color: var(--fono-texto-suave); }
+// .spinner {
+//   width: 30px; height: 30px;
+//   border: 3px solid var(--fono-borde-suave); border-top-color: var(--fono-primario);
+//   border-radius: 50%; animation: spin 1s linear infinite;
+//   margin: 0 auto 1rem;
+// }
+// @keyframes spin { to { transform: rotate(360deg); } }

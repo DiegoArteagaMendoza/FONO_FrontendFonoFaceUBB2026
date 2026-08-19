@@ -1,0 +1,86 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().pm_documentos.titulo }}</h2>
+      <p>{{ t().pm_documentos.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeExito" class="success-alert">
+    {{ mensajeExito }}
+  </div>
+
+  <div class="form-card mb-6" style="max-width: none;">
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="tipo_documeto_profesional">{{ t().pm_documentos.label_tipo }}</label>
+          <select id="tipo_documeto_profesional" formControlName="tipo_documeto_profesional">
+            <option value="" disabled selected>{{ t().pm_documentos.placeholder_tipo }}</option>
+            <option *ngFor="let tipo of tiposDocumento" [value]="tipo">
+              {{ t().pm_tipos_documento[tipo] }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="archivo">{{ t().pm_documentos.label_archivo }}</label>
+          <input id="archivo" type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileChange($event)">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="subiendo">
+          {{ subiendo ? t().pm_documentos.btn_subiendo : t().pm_documentos.btn_subir }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().pm_documentos.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().pm_documentos.label_tipo }}</th>
+          <th>{{ t().tablas.ultima_actualizacion }}</th>
+          <th>{{ t().tablas.estado_usuario }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="documentos.length === 0">
+          <td colspan="4" class="empty-state">{{ t().pm_documentos.vacio }}</td>
+        </tr>
+        <tr *ngFor="let documento of documentos">
+          <td class="td-title">
+            <a [href]="documento.url_documento_profesional" target="_blank" rel="noopener">
+              {{ t().pm_tipos_documento[documento.tipo_documeto_profesional] }}
+            </a>
+          </td>
+          <td>{{ documento.fecha_subida_documento_profesional | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <span class="badge" [ngStyle]="{
+              'background-color': documento.documento_profesional_valido ? '#dcfce7' : '#fff3cd',
+              'color': documento.documento_profesional_valido ? '#166534' : '#856404'
+            }">
+              {{ documento.documento_profesional_valido ? t().pm_documentos.estado_validado : t().pm_documentos.estado_pendiente }}
+            </span>
+          </td>
+          <td class="td-actions">
+            <button class="btn-icon delete" *ngIf="!documento.documento_profesional_valido"
+                    (click)="eliminarDocumento(documento.id_documento)">
+              {{ t().pm_documentos.btn_eliminar }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

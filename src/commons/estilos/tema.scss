@@ -1,0 +1,137 @@
+/* ==========================================================================
+   TEMA CLARO / OSCURO
+   --------------------------------------------------------------------------
+   Todos los colores estructurales del proyecto (fondos, textos, bordes) se
+   definen aquí como variables CSS. Los componentes las consumen con var(),
+   así que al cambiar el atributo data-theme del <html> toda la aplicación
+   cambia de tema sin duplicar estilos.
+
+   El servicio TemaService (core/services/tema/tema.ts) es el encargado de
+   escribir data-theme="claro" | "oscuro" en el <html>.
+   ========================================================================== */
+
+:root,
+[data-theme="claro"] {
+  /* Superficies */
+  --fono-fondo: #f4f6f8;          /* Fondo general de las páginas */
+  --fono-fondo-portal: #f8fafc;   /* Fondo del portal cliente */
+  --fono-superficie: #ffffff;     /* Tarjetas, modales, navbar, formularios */
+  --fono-superficie-2: #f8f9fa;   /* Cabeceras de tabla, hovers, zonas sutiles */
+  --fono-superficie-3: #f1f5f9;   /* Placeholders de imagen, rellenos suaves */
+  --fono-campo: #ffffff;          /* Fondo de inputs, selects y textareas */
+
+  /* Textos */
+  --fono-texto: #1e293b;          /* Titulares y texto principal */
+  --fono-texto-cuerpo: #334155;   /* Texto de párrafos y celdas */
+  --fono-texto-suave: #64748b;    /* Texto secundario, descripciones */
+  --fono-texto-tenue: #94a3b8;    /* Texto deshabilitado o de apoyo */
+  --fono-texto-fuerte: #0f172a;   /* Énfasis máximo */
+  --fono-texto-inverso: #ffffff;  /* Texto sobre botones de color (igual en ambos temas) */
+
+  /* Bordes y sombras */
+  --fono-borde: #e2e8f0;
+  --fono-borde-suave: #f1f5f9;
+  --fono-sombra: rgba(0, 0, 0, 0.05);
+  --fono-sombra-fuerte: rgba(0, 0, 0, 0.1);
+
+  /* Marca */
+  --fono-primario: #0284c7;
+  --fono-primario-hover: #0369a1;
+  --fono-primario-claro: #e0f2fe;  /* Fondos suaves con tinte de marca */
+  --fono-acento: #0ea5e9;
+
+  /* Estados */
+  --fono-error: #dc3545;
+  --fono-error-fondo: #f8d7da;
+  --fono-error-texto: #721c24;
+  --fono-error-borde: #f5c6cb;
+
+  --fono-exito-fondo: #dcfce7;
+  --fono-exito-texto: #166534;
+  --fono-exito-borde: #86efac;
+
+  --fono-info-fondo: #e0f2fe;
+  --fono-info-texto: #075985;
+  --fono-info-borde: #7dd3fc;
+
+  /* Degradados destacados (hero, newsletter) */
+  --fono-degradado-inicio: #0284c7;
+  --fono-degradado-fin: #0c4a6e;
+
+  /* Footer del portal cliente (banda de marca) */
+  --fono-footer-fondo: #0c4a6e;
+  --fono-footer-borde: #075985;
+}
+
+[data-theme="oscuro"] {
+  /* Superficies */
+  --fono-fondo: #0f172a;
+  --fono-fondo-portal: #0f172a;
+  --fono-superficie: #1e293b;
+  --fono-superficie-2: #273449;
+  --fono-superficie-3: #334155;
+  /* Los campos van más oscuros que la tarjeta para diferenciarse del fondo */
+  --fono-campo: #0f172a;
+
+  /* Textos */
+  --fono-texto: #f1f5f9;
+  --fono-texto-cuerpo: #e2e8f0;
+  --fono-texto-suave: #94a3b8;
+  --fono-texto-tenue: #64748b;
+  --fono-texto-fuerte: #f8fafc;
+  --fono-texto-inverso: #ffffff;
+
+  /* Bordes y sombras */
+  --fono-borde: #334155;
+  --fono-borde-suave: #273449;
+  --fono-sombra: rgba(0, 0, 0, 0.4);
+  --fono-sombra-fuerte: rgba(0, 0, 0, 0.55);
+
+  /* Marca: se aclara para mantener contraste sobre fondos oscuros */
+  --fono-primario: #38bdf8;
+  --fono-primario-hover: #7dd3fc;
+  --fono-primario-claro: #1e3a5f;
+  --fono-acento: #38bdf8;
+
+  /* Estados */
+  --fono-error: #f87171;
+  --fono-error-fondo: #45191d;
+  --fono-error-texto: #fecaca;
+  --fono-error-borde: #7f1d1d;
+
+  --fono-exito-fondo: #14311f;
+  --fono-exito-texto: #86efac;
+  --fono-exito-borde: #166534;
+
+  --fono-info-fondo: #12303f;
+  --fono-info-texto: #7dd3fc;
+  --fono-info-borde: #075985;
+
+  /* Degradados destacados */
+  --fono-degradado-inicio: #075985;
+  --fono-degradado-fin: #0f172a;
+
+  /* Footer: se oscurece para integrarse con el fondo del portal */
+  --fono-footer-fondo: #0b2033;
+  --fono-footer-borde: #1e3a5f;
+}
+
+/* Transición suave al alternar de tema */
+body,
+.page-container,
+.table-card,
+.form-card,
+.modal-content,
+.article-card,
+.navbar,
+.cliente-footer {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Los badges de categoría son pastel (fondo claro + texto oscuro) y se leen
+   solos en cualquier tema. En oscuro se atenúan levemente para que no
+   deslumbren en tablas largas, sin perder contraste interno. */
+[data-theme="oscuro"] .badge,
+[data-theme="oscuro"] .category-badge {
+  filter: brightness(0.88) saturate(1.05);
+}

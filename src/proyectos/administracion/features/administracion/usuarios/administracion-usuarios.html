@@ -1,0 +1,141 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().gestion_usuarios.titulo }}</h2>
+      <p>{{ t().gestion_usuarios.subtitulo }}</p>
+    </div>
+    <button class="btn-primary" (click)="irAcrear()">
+      + {{ t().gestion_usuarios.nuevo_usuario }}
+    </button>
+  </div>
+
+  <!-- SECCIÓN DE FILTROS -->
+  <div class="filters-section" *ngIf="!cargando">
+    <div class="filter-group">
+      <label for="filtroEstado">{{ t().gestion_usuarios.filtrar_estado }}</label>
+      <select id="filtroEstado" (change)="alCambiarFiltro($event)" [value]="filtroEstado">
+        <option value="todos">{{ t().gestion_usuarios.estado_todos }}</option>
+        <option value="activos">{{ t().gestion_usuarios.estado_activos }}</option>
+        <option value="inactivos">{{ t().gestion_usuarios.estado_inactivos }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().tablas.nombre_tabla }}</th>
+          <th>{{ t().tablas.rut_tabla }}</th>
+          <th>{{ t().tablas.email_tabla }}</th>
+          <th>Rol</th>
+          <th>{{ t().tablas.estado_usuario || 'Estado' }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Verificamos la lista filtrada, no la original -->
+        <tr *ngIf="usuariosFiltrados.length === 0">
+          <td colspan="6" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+
+        <!-- Iteramos sobre usuariosFiltrados -->
+        <tr *ngFor="let item of usuariosFiltrados">
+          <td class="td-title">{{ item.nombre }}</td>
+          <td>{{ item.rut }}</td>
+          <td>{{ item.email }}</td>
+          <td>
+            <span class="badge" [ngStyle]="{
+              'background-color': item.is_superuser ? '#e2d9f3' : (item.is_staff ? '#cff4fc' : '#e2e3e5'),
+              'color': item.is_superuser ? '#432874' : (item.is_staff ? '#055160' : '#383d41')
+            }">
+              {{ etiquetaRol(item) }}
+            </span>
+          </td>
+
+          <td>
+            <span class="badge" 
+                  [ngStyle]="{
+                    'background-color': item.estado ? '#dcfce7' : '#fee2e2', 
+                    'color': item.estado ? '#166534' : '#991b1b', 
+                    'padding': '0.3rem 0.6rem', 
+                    'border-radius': '4px', 
+                    'font-size': '0.85rem', 
+                    'font-weight': '500'
+                  }">
+              {{ item.estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          
+          <td class="td-actions">
+            <!-- Asumiendo que agregaste 'boton_ver', 'boton_editar' y 'boton_eliminar' en tablas -->
+            <button class="btn-icon view" (click)="verDetalle(item)" [title]="t().tablas.boton_ver || 'Ver'">Ver</button>
+            <button class="btn-icon edit" (click)="editarUsuario(item.id_usuario)" [title]="t().tablas.boton_editar || 'Editar'">Editar</button>
+            <button class="btn-icon delete" (click)="eliminarUsuario(item.rut)" [title]="t().tablas.boton_eliminar || 'Eliminar'">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL DE DETALLE DEL USUARIO -->
+<div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
+  <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>{{ t().modal_usuario.titulo }}</h3>
+      <button class="btn-close" (click)="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="content-text">
+        <p>
+          <strong>{{ t().modal_usuario.nombre_completo }}</strong><br>
+          {{ itemSeleccionado.nombre }}
+        </p>
+        <p>
+          <strong>{{ t().modal_usuario.rut }}</strong><br>
+          {{ itemSeleccionado.rut }}
+        </p>
+        <p>
+          <strong>{{ t().modal_usuario.correo }}</strong><br>
+          {{ itemSeleccionado.email }}
+        </p>
+        <p>
+          <strong>{{ t().tablas.estado_usuario || 'Estado' }}:</strong><br>
+          <span class="badge" 
+                style="display: inline-block; margin-top: 0.3rem;"
+                [ngStyle]="{
+                  'background-color': itemSeleccionado.estado ? '#dcfce7' : '#fee2e2', 
+                  'color': itemSeleccionado.estado ? '#166534' : '#991b1b', 
+                  'padding': '0.3rem 0.6rem', 
+                  'border-radius': '4px', 
+                  'font-size': '0.85rem', 
+                  'font-weight': '500'
+                }">
+            {{ itemSeleccionado.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </p>
+        <p>
+          <strong>{{ t().modal_usuario.rol }}</strong><br>
+          <span class="badge" style="display: inline-block; margin-top: 0.3rem;" [ngStyle]="{
+            'background-color': itemSeleccionado.is_superuser ? '#e2d9f3' : (itemSeleccionado.is_staff ? '#cff4fc' : '#e2e3e5'),
+            'color': itemSeleccionado.is_superuser ? '#432874' : (itemSeleccionado.is_staff ? '#055160' : '#383d41')
+          }">
+            {{ etiquetaRol(itemSeleccionado) }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,188 @@
+<div class="page-container">
+
+  <div class="mx-auto" style="max-width: 760px;">
+
+    <!-- ============ ENCABEZADO ============ -->
+    <div class="flex flex-wrap items-start justify-between gap-3 mb-5">
+      <div>
+        <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_mis_citas.titulo }}</h2>
+        <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pmc_mis_citas.subtitulo }}</p>
+      </div>
+      <button type="button" class="btn-primary" (click)="irAReservar()">
+        {{ t().pmc_mis_citas.btn_reservar }}
+      </button>
+    </div>
+
+    <!-- ============ FILTRO ============ -->
+    <div class="tabs-cuenta mb-5" role="tablist">
+      <button type="button" role="tab" [attr.aria-selected]="soloProximas"
+              [class.activa]="soloProximas" (click)="cambiarFiltro(true)">
+        {{ t().pmc_mis_citas.filtro_proximas }}
+      </button>
+      <button type="button" role="tab" [attr.aria-selected]="!soloProximas"
+              [class.activa]="!soloProximas" (click)="cambiarFiltro(false)">
+        {{ t().pmc_mis_citas.filtro_historial }}
+      </button>
+    </div>
+
+    <div *ngIf="mensajeExito" class="success-alert">{{ mensajeExito }}</div>
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <div *ngIf="cargando" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().pmc_mis_citas.cargando }}</p>
+    </div>
+
+    <!-- ============ SIN CITAS ============ -->
+    <div *ngIf="!cargando && citas.length === 0" class="empty-state">
+      <ng-container *ngIf="soloProximas">
+        <strong>{{ t().pmc_mis_citas.vacio_proximas_titulo }}</strong>
+        <p class="mt-1 mb-0">{{ t().pmc_mis_citas.vacio_proximas_desc }}</p>
+      </ng-container>
+      <ng-container *ngIf="!soloProximas">{{ t().pmc_mis_citas.vacio_historial }}</ng-container>
+    </div>
+
+    <!-- ============ LISTADO ============ -->
+    <div *ngFor="let cita of citas" class="form-card mb-3" style="max-width: none;">
+
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div style="min-width: 0; flex: 1;">
+          <p class="m-0 font-semibold" style="color: var(--fono-texto);">
+            {{ cita.fecha_hora | date:'EEEE d \'de\' MMMM \'de\' y, HH:mm' }}
+          </p>
+          <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_mis_citas.con_profesional }} {{ nombreProfesionalDe(cita) }}
+          </p>
+          <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_mis_citas.duracion }} {{ cita.duracion_minutos }} {{ t().pmc_mis_citas.minutos }}
+            · {{ textoTermina(cita) }}
+          </p>
+        </div>
+
+        <span class="badge" [ngClass]="pmCitaService.claseEstado(cita)">{{ etiquetaEstado(cita) }}</span>
+      </div>
+
+      <!-- Motivo de consulta -->
+      <p class="text-sm mt-3 mb-0" style="color: var(--fono-texto-cuerpo);">
+        <strong>{{ t().pmc_mis_citas.motivo }}</strong>
+        {{ cita.motivo_consulta || t().pmc_mis_citas.sin_motivo }}
+      </p>
+
+      <!-- Historial de reprogramaciones -->
+      <p class="text-sm mt-2 mb-0" style="color: var(--fono-texto-suave);"
+         *ngIf="cita.veces_reprogramada > 0">
+        {{ textoReprogramada(cita) }}<ng-container *ngIf="cita.fecha_hora_original">
+          · {{ textosService.reemplazarVariables(t().pmc_mis_citas.fecha_original, {
+                 fecha: (cita.fecha_hora_original | date:'d \'de\' MMMM, HH:mm') || ''
+               }) }}
+        </ng-container>
+      </p>
+
+      <!-- Motivo de la cancelación -->
+      <p class="text-sm mt-2 mb-0" style="color: var(--fono-texto-suave);"
+         *ngIf="cita.motivo_cancelacion">
+        <strong>{{ t().pmc_mis_citas.motivo_cancelacion }}</strong> {{ cita.motivo_cancelacion }}
+      </p>
+
+      <!-- Avisos de por qué no se puede actuar -->
+      <div class="info-alert mt-3" *ngIf="cambiosCerrados(cita)">{{ textoCambiosCerrados }}</div>
+      <div class="info-alert mt-3" *ngIf="sinReprogramaciones(cita)">{{ textoSinReprogramaciones }}</div>
+      <div class="info-alert mt-3" *ngIf="cita.esta_activa && cita.ya_paso">{{ t().pmc_mis_citas.ya_paso }}</div>
+
+      <!-- ============ ACCIONES ============ -->
+      <div class="form-actions mt-3" *ngIf="cita.esta_activa && accion === null">
+        <button type="button" class="btn-primary" *ngIf="pmCitaService.admiteVideo(cita)"
+                (click)="adjuntarVideo(cita)">
+          {{ t().pmc_mis_citas.btn_adjuntar_video }}
+        </button>
+        <button type="button" class="btn-secondary" *ngIf="pmCitaService.permiteReprogramar(cita)"
+                (click)="abrirPosponer(cita)">
+          {{ t().pmc_mis_citas.btn_posponer }}
+        </button>
+        <button type="button" class="btn-icon delete" *ngIf="pmCitaService.permiteCambios(cita)"
+                (click)="abrirCancelar(cita)">
+          {{ t().pmc_mis_citas.btn_cancelar }}
+        </button>
+      </div>
+
+      <!-- ============ CAMBIAR FECHA ============ -->
+      <div class="mt-4" *ngIf="esAccionAbierta(cita, 'posponer')"
+           style="border-top: 1px solid var(--fono-borde); padding-top: 1rem;">
+        <h4 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">
+          {{ t().pmc_mis_citas.posponer_titulo }}
+        </h4>
+        <p class="text-sm mt-0 mb-1" style="color: var(--fono-texto-suave);">
+          {{ textosService.reemplazarVariables(t().pmc_mis_citas.posponer_actual, {
+               fecha: (cita.fecha_hora | date:'EEEE d \'de\' MMMM, HH:mm') || ''
+             }) }}
+        </p>
+        <p class="text-sm mt-0 mb-3" style="color: var(--fono-texto-suave);">{{ textoRestantes(cita) }}</p>
+
+        <div *ngIf="errorAccion" class="error-alert">{{ errorAccion }}</div>
+
+        <form [formGroup]="formPosponer" (ngSubmit)="confirmarPosponer()" class="custom-form">
+          <div class="form-group">
+            <label [attr.for]="'nueva-fecha-' + cita.id_cita">{{ t().pmc_mis_citas.label_nueva_fecha }}</label>
+            <input [id]="'nueva-fecha-' + cita.id_cita" type="datetime-local"
+                   formControlName="fecha_hora" [min]="minimoFechaHora">
+            <small class="error-text" *ngIf="faltaAnticipacionNueva">
+              {{ textosService.reemplazarVariables(t().pmc_reservar.alerta_anticipacion, {
+                   horas: horasAnticipacion + '' }) }}
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label [attr.for]="'motivo-cambio-' + cita.id_cita">{{ t().pmc_mis_citas.label_motivo_cambio }}</label>
+            <textarea [id]="'motivo-cambio-' + cita.id_cita" formControlName="motivo" rows="2"
+                      [placeholder]="t().pmc_mis_citas.placeholder_motivo_cambio"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"
+                    [disabled]="procesando || formPosponer.invalid || faltaAnticipacionNueva">
+              {{ t().pmc_mis_citas.btn_confirmar_posponer }}
+            </button>
+            <button type="button" class="btn-secondary" (click)="cerrarAccion()" [disabled]="procesando">
+              {{ t().pmc_mis_citas.btn_volver }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ============ CANCELAR ============ -->
+      <div class="mt-4" *ngIf="esAccionAbierta(cita, 'cancelar')"
+           style="border-top: 1px solid var(--fono-borde); padding-top: 1rem;">
+        <h4 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">
+          {{ t().pmc_mis_citas.cancelar_titulo }}
+        </h4>
+        <p class="text-sm mt-0 mb-3" style="color: var(--fono-texto-suave);">
+          {{ t().pmc_mis_citas.cancelar_desc }}
+        </p>
+
+        <div *ngIf="errorAccion" class="error-alert">{{ errorAccion }}</div>
+
+        <form [formGroup]="formCancelar" (ngSubmit)="confirmarCancelar()" class="custom-form">
+          <div class="form-group">
+            <label [attr.for]="'motivo-cancelar-' + cita.id_cita">
+              {{ t().pmc_mis_citas.label_motivo_cancelacion }}
+            </label>
+            <textarea [id]="'motivo-cancelar-' + cita.id_cita" formControlName="motivo" rows="2"
+                      [placeholder]="t().pmc_mis_citas.placeholder_motivo_cancelacion"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-icon delete" [disabled]="procesando">
+              {{ t().pmc_mis_citas.btn_confirmar_cancelar }}
+            </button>
+            <button type="button" class="btn-secondary" (click)="cerrarAccion()" [disabled]="procesando">
+              {{ t().pmc_mis_citas.btn_no_cancelar }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

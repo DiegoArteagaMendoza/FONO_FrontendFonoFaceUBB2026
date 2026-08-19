@@ -1,0 +1,624 @@
+.dashboard-container {
+  padding: 2rem;
+  background-color: var(--fono-fondo);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* --- Banner de Bienvenida --- */
+.welcome-banner {
+  background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%); /* Tonos azules que combinan con tu sidebar */
+  border-radius: 16px;
+  padding: 2.5rem;
+  color: var(--fono-texto-inverso);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.2);
+  overflow: hidden;
+  position: relative;
+
+  .banner-content {
+    z-index: 2;
+    
+    h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      margin: 0.75rem 0 0 0;
+      font-size: 1.05rem;
+      color: #e0f2fe;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+  }
+
+  .banner-decoration {
+    z-index: 1;
+    opacity: 0.15;
+    
+    svg {
+      width: 180px;
+      height: 180px;
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+/* --- Tarjetas de Estadísticas --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: var(--fono-superficie);
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  .stat-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .stat-info {
+    h3 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--fono-texto);
+      font-weight: 700;
+      transition: color 0.2s ease;
+    }
+    p {
+      margin: 0.25rem 0 0 0;
+      color: var(--fono-texto-suave);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Clases utilitarias inyectadas desde el TS para los colores de las tarjetas */
+.bg-blue-100 { background-color: #dbeafe; }
+.text-blue-600 { color: #2563eb; }
+.bg-rose-100 { background-color: #ffe4e6; }
+.text-rose-600 { color: #e11d48; }
+.bg-amber-100 { background-color: #fef3c7; }
+.text-amber-600 { color: #d97706; }
+
+/* --- Sección Inferior --- */
+.dashboard-bottom {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1 columna para botones, 2 para la tabla/actividad */
+  gap: 1.5rem;
+}
+
+.card-box {
+  background: var(--fono-superficie);
+  padding: 1.75rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  color: var(--fono-texto-cuerpo);
+  font-weight: 600;
+}
+
+/* --- Botones de Acción Rápida --- */
+.actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--fono-superficie-2);
+  border: 1px solid var(--fono-borde);
+  border-radius: 8px;
+  color: var(--fono-texto-cuerpo);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--fono-primario);
+  }
+
+  &:hover {
+    background-color: #f0f9ff;
+    border-color: #bae6fd;
+    color: var(--fono-primario);
+    transform: translateX(4px);
+  }
+}
+
+/* --- Estado vacío de la Actividad Reciente --- */
+.empty-activity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--fono-texto-tenue);
+  text-align: center;
+
+  svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    max-width: 300px;
+  }
+}
+
+/* --- Profesionales pendientes de aprobación --- */
+.pending-professionals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--fono-borde);
+}
+
+.pending-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #d97706;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+.pending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--fono-texto-cuerpo);
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #f59e0b;
+    transform: translateX(4px);
+  }
+
+  .pending-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+
+    strong {
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pending-registro {
+      font-size: 0.8rem;
+      color: var(--fono-texto-suave);
+    }
+  }
+
+  .pending-boton {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #d97706;
+  }
+}
+
+.pending-ver-todos {
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fono-primario);
+  text-decoration: none;
+  margin-top: 0.25rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* --- Elementos creados recientemente --- */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--fono-superficie-2);
+  }
+
+  & + .activity-item {
+    border-top: 1px solid var(--fono-borde);
+  }
+
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .activity-info {
+    min-width: 0;
+
+    .activity-titulo {
+      margin: 0;
+      font-weight: 600;
+      color: var(--fono-texto-cuerpo);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .activity-meta {
+      font-size: 0.8rem;
+      color: var(--fono-texto-suave);
+    }
+  }
+}
+
+/* ======== MEDIA QUERIES (Responsive) ======== */
+@media (max-width: 1024px) {
+  .dashboard-bottom {
+    grid-template-columns: 1fr; /* Pasa a ser de una sola columna */
+  }
+
+  .actions-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    .action-btn {
+      flex: 1;
+      min-width: 200px;
+      justify-content: center;
+      
+      &:hover {
+        transform: translateY(-2px); /* Cambia la animación lateral por una vertical */
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .welcome-banner {
+    padding: 1.5rem;
+    
+    .banner-content h1 {
+      font-size: 1.75rem;
+    }
+    
+    .banner-decoration {
+      display: none; /* Ocultamos el icono de fondo en móviles para ahorrar espacio */
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr; /* Una tarjeta por fila */
+  }
+
+  .actions-grid .action-btn {
+    min-width: 100%; /* Botones de ancho completo */
+  }
+}
+
+// .dashboard-container {
+//   padding: 2rem;
+//   background-color: var(--fono-fondo);
+//   min-height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 2rem;
+// }
+
+// /* --- Banner de Bienvenida --- */
+// .welcome-banner {
+//   background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%); /* Tonos azules que combinan con tu sidebar */
+//   border-radius: 16px;
+//   padding: 2.5rem;
+//   color: var(--fono-texto-inverso);
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   box-shadow: 0 10px 25px rgba(2, 132, 199, 0.2);
+//   overflow: hidden;
+//   position: relative;
+
+//   .banner-content {
+//     z-index: 2;
+    
+//     h1 {
+//       margin: 0;
+//       font-size: 2.2rem;
+//       font-weight: 700;
+//       letter-spacing: -0.5px;
+//     }
+
+//     p {
+//       margin: 0.75rem 0 0 0;
+//       font-size: 1.05rem;
+//       color: #e0f2fe;
+//       max-width: 600px;
+//       line-height: 1.5;
+//     }
+//   }
+
+//   .banner-decoration {
+//     z-index: 1;
+//     opacity: 0.15;
+    
+//     svg {
+//       width: 180px;
+//       height: 180px;
+//       position: absolute;
+//       right: 5%;
+//       top: 50%;
+//       transform: translateY(-50%);
+//     }
+//   }
+// }
+
+// /* --- Tarjetas de Estadísticas --- */
+// .stats-grid {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+//   gap: 1.5rem;
+// }
+
+// .stat-card {
+//   background: var(--fono-superficie);
+//   padding: 1.5rem;
+//   border-radius: 12px;
+//   display: flex;
+//   align-items: center;
+//   gap: 1.5rem;
+//   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+//   transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+//   &:hover {
+//     transform: translateY(-3px);
+//     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+//   }
+
+//   .stat-icon {
+//     width: 64px;
+//     height: 64px;
+//     border-radius: 16px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+    
+//     svg {
+//       width: 32px;
+//       height: 32px;
+//     }
+//   }
+
+//   .stat-info {
+//     h3 {
+//       margin: 0;
+//       font-size: 1.8rem;
+//       color: var(--fono-texto);
+//       font-weight: 700;
+//       transition: color 0.2s ease;
+//     }
+//     p {
+//       margin: 0.25rem 0 0 0;
+//       color: var(--fono-texto-suave);
+//       font-size: 0.95rem;
+//       font-weight: 500;
+//     }
+//   }
+// }
+
+// /* Clases utilitarias inyectadas desde el TS para los colores de las tarjetas */
+// .bg-blue-100 { background-color: #dbeafe; }
+// .text-blue-600 { color: #2563eb; }
+// .bg-rose-100 { background-color: #ffe4e6; }
+// .text-rose-600 { color: #e11d48; }
+// .bg-amber-100 { background-color: #fef3c7; }
+// .text-amber-600 { color: #d97706; }
+
+// /* --- Sección Inferior --- */
+// .dashboard-bottom {
+//   display: grid;
+//   grid-template-columns: 1fr 2fr; /* 1 columna para botones, 2 para la tabla/actividad */
+//   gap: 1.5rem;
+// }
+
+// .card-box {
+//   background: var(--fono-superficie);
+//   padding: 1.75rem;
+//   border-radius: 12px;
+//   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+// }
+
+// .section-title {
+//   margin: 0 0 1.5rem 0;
+//   font-size: 1.25rem;
+//   color: var(--fono-texto-cuerpo);
+//   font-weight: 600;
+// }
+
+// /* --- Botones de Acción Rápida --- */
+// .actions-grid {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1rem;
+// }
+
+// .action-btn {
+//   display: flex;
+//   align-items: center;
+//   gap: 1rem;
+//   padding: 1rem 1.25rem;
+//   background-color: var(--fono-superficie-2);
+//   border: 1px solid var(--fono-borde);
+//   border-radius: 8px;
+//   color: var(--fono-texto-cuerpo);
+//   text-decoration: none;
+//   font-weight: 600;
+//   transition: all 0.2s ease;
+
+//   svg {
+//     width: 20px;
+//     height: 20px;
+//     color: var(--fono-primario);
+//   }
+
+//   &:hover {
+//     background-color: #f0f9ff;
+//     border-color: #bae6fd;
+//     color: var(--fono-primario);
+//     transform: translateX(4px);
+//   }
+// }
+
+// /* --- Estado vacío de la Actividad Reciente --- */
+// .empty-activity {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   height: 200px;
+//   color: var(--fono-texto-tenue);
+//   text-align: center;
+
+//   svg {
+//     width: 48px;
+//     height: 48px;
+//     margin-bottom: 1rem;
+//     opacity: 0.5;
+//   }
+
+//   p {
+//     margin: 0;
+//     max-width: 300px;
+//   }
+// }
+
+// /* ======== MEDIA QUERIES (Responsive) ======== */
+// @media (max-width: 1024px) {
+//   .dashboard-bottom {
+//     grid-template-columns: 1fr; /* Pasa a ser de una sola columna */
+//   }
+
+//   .actions-grid {
+//     flex-direction: row;
+//     flex-wrap: wrap;
+    
+//     .action-btn {
+//       flex: 1;
+//       min-width: 200px;
+//       justify-content: center;
+      
+//       &:hover {
+//         transform: translateY(-2px); /* Cambia la animación lateral por una vertical */
+//       }
+//     }
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   .dashboard-container {
+//     padding: 1rem;
+//     gap: 1rem;
+//   }
+
+//   .welcome-banner {
+//     padding: 1.5rem;
+    
+//     .banner-content h1 {
+//       font-size: 1.75rem;
+//     }
+    
+//     .banner-decoration {
+//       display: none; /* Ocultamos el icono de fondo en móviles para ahorrar espacio */
+//     }
+//   }
+
+//   .stats-grid {
+//     grid-template-columns: 1fr; /* Una tarjeta por fila */
+//   }
+
+//   .actions-grid .action-btn {
+//     min-width: 100%; /* Botones de ancho completo */
+//   }
+// }

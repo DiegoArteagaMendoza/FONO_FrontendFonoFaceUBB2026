@@ -1,0 +1,83 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().edicion_voz.titulo }}</h2>
+      <p>{{ t().edicion_voz.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().edicion_voz.cargando_datos }}</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">{{ t().creacion_voz.label_titulo }}</label>
+          <input id="titulo" type="text" formControlName="titulo">
+          <small class="error-text" *ngIf="editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched">
+            {{ t().creacion_voz.alerta_titulo }}
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="categoria">{{ t().creacion_voz.label_categoria }}</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="DEFINICION">{{ t().voz_extras.definicion }}</option>
+            <option value="ANATOMIA">{{ t().voz_extras.anatomia }}</option>
+            <option value="FISIOLOGIA">{{ t().voz_extras.fisiologia }}</option>
+            <option value="TRASTORNOS">{{ t().voz_extras.trastornos }}</option>
+            <option value="IMPORTANCIA">{{ t().voz_extras.importancia }}</option>
+            <option value="CURIOSIDADES">{{ t().voz_extras.curiosidades }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">{{ t().creacion_voz.label_contenido }}</label>
+        <textarea id="contenido" formControlName="contenido" rows="6"></textarea>
+        <small class="error-text" *ngIf="editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched">
+          {{ t().creacion_voz.alerta_contenido }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="fuente">{{ t().creacion_voz.label_fuente }}</label>
+        <input id="fuente" type="text" formControlName="fuente">
+        <small class="error-text" *ngIf="editarForm.get('fuente')?.invalid && editarForm.get('fuente')?.touched">
+          {{ t().creacion_voz.alerta_fuente }}
+        </small>
+      </div>
+
+      <div class="form-row image-edit-section">
+        <div class="form-group flex-1" *ngIf="imagenActualUrl">
+          <label>{{ t().edicion_voz.imagen_actual }}</label>
+          <div class="current-img-preview">
+            <img [src]="obtenerUrlImagen(imagenActualUrl)">
+          </div>
+        </div>
+
+        <div class="form-group flex-2 file-upload-section">
+          <label for="img">{{ t().edicion_voz.label_reemplazar }}</label>
+          <input id="img" type="file" accept="image/*" (change)="onFileChange($event)" class="file-input">
+          <small class="help-text">{{ t().edicion_voz.help_reemplazar }}</small>
+
+          <div class="preview-files" *ngIf="nuevaImagenSeleccionada">
+            <p><strong>{{ t().edicion_voz.nueva_imagen }}</strong> {{ nuevaImagenSeleccionada.name }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().edicion_voz.btn_actualizando : t().edicion_voz.btn_actualizar }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

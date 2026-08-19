@@ -3,7 +3,7 @@
    ========================================================================== */
 .page-container {
   padding: 2rem;
-  background-color: #f4f6f8;
+  background-color: var(--fono-fondo);
   min-height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
@@ -18,14 +18,14 @@
   .title-section h2, 
   h1 { 
     margin: 0 0 0.5rem 0; 
-    color: #1e293b; 
+    color: var(--fono-texto); 
     font-size: 1.8rem; 
   }
   
   .title-section p, 
   p { 
     margin: 0; 
-    color: #64748b; 
+    color: var(--fono-texto-suave); 
   }
 }
 
@@ -33,15 +33,15 @@
 .empty-state { 
   text-align: center; 
   padding: 3rem; 
-  color: #666; 
+  color: var(--fono-texto-suave); 
   font-style: italic;
 }
 
 .spinner {
   width: 30px; 
   height: 30px;
-  border: 3px solid #f1f5f9; 
-  border-top-color: #0284c7;
+  border: 3px solid var(--fono-borde-suave); 
+  border-top-color: var(--fono-primario);
   border-radius: 50%; 
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -52,12 +52,39 @@
 }
 
 .error-alert {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: var(--fono-error-fondo);
+  color: var(--fono-error-texto);
   padding: 1rem;
   border-radius: 6px;
   margin-bottom: 1.5rem;
-  border: 1px solid #f5c6cb;
+  border: 1px solid var(--fono-error-borde);
   font-size: 0.95rem;
   white-space: pre-wrap;
+}
+
+/* Avisos de éxito e informativos.
+   Antes cada vista reutilizaba .error-alert pisando los colores con estilos
+   en línea (y esos colores fijos no respetaban el modo oscuro). Estas dos
+   clases usan las variables del tema, así que sirven en ambos temas. */
+.success-alert,
+.info-alert {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid;
+  font-size: 0.95rem;
+
+  p { margin: 0; }
+}
+
+.success-alert {
+  background-color: var(--fono-exito-fondo);
+  color: var(--fono-exito-texto);
+  border-color: var(--fono-exito-borde);
+}
+
+.info-alert {
+  background-color: var(--fono-info-fondo);
+  color: var(--fono-info-texto);
+  border-color: var(--fono-info-borde);
 }

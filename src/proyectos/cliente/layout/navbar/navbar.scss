@@ -1,0 +1,281 @@
+/* --- Variables de color heredadas de tu diseño --- */
+$primary-color: var(--fono-primario);
+$primary-hover: var(--fono-primario-hover);
+$text-color: var(--fono-texto-cuerpo);
+$bg-color: var(--fono-superficie);
+$border-color: var(--fono-borde);
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: $bg-color;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  border-bottom: 1px solid $border-color;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: $primary-color;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: $text-color;
+  cursor: pointer;
+  padding: 0.5rem;
+  
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+
+  /* Aplica a los links normales (fuera del admin y del dropdown menu) */
+  > a:not(.btn-admin) {
+    color: $text-color;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+    padding: 0.5rem 0;
+    position: relative;
+
+    &:hover, &.active-link {
+      color: $primary-color;
+    }
+
+    /* Subrayado animado para el elemento activo */
+    &.active-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: $primary-color;
+      border-radius: 2px;
+    }
+  }
+}
+
+/* --- ESTILOS DEL DROPDOWN (MENÚ DESPLEGABLE) --- */
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .dropdown-trigger {
+    color: $text-color;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: $bg-color;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+    /* Oculto por defecto con animación suave */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    border: 1px solid $border-color;
+
+    a {
+      padding: 0.75rem 1.5rem;
+      color: $text-color;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      &:hover, &.active-link {
+        background-color: var(--fono-superficie-2);
+        color: $primary-color;
+      }
+    }
+  }
+
+  /* Mostrar al hacer hover */
+  &:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.admin-access {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid $border-color;
+
+  .boton-tema-navbar {
+    color: $text-color;
+    display: inline-flex;
+  }
+}
+
+.btn-admin {
+  background-color: transparent;
+  color: $primary-color;
+  border: 2px solid $primary-color;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $primary-color;
+    color: var(--fono-texto-inverso);
+  }
+}
+
+.navbar-spacer {
+  height: 70px;
+  width: 100%;
+}
+
+/* ======== MEDIA QUERIES (Responsive) ======== */
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar-links {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: $bg-color;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+    &.active {
+      max-height: 600px; /* Expandido para alojar el submenú */
+    }
+
+    > a:not(.btn-admin) {
+      width: 100%;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--fono-borde-suave);
+      
+      &.active-link::after {
+        display: none;
+      }
+      
+      &.active-link {
+        background-color: var(--fono-superficie-2);
+        border-left: 4px solid $primary-color;
+        padding-left: calc(2rem - 4px);
+      }
+    }
+  }
+
+  /* Dropdown en vista móvil: Se muestra siempre abierto pero indentado */
+  .dropdown {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .dropdown-trigger {
+      width: 100%;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--fono-borde-suave);
+      justify-content: space-between; /* Flecha al extremo derecho */
+      
+      svg {
+        transform: rotate(180deg); /* Flecha indicando que está abierto */
+      }
+    }
+
+    .dropdown-menu {
+      position: static;
+      width: 100%;
+      box-shadow: none;
+      border: none;
+      border-radius: 0;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      padding: 0;
+      background-color: var(--fono-superficie-2);
+
+      a {
+        padding: 1rem 2rem 1rem 3.5rem; /* Indentación extra para notar jerarquía */
+        border-bottom: 1px solid var(--fono-borde);
+      }
+    }
+  }
+
+  .admin-access {
+    margin: 0;
+    padding: 1.5rem 2rem;
+    border-left: none;
+    width: 100%;
+    
+    .btn-admin {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+  }
+}

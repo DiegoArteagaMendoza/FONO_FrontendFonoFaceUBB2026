@@ -1,0 +1,134 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; {{ t().globales.boton_volver }}
+      </button>
+      <h2>{{ t().creacion_usuarios.titulo }}</h2>
+      <p>{{ t().creacion_usuarios.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        
+        <div class="flex-2" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="nombre">{{ t().creacion_usuarios.label_nombre }}</label>
+            <input 
+              id="nombre" 
+              type="text" 
+              formControlName="nombre" 
+              [placeholder]="t().creacion_usuarios.placeholder_nombre"
+              [class.is-invalid]="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched"
+            >
+            <small class="error-text" *ngIf="formulario.get('nombre')?.hasError('required') && formulario.get('nombre')?.touched">
+              {{ t().creacion_usuarios.alerta_nombre }}
+            </small>
+          </div>
+
+          <div class="form-row" style="margin-bottom: 0;">
+            <div class="form-group flex-1" style="margin-bottom: 0;">
+              <label for="rut">{{ t().creacion_usuarios.label_rut }}</label>
+              <input 
+                id="rut" 
+                type="text" 
+                formControlName="rut" 
+                [placeholder]="t().creacion_usuarios.placeholder_rut"
+                [class.is-invalid]="formulario.get('rut')?.invalid && formulario.get('rut')?.touched"
+              >
+              <small class="error-text" *ngIf="formulario.get('rut')?.hasError('required') && formulario.get('rut')?.touched">
+                {{ t().creacion_usuarios.alerta_rut }}
+              </small>
+            </div>
+
+            <div class="form-group flex-2" style="margin-bottom: 0;">
+              <label for="email">{{ t().creacion_usuarios.label_email }}</label>
+              <input 
+                id="email" 
+                type="text" 
+                formControlName="email" 
+                [placeholder]="t().creacion_usuarios.placeholder_email"
+                [class.is-invalid]="formulario.get('email')?.invalid && formulario.get('email')?.touched"
+              >
+              <small class="error-text" *ngIf="formulario.get('email')?.hasError('required') && formulario.get('email')?.touched">
+                {{ t().creacion_usuarios.alerta_email_req }}
+              </small>
+              <small class="error-text" *ngIf="formulario.get('email')?.hasError('email') && formulario.get('email')?.touched">
+                {{ t().creacion_usuarios.alerta_email_inv }}
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="password">{{ t().creacion_usuarios.label_password }}</label>
+            <input 
+              id="password" 
+              type="text" 
+              formControlName="password" 
+              [placeholder]="t().creacion_usuarios.placeholder_password"
+              [class.is-invalid]="formulario.get('password')?.invalid && formulario.get('password')?.touched"
+            >
+            <small class="help-text">{{ t().creacion_usuarios.help_password }}</small>
+            <small class="error-text" *ngIf="formulario.get('password')?.hasError('required') && formulario.get('password')?.touched">
+              {{ t().creacion_usuarios.alerta_password }}
+            </small>
+          </div>
+
+        </div>
+
+        <div class="flex-1" style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; height: fit-content;">
+          <h3 style="margin: 0 0 1.5rem 0; font-size: 1.1rem; color: #1e293b;">{{ t().creacion_usuarios.permisos_titulo }}</h3>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="rol">{{ t().creacion_usuarios.label_rol }}</label>
+            <select id="rol" formControlName="rol">
+              <option *ngFor="let opcion of roles" [value]="opcion.valor">{{ opcion.label }}</option>
+            </select>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal; line-height: 1.4;">
+              @switch (formulario.get('rol')?.value) {
+                @case ('admin') { {{ t().creacion_usuarios.desc_rol_admin }} }
+                @case ('superadmin') { {{ t().creacion_usuarios.desc_rol_superadmin }} }
+                @default { {{ t().creacion_usuarios.desc_rol_usuario }} }
+              }
+            </p>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
+            <div>
+              <label for="tipo" style="margin: 0;">{{ t().creacion_usuarios.label_tipo }}</label>
+              <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal;">{{ t().creacion_usuarios.desc_tipo }}</p>
+            </div>
+            <input id="tipo" type="checkbox" formControlName="tipo" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 0;">
+            <div>
+              <label for="estado" style="margin: 0;">{{ t().creacion_usuarios.label_estado }}</label>
+              <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal;">{{ t().creacion_usuarios.desc_estado }}</p>
+            </div>
+            <input id="estado" type="checkbox" formControlName="estado" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_usuarios.boton_creando : t().creacion_usuarios.boton_crear }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

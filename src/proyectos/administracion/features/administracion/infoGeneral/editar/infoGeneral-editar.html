@@ -1,0 +1,91 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">
+        &larr; {{ t().globales.boton_volver }}
+      </button>
+      <h2>{{ t().edicion_info_general.titulo }}</h2>
+      <p>{{ t().edicion_info_general.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="cargandoDatos" class="loading-state">
+      <div class="spinner"></div>
+      <p>{{ t().globales.cargando }}</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form *ngIf="!cargandoDatos" [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      
+      <div class="form-row">
+        
+        <div class="flex-2" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <div class="form-row" style="margin: 0;">
+            
+            <!-- CAMBIO A SELECT -->
+            <div class="form-group flex-1" style="margin-bottom: 0;">
+              <label for="seccion">{{ t().creacion_info_general.label_seccion }}</label>
+              <select 
+                id="seccion" 
+                formControlName="seccion" 
+                [class.is-invalid]="editarForm.get('seccion')?.invalid && editarForm.get('seccion')?.touched"
+              >
+                <option value="" disabled>Seleccione una sección...</option>
+                <option *ngFor="let sec of seccionesDisponibles" [value]="sec.valor">{{ sec.etiqueta }}</option>
+              </select>
+            </div>
+
+            <div class="form-group flex-1" style="margin-bottom: 0;">
+              <label for="clave">{{ t().creacion_info_general.label_clave }}</label>
+              <input id="clave" type="text" formControlName="clave" [class.is-invalid]="editarForm.get('clave')?.invalid && editarForm.get('clave')?.touched">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="titulo">{{ t().creacion_info_general.label_titulo_texto }}</label>
+            <input id="titulo" type="text" formControlName="titulo">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="enlace">{{ t().creacion_info_general.label_enlace }}</label>
+            <input id="enlace" type="text" formControlName="enlace">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="descripcion">{{ t().creacion_info_general.label_descripcion }}</label>
+            <textarea id="descripcion" formControlName="descripcion" rows="6"></textarea>
+          </div>
+
+        </div>
+
+        <div class="flex-1" style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; height: fit-content;">
+          
+          <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 0;">
+            <div>
+              <label for="estado" style="margin: 0;">{{ t().edicion_info_general.label_estado }}</label>
+              <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b; font-weight: normal;">{{ t().edicion_info_general.desc_estado }}</p>
+            </div>
+            <input id="estado" type="checkbox" formControlName="estado" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="form-actions" style="margin-top: 2rem;">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">
+          {{ t().globales.boton_cancelar }}
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().edicion_info_general.boton_actualizando : t().edicion_info_general.boton_actualizar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().gestion_pm_especialidades.titulo }}</h2>
+      <p>{{ t().gestion_pm_especialidades.subtitulo }}</p>
+    </div>
+    <button *ngIf="adminService.usuarioActual()?.is_staff" class="btn-primary" (click)="abrirCrear()">
+      + {{ t().gestion_pm_especialidades.nueva_especialidad }}
+    </button>
+  </div>
+
+  <div *ngIf="!adminService.usuarioActual()?.is_staff" class="info-alert">
+    {{ t().pm_profesional_detalle.error_permisos }}
+  </div>
+
+  <div *ngIf="mensajeExito" class="success-alert">
+    {{ mensajeExito }}
+  </div>
+  <div *ngIf="errorMensaje && !modalAbierto" class="error-alert">{{ errorMensaje }}</div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().tablas.nombre_tabla }}</th>
+          <th class="text-center">{{ t().pm_especialidades.requiere_certificado }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="especialidades.length === 0">
+          <td colspan="3" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+        <tr *ngFor="let especialidad of especialidades">
+          <td class="td-title">{{ especialidad.nombre_especialidad_profesional }}</td>
+          <td class="text-center">{{ especialidad.especialidad_requiere_certificado ? 'Sí' : 'No' }}</td>
+          <td class="td-actions">
+            <ng-container *ngIf="adminService.usuarioActual()?.is_staff; else sinPermisoFila">
+              <button class="btn-icon edit" (click)="abrirEditar(especialidad)">{{ t().tablas.boton_editar }}</button>
+              <button class="btn-icon delete" (click)="eliminar(especialidad)">{{ t().tablas.boton_eliminar }}</button>
+            </ng-container>
+            <ng-template #sinPermisoFila>—</ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL CREAR / EDITAR -->
+<div class="modal-overlay" *ngIf="modalAbierto" (click)="cerrarModal()">
+  <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ especialidadEnEdicion ? t().tablas.boton_editar : t().gestion_pm_especialidades.nueva_especialidad }}</h3>
+      <button class="btn-close" (click)="cerrarModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+      <form [formGroup]="formulario" (ngSubmit)="guardar()" class="custom-form">
+        <div class="form-group">
+          <label for="nombre_especialidad_profesional">{{ t().gestion_pm_especialidades.label_nombre }}</label>
+          <input id="nombre_especialidad_profesional" type="text" formControlName="nombre_especialidad_profesional"
+                 [placeholder]="t().gestion_pm_especialidades.placeholder_nombre"
+                 [class.is-invalid]="formulario.get('nombre_especialidad_profesional')?.invalid && formulario.get('nombre_especialidad_profesional')?.touched">
+          <small class="error-text" *ngIf="formulario.get('nombre_especialidad_profesional')?.invalid && formulario.get('nombre_especialidad_profesional')?.touched">
+            {{ t().gestion_pm_especialidades.alerta_nombre }}
+          </small>
+        </div>
+
+        <div class="form-group" style="display:flex; flex-direction: row; align-items: center; justify-content: space-between;">
+          <div>
+            <label style="margin:0;">{{ t().gestion_pm_especialidades.label_requiere_certificado }}</label>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: var(--fono-texto-suave); font-weight: normal;">
+              {{ t().gestion_pm_especialidades.desc_requiere_certificado }}
+            </p>
+          </div>
+          <input type="checkbox" formControlName="especialidad_requiere_certificado" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="cerrarModal()">{{ t().gestion_pm_especialidades.btn_cancelar }}</button>
+          <button type="submit" class="btn-primary" [disabled]="guardando">
+            {{ guardando ? t().gestion_pm_especialidades.btn_guardando : t().gestion_pm_especialidades.btn_guardar }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

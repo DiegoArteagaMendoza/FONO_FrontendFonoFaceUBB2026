@@ -1,0 +1,76 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().creacion_informacion.titulo }}</h2>
+      <p>{{ t().creacion_informacion.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">
+      {{ errorMensaje }}
+    </div>
+
+    <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
+
+      <div class="form-row">
+        <div class="form-group flex-2">
+          <label for="titulo">{{ t().creacion_informacion.label_titulo }}</label>
+          <input id="titulo" type="text" formControlName="titulo" [placeholder]="t().creacion_informacion.placeholder_titulo">
+          <small class="error-text" *ngIf="crearForm.get('titulo')?.invalid && crearForm.get('titulo')?.touched">
+            {{ t().creacion_informacion.alerta_titulo }}
+          </small>
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="categoria">{{ t().creacion_informacion.label_categoria }}</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="" disabled selected>{{ t().creacion_informacion.placeholder_categoria }}</option>
+            <option value="PO">{{ t().creacion_informacion.categorias_promocion }}</option>
+            <option value="PE">{{ t().creacion_informacion.categorias_prevencion }}</option>
+            <option value="FA">{{ t().creacion_informacion.categorias_farmacos }}</option>
+          </select>
+          <small class="error-text" *ngIf="crearForm.get('categoria')?.invalid && crearForm.get('categoria')?.touched">
+            {{ t().creacion_informacion.alerta_categoria }}
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contenido">{{ t().creacion_informacion.label_contenido }}</label>
+        <textarea id="contenido" formControlName="contenido" rows="6" [placeholder]="t().creacion_informacion.placeholder_contenido"></textarea>
+        <small class="error-text" *ngIf="crearForm.get('contenido')?.invalid && crearForm.get('contenido')?.touched">
+          {{ t().creacion_informacion.alerta_contenido }}
+        </small>
+      </div>
+
+      <div class="form-group file-upload-section">
+        <label for="imagenes">{{ t().creacion_informacion.label_imagenes }}</label>
+        <input
+          id="imagenes"
+          type="file"
+          multiple
+          accept="image/*"
+          (change)="onFileChange($event)"
+          class="file-input"
+        >
+        <small class="help-text">{{ t().creacion_informacion.help_imagenes }}</small>
+
+        <div class="preview-files" *ngIf="imagenesSeleccionadas.length > 0">
+          <p><strong>{{ t().creacion_informacion.archivos_seleccionados }}</strong> {{ imagenesSeleccionadas.length }}/4</p>
+          <ul>
+            <li *ngFor="let file of imagenesSeleccionadas">{{ file.name }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_informacion.boton_guardando : t().creacion_informacion.boton_guardar }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

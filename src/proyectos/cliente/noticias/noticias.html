@@ -1,0 +1,105 @@
+<div class="cliente-page">
+
+  <div class="page-header text-center">
+    <h1>{{ t().portal_noticias.titulo }}</h1>
+    <p>{{ t().portal_noticias.subtitulo }}</p>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().portal_noticias.cargando }}</p>
+  </div>
+
+  <ng-container *ngIf="!cargando">
+
+    <!-- ================== CARRUSEL DE NOTICIAS DESTACADAS ================== -->
+    <section class="noticias-carousel" *ngIf="destacadas.length > 0">
+      <div class="carousel-container">
+
+        <div class="carousel-slide"
+             *ngFor="let noticia of destacadas; let i = index"
+             [class.active]="i === currentIndex"
+             (click)="verDetalle(noticia.id_noticia)">
+
+          <img *ngIf="obtenerUrlImagen(noticia)" [src]="obtenerUrlImagen(noticia)" [alt]="noticia.titulo" class="slide-image">
+          <div *ngIf="!obtenerUrlImagen(noticia)" class="slide-placeholder"></div>
+
+          <div class="slide-overlay">
+            <div class="hero-content">
+              <span class="slide-date">{{ noticia.fecha_creacion | date:'dd/MM/yyyy' }}</span>
+              <h3>{{ noticia.titulo }}</h3>
+              <p>{{ (noticia.contenido.length > 150) ? (noticia.contenido | slice:0:150) + '...' : noticia.contenido }}</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="nav-btn prev-btn" *ngIf="destacadas.length > 1" (click)="anterior()">&#10094;</button>
+        <button class="nav-btn next-btn" *ngIf="destacadas.length > 1" (click)="siguiente()">&#10095;</button>
+
+        <div class="carousel-indicators" *ngIf="destacadas.length > 1">
+          <span class="dot"
+                *ngFor="let noticia of destacadas; let i = index"
+                [class.active]="i === currentIndex"
+                (click)="irA(i)">
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== ÚLTIMAS NOTICIAS ================== -->
+    <section class="ultimas-noticias">
+      <h2 *ngIf="noticias.length > 0">{{ t().portal_noticias.ultimas_titulo }}</h2>
+
+      <div *ngIf="noticias.length === 0" class="empty-state">
+        <p>{{ t().portal_noticias.vacio }}</p>
+      </div>
+
+      <div class="articles-grid" *ngIf="noticias.length > 0">
+        <article class="article-card" *ngFor="let noticia of noticias" (click)="verDetalle(noticia.id_noticia)">
+          <div class="card-image">
+            <img *ngIf="obtenerUrlImagen(noticia)" [src]="obtenerUrlImagen(noticia)" alt="Imagen de la noticia">
+            <div *ngIf="!obtenerUrlImagen(noticia)" class="no-image">
+              <span>{{ t().portal_noticias.sin_imagen }}</span>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <span class="card-date">{{ noticia.fecha_creacion | date:'dd/MM/yyyy' }}</span>
+            <h3>{{ noticia.titulo }}</h3>
+            <p>{{ (noticia.contenido.length > 120) ? (noticia.contenido | slice:0:120) + '...' : noticia.contenido }}</p>
+            <span class="read-more">{{ t().portal_noticias.leer_mas }}</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </ng-container>
+
+  <!-- ================== NEWSLETTER ================== -->
+  <section class="newsletter-block">
+    <div class="newsletter-content">
+      <h2>{{ t().portal_noticias.newsletter_titulo }}</h2>
+      <p>{{ t().portal_noticias.newsletter_subtitulo }}</p>
+
+      <form *ngIf="!newsletterEnviado" [formGroup]="newsletterForm" (ngSubmit)="suscribirse()" class="newsletter-form" novalidate>
+        <div class="input-group">
+          <input type="email" formControlName="email" [placeholder]="t().portal_noticias.newsletter_placeholder" aria-label="Correo electrónico">
+          <button type="submit" [disabled]="newsletterEnviando">
+            {{ newsletterEnviando ? t().portal_noticias.newsletter_boton_enviando : t().portal_noticias.newsletter_boton }}
+          </button>
+        </div>
+        <span class="error-msg" *ngIf="email?.invalid && email?.touched">
+          {{ t().portal_noticias.newsletter_error_email }}
+        </span>
+        <span class="error-msg" *ngIf="newsletterError">
+          {{ newsletterError }}
+        </span>
+      </form>
+
+      <div *ngIf="newsletterEnviado" class="success-msg">
+        <p>{{ newsletterMensajeExito }}</p>
+      </div>
+    </div>
+  </section>
+
+</div>

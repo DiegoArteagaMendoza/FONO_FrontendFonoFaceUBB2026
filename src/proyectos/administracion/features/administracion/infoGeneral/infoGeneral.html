@@ -1,0 +1,119 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().tablas.gestion_info_general.titulo }}</h2>
+      <p>{{ t().tablas.gestion_info_general.subtitulo }}</p>
+    </div>
+    <button class="btn-primary" (click)="irACrear()">
+      + {{ t().tablas.gestion_info_general.nuevo_texto }}
+    </button>
+  </div>
+
+  <div class="filters-section" *ngIf="!cargando">
+    <div class="filter-group">
+      <label for="filtroSeccion">{{ t().tablas.gestion_info_general.filtrar_seccion }}</label>
+      <select id="filtroSeccion" (change)="alCambiarFiltro($event)" [value]="filtroActual">
+        <option value="todas">{{ t().tablas.gestion_info_general.seccion_todas }}</option>
+        <option *ngFor="let sec of seccionesUnicas" [value]="sec">{{ sec }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Sección</th>
+          <th>Clave Única</th>
+          <th>{{ t().tablas.titulo_tabla }}</th>
+          <th>Estado</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="listaFiltrada.length === 0">
+          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+
+        <tr *ngFor="let item of listaFiltrada">
+          <td class="td-title"><strong>{{ item.seccion }}</strong></td>
+          <td><span class="badge" style="background: #f1f5f9; color: #475569;">{{ item.clave }}</span></td>
+          <td>{{ item.titulo || 'Sin título' }}</td>
+          <td>
+            <span class="badge" 
+                  [ngStyle]="{
+                    'background-color': item.estado ? '#dcfce7' : '#fee2e2', 
+                    'color': item.estado ? '#166534' : '#991b1b', 
+                    'padding': '0.3rem 0.6rem', 
+                    'border-radius': '4px', 
+                    'font-size': '0.85rem', 
+                    'font-weight': '500'
+                  }">
+              {{ item.estado ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="td-actions">
+            <button class="btn-icon view" (click)="verDetalle(item)" title="Ver">Ver</button>
+            <button class="btn-icon edit" (click)="editarItem(item.id_info!)" title="Editar">Editar</button>
+            <button class="btn-icon delete" (click)="eliminarItem(item.id_info!)" title="Eliminar">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DE DETALLE DEL TEXTO                 -->
+<!-- ========================================== -->
+<div class="modal-overlay" *ngIf="itemSeleccionado" (click)="cerrarDetalle()">
+  <div class="modal-content modal-sm" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>Detalle del Texto</h3>
+      <button class="btn-close" (click)="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="content-text">
+        <p>
+          <strong>Sección / Clave:</strong><br>
+          {{ itemSeleccionado.seccion }} / {{ itemSeleccionado.clave }}
+        </p>
+        <p *ngIf="itemSeleccionado.titulo">
+          <strong>{{ t().tablas.titulo_tabla }}:</strong><br>
+          {{ itemSeleccionado.titulo }}
+        </p>
+        <p *ngIf="itemSeleccionado.descripcion">
+          <strong>{{ t().tablas.descripcion_tabla }}:</strong><br>
+          {{ itemSeleccionado.descripcion }}
+        </p>
+        <p *ngIf="itemSeleccionado.enlace">
+          <strong>Enlace configurado:</strong><br>
+          <a [routerLink]="itemSeleccionado.enlace" style="color: #0284c7;">{{ itemSeleccionado.enlace }}</a>
+        </p>
+        <p>
+          <strong>Estado:</strong><br>
+          <span class="badge" 
+                style="display: inline-block; margin-top: 0.3rem;"
+                [ngStyle]="{
+                  'background-color': itemSeleccionado.estado ? '#dcfce7' : '#fee2e2', 
+                  'color': itemSeleccionado.estado ? '#166534' : '#991b1b', 
+                  'padding': '0.3rem 0.6rem', 
+                  'border-radius': '4px', 
+                  'font-size': '0.85rem', 
+                  'font-weight': '500'
+                }">
+            {{ itemSeleccionado.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
