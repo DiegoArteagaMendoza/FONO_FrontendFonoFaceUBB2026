@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 import { soloVisitantes } from './core/guards/solo-visitantes.guard';
 import { Layout } from '../proyectos/administracion/layout/layout';
 import { Login } from '../proyectos/administracion/features/auth/login/login';
@@ -50,10 +51,13 @@ import { PortalMedicoPerfilComponent } from '../proyectos/portalMedico/features/
 import { PortalMedicoDocumentosComponent } from '../proyectos/portalMedico/features/documentos/documentos';
 import { PortalMedicoEspecialidadesComponent } from '../proyectos/portalMedico/features/especialidades/especialidades';
 import { PortalMedicoAcreditacionComponent } from '../proyectos/portalMedico/features/acreditacion/acreditacion';
-// Lado paciente del Portal Médico (backend: apps PmCliente y PmVideo)
+// Lado paciente del Portal Médico (backend: apps PmCliente, PmVideo y PmCita)
 import { PmClienteRegistroComponent } from '../proyectos/portalMedico/features/cliente/registro/registro';
-import { PmClienteLoginComponent } from '../proyectos/portalMedico/features/cliente/login/login';
 import { PmClienteVideoComponent } from '../proyectos/portalMedico/features/cliente/video/video';
+import { PmClienteMisCitasComponent } from '../proyectos/portalMedico/features/cliente/citas/mis-citas/mis-citas';
+import { PmClienteReservarCitaComponent } from '../proyectos/portalMedico/features/cliente/citas/reservar/reservar';
+// Agenda del profesional (app PmCita, lado del fonoaudiólogo)
+import { PmAgendaComponent } from '../proyectos/portalMedico/features/agenda/agenda';
 // Panel de administración del Portal Médico: se renderiza dentro del Layout de
 // administracion/ (mismo sidebar/sesión de FonoApp), por eso se registra como hijo
 // de ese Layout más abajo en vez de dentro del bloque 'portalmedico/*'.
@@ -110,20 +114,35 @@ export const routes: Routes = [
     component: PortalMedicoLayout,
     children: [
       { path: 'inicio', component: PortalMedicoInicioComponent },
-      { path: 'login', component: PortalMedicoLoginComponent, canActivate: [soloVisitantes('profesional')] },
+      { path: 'login', component: PortalMedicoLoginComponent, canActivate: [soloVisitantes('portalMedico')] },
       { path: 'registro', component: PortalMedicoRegistroComponent, canActivate: [soloVisitantes('profesional')] },
       { path: 'directorio', component: PortalMedicoDirectorioComponent },
       { path: 'perfil', component: PortalMedicoPerfilComponent },
       { path: 'documentos', component: PortalMedicoDocumentosComponent },
       { path: 'especialidades', component: PortalMedicoEspecialidadesComponent },
       { path: 'acreditacion', component: PortalMedicoAcreditacionComponent },
+      // Agenda del profesional: las citas que sus pacientes reservaron con él
+      { path: 'agenda', component: PmAgendaComponent },
 
       // LADO PACIENTE: registro, sesión propia y videos de síntomas.
       // Usa su propia identidad JWT (claim 'id_cliente'), separada de la del
       // profesional y de la del administrador de FonoApp.
       { path: 'paciente/registro', component: PmClienteRegistroComponent },
-      { path: 'paciente/login', component: PmClienteLoginComponent, canActivate: [soloVisitantes('paciente')] },
+      // El login del paciente se fusionó con el del profesional en una sola vista
+      // con pestañas. Se conserva la ruta para no romper enlaces existentes.
+      {
+        path: 'paciente/login',
+        // redirectTo con string no admite query params, por eso se usa la forma
+        // de función: así la pestaña "paciente" queda preseleccionada.
+        redirectTo: () => inject(Router).createUrlTree(['/portalmedico/login'], { queryParams: { tipo: 'paciente' } }),
+        pathMatch: 'full'
+      },
       { path: 'paciente/video', component: PmClienteVideoComponent },
+
+      // Citas del paciente (app PmCita). 'reservar' va antes que la lista para
+      // dejar claro el orden de lectura; no hay conflicto de rutas entre ambas.
+      { path: 'paciente/citas', component: PmClienteMisCitasComponent },
+      { path: 'paciente/citas/reservar', component: PmClienteReservarCitaComponent },
 
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     ]

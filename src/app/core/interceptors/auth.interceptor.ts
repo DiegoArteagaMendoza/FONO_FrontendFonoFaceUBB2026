@@ -53,7 +53,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           router.navigate(['/portalmedico/login'], { queryParams: { expirada: '1' } });
         } else if (esSesionPaciente) {
           pmClienteService.logoutCliente();
-          router.navigate(['/portalmedico/paciente/login'], { queryParams: { expirada: '1' } });
+          router.navigate(['/portalmedico/login'], { queryParams: { tipo: 'paciente', expirada: '1' } });
         } else {
           authService.logout();
           router.navigate(['/login'], { queryParams: { expirada: '1' } });

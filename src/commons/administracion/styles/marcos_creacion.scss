@@ -92,6 +92,42 @@
   line-height: 1.4;
 }
 
+/* Pestañas para alternar entre dos formularios dentro de una misma tarjeta
+   (se usan en el inicio de sesión del Portal Médico: paciente / profesional). */
+.tabs-cuenta {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  background-color: var(--fono-superficie-2);
+  border: 1px solid var(--fono-borde);
+
+  button {
+    flex: 1;
+    padding: 0.6rem 0.75rem;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--fono-texto-suave);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover:not(.activa) {
+      color: var(--fono-texto);
+    }
+
+    &.activa {
+      background-color: var(--fono-superficie);
+      color: var(--fono-primario);
+      box-shadow: 0 1px 3px var(--fono-sombra);
+    }
+  }
+}
+
 .file-upload-section {
   .file-input {
     padding: 0.65rem;

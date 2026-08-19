@@ -45,6 +45,8 @@ export interface LoginClienteResponse {
 export interface VideoSintomas {
   id_video: number;
   cliente: number;
+  /** Cita a la que se adjuntó el video, si el paciente eligió una. */
+  cita: number | null;
   video: string;
   descripcion: string | null;
   duracion_segundos: number;
@@ -73,6 +75,11 @@ export const VIDEO_DIAS_VIGENCIA = 30;
 const CLAVE_PMC_ACCESS = 'pmc_access_token';
 const CLAVE_PMC_REFRESH = 'pmc_refresh_token';
 const CLAVE_PMC_CLIENTE = 'pmc_cliente_data';
+
+// Token del profesional: hace falta para el único endpoint de este archivo que
+// no consulta el propio paciente, sino el fonoaudiólogo (el listado de pacientes
+// que usa la agenda para poner nombres a las citas).
+const CLAVE_PM_ACCESS = 'pm_access_token';
 
 @Injectable({
   providedIn: 'root'
@@ -175,6 +182,25 @@ export class PmClienteService {
       `${this.apiClientes}${API_ENDPOINTS.portalMedicoClientes.perfilPassword}`,
       datos,
       { headers: this.getClienteAuthHeaders() }
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // Consulta del profesional (no del propio paciente)
+  // ---------------------------------------------------------------------
+
+  /**
+   * Pacientes activos, tal como los ve el fonoaudiólogo. La agenda lo usa para
+   * mostrar el nombre de quien reservó cada cita, porque el serializer de PmCita
+   * entrega el id del cliente y no sus datos.
+   *
+   * Va con el token del profesional, no con el del paciente: el backend exige
+   * EsProfesional | EsAdministrador en este endpoint.
+   */
+  getClientesComoProfesional(): Observable<PmCliente[]> {
+    return this.http.get<PmCliente[]>(
+      `${this.apiClientes}${API_ENDPOINTS.portalMedicoClientes.listar}`,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PM_ACCESS)}` }) }
     );
   }
 

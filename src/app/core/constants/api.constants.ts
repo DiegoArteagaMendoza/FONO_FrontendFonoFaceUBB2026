@@ -98,6 +98,34 @@ export const API_ENDPOINTS = {
     // Profesional o administrador
     listar: '/listar/',
     detalle: (idVideo: number) => `/${idVideo}/`,
-    eliminar: (idVideo: number) => `/${idVideo}/eliminar/`
+    eliminar: (idVideo: number) => `/${idVideo}/eliminar/`,
+
+    // Videos adjuntos a una cita concreta (solo el profesional que la atiende)
+    listarPorCita: (idCita: number) => `/listar/?cita=${idCita}`
+  },
+
+  // Portal Médico — citas telemáticas (app PmCita del backend FonoAppPortalMedico).
+  // Todos los endpoints de paciente exigen el token del paciente y toman al dueño
+  // de la cita desde ese token: el id_cliente NO viaja en el cuerpo.
+  portalMedicoCitas: {
+    // Paciente autenticado
+    reservar: '/reservar/',
+    misCitas: (idCliente: number) => `/cliente/${idCliente}/listar/`,
+    misCitasProximas: (idCliente: number) => `/cliente/${idCliente}/listar/?proximas=true`,
+    clienteCancelar: (idCita: number) => `/${idCita}/cliente/cancelar/`,
+    clientePosponer: (idCita: number) => `/${idCita}/cliente/posponer/`,
+
+    // Profesional autenticado
+    agenda: '/profesional/listar/',
+    agendaProximas: '/profesional/listar/?proximas=true',
+    profesionalCancelar: (idCita: number) => `/${idCita}/profesional/cancelar/`,
+    profesionalPosponer: (idCita: number) => `/${idCita}/profesional/posponer/`,
+    profesionalMarcarRealizada: (idCita: number) => `/${idCita}/profesional/marcar-realizada/`,
+
+    // Detalle: lo puede pedir el paciente dueño, el profesional que atiende o un admin
+    detalle: (idCita: number) => `/${idCita}/`,
+
+    // Listado administrativo con filtros combinables
+    listar: '/listar/'
   }
 };

@@ -9,5 +9,8 @@ export const environment = {
   // Mismo backend del Portal Médico, apps PmCliente y PmVideo: registro de
   // pacientes que buscan atención telemática y subida de sus videos de síntomas.
   apiUrlPortalMedicoClientes: 'https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/clientes',
-  apiUrlPortalMedicoVideos: 'https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/videos'
+  apiUrlPortalMedicoVideos: 'https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/videos',
+
+  // App PmCita: agenda de citas telemáticas entre paciente y fonoaudiólogo.
+  apiUrlPortalMedicoCitas: 'https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/citas'
 };

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   PmClienteService,
   VideoSintomas,
@@ -10,6 +10,8 @@ import {
   VIDEO_EXTENSIONES_PERMITIDAS,
   VIDEO_DIAS_VIGENCIA
 } from '@core/services/portal-medico/pm-cliente';
+import { PmCitaService, Cita } from '@core/services/portal-medico/pm-cita';
+import { PortalMedicoService, ProfesionalDirectorio } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
 
 @Component({
@@ -22,9 +24,12 @@ export class PmClienteVideoComponent implements OnInit {
   public textosService = inject(TextosService);
   public t = this.textosService.t;
   public pmClienteService = inject(PmClienteService);
+  public pmCitaService = inject(PmCitaService);
 
+  private portalMedicoService = inject(PortalMedicoService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private ruta = inject(ActivatedRoute);
   // La lectura de metadatos del video ocurre fuera de la zona de Angular (el
   // <video> nunca se adjunta al DOM), así que hay que refrescar a mano.
   // Es el mismo criterio que siguen el resto de las vistas del portal.
@@ -44,6 +49,11 @@ export class PmClienteVideoComponent implements OnInit {
   cargandoVideos = true;
   mensajeVideos: string | null = null;
 
+  // Citas a las que se puede adjuntar el video: solo las que el backend acepta
+  // (activas y con permite_carga_video). Ver PmVideo/serializer.validate.
+  citasDisponibles: Cita[] = [];
+  private nombresProfesional = new Map<number, string>();
+
   // Reglas expuestas a la plantilla
   readonly duracionMaxima = VIDEO_DURACION_MAXIMA_SEGUNDOS;
   readonly pesoMaximo = VIDEO_TAMANO_MAXIMO_MB;
@@ -52,16 +62,70 @@ export class PmClienteVideoComponent implements OnInit {
 
   constructor() {
     this.formulario = this.fb.group({
-      descripcion: ['']
+      descripcion: [''],
+      cita: ['']
     });
   }
 
   ngOnInit(): void {
     if (!this.pmClienteService.estaAutenticadoComoCliente()) {
-      this.router.navigate(['/portalmedico/paciente/login']);
+      this.router.navigate(['/portalmedico/login'], { queryParams: { tipo: 'paciente' } });
       return;
     }
     this.cargarMisVideos();
+    this.cargarCitasDisponibles();
+    this.cargarNombresProfesional();
+  }
+
+  /**
+   * Citas próximas a las que se puede colgar un video. Se piden las activas y
+   * futuras y se dejan solo las que admiten carga, que es exactamente lo que el
+   * backend valida al subir: así el selector no ofrece opciones que serían
+   * rechazadas.
+   */
+  private cargarCitasDisponibles(): void {
+    const idCliente = this.pmClienteService.clienteActual()?.id_cliente;
+    if (!idCliente) return;
+
+    this.pmCitaService.getMisCitas(idCliente, true).subscribe({
+      next: (citas) => {
+        this.citasDisponibles = citas.filter(cita => this.pmCitaService.admiteVideo(cita));
+        this.preseleccionarCitaDeLaUrl();
+        this.cdr.detectChanges();
+      },
+      // Sin el listado el video se puede subir igual, solo sin asociar a una cita.
+      error: () => this.cdr.detectChanges()
+    });
+  }
+
+  private cargarNombresProfesional(): void {
+    this.portalMedicoService.getDirectorio().subscribe({
+      next: (profesionales: ProfesionalDirectorio[]) => {
+        profesionales.forEach(profesional => {
+          this.nombresProfesional.set(
+            profesional.id_profesional,
+            `${profesional.nombres_profesional} ${profesional.apellidos_profesional}`
+          );
+        });
+        this.cdr.detectChanges();
+      },
+      error: () => this.cdr.detectChanges()
+    });
+  }
+
+  /**
+   * "Mis citas" enlaza aquí con ?cita=<id> para que el paciente no tenga que
+   * volver a buscarla en el selector. Solo se acepta si la cita está entre las
+   * que admiten video.
+   */
+  private preseleccionarCitaDeLaUrl(): void {
+    const idCita = Number(this.ruta.snapshot.queryParamMap.get('cita'));
+    if (!idCita) return;
+
+    const disponible = this.citasDisponibles.some(cita => cita.id_cita === idCita);
+    if (disponible) {
+      this.formulario.patchValue({ cita: idCita });
+    }
   }
 
   get nombreCliente(): string {
@@ -94,6 +158,27 @@ export class PmClienteVideoComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  /**
+   * Etiqueta de una cita en el selector: fecha legible y, si se conoce, el
+   * nombre del profesional que atiende.
+   */
+  etiquetaCita(cita: Cita): string {
+    const fecha = new Date(cita.fecha_hora).toLocaleString('es-CL', {
+      weekday: 'long', day: 'numeric', month: 'long',
+      hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    const profesional = this.nombresProfesional.get(cita.profesional);
+
+    if (!profesional) {
+      return this.textosService.reemplazarVariables(this.t().pmc_video.opcion_cita_simple, { fecha });
+    }
+    return this.textosService.reemplazarVariables(this.t().pmc_video.opcion_cita, { fecha, profesional });
+  }
+
+  irAReservar(): void {
+    this.router.navigate(['/portalmedico/paciente/citas/reservar']);
   }
 
   textoVenceEn(video: VideoSintomas): string {
@@ -208,6 +293,12 @@ export class PmClienteVideoComponent implements OnInit {
     const descripcion = this.formulario.get('descripcion')?.value;
     if (descripcion) {
       datos.append('descripcion', descripcion);
+    }
+
+    // La cita es opcional: solo viaja si el paciente eligió una.
+    const cita = this.formulario.get('cita')?.value;
+    if (cita) {
+      datos.append('cita', cita);
     }
 
     this.pmClienteService.subirVideo(datos).subscribe({

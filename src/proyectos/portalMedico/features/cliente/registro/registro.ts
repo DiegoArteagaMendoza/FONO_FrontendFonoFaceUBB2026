@@ -63,7 +63,7 @@ export class PmClienteRegistroComponent {
   }
 
   irALogin(): void {
-    this.router.navigate(['/portalmedico/paciente/login']);
+    this.router.navigate(['/portalmedico/login'], { queryParams: { tipo: 'paciente' } });
   }
 
   irAlVideo(): void {

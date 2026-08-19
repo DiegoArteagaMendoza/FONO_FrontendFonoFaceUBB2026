@@ -5,8 +5,13 @@ import { AuthService } from '../services/auth/auth';
 import { PortalMedicoService } from '../services/portal-medico/portal-medico';
 import { PmClienteService } from '../services/portal-medico/pm-cliente';
 
-/** Las tres identidades que conviven en la aplicación */
-export type IdentidadPortal = 'admin' | 'profesional' | 'paciente';
+/**
+ * Las identidades que conviven en la aplicación.
+ * 'portalMedico' cubre la pantalla de login unificada, que sirve tanto a
+ * pacientes como a profesionales mediante pestañas: basta con que una de las
+ * dos sesiones esté activa para que no tenga sentido volver a ese formulario.
+ */
+export type IdentidadPortal = 'admin' | 'profesional' | 'paciente' | 'portalMedico';
 
 /**
  * Impide entrar a las pantallas de acceso (login / registro) cuando esa misma
@@ -43,6 +48,19 @@ export function soloVisitantes(identidad: IdentidadPortal): CanActivateFn {
         return pmClienteService.estaAutenticadoComoCliente()
           ? router.createUrlTree(['/portalmedico/paciente/video'])
           : true;
+      }
+
+      case 'portalMedico': {
+        const portalMedicoService = inject(PortalMedicoService);
+        const pmClienteService = inject(PmClienteService);
+
+        if (portalMedicoService.estaAutenticadoComoProfesional()) {
+          return router.createUrlTree(['/portalmedico/perfil']);
+        }
+        if (pmClienteService.estaAutenticadoComoCliente()) {
+          return router.createUrlTree(['/portalmedico/paciente/video']);
+        }
+        return true;
       }
     }
   };
