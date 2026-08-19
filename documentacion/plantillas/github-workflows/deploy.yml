@@ -1,0 +1,65 @@
+# PLANTILLA — todavía no activada. GitHub solo ejecuta workflows que viven en
+# .github/workflows/ en la raíz del repo, así que este archivo aquí en
+# documentacion/plantillas/ no corre. Para activarlo:
+#
+#   mkdir -p .github/workflows
+#   cp documentacion/plantillas/github-workflows/deploy.yml .github/workflows/
+#
+# y crea antes los 4 secrets que pide (FTP_SERVER, FTP_USERNAME,
+# FTP_PASSWORD, FTP_SERVER_DIR) — ver documentacion/CI_CD_GITHUB_ACTIONS.md.
+
+name: Deploy a V2Networks
+
+# Se dispara en cada push a master (rama de producción) y también se puede
+# lanzar a mano desde la pestaña Actions (workflow_dispatch). Ver guía
+# completa en documentacion/DEPLOY_V2NETWORKS.md y documentacion/CI_CD_GITHUB_ACTIONS.md.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Evita que dos deploys corran a la vez y se pisen el FTP.
+concurrency:
+  group: deploy-produccion
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repo
+        uses: actions/checkout@v4
+
+      - name: Configurar pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Build de producción
+        run: pnpm build
+        # environment.ts (producción) ya trae baked-in las URLs de las APIs
+        # (apiUrl / apiUrlPortalMedico) — ver docs/ARQUITECTURA.md §6.
+
+      - name: Subir por FTP a V2Networks
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/FrontendFonoFaceUBB2026/browser/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # Evita borrar en el servidor archivos propios de cPanel que no
+          # vienen del build (p. ej. certificados o carpetas de otras apps
+          # si el server-dir se comparte con algo más).
+          exclude: |
+            **/.well-known/**
+            **/cgi-bin/**

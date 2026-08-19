@@ -1,0 +1,45 @@
+# PLANTILLA — todavía no activada. GitHub solo ejecuta workflows que viven en
+# .github/workflows/ en la raíz del repo, así que este archivo aquí en
+# documentacion/plantillas/ no corre. Para activarlo:
+#
+#   mkdir -p .github/workflows
+#   cp documentacion/plantillas/github-workflows/ci.yml .github/workflows/
+#
+# Ver documentacion/CI_CD_GITHUB_ACTIONS.md para el resto del proceso.
+
+name: CI
+
+# Corre en cualquier push/PR sobre develop o master. No requiere secretos del
+# hosting: solo valida que el código instala, testea y compila. El deploy
+# real vive en deploy.yml (ver documentacion/CI_CD_GITHUB_ACTIONS.md).
+on:
+  push:
+    branches: [develop, master]
+  pull_request:
+    branches: [develop, master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repo
+        uses: actions/checkout@v4
+
+      - name: Configurar pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Tests unitarios
+        run: pnpm test
+
+      - name: Build de producción
+        run: pnpm build
