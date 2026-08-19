@@ -77,6 +77,108 @@
   font-weight: 500;
 }
 
+/* ==========================================================================
+   TEXTOS DE AYUDA Y CARGA DE ARCHIVOS
+   --------------------------------------------------------------------------
+   Estas clases ya se usaban en más de diez vistas (admin y portales) pero
+   nunca tuvieron estilo: el texto de ayuda se veía igual que la etiqueta y el
+   selector de archivos quedaba con la apariencia cruda del navegador.
+   ========================================================================== */
+
+.help-text {
+  color: var(--fono-texto-suave);
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+/* Pestañas para alternar entre dos formularios dentro de una misma tarjeta
+   (se usan en el inicio de sesión del Portal Médico: paciente / profesional). */
+.tabs-cuenta {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  background-color: var(--fono-superficie-2);
+  border: 1px solid var(--fono-borde);
+
+  button {
+    flex: 1;
+    padding: 0.6rem 0.75rem;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--fono-texto-suave);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover:not(.activa) {
+      color: var(--fono-texto);
+    }
+
+    &.activa {
+      background-color: var(--fono-superficie);
+      color: var(--fono-primario);
+      box-shadow: 0 1px 3px var(--fono-sombra);
+    }
+  }
+}
+
+.file-upload-section {
+  .file-input {
+    padding: 0.65rem;
+    border: 1px dashed var(--fono-borde);
+    border-radius: 6px;
+    background-color: var(--fono-campo);
+    color: var(--fono-texto-cuerpo);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &:hover { border-color: var(--fono-primario); }
+
+    /* Botón "Examinar" del input de archivo */
+    &::file-selector-button {
+      margin-right: 0.75rem;
+      padding: 0.4rem 0.9rem;
+      border: none;
+      border-radius: 4px;
+      background-color: var(--fono-superficie-3);
+      color: var(--fono-texto-cuerpo);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    &:hover::file-selector-button { background-color: var(--fono-primario-claro); }
+  }
+}
+
+.preview-files {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background-color: var(--fono-superficie-2);
+  border: 1px solid var(--fono-borde);
+  color: var(--fono-texto-cuerpo);
+  font-size: 0.85rem;
+
+  p { margin: 0 0 0.25rem 0; }
+  p:last-child { margin-bottom: 0; }
+
+  ul {
+    margin: 0.25rem 0 0 0;
+    padding-left: 1.1rem;
+    color: var(--fono-texto-suave);
+  }
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

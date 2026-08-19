@@ -28,6 +28,15 @@ export class AuthService {
     return this.http.post<LoginResponse>(this.loginUrl, credentials);
   }
 
+  /**
+   * True si hay sesión de administrador de FonoApp iniciada en este navegador.
+   * Equivalente a estaAutenticadoComoProfesional() de PortalMedicoService y a
+   * estaAutenticadoComoCliente() de PmClienteService, para las otras dos identidades.
+   */
+  estaAutenticado(): boolean {
+    return !!localStorage.getItem('access_token');
+  }
+
   setSession(authResult: LoginResponse): void {
     localStorage.setItem('access_token', authResult.access);
     localStorage.setItem('refresh_token', authResult.refresh);
@@ -49,17 +58,23 @@ logout() {
   //    La sesión del profesional del Portal Médico (pm_*) tampoco es un dato de
   //    ESTA sesión: es una identidad totalmente distinta (ver PortalMedicoService)
   //    que puede seguir activa en otra pestaña, así que también se conserva.
+  //    Lo mismo vale para la sesión del paciente (pmc_*): es una tercera
+  //    identidad independiente (ver PmClienteService).
   const temaGuardado = localStorage.getItem(CLAVE_TEMA);
-  const pmAccess = localStorage.getItem('pm_access_token');
-  const pmRefresh = localStorage.getItem('pm_refresh_token');
-  const pmProfesional = localStorage.getItem('pm_profesional_data');
+  const clavesAPreservar = [
+    'pm_access_token', 'pm_refresh_token', 'pm_profesional_data',
+    'pmc_access_token', 'pmc_refresh_token', 'pmc_cliente_data',
+  ];
+  const preservados = clavesAPreservar
+    .map(clave => [clave, localStorage.getItem(clave)] as const)
+    .filter(([, valor]) => valor !== null);
+
   localStorage.clear();
+
   if (temaGuardado) {
     localStorage.setItem(CLAVE_TEMA, temaGuardado);
   }
-  if (pmAccess) localStorage.setItem('pm_access_token', pmAccess);
-  if (pmRefresh) localStorage.setItem('pm_refresh_token', pmRefresh);
-  if (pmProfesional) localStorage.setItem('pm_profesional_data', pmProfesional);
+  preservados.forEach(([clave, valor]) => localStorage.setItem(clave, valor as string));
 
   // 4. Limpia el sessionStorage por si acaso
   sessionStorage.clear();

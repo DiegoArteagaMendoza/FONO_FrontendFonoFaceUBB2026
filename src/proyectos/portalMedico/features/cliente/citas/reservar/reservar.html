@@ -1,0 +1,153 @@
+<div class="page-container">
+
+  <div class="mb-6 mx-auto" style="max-width: 700px;">
+    <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_reservar.titulo }}</h2>
+    <p class="text-sm mt-1" style="color: var(--fono-texto-suave);">{{ t().pmc_reservar.subtitulo }}</p>
+  </div>
+
+  <div class="form-card mx-auto" style="max-width: 700px;">
+
+    <!-- ============ HORA RESERVADA ============ -->
+    <div *ngIf="citaCreada">
+      <div class="success-alert">
+        <strong>{{ t().pmc_reservar.exito_titulo }}</strong>
+        <p class="mt-1 mb-0">
+          {{ textosService.reemplazarVariables(t().pmc_reservar.exito_desc, {
+               fecha: (citaCreada.fecha_hora | date:'EEEE d \'de\' MMMM, HH:mm') || ''
+             }) }}
+        </p>
+      </div>
+
+      <div class="form-actions mt-4">
+        <button type="button" class="btn-primary" (click)="irAMisCitas()">
+          {{ t().pmc_reservar.btn_ver_mis_citas }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="irAlVideo()"
+                *ngIf="pmCitaService.admiteVideo(citaCreada)">
+          {{ t().pmc_reservar.btn_adjuntar_video }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="reservarOtra()">
+          {{ t().pmc_reservar.btn_reservar_otra }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ============ FORMULARIO ============ -->
+    <ng-container *ngIf="!citaCreada">
+
+      <p class="text-sm mb-4" style="color: var(--fono-texto-suave);">
+        {{ t().pmc_reservar.identificado_como }}
+        <strong style="color: var(--fono-texto-cuerpo);">{{ nombreCliente }}</strong>
+      </p>
+
+      <!-- Reglas del negocio, antes de que la persona escriba nada -->
+      <div class="info-alert mb-4">
+        <strong>{{ t().pmc_reservar.reglas_titulo }}</strong>
+        <ul class="mt-2 mb-0" style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.25rem;">
+          <li>{{ textoReglaAnticipacion }}</li>
+          <li>{{ textoReglaReprogramaciones }}</li>
+          <li>{{ t().pmc_reservar.regla_video }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="cargandoProfesionales" class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ t().pmc_reservar.cargando_profesionales }}</p>
+      </div>
+
+      <div *ngIf="errorProfesionales" class="error-alert">{{ errorProfesionales }}</div>
+
+      <!-- Sin profesionales acreditados no hay con quién agendar -->
+      <div *ngIf="!cargandoProfesionales && !errorProfesionales && profesionales.length === 0"
+           class="empty-state">
+        <strong>{{ t().pmc_reservar.vacio_profesionales_titulo }}</strong>
+        <p class="mt-1 mb-0">{{ t().pmc_reservar.vacio_profesionales_desc }}</p>
+      </div>
+
+      <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+      <form *ngIf="!cargandoProfesionales && profesionales.length > 0"
+            [formGroup]="formulario" (ngSubmit)="onSubmit()" class="custom-form">
+
+        <!-- Paso 1: profesional -->
+        <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">
+          {{ t().pmc_reservar.paso_profesional }}
+        </h3>
+
+        <div class="form-group">
+          <label for="id_profesional">{{ t().pmc_reservar.label_profesional }}</label>
+          <select id="id_profesional" formControlName="id_profesional">
+            <option value="">{{ t().pmc_reservar.placeholder_profesional }}</option>
+            <option *ngFor="let profesional of profesionales" [value]="profesional.id_profesional">
+              {{ nombreProfesional(profesional) }}
+            </option>
+          </select>
+          <small class="error-text" *ngIf="campoInvalido('id_profesional')">
+            {{ t().pmc_reservar.alerta_profesional }}
+          </small>
+
+          <div class="preview-files" *ngIf="profesionalElegido">
+            <p class="m-0 font-semibold" style="color: var(--fono-texto);">
+              {{ nombreProfesional(profesionalElegido) }}
+            </p>
+            <p class="m-0 text-sm" style="color: var(--fono-texto-suave);">
+              {{ especialidadesDe(profesionalElegido) }}
+            </p>
+            <p class="m-0 text-sm" style="color: var(--fono-texto-suave);"
+               *ngIf="profesionalElegido.numero_registro_salud_profesional">
+              {{ t().pmc_reservar.registro_salud }}
+              {{ profesionalElegido.numero_registro_salud_profesional }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Paso 2: horario -->
+        <h3 class="text-base font-semibold mt-5 mb-3" style="color: var(--fono-texto);">
+          {{ t().pmc_reservar.paso_horario }}
+        </h3>
+
+        <div class="form-group">
+          <label for="fecha_hora">{{ t().pmc_reservar.label_fecha_hora }}</label>
+          <input id="fecha_hora" type="datetime-local" formControlName="fecha_hora"
+                 [min]="minimoFechaHora">
+          <small class="help-text">{{ textoAyudaFechaHora }}</small>
+          <small class="error-text" *ngIf="campoInvalido('fecha_hora')">
+            {{ t().pmc_reservar.alerta_fecha_hora_req }}
+          </small>
+          <small class="error-text" *ngIf="faltaAnticipacion">{{ textoAlertaAnticipacion }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="duracion_minutos">{{ t().pmc_reservar.label_duracion }}</label>
+          <select id="duracion_minutos" formControlName="duracion_minutos">
+            <option *ngFor="let duracion of duraciones" [value]="duracion">
+              {{ duracion }} {{ t().pmc_reservar.minutos }}
+            </option>
+          </select>
+          <small class="help-text">{{ textoAyudaDuracion }}</small>
+        </div>
+
+        <!-- Paso 3: motivo -->
+        <h3 class="text-base font-semibold mt-5 mb-3" style="color: var(--fono-texto);">
+          {{ t().pmc_reservar.paso_motivo }}
+        </h3>
+
+        <div class="form-group">
+          <label for="motivo_consulta">{{ t().pmc_reservar.label_motivo }}</label>
+          <textarea id="motivo_consulta" formControlName="motivo_consulta" rows="3"
+                    [placeholder]="t().pmc_reservar.placeholder_motivo"></textarea>
+          <small class="help-text">{{ t().pmc_reservar.ayuda_motivo }}</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="!puedeEnviar">
+            {{ reservando ? t().pmc_reservar.btn_reservando : t().pmc_reservar.btn_reservar }}
+          </button>
+        </div>
+      </form>
+
+    </ng-container>
+
+  </div>
+
+</div>

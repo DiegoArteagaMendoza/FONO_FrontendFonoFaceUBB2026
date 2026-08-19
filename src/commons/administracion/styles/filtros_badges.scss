@@ -56,6 +56,22 @@
   &.PE { background-color: #ffa0a8; color: #b92231; } 
   &.FA { background-color: #d1e7dd; color: #0f5132; } 
   
+  /* Estados de acreditación del Portal Médico.
+     Antes estas vistas reutilizaban .badge-ninos / .badge-locutores, que son
+     públicos objetivo de Cuidados: mismos colores, pero un nombre que no decía
+     nada del estado y que se rompería al cambiar la paleta de Cuidados. */
+  &.badge-pendiente { background-color: #cff4fc; color: #055160; }
+  &.badge-revision  { background-color: #fff3cd; color: #856404; }
+  &.badge-aprobado  { background-color: #d1e7dd; color: #0f5132; }
+  &.badge-rechazado { background-color: #f8d7da; color: #721c24; }
+
+  /* Estados de una cita (PmCita.Estado). Nombres propios en vez de reutilizar
+     los de acreditación: comparten paleta hoy, pero son ciclos de vida
+     distintos y conviene poder cambiar uno sin arrastrar el otro. */
+  &.badge-cita-reservada { background-color: #d1e7dd; color: #0f5132; }
+  &.badge-cita-realizada { background-color: #cff4fc; color: #055160; }
+  &.badge-cita-cancelada { background-color: #f8d7da; color: #721c24; }
+
   /* Colores para Cuidados (Ajusta según tu lógica) */
   &.badge-ninos { background-color: #d1e7dd; color: #0f5132; }
   &.badge-profesores { background-color: #fff3cd; color: #856404; }

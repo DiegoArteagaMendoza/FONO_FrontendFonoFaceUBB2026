@@ -26,6 +26,11 @@
         </a>
 
         @if (portalMedicoService.profesionalActual()) {
+          <!-- La agenda va primero: es la pantalla de uso diario del profesional -->
+          <a routerLink="/portalmedico/agenda" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.mi_agenda }}
+          </a>
           <a routerLink="/portalmedico/perfil" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.mi_perfil }}
@@ -44,12 +49,38 @@
           </a>
         }
 
+        <!-- Sección del paciente autenticado -->
+        @if (!portalMedicoService.profesionalActual() && pmClienteService.clienteActual()) {
+          <a routerLink="/portalmedico/paciente/citas" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.mis_citas }}
+          </a>
+          <a routerLink="/portalmedico/paciente/video" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.mi_video }}
+          </a>
+        }
+
+        <!-- Salida al portal público de FonoFace. Antes solo existía en el menú
+             móvil, así que en escritorio no había forma de volver. -->
+        <a routerLink="/portal/inicio"
+           class="px-3 py-2 rounded-md text-sm font-medium text-sky-200 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+          {{ t().pm_navbar.volver_portal }}
+        </a>
+
         <app-boton-tema class="text-white ml-1"></app-boton-tema>
 
+        <!-- Un único acceso: la pantalla de login trae las pestañas para elegir
+             si entras como paciente o como fonoaudiólogo/a. -->
         @if (portalMedicoService.profesionalActual()) {
           <button (click)="cerrarSesion()"
                   class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.cerrar_sesion }}
+          </button>
+        } @else if (pmClienteService.clienteActual()) {
+          <button (click)="cerrarSesionPaciente()"
+                  class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.cerrar_sesion }}
           </button>
         } @else {
           <a routerLink="/portalmedico/login"
@@ -67,14 +98,21 @@
         <a routerLink="/portalmedico/directorio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.directorio }}</a>
 
         @if (portalMedicoService.profesionalActual()) {
+          <a routerLink="/portalmedico/agenda" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_agenda }}</a>
           <a routerLink="/portalmedico/perfil" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.mi_perfil }}</a>
           <a routerLink="/portalmedico/documentos" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.documentos }}</a>
           <a routerLink="/portalmedico/especialidades" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.especialidades }}</a>
           <a routerLink="/portalmedico/acreditacion" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.acreditacion }}</a>
           <button (click)="cerrarSesion()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.cerrar_sesion }}</button>
+        } @else if (pmClienteService.clienteActual()) {
+          <!-- Paciente autenticado -->
+          <a routerLink="/portalmedico/paciente/citas" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mis_citas }}</a>
+          <a routerLink="/portalmedico/paciente/citas/reservar" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.reservar_hora }}</a>
+          <a routerLink="/portalmedico/paciente/video" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_video }}</a>
+          <button (click)="cerrarSesionPaciente()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pmc_navbar.cerrar_sesion }}</button>
         } @else {
+          <!-- Sin sesión: un único acceso, con pestañas dentro para elegir el tipo de cuenta -->
           <a routerLink="/portalmedico/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.iniciar_sesion }}</a>
-          <a routerLink="/portalmedico/registro" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.registrarme }}</a>
         }
 
         <a routerLink="/portal/inicio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium text-sky-200 hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.volver_portal }}</a>

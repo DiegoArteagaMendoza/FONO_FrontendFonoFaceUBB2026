@@ -61,3 +61,30 @@
   font-size: 0.95rem;
   white-space: pre-wrap;
 }
+
+/* Avisos de éxito e informativos.
+   Antes cada vista reutilizaba .error-alert pisando los colores con estilos
+   en línea (y esos colores fijos no respetaban el modo oscuro). Estas dos
+   clases usan las variables del tema, así que sirven en ambos temas. */
+.success-alert,
+.info-alert {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid;
+  font-size: 0.95rem;
+
+  p { margin: 0; }
+}
+
+.success-alert {
+  background-color: var(--fono-exito-fondo);
+  color: var(--fono-exito-texto);
+  border-color: var(--fono-exito-borde);
+}
+
+.info-alert {
+  background-color: var(--fono-info-fondo);
+  color: var(--fono-info-texto);
+  border-color: var(--fono-info-borde);
+}

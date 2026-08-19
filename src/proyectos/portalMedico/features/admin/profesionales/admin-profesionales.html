@@ -47,9 +47,10 @@
           <td>{{ profesional.email_profesional }}</td>
           <td>
             <span class="badge" [ngClass]="{
-              'badge-general': estadoVigente(profesional) === 'PENDIENTE' || estadoVigente(profesional) === 'EN_REVISION',
-              'badge-ninos': estadoVigente(profesional) === 'APROBADO',
-              'badge-locutores': estadoVigente(profesional) === 'RECHAZADO'
+              'badge-pendiente': estadoVigente(profesional) === 'PENDIENTE',
+              'badge-revision': estadoVigente(profesional) === 'EN_REVISION',
+              'badge-aprobado': estadoVigente(profesional) === 'APROBADO',
+              'badge-rechazado': estadoVigente(profesional) === 'RECHAZADO'
             }">
               {{ t().pm_estados[estadoVigente(profesional)] }}
             </span>

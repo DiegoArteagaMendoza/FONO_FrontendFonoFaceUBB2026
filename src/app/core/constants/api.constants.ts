@@ -70,5 +70,62 @@ export const API_ENDPOINTS = {
     especialidadAsignar: '/especialidades/asignar/',
     especialidadQuitar: (idEspecialidad: number) => `/especialidades/${idEspecialidad}/quitar/`,
     profesionalEspecialidadesListar: (idProfesional: number) => `/${idProfesional}/especialidades/`
+  },
+
+  // Portal Médico — pacientes (app PmCliente del backend FonoAppPortalMedico)
+  portalMedicoClientes: {
+    // Paciente: registro, sesión y perfil propio
+    registrar: '/registrar/',
+    login: '/login/',
+    perfil: '/perfil/',
+    perfilEditar: '/perfil/editar/',
+    perfilPassword: '/perfil/password/',
+
+    // Consultas del profesional o del administrador
+    listar: '/listar/',
+    detalle: (idCliente: number) => `/${idCliente}/`,
+    editar: (idCliente: number) => `/${idCliente}/editar/`,
+    eliminar: (idCliente: number) => `/${idCliente}/eliminar/`
+  },
+
+  // Portal Médico — videos de síntomas (app PmVideo del backend FonoAppPortalMedico)
+  portalMedicoVideos: {
+    // Paciente autenticado
+    subir: '/subir/',
+    misVideos: '/mis-videos/',
+    miVideoEliminar: (idVideo: number) => `/mis-videos/${idVideo}/eliminar/`,
+
+    // Profesional o administrador
+    listar: '/listar/',
+    detalle: (idVideo: number) => `/${idVideo}/`,
+    eliminar: (idVideo: number) => `/${idVideo}/eliminar/`,
+
+    // Videos adjuntos a una cita concreta (solo el profesional que la atiende)
+    listarPorCita: (idCita: number) => `/listar/?cita=${idCita}`
+  },
+
+  // Portal Médico — citas telemáticas (app PmCita del backend FonoAppPortalMedico).
+  // Todos los endpoints de paciente exigen el token del paciente y toman al dueño
+  // de la cita desde ese token: el id_cliente NO viaja en el cuerpo.
+  portalMedicoCitas: {
+    // Paciente autenticado
+    reservar: '/reservar/',
+    misCitas: (idCliente: number) => `/cliente/${idCliente}/listar/`,
+    misCitasProximas: (idCliente: number) => `/cliente/${idCliente}/listar/?proximas=true`,
+    clienteCancelar: (idCita: number) => `/${idCita}/cliente/cancelar/`,
+    clientePosponer: (idCita: number) => `/${idCita}/cliente/posponer/`,
+
+    // Profesional autenticado
+    agenda: '/profesional/listar/',
+    agendaProximas: '/profesional/listar/?proximas=true',
+    profesionalCancelar: (idCita: number) => `/${idCita}/profesional/cancelar/`,
+    profesionalPosponer: (idCita: number) => `/${idCita}/profesional/posponer/`,
+    profesionalMarcarRealizada: (idCita: number) => `/${idCita}/profesional/marcar-realizada/`,
+
+    // Detalle: lo puede pedir el paciente dueño, el profesional que atiende o un admin
+    detalle: (idCita: number) => `/${idCita}/`,
+
+    // Listado administrativo con filtros combinables
+    listar: '/listar/'
   }
 };
