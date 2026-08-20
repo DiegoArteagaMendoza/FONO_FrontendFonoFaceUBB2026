@@ -45,17 +45,61 @@ export interface Cita {
   // Calculados por el backend
   esta_activa: boolean;
   ya_paso: boolean;
+
+  /** Solo llega al reservar: indica si la cita se creó sin sesión iniciada. */
+  reservada_sin_sesion?: boolean;
+}
+
+/** Hora publicada por un profesional, tal como la ve el paciente al elegir. */
+export interface DisponibilidadPublica {
+  id_disponibilidad: number;
+  profesional: number;
+  fecha_hora: string;
+  fecha_hora_fin: string;
+  duracion_minutos: number;
+}
+
+/** La misma hora vista por el profesional dueño, que sí sabe si ya fue tomada. */
+export interface Disponibilidad extends DisponibilidadPublica {
+  cita: number | null;
+  estado: boolean;
+  fecha_creacion: string;
+  esta_reservado: boolean;
+  esta_disponible: boolean;
+  ya_paso: boolean;
+}
+
+/** Respuesta de publicar: cada hora se evalúa por separado. */
+export interface ResultadoPublicacion {
+  creados: Disponibilidad[];
+  rechazados: { fecha_hora: string; motivo: string }[];
 }
 
 /**
- * Cuerpo de POST /reservar/. No incluye el id del paciente: el backend lo toma
- * del token, igual que en la subida de videos. Mandarlo no serviría de nada.
+ * Datos personales de quien reserva sin haber iniciado sesión. Con ellos el
+ * backend crea o recupera su ficha; son los mismos campos del registro salvo
+ * la contraseña.
+ */
+export interface PacienteInvitadoPayload {
+  nombres_cliente: string;
+  apellidos_clientes: string;
+  rut_cliente: string;
+  fecha_nacimiento_cliente: string;
+  email_cliente: string;
+  telefono_cliente: string;
+}
+
+/**
+ * Cuerpo de POST /reservar/. Ni la fecha ni la duración ni el profesional
+ * viajan aquí: los tres salen del bloque que el profesional publicó.
+ *
+ * 'paciente' solo se envía cuando no hay sesión. Con token, el dueño de la
+ * cita sale siempre del token.
  */
 export interface ReservarCitaPayload {
-  id_profesional: number;
-  fecha_hora: string;
+  id_disponibilidad: number;
   motivo_consulta?: string;
-  duracion_minutos?: number;
+  paciente?: PacienteInvitadoPayload;
 }
 
 export interface PosponerCitaPayload {
@@ -106,6 +150,19 @@ export class PmCitaService {
     return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PMC_ACCESS)}` });
   }
 
+  /**
+   * Cabeceras para reservar, que ahora funciona con y sin sesión. Si no hay
+   * token, se devuelve un objeto vacío en vez de "Bearer null": mandar una
+   * cabecera de autorización inválida hace que el backend responda 401 en vez
+   * de tratar la petición como anónima.
+   */
+  private getHeadersOpcionalesDeCliente(): HttpHeaders {
+    const token = localStorage.getItem(CLAVE_PMC_ACCESS);
+    return token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : new HttpHeaders();
+  }
+
   private getProfesionalAuthHeaders(): HttpHeaders {
     return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PM_ACCESS)}` });
   }
@@ -114,11 +171,26 @@ export class PmCitaService {
   // Lado del paciente
   // ---------------------------------------------------------------------
 
+  /**
+   * Reserva tomando una hora publicada. Funciona con y sin sesión: si hay
+   * token va como el paciente autenticado, y si no, el payload debe traer
+   * 'paciente' con sus datos personales.
+   */
   reservar(datos: ReservarCitaPayload): Observable<Cita> {
     return this.http.post<Cita>(
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.reservar}`,
       datos,
-      { headers: this.getClienteAuthHeaders() }
+      { headers: this.getHeadersOpcionalesDeCliente() }
+    );
+  }
+
+  /**
+   * Horas libres de un profesional. Endpoint público: el paciente necesita
+   * verlas antes de decidir si se registra.
+   */
+  getDisponibilidadDeProfesional(idProfesional: number): Observable<DisponibilidadPublica[]> {
+    return this.http.get<DisponibilidadPublica[]>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadDeProfesional(idProfesional)}`
     );
   }
 
@@ -188,6 +260,42 @@ export class PmCitaService {
     return this.http.patch<Cita>(
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.profesionalMarcarRealizada(idCita)}`,
       {},
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  // --- Disponibilidad publicada por el profesional ---
+
+  /**
+   * Publica varias horas de una vez. La respuesta separa las creadas de las
+   * rechazadas: un solape en una hora no debe obligar a repetir la jornada.
+   */
+  publicarDisponibilidad(fechasHora: string[], duracionMinutos?: number): Observable<ResultadoPublicacion> {
+    const cuerpo: { fechas_hora: string[]; duracion_minutos?: number } = { fechas_hora: fechasHora };
+    if (duracionMinutos) cuerpo.duracion_minutos = duracionMinutos;
+
+    return this.http.post<ResultadoPublicacion>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadPublicar}`,
+      cuerpo,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /** Horas publicadas por el profesional autenticado, con su estado. */
+  getMisDisponibilidades(incluirPasadas = false): Observable<Disponibilidad[]> {
+    const ruta = incluirPasadas
+      ? API_ENDPOINTS.portalMedicoCitas.disponibilidadMiasTodas
+      : API_ENDPOINTS.portalMedicoCitas.disponibilidadMias;
+
+    return this.http.get<Disponibilidad[]>(`${this.apiCitas}${ruta}`, {
+      headers: this.getProfesionalAuthHeaders()
+    });
+  }
+
+  /** Retira una hora publicada. El backend rechaza las que ya tienen cita. */
+  retirarDisponibilidad(idDisponibilidad: number): Observable<Disponibilidad> {
+    return this.http.delete<Disponibilidad>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadRetirar(idDisponibilidad)}`,
       { headers: this.getProfesionalAuthHeaders() }
     );
   }

@@ -31,6 +31,10 @@
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pmc_navbar.mi_agenda }}
           </a>
+          <a routerLink="/portalmedico/disponibilidad" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.mis_horas }}
+          </a>
           <a routerLink="/portalmedico/perfil" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.mi_perfil }}
@@ -46,6 +50,15 @@
           <a routerLink="/portalmedico/acreditacion" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.acreditacion }}
+          </a>
+        }
+
+        <!-- Reservar está abierto a cualquiera: no hace falta cuenta para pedir
+             hora. Solo se oculta al profesional, que reserva nada. -->
+        @if (!portalMedicoService.profesionalActual()) {
+          <a routerLink="/portalmedico/paciente/citas/reservar" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.reservar_hora }}
           </a>
         }
 
@@ -99,6 +112,7 @@
 
         @if (portalMedicoService.profesionalActual()) {
           <a routerLink="/portalmedico/agenda" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_agenda }}</a>
+          <a routerLink="/portalmedico/disponibilidad" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mis_horas }}</a>
           <a routerLink="/portalmedico/perfil" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.mi_perfil }}</a>
           <a routerLink="/portalmedico/documentos" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.documentos }}</a>
           <a routerLink="/portalmedico/especialidades" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.especialidades }}</a>
@@ -111,7 +125,9 @@
           <a routerLink="/portalmedico/paciente/video" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_video }}</a>
           <button (click)="cerrarSesionPaciente()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pmc_navbar.cerrar_sesion }}</button>
         } @else {
-          <!-- Sin sesión: un único acceso, con pestañas dentro para elegir el tipo de cuenta -->
+          <!-- Sin sesión: se puede reservar igual, y el acceso es uno solo con
+               pestañas dentro para elegir el tipo de cuenta -->
+          <a routerLink="/portalmedico/paciente/citas/reservar" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.reservar_hora }}</a>
           <a routerLink="/portalmedico/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.iniciar_sesion }}</a>
         }
 

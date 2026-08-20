@@ -126,6 +126,14 @@ export const API_ENDPOINTS = {
     detalle: (idCita: number) => `/${idCita}/`,
 
     // Listado administrativo con filtros combinables
-    listar: '/listar/'
+    listar: '/listar/',
+
+    // Disponibilidad: horas que el profesional publica para ser reservadas.
+    // El listado por profesional es público porque se puede reservar sin cuenta.
+    disponibilidadPublicar: '/disponibilidad/publicar/',
+    disponibilidadMias: '/disponibilidad/mias/',
+    disponibilidadMiasTodas: '/disponibilidad/mias/?todas=true',
+    disponibilidadRetirar: (idDisponibilidad: number) => `/disponibilidad/${idDisponibilidad}/retirar/`,
+    disponibilidadDeProfesional: (idProfesional: number) => `/disponibilidad/profesional/${idProfesional}/`
   }
 };

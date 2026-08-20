@@ -1,0 +1,155 @@
+<div class="page-container">
+
+  <div class="mx-auto" style="max-width: 780px;">
+
+    <div class="mb-5">
+      <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pm_disponibilidad.titulo }}</h2>
+      <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pm_disponibilidad.subtitulo }}</p>
+    </div>
+
+    <!-- Sin acreditación aprobada no aparece en el buscador de pacientes -->
+    <div class="info-alert mb-5" *ngIf="acreditacionPendiente">
+      <strong>{{ t().pm_disponibilidad.sin_acreditacion_titulo }}</strong>
+      <p class="mt-1 mb-2">{{ t().pm_disponibilidad.sin_acreditacion_desc }}</p>
+      <button type="button" class="btn-secondary" (click)="irAlPerfil()">
+        {{ t().pm_disponibilidad.btn_ir_perfil }}
+      </button>
+    </div>
+
+    <!-- ============ PUBLICAR ============ -->
+    <div class="form-card" style="max-width: none;">
+      <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">
+        {{ t().pm_disponibilidad.publicar_titulo }}
+      </h3>
+
+      <div *ngIf="mensajeExito" class="success-alert">{{ mensajeExito }}</div>
+      <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+      <!-- Horas que el backend no aceptó, con su motivo -->
+      <div *ngIf="rechazados.length > 0" class="info-alert">
+        <ul class="m-0" style="padding-left: 1.25rem;">
+          <li *ngFor="let rechazado of rechazados">
+            {{ rechazado.fecha_hora | date:'d \'de\' MMMM, HH:mm' }} — {{ rechazado.motivo }}
+          </li>
+        </ul>
+      </div>
+
+      <form [formGroup]="formulario" (ngSubmit)="publicar()" class="custom-form">
+        <div class="form-group">
+          <label for="fecha">{{ t().pm_disponibilidad.label_fecha }}</label>
+          <input id="fecha" type="date" formControlName="fecha" [min]="hoy">
+          <small class="help-text">{{ t().pm_disponibilidad.ayuda_fecha }}</small>
+          <small class="error-text" *ngIf="campoInvalido('fecha')">
+            {{ t().pm_disponibilidad.alerta_fecha }}
+          </small>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <div class="form-group" style="flex: 1; min-width: 140px;">
+            <label for="desde">{{ t().pm_disponibilidad.label_desde }}</label>
+            <input id="desde" type="time" formControlName="desde">
+          </div>
+
+          <div class="form-group" style="flex: 1; min-width: 140px;">
+            <label for="hasta">{{ t().pm_disponibilidad.label_hasta }}</label>
+            <input id="hasta" type="time" formControlName="hasta">
+          </div>
+        </div>
+
+        <small class="error-text" *ngIf="rangoInvalido">{{ t().pm_disponibilidad.alerta_rango }}</small>
+
+        <div class="form-group">
+          <label for="duracion_minutos">{{ t().pm_disponibilidad.label_duracion }}</label>
+          <select id="duracion_minutos" formControlName="duracion_minutos">
+            <option *ngFor="let duracion of duraciones" [value]="duracion">
+              {{ duracion }} {{ t().pm_disponibilidad.minutos }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Vista previa: qué horas se van a crear exactamente -->
+        <div class="preview-files" *ngIf="!rangoInvalido">
+          <ng-container *ngIf="horasCalculadas.length > 0">
+            <p class="m-0 font-semibold" style="color: var(--fono-texto);">{{ textoVistaPrevia }}</p>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span class="badge badge-cita-reservada" *ngFor="let hora of horasCalculadas">
+                {{ hora | date:'HH:mm' }}
+              </span>
+            </div>
+          </ng-container>
+          <p class="m-0 text-sm" style="color: var(--fono-texto-suave);"
+             *ngIf="horasCalculadas.length === 0">
+            {{ t().pm_disponibilidad.vista_previa_vacia }}
+          </p>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="!puedePublicar">
+            {{ publicando ? t().pm_disponibilidad.btn_publicando : t().pm_disponibilidad.btn_publicar }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ============ LISTADO ============ -->
+    <div class="mt-8">
+      <h3 class="text-lg font-bold mb-3" style="color: var(--fono-texto);">
+        {{ t().pm_disponibilidad.listado_titulo }}
+      </h3>
+
+      <div class="tabs-cuenta mb-4" role="tablist">
+        <button type="button" role="tab" [attr.aria-selected]="!incluirPasadas"
+                [class.activa]="!incluirPasadas" (click)="cambiarFiltro(false)">
+          {{ t().pm_disponibilidad.filtro_proximas }}
+        </button>
+        <button type="button" role="tab" [attr.aria-selected]="incluirPasadas"
+                [class.activa]="incluirPasadas" (click)="cambiarFiltro(true)">
+          {{ t().pm_disponibilidad.filtro_todas }}
+        </button>
+      </div>
+
+      <div *ngIf="cargando" class="loading-state">
+        <div class="spinner"></div>
+        <p>{{ t().pm_disponibilidad.cargando }}</p>
+      </div>
+
+      <div *ngIf="!cargando && bloques.length === 0" class="empty-state">
+        <strong>{{ t().pm_disponibilidad.vacio_titulo }}</strong>
+        <p class="mt-1 mb-0">{{ t().pm_disponibilidad.vacio_desc }}</p>
+      </div>
+
+      <div *ngFor="let bloque of bloques" class="form-card mb-2" style="max-width: none;">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div style="min-width: 0; flex: 1;">
+            <p class="m-0 font-semibold" style="color: var(--fono-texto);">
+              {{ bloque.fecha_hora | date:'EEEE d \'de\' MMMM, HH:mm' }}
+            </p>
+            <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+              {{ bloque.duracion_minutos }} {{ t().pm_disponibilidad.minutos }} · {{ textoTermina(bloque) }}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="badge" [ngClass]="claseEstado(bloque)">{{ etiquetaEstado(bloque) }}</span>
+            <button type="button" class="btn-icon delete" *ngIf="puedeRetirar(bloque)"
+                    (click)="retirar(bloque)">
+              {{ t().pm_disponibilidad.btn_retirar }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Una hora ya tomada no se retira: se cancela desde la agenda -->
+        <div class="info-alert mt-3" *ngIf="bloque.esta_reservado && bloque.estado">
+          {{ t().pm_disponibilidad.aviso_reservada }}
+          <div class="mt-2">
+            <button type="button" class="btn-secondary" (click)="irALaAgenda()">
+              {{ t().pm_disponibilidad.btn_ir_agenda }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
