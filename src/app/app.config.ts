@@ -1,4 +1,4 @@
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { ApplicationConfig, LOCALE_ID, importProvidersFrom } from '@angular/core';
@@ -16,7 +16,14 @@ registerLocaleData(localeEsCl);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    // withHashLocation(): el hosting de cPanel (dev.vocare-ubb.cl) no aplica
+    // el .htaccess necesario para reescribir rutas profundas hacia index.html
+    // (se probó mod_rewrite y FallbackResource, ninguno tuvo efecto — parece
+    // una restricción de AllowOverride del hosting, no algo resoluble desde
+    // el panel de usuario). Con hash routing (/#/portalmedico en vez de
+    // /portalmedico) el navegador nunca le pide esa ruta al servidor, así
+    // que no depende de ninguna configuración del lado del servidor.
+    provideRouter(routes, withHashLocation()),
     provideHttpClient(withInterceptors([authInterceptor])),
     { provide: LOCALE_ID, useValue: 'es-CL' },
     // importProvidersFrom(RecaptchaModule),
