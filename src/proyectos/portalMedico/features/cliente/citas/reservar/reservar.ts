@@ -4,7 +4,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
-import { PortalMedicoService, ProfesionalDirectorio } from '@core/services/portal-medico/portal-medico';
+import {
+  PortalMedicoService,
+  ProfesionalDirectorio,
+  Especialidad
+} from '@core/services/portal-medico/portal-medico';
 import {
   PmCitaService,
   Cita,
@@ -50,6 +54,15 @@ export class PmClienteReservarCitaComponent implements OnInit {
   cargandoProfesionales = true;
   errorProfesionales: string | null = null;
 
+  /**
+   * Filtro por especialidad. Se resuelve en el navegador contra lo que ya
+   * entrega el directorio (cada profesional viene con sus especialidades), así
+   * que no hace falta pedirle nada más al backend al cambiarlo.
+   * Cadena vacía = sin filtro.
+   */
+  especialidades: Especialidad[] = [];
+  especialidadFiltro = '';
+
   reservando = false;
   errorMensaje: string | null = null;
   citaCreada: Cita | null = null;
@@ -80,6 +93,47 @@ export class PmClienteReservarCitaComponent implements OnInit {
       return;
     }
     this.cargarProfesionales();
+    this.cargarEspecialidades();
+  }
+
+  /**
+   * Profesionales que se ofrecen en el selector, ya acotados por el filtro.
+   * Solo salen del directorio público, que son los acreditados: el mismo
+   * conjunto con el que el backend permite reservar.
+   */
+  get profesionalesFiltrados(): ProfesionalDirectorio[] {
+    if (!this.especialidadFiltro) return this.profesionales;
+
+    const idEspecialidad = Number(this.especialidadFiltro);
+    return this.profesionales.filter(profesional =>
+      profesional.especialidades?.some(e => e.id_especialidad === idEspecialidad)
+    );
+  }
+
+  get textoContadorProfesionales(): string {
+    return this.textosService.reemplazarVariables(this.t().pmc_reservar.contador_profesionales, {
+      cantidad: this.profesionalesFiltrados.length + '',
+      total: this.profesionales.length + ''
+    });
+  }
+
+  /**
+   * Al cambiar el filtro, el profesional ya elegido puede quedar fuera del
+   * listado. Si pasa, se limpia la selección: dejarla puesta permitiría enviar
+   * a alguien que la persona ya no está viendo en pantalla.
+   */
+  onCambioEspecialidad(evento: Event): void {
+    this.especialidadFiltro = (evento.target as HTMLSelectElement).value;
+
+    const elegido = this.formulario.get('id_profesional')?.value;
+    if (!elegido) return;
+
+    const sigueVisible = this.profesionalesFiltrados
+      .some(profesional => profesional.id_profesional === Number(elegido));
+
+    if (!sigueVisible) {
+      this.formulario.patchValue({ id_profesional: '' });
+    }
   }
 
   get nombreCliente(): string {
@@ -154,6 +208,20 @@ export class PmClienteReservarCitaComponent implements OnInit {
   get textoReglaReprogramaciones(): string {
     return this.textosService.reemplazarVariables(this.t().pmc_reservar.regla_reprogramaciones, {
       maximas: this.reprogramacionesMaximas + ''
+    });
+  }
+
+  /**
+   * Catálogo de especialidades para el filtro. Si falla, el filtro no se
+   * muestra y la reserva sigue funcionando: es una ayuda, no un requisito.
+   */
+  private cargarEspecialidades(): void {
+    this.portalMedicoService.getEspecialidades().subscribe({
+      next: (especialidades) => {
+        this.especialidades = especialidades;
+        this.cdr.detectChanges();
+      },
+      error: () => this.cdr.detectChanges()
     });
   }
 
