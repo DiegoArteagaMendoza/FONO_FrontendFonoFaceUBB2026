@@ -58,6 +58,7 @@ import { PmClienteMisCitasComponent } from '../proyectos/portalMedico/features/c
 import { PmClienteReservarCitaComponent } from '../proyectos/portalMedico/features/cliente/citas/reservar/reservar';
 // Agenda del profesional (app PmCita, lado del fonoaudiólogo)
 import { PmAgendaComponent } from '../proyectos/portalMedico/features/agenda/agenda';
+import { PmDisponibilidadComponent } from '../proyectos/portalMedico/features/disponibilidad/disponibilidad';
 // Panel de administración del Portal Médico: se renderiza dentro del Layout de
 // administracion/ (mismo sidebar/sesión de FonoApp), por eso se registra como hijo
 // de ese Layout más abajo en vez de dentro del bloque 'portalmedico/*'.
@@ -123,6 +124,8 @@ export const routes: Routes = [
       { path: 'acreditacion', component: PortalMedicoAcreditacionComponent },
       // Agenda del profesional: las citas que sus pacientes reservaron con él
       { path: 'agenda', component: PmAgendaComponent },
+      // Horas que el profesional publica para que los pacientes las reserven
+      { path: 'disponibilidad', component: PmDisponibilidadComponent },
 
       // LADO PACIENTE: registro, sesión propia y videos de síntomas.
       // Usa su propia identidad JWT (claim 'id_cliente'), separada de la del
