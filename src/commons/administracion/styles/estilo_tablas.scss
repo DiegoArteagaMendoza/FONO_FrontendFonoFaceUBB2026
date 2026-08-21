@@ -75,3 +75,24 @@
   border-radius: 6px; 
   text-align: center;
 }
+/* Nombre de documento dentro de una tabla que abre un visor en vez de navegar.
+   Es un <button> por accesibilidad (no lleva a ninguna URL), pero debe leerse
+   como el enlace que reemplaza. */
+.enlace-documento {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--fono-primario);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover { color: var(--fono-primario-oscuro, var(--fono-primario)); }
+
+  &:focus-visible {
+    outline: 2px solid var(--fono-primario);
+    outline-offset: 2px;
+  }
+}

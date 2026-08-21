@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AdministracionService } from '@core/services/administracion/administracion';
 // Inject the service
 import { TextosService } from '@core/services/textos/textos';
+import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.constants';
 
 @Component({
   selector: 'app-crear-inicio',
@@ -73,7 +74,9 @@ export class AdministracionInicioCrearComponent implements OnInit {
     this.adminService.crearInicio(formData).subscribe({
       next: (respuesta) => {
         console.log('Elemento creado:', respuesta);
-        this.router.navigate(['/administracion/inicio']); 
+        // Al listado del carrusel, no al dashboard: '/administracion/inicio'
+        // renderiza el panel de inicio, no la lista que se acaba de modificar.
+        this.router.navigate([RUTA_LISTADO_CARRUSEL]);
       },
       error: (err) => {
         console.error('Error al guardar', err);
@@ -84,6 +87,10 @@ export class AdministracionInicioCrearComponent implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/administracion']);
+    // Vuelve al listado del carrusel, que es de donde se llega aquí.
+    // Antes apuntaba a '/administracion', que no es ninguna ruta declarada
+    // (todas cuelgan de 'administracion/algo'), y el router lanzaba
+    // NG04002: Cannot match any routes al pulsar Volver o Cancelar.
+    this.router.navigate([RUTA_LISTADO_CARRUSEL]);
   }
 }

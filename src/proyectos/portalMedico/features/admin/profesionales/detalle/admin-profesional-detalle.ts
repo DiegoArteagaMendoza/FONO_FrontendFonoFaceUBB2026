@@ -1,7 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { PortalMedicoService, ProfesionalPerfil } from '@core/services/portal-medico/portal-medico';
+import {
+  PortalMedicoService,
+  ProfesionalPerfil,
+  DocumentoRespaldo
+} from '@core/services/portal-medico/portal-medico';
 import { AdministracionService } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
 
@@ -21,6 +26,12 @@ export class PmAdminProfesionalDetalleComponent implements OnInit {
   mensajeExito: string | null = null;
   procesandoAcreditacion = false;
   procesandoDocumento: number | null = null;
+
+  // Documento que se está revisando en el visor (null = visor cerrado)
+  documentoAbierto: DocumentoRespaldo | null = null;
+  urlDocumentoSegura: SafeResourceUrl | null = null;
+
+  private sanitizer = inject(DomSanitizer);
 
   constructor(
     private route: ActivatedRoute,
@@ -118,5 +129,26 @@ export class PmAdminProfesionalDetalleComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  /**
+   * Abre el documento en el visor sobre la ficha, en vez de saltar a otra
+   * pestaña: revisar una acreditacion implica ir y volver entre el respaldo y
+   * los datos, y perder la pagina en cada clic hacia mas lento el trabajo.
+   *
+   * La URL pasa por el sanitizador porque Angular bloquea las URLs dinamicas
+   * en [data] de un <object> (las trata como recurso ejecutable). Es seguro:
+   * viene del propio backend, no del usuario.
+   */
+  abrirDocumento(documento: DocumentoRespaldo): void {
+    this.documentoAbierto = documento;
+    this.urlDocumentoSegura = this.sanitizer.bypassSecurityTrustResourceUrl(
+      documento.url_documento_profesional
+    );
+  }
+
+  cerrarDocumento(): void {
+    this.documentoAbierto = null;
+    this.urlDocumentoSegura = null;
   }
 }

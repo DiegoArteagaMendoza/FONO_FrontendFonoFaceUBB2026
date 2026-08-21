@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { AdministracionService } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.constants';
 
 @Component({
   selector: 'app-editar-inicio',
@@ -138,6 +139,8 @@ export class AdministracionInicioEditarComponent implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/administracion/inicio']);
+    // Al listado del carrusel, no al dashboard: '/administracion/inicio'
+    // renderiza el panel de inicio, no la lista de la que se venía.
+    this.router.navigate([RUTA_LISTADO_CARRUSEL]);
   }
 }

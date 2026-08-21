@@ -88,9 +88,12 @@
           <tbody>
             <tr *ngFor="let documento of profesional.documentos">
               <td class="td-title">
-                <a [href]="documento.url_documento_profesional" target="_blank" rel="noopener">
+                <!-- Abre el visor sobre la ficha en vez de saltar a otra pestaña,
+                     para no perder el contexto de la revisión. -->
+                <button type="button" class="enlace-documento"
+                        (click)="abrirDocumento(documento)">
                   {{ t().pm_tipos_documento[documento.tipo_documeto_profesional] }}
-                </a>
+                </button>
               </td>
               <td>{{ documento.fecha_subida_documento_profesional | date:'dd/MM/yyyy HH:mm' }}</td>
               <td>
@@ -126,6 +129,45 @@
           {{ relacion.especialidad.nombre_especialidad_profesional }}
         </span>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ VISOR DEL DOCUMENTO ============ -->
+<!-- Se muestra sobre la ficha para revisar el respaldo sin perder el contexto.
+     El <object> intenta incrustar el PDF y, si el navegador o el servicio de
+     almacenamiento no lo permiten, cae en el bloque de respaldo de dentro. -->
+<div class="modal-overlay" *ngIf="documentoAbierto" (click)="cerrarDocumento()">
+  <div class="modal-content" style="max-width: 900px; width: 92vw;" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h3 class="m-0">
+        {{ t().pm_documentos.visor_titulo }} ·
+        {{ t().pm_tipos_documento[documentoAbierto.tipo_documeto_profesional] }}
+      </h3>
+      <button type="button" class="btn-icon" (click)="cerrarDocumento()"
+              [attr.aria-label]="t().pm_documentos.visor_btn_cerrar">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <object [data]="urlDocumentoSegura" type="application/pdf"
+              style="width: 100%; height: 70vh; border: 0;">
+        <div class="error-alert">
+          <strong>{{ t().pm_documentos.visor_error_titulo }}</strong>
+          <p class="mt-1 mb-0">{{ t().pm_documentos.visor_error_desc }}</p>
+        </div>
+      </object>
+    </div>
+
+    <div class="form-actions">
+      <a class="btn-secondary" [href]="documentoAbierto.url_documento_profesional"
+         target="_blank" rel="noopener">
+        {{ t().pm_documentos.visor_btn_descargar }}
+      </a>
+      <button type="button" class="btn-secondary" (click)="cerrarDocumento()">
+        {{ t().pm_documentos.visor_btn_cerrar }}
+      </button>
     </div>
 
   </div>
