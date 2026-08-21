@@ -5,6 +5,7 @@ import { NoticiasService, Noticia } from '@core/services/noticias/noticias';
 
 // IMPORT DE TEXTOS
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-noticias-admin',
@@ -17,7 +18,6 @@ export class NoticiasAdminComponent implements OnInit {
   listaNoticias: Noticia[] = [];
   cargando = true;
   itemSeleccionado: Noticia | null = null;
-  public backendUrl = 'http://127.0.0.1:8000';
 
   public textosService = inject(TextosService);
   public t = this.textosService.t;
@@ -51,17 +51,7 @@ export class NoticiasAdminComponent implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string): string {
-    if (!rutaImagen) return '';
-
-    // Si la API ya devuelve la URL con http/https, la retornamos tal cual
-    if (rutaImagen.startsWith('http')) {
-      return rutaImagen;
-    }
-
-    // Si no, concatenamos evitando dobles slashes
-    return rutaImagen.startsWith('/')
-      ? this.backendUrl + rutaImagen
-      : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   // Métodos de navegación

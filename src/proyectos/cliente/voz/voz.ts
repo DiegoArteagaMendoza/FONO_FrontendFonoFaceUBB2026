@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { VozService, Voz } from '@core/services/voz/voz';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-voz-cliente',
@@ -19,8 +20,6 @@ export class VozClienteComponent implements OnInit {
   vozFiltrada: Voz[] = [];
   cargando = true;
   categoriaActiva = 'TODAS';
-
-  public backendUrl = 'http://127.0.0.1:8000';
 
   categorias = [
     { id: 'TODAS', nombre: 'Todas' },
@@ -70,18 +69,8 @@ export class VozClienteComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Método de imagen con soporte para /media/
   obtenerUrlImagen(rutaImagen: string | null): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-
-    // Si la ruta no incluye '/media/', se lo agregamos
-    if (!rutaImagen.includes('/media/')) {
-      const limpia = rutaImagen.startsWith('/') ? rutaImagen.slice(1) : rutaImagen;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   obtenerNombreCategoria(id: string): string {

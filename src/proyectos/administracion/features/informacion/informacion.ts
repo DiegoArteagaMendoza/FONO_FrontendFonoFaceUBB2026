@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { InformacionService, Informacion } from '@core/services/informacion/informacion';
-import { environment } from '../../../../environments/environment';
 
 // IMPORT DE TEXTOS
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-informacion',
@@ -18,7 +18,6 @@ export class InformacionComponent implements OnInit {
   listaInformacion: Informacion[] = [];
   cargando = true;
   itemSeleccionado: Informacion | null = null;
-  public backendUrl = 'http://127.0.0.1:8000';
 
   public textosService = inject(TextosService)
 
@@ -62,17 +61,7 @@ export class InformacionComponent implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string): string {
-    if (!rutaImagen) return '';
-    
-    // Si la API ya devuelve la URL con http/https, la retornamos tal cual
-    if (rutaImagen.startsWith('http')) {
-      return rutaImagen;
-    }
-    
-    // Si no, concatenamos evitando dobles slashes
-    return rutaImagen.startsWith('/') 
-      ? this.backendUrl + rutaImagen 
-      : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   // Métodos de navegación

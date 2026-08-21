@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
+import { environment } from '../../../../environments/environment';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 // 1. Añadimos la interfaz de la imagen tal como la devuelve Django
 export interface ImagenBanner {
@@ -26,8 +28,6 @@ export interface CarruselItem {
   styleUrls: ['./inicio-carrusel.scss']
 })
 export class InicioCarruselComponent implements OnInit, OnDestroy {
-  public backendUrl = 'http://127.0.0.1:8000';
-  
   // Mantenemos tus datos actuales como Fallback
   caracteristicas: CarruselItem[] = [
     {
@@ -64,7 +64,7 @@ export class InicioCarruselComponent implements OnInit, OnDestroy {
   }
 
   cargarContenidoCarrusel(): void {
-    const url = `${this.backendUrl}/api/usuarios/banners/listar/`; // ¡Asegúrate de incluir /api/ si tu backend lo requiere!
+    const url = `${environment.apiUrl}/usuarios/banners/listar/`;
 
     this.http.get<CarruselItem[]>(url).subscribe({
       next: (datos) => {
@@ -97,14 +97,7 @@ export class InicioCarruselComponent implements OnInit, OnDestroy {
       rutaImagen = item.imagen;
     }
 
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    
-    if (!rutaImagen.includes('/media/')) {
-      const limpia = rutaImagen.startsWith('/') ? rutaImagen.slice(1) : rutaImagen;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   siguiente() {

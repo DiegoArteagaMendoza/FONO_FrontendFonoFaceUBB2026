@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 // 1. Importamos la interfaz Cuidado junto con el servicio
 import { CuidadosService, Cuidado } from '@core/services/cuidados/cuidados';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-cuidados-cliente',
@@ -21,8 +22,6 @@ export class CuidadosClienteComponent implements OnInit {
   cuidadosFiltrados: Cuidado[] = [];
   cargando = true;
   categoriaActiva = 'TODAS';
-  
-  public backendUrl = 'http://127.0.0.1:8000';
 
   // 3. Ajustamos los IDs para que coincidan EXACTAMENTE con el 'publico' de la BD
   categorias = [
@@ -73,18 +72,8 @@ export class CuidadosClienteComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // 5. Método de imagen mejorado con soporte para /media/
   obtenerUrlImagen(rutaImagen: string | null): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    
-    // Si la ruta no incluye '/media/', se lo agregamos
-    if (!rutaImagen.includes('/media/')) {
-      const limpia = rutaImagen.startsWith('/') ? rutaImagen.slice(1) : rutaImagen;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   obtenerNombreCategoria(id: string): string {

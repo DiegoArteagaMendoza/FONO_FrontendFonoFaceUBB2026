@@ -20,7 +20,6 @@ export class AdministracionUsuarioComponent implements OnInit {
     cargando = true;
     errorMensaje: string | null = null;
     itemSeleccionado: UsuarioItem | null = null;
-    public backendUrl = 'http://127.0.0.1:8000';
 
     filtroEstado: string = 'todos'; // Valor por defecto del select
 

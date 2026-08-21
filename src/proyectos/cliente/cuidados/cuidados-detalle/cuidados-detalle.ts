@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CuidadosService, Cuidado } from '@core/services/cuidados/cuidados';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-cuidados-detalle',
@@ -18,7 +19,6 @@ export class CuidadosDetalleComponent implements OnInit {
   cuidado: Cuidado | null = null;
   cargando = true;
   errorMensaje = '';
-  public backendUrl = 'http://127.0.0.1:8000';
 
   categorias = [
     { id: 'NIÑOS', nombre: 'Niños' },
@@ -67,15 +67,7 @@ export class CuidadosDetalleComponent implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string | null): string {
-    if (!ruta) return '';
-    if (ruta.startsWith('http')) return ruta;
-    
-    // Parche para asegurar que incluya /media/
-    if (!ruta.includes('/media/')) {
-      const limpia = ruta.startsWith('/') ? ruta.slice(1) : ruta;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return ruta.startsWith('/') ? this.backendUrl + ruta : `${this.backendUrl}/${ruta}`;
+    return resolverUrlImagen(ruta);
   }
 
   obtenerNombreCategoria(id: string): string {

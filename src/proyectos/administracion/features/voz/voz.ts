@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { VozService, Voz } from '@core/services/voz/voz';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-voz',
@@ -19,7 +20,6 @@ export class VozAdminComponent implements OnInit {
   listaVoz: Voz[] = [];
   cargando = true;
   itemSeleccionado: Voz | null = null;
-  public backendUrl = 'http://127.0.0.1:8000';
 
   categoriaActual: string = '';
 
@@ -60,9 +60,7 @@ export class VozAdminComponent implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string | null): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   irACrear(): void {

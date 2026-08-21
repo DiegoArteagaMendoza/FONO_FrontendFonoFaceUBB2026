@@ -5,6 +5,7 @@ import { NoticiasService, Noticia } from '@core/services/noticias/noticias';
 
 // IMPORT DE TEXTOS
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-noticias-detalle',
@@ -20,7 +21,6 @@ export class NoticiasDetalleComponent implements OnInit {
   noticia: Noticia | null = null;
   cargando = true;
   errorMensaje = '';
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private route: ActivatedRoute,
@@ -61,15 +61,7 @@ export class NoticiasDetalleComponent implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string): string {
-    if (!ruta) return '';
-    if (ruta.startsWith('http')) return ruta;
-
-    // Parche de seguridad para asegurar la ruta de medios de Django
-    if (!ruta.includes('/media/')) {
-      const limpia = ruta.startsWith('/') ? ruta.slice(1) : ruta;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return ruta.startsWith('/') ? this.backendUrl + ruta : `${this.backendUrl}/${ruta}`;
+    return resolverUrlImagen(ruta);
   }
 
   volver(): void {
