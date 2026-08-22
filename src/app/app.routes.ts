@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { soloVisitantes } from './core/guards/solo-visitantes.guard';
+import { requiereSesion } from './core/guards/requiere-sesion.guard';
 import { Layout } from '../proyectos/administracion/layout/layout';
 import { Login } from '../proyectos/administracion/features/auth/login/login';
 import { Inicio } from '../proyectos/administracion/features/dashboard/inicio/inicio';
@@ -162,7 +163,10 @@ export const routes: Routes = [
   {
     path: '',
     component: Layout,
-    children: [     
+    // La guarda va en el padre y no en cada hija: cubre las rutas de golpe y,
+    // sobre todo, no hay forma de olvidarla al agregar una pantalla nueva.
+    canActivate: [requiereSesion('admin')],
+    children: [
       // INICIO
       { path: 'administracion/inicio', component: Inicio },
       // INFORMACION
