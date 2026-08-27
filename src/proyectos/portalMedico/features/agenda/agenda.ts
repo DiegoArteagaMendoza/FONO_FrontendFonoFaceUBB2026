@@ -441,7 +441,12 @@ export class PmAgendaComponent implements OnInit {
     });
   }
 
-  irAlPerfil(): void {
-    this.router.navigate(['/portalmedico/perfil']);
+  /**
+   * A la pantalla de acreditación, no al perfil: allí vive la guía de pasos
+   * (app-pm-pasos-acreditacion), que enlaza al que falte — documentos o
+   * especialidades — en vez de dejar a la persona buscando por su cuenta.
+   */
+  irALaAcreditacion(): void {
+    this.router.navigate(['/portalmedico/acreditacion']);
   }
 }

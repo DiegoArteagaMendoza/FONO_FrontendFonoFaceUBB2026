@@ -35,22 +35,48 @@
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pmc_navbar.mis_horas }}
           </a>
-          <a routerLink="/portalmedico/perfil" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.mi_perfil }}
-          </a>
-          <a routerLink="/portalmedico/documentos" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.documentos }}
-          </a>
-          <a routerLink="/portalmedico/especialidades" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.especialidades }}
-          </a>
-          <a routerLink="/portalmedico/acreditacion" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.acreditacion }}
-          </a>
+
+          <!-- Todo lo de la cuenta va agrupado aquí. Antes eran cuatro enlaces
+               sueltos que, junto a la agenda y las horas, dejaban la barra
+               apretada y difícil de leer. -->
+          <div class="relative">
+            <button type="button" (click)="alternarMenuPerfil($event)"
+                    [attr.aria-expanded]="menuPerfilAbierto" aria-haspopup="true"
+                    class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
+                    [class.bg-sky-700]="menuPerfilAbierto">
+              {{ t().pm_navbar.mi_perfil }}
+              <svg class="w-4 h-4 transition-transform" [class.rotate-180]="menuPerfilAbierto"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            @if (menuPerfilAbierto) {
+              <div class="absolute right-0 mt-1 py-1 w-56 rounded-md shadow-lg z-50"
+                   style="background-color: var(--fono-superficie); border: 1px solid var(--fono-borde);"
+                   role="menu">
+                <a routerLink="/portalmedico/perfil" role="menuitem" class="menu-perfil-opcion">
+                  {{ t().pm_navbar.mi_perfil }}
+                </a>
+                <a routerLink="/portalmedico/documentos" role="menuitem" class="menu-perfil-opcion">
+                  {{ t().pm_navbar.documentos }}
+                </a>
+                <a routerLink="/portalmedico/especialidades" role="menuitem" class="menu-perfil-opcion">
+                  {{ t().pm_navbar.especialidades }}
+                </a>
+                <a routerLink="/portalmedico/acreditacion" role="menuitem" class="menu-perfil-opcion">
+                  {{ t().pm_navbar.acreditacion }}
+                </a>
+
+                <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
+
+                <button type="button" role="menuitem" (click)="cerrarSesion()"
+                        class="menu-perfil-opcion menu-perfil-salir">
+                  {{ t().pm_navbar.cerrar_sesion }}
+                </button>
+              </div>
+            }
+          </div>
         }
 
         <!-- Reservar está abierto a cualquiera: no hace falta cuenta para pedir
@@ -59,6 +85,11 @@
           <a routerLink="/portalmedico/paciente/citas/reservar" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pmc_navbar.reservar_hora }}
+          </a>
+          <!-- Para quien reservó sin cuenta: consultar su hora con el código -->
+          <a routerLink="/portalmedico/cita/seguimiento" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pmc_navbar.seguimiento }}
           </a>
         }
 
@@ -83,19 +114,15 @@
 
         <app-boton-tema class="text-white ml-1"></app-boton-tema>
 
-        <!-- Un único acceso: la pantalla de login trae las pestañas para elegir
-             si entras como paciente o como fonoaudiólogo/a. -->
-        @if (portalMedicoService.profesionalActual()) {
-          <button (click)="cerrarSesion()"
-                  class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.cerrar_sesion }}
-          </button>
-        } @else if (pmClienteService.clienteActual()) {
+        <!-- El profesional ya cierra sesión desde el menú "Mi perfil", así que
+             aquí no le corresponde ningún botón. Un único acceso para el resto:
+             la pantalla de login trae las pestañas para elegir el tipo de cuenta. -->
+        @if (pmClienteService.clienteActual() && !portalMedicoService.profesionalActual()) {
           <button (click)="cerrarSesionPaciente()"
                   class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pmc_navbar.cerrar_sesion }}
           </button>
-        } @else {
+        } @else if (!portalMedicoService.profesionalActual()) {
           <a routerLink="/portalmedico/login"
              class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pm_navbar.iniciar_sesion }}
@@ -128,6 +155,7 @@
           <!-- Sin sesión: se puede reservar igual, y el acceso es uno solo con
                pestañas dentro para elegir el tipo de cuenta -->
           <a routerLink="/portalmedico/paciente/citas/reservar" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.reservar_hora }}</a>
+          <a routerLink="/portalmedico/cita/seguimiento" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.seguimiento }}</a>
           <a routerLink="/portalmedico/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.iniciar_sesion }}</a>
         }
 

@@ -1,0 +1,180 @@
+<div class="page-container">
+
+  <div class="mb-6 mx-auto" style="max-width: 680px;">
+    <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_seguimiento.titulo }}</h2>
+    <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pmc_seguimiento.subtitulo }}</p>
+  </div>
+
+  <div class="form-card mx-auto" style="max-width: 680px;">
+
+    <!-- ============ BUSCAR POR CÓDIGO ============ -->
+    <ng-container *ngIf="!cita">
+      <div *ngIf="errorBusqueda" class="error-alert">{{ errorBusqueda }}</div>
+
+      <form [formGroup]="formBuscar" (ngSubmit)="buscar()" class="custom-form">
+        <div class="form-group">
+          <label for="codigo">{{ t().pmc_seguimiento.label_codigo }}</label>
+          <input id="codigo" type="text" formControlName="codigo"
+                 [placeholder]="t().pmc_seguimiento.placeholder_codigo"
+                 [maxlength]="largoCodigo" (input)="normalizarCodigo($event)"
+                 autocomplete="off" spellcheck="false"
+                 style="letter-spacing: 0.15em; font-family: monospace; text-transform: uppercase;">
+          <small class="help-text">{{ textoAyudaCodigo }}</small>
+          <small class="error-text" *ngIf="formBuscar.get('codigo')?.touched && formBuscar.get('codigo')?.invalid">
+            {{ t().pmc_seguimiento.alerta_codigo }}
+          </small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="buscando">
+            {{ buscando ? t().pmc_seguimiento.btn_buscando : t().pmc_seguimiento.btn_buscar }}
+          </button>
+        </div>
+      </form>
+
+      <!-- Quien tiene cuenta no necesita el código -->
+      <div class="info-alert mt-4" *ngIf="!pmClienteService.estaAutenticadoComoCliente()">
+        {{ t().pmc_seguimiento.sin_cuenta_aviso }}
+        <div class="mt-2">
+          <button type="button" class="btn-secondary" (click)="irALogin()">
+            {{ t().pmc_seguimiento.btn_iniciar_sesion }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ============ DETALLE DE LA HORA ============ -->
+    <ng-container *ngIf="cita">
+      <div *ngIf="mensajeExito" class="success-alert">{{ mensajeExito }}</div>
+
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div style="min-width: 0; flex: 1;">
+          <p class="m-0 font-semibold" style="color: var(--fono-texto);">
+            {{ cita.fecha_hora | date:'EEEE d \'de\' MMMM \'de\' y, HH:mm' }}
+          </p>
+          <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_seguimiento.con_profesional }} {{ cita.profesional_nombre }}
+          </p>
+          <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_seguimiento.paciente }} {{ cita.paciente_nombre }}
+          </p>
+          <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_seguimiento.duracion }} {{ cita.duracion_minutos }} {{ t().pmc_seguimiento.minutos }}
+            · {{ textoTermina }}
+          </p>
+        </div>
+
+        <span class="badge" [ngClass]="claseEstado()">{{ cita.estado_display }}</span>
+      </div>
+
+      <p class="text-sm mt-3 mb-0" style="color: var(--fono-texto-cuerpo);">
+        <strong>{{ t().pmc_seguimiento.motivo }}</strong>
+        {{ cita.motivo_consulta || t().pmc_seguimiento.sin_motivo }}
+      </p>
+
+      <p class="text-sm mt-2 mb-0" style="color: var(--fono-texto-suave);"
+         *ngIf="cita.veces_reprogramada > 0">
+        {{ textoReprogramada }}<ng-container *ngIf="cita.fecha_hora_original">
+          · {{ textosService.reemplazarVariables(t().pmc_seguimiento.fecha_original, {
+                 fecha: (cita.fecha_hora_original | date:'d \'de\' MMMM, HH:mm') || ''
+               }) }}
+        </ng-container>
+      </p>
+
+      <p class="text-sm mt-2 mb-0" style="color: var(--fono-texto-suave);" *ngIf="cita.motivo_cancelacion">
+        <strong>{{ t().pmc_seguimiento.motivo_cancelacion }}</strong> {{ cita.motivo_cancelacion }}
+      </p>
+
+      <!-- Por qué no hay acciones disponibles -->
+      <div class="info-alert mt-3" *ngIf="cambiosCerrados">{{ textoCambiosCerrados }}</div>
+      <div class="info-alert mt-3" *ngIf="sinReprogramaciones">{{ textoSinReprogramaciones }}</div>
+      <div class="info-alert mt-3" *ngIf="cita.esta_activa && cita.ya_paso">{{ t().pmc_seguimiento.ya_paso }}</div>
+
+      <!-- ============ ACCIONES ============ -->
+      <div class="form-actions mt-4" *ngIf="accion === null">
+        <button type="button" class="btn-secondary" *ngIf="puedePosponer" (click)="abrirPosponer()">
+          {{ t().pmc_seguimiento.btn_posponer }}
+        </button>
+        <button type="button" class="btn-icon delete" *ngIf="puedeCancelar" (click)="abrirCancelar()">
+          {{ t().pmc_seguimiento.btn_cancelar }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="consultarOtro()">
+          {{ t().pmc_seguimiento.btn_otro_codigo }}
+        </button>
+      </div>
+
+      <!-- ============ CAMBIAR FECHA ============ -->
+      <div class="mt-4" *ngIf="accion === 'posponer'"
+           style="border-top: 1px solid var(--fono-borde); padding-top: 1rem;">
+        <h4 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">
+          {{ t().pmc_seguimiento.posponer_titulo }}
+        </h4>
+        <p class="text-sm mt-0 mb-1" style="color: var(--fono-texto-suave);">
+          {{ textosService.reemplazarVariables(t().pmc_seguimiento.posponer_actual, {
+               fecha: (cita.fecha_hora | date:'EEEE d \'de\' MMMM, HH:mm') || '' }) }}
+        </p>
+        <p class="text-sm mt-0 mb-3" style="color: var(--fono-texto-suave);">{{ textoRestantes }}</p>
+
+        <div *ngIf="errorAccion" class="error-alert">{{ errorAccion }}</div>
+
+        <form [formGroup]="formPosponer" (ngSubmit)="confirmarPosponer()" class="custom-form">
+          <div class="form-group">
+            <label for="nueva-fecha">{{ t().pmc_seguimiento.label_nueva_fecha }}</label>
+            <input id="nueva-fecha" type="datetime-local" formControlName="fecha_hora"
+                   [min]="minimoFechaHora">
+            <small class="help-text">{{ textoAyudaNuevaFecha }}</small>
+            <small class="error-text" *ngIf="faltaAnticipacion">{{ textoAlertaAnticipacion }}</small>
+          </div>
+
+          <div class="form-group">
+            <label for="motivo-cambio">{{ t().pmc_seguimiento.label_motivo_cambio }}</label>
+            <textarea id="motivo-cambio" formControlName="motivo" rows="2"
+                      [placeholder]="t().pmc_seguimiento.placeholder_motivo_cambio"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"
+                    [disabled]="procesando || formPosponer.invalid || faltaAnticipacion">
+              {{ t().pmc_seguimiento.btn_confirmar_posponer }}
+            </button>
+            <button type="button" class="btn-secondary" (click)="cerrarAccion()" [disabled]="procesando">
+              {{ t().pmc_seguimiento.btn_volver }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ============ CANCELAR ============ -->
+      <div class="mt-4" *ngIf="accion === 'cancelar'"
+           style="border-top: 1px solid var(--fono-borde); padding-top: 1rem;">
+        <h4 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">
+          {{ t().pmc_seguimiento.cancelar_titulo }}
+        </h4>
+        <p class="text-sm mt-0 mb-3" style="color: var(--fono-texto-suave);">
+          {{ t().pmc_seguimiento.cancelar_desc }}
+        </p>
+
+        <div *ngIf="errorAccion" class="error-alert">{{ errorAccion }}</div>
+
+        <form [formGroup]="formCancelar" (ngSubmit)="confirmarCancelar()" class="custom-form">
+          <div class="form-group">
+            <label for="motivo-cancelar">{{ t().pmc_seguimiento.label_motivo_cancelacion }}</label>
+            <textarea id="motivo-cancelar" formControlName="motivo" rows="2"
+                      [placeholder]="t().pmc_seguimiento.placeholder_motivo_cancelacion"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-icon delete" [disabled]="procesando">
+              {{ t().pmc_seguimiento.btn_confirmar_cancelar }}
+            </button>
+            <button type="button" class="btn-secondary" (click)="cerrarAccion()" [disabled]="procesando">
+              {{ t().pmc_seguimiento.btn_no_cancelar }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-container>
+
+  </div>
+
+</div>

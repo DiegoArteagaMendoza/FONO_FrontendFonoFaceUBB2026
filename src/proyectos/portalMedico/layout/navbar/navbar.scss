@@ -1,0 +1,42 @@
+/*
+  Estilos del navbar del Portal Médico.
+
+  Van aquí y NO en commons/administracion/styles/: esos archivos se importan
+  dentro del bloque .admin-theme de styles.scss, que Sass antepone a cada
+  selector. El navbar queda fuera de ese contenedor (ver layout.html: la clase
+  .admin-theme está en el <main>, no en el <app-pm-navbar>), así que una regla
+  puesta allí nunca lo alcanza — compila como `.admin-theme .lo-que-sea` y no
+  coincide con nada.
+*/
+
+/* Opciones del menú desplegable "Mi perfil".
+   El panel se dibuja sobre la superficie del tema, no sobre el azul de la
+   barra, así que necesita los colores de texto normales: sin esto hereda el
+   `text-white` del <nav> y el texto queda blanco sobre blanco. */
+.menu-perfil-opcion {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  color: var(--fono-texto-cuerpo);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--fono-superficie-2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--fono-primario);
+    outline-offset: -2px;
+  }
+
+  /* Cerrar sesión: se distingue por color porque termina la sesión */
+  &.menu-perfil-salir {
+    color: var(--fono-error, #b91c1c);
+  }
+}

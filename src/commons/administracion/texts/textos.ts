@@ -59,7 +59,7 @@ export const TEXTOS_SITIO = {
 
     inicio_admin: {
         bienvenida_titulo: "¡Hola, {nombre}! 👋",
-        bienvenida_desc: "Bienvenido al panel de adminisrtación. Aquí tienes un resumen de la plataforma al",
+        bienvenida_desc: "Bienvenido al panel de administración. Aquí tienes un resumen de la plataforma al",
         accesos_titulo: "Accesos Rápidos",
         actividad_reciente: "Actividad Reciente",
         actividad_vacia: "Pronto podrás ver aquí los últimos registros añadidos al sistema.",
@@ -283,7 +283,8 @@ export const TEXTOS_SITIO = {
         btn_portal: "Portal cliente",
         error_credenciales: "Correo o contraseña incorrectos.",
         error_servidor: "Error al conectar con el servidor.",
-        alerta_sesion_expirada: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+        alerta_sesion_expirada: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+        aviso_requiere_admin: "Esa sección es del panel de administración. Inicia sesión con tu cuenta de administrador para entrar."
     },
 
     // CREACION NOTICIAS
@@ -1106,6 +1107,10 @@ export const TEXTOS_SITIO = {
         exito_desc: "Te esperamos el {fecha}. La encontrarás en «Mis citas».",
         exito_desc_invitado: "Te esperamos el {fecha}. Te contactaremos al correo que indicaste.",
         exito_invitado_cuenta: "Creamos tu ficha con el RUT que ingresaste. Si te registras con ese mismo RUT podrás ver y gestionar tus horas desde el portal.",
+        codigo_titulo: "Tu código de seguimiento",
+        codigo_desc: "Guárdalo. Con él puedes ver tu hora, cambiarla o cancelarla sin tener cuenta. También te lo enviamos por correo.",
+        codigo_sin_correo: "No pudimos enviarte el correo de confirmación, así que anota este código: es la única forma de gestionar tu hora sin cuenta.",
+        btn_ir_seguimiento: "Ir al seguimiento",
         btn_crear_cuenta: "Crear mi cuenta",
         btn_ver_mis_citas: "Ver mis citas",
         btn_adjuntar_video: "Adjuntar un video de síntomas",
@@ -1239,6 +1244,61 @@ export const TEXTOS_SITIO = {
         error_servidor: "No pudimos cargar tu agenda. Inténtalo nuevamente."
     },
 
+    // SEGUIMIENTO DE UNA HORA CON EL CÓDIGO DEL CORREO
+    pmc_seguimiento: {
+        titulo: "Seguimiento de tu hora",
+        subtitulo: "Escribe el código que te enviamos por correo al reservar y podrás ver tu hora, cambiarla o cancelarla.",
+        label_codigo: "Código de seguimiento",
+        placeholder_codigo: "Ej: A7K2M9PQ",
+        ayuda_codigo: "Son {largo} caracteres. Lo encuentras en el correo de confirmación.",
+        alerta_codigo: "Escribe tu código de seguimiento.",
+        btn_buscando: "Buscando...",
+        btn_buscar: "Ver mi hora",
+        error_no_encontrado: "No encontramos ninguna hora con ese código. Revísalo e inténtalo de nuevo.",
+        error_servidor: "No pudimos consultar tu hora. Inténtalo nuevamente.",
+        sin_cuenta_aviso: "¿Tienes cuenta? Inicia sesión y verás todas tus horas juntas.",
+        btn_iniciar_sesion: "Iniciar sesión",
+        // Detalle
+        detalle_titulo: "Tu hora",
+        con_profesional: "Profesional:",
+        paciente: "A nombre de:",
+        duracion: "Duración:",
+        minutos: "minutos",
+        motivo: "Motivo:",
+        sin_motivo: "Sin motivo indicado",
+        termina_a_las: "Termina cerca de las {hora}",
+        reprogramada_veces: "Reprogramada {veces} de {maximas} veces",
+        fecha_original: "Se agendó originalmente para el {fecha}",
+        motivo_cancelacion: "Motivo de la cancelación:",
+        cambios_cerrados: "Ya no admite cambios: faltan menos de {horas} horas.",
+        sin_reprogramaciones: "Alcanzó el máximo de {maximas} cambios de fecha. Si ya no te sirve, cancélala.",
+        ya_paso: "Esta hora ya pasó.",
+        btn_otro_codigo: "Consultar otro código",
+        // Acciones
+        btn_posponer: "Cambiar fecha",
+        btn_cancelar: "Cancelar hora",
+        posponer_titulo: "Cambiar la fecha de tu hora",
+        posponer_actual: "Hoy está agendada para el {fecha}.",
+        posponer_restantes: "Te quedan {restantes} cambios de fecha.",
+        label_nueva_fecha: "Nueva fecha y hora",
+        ayuda_nueva_fecha: "Debe ser con al menos {horas} horas de anticipación.",
+        alerta_anticipacion: "Falta muy poco para ese horario. Elige uno con al menos {horas} horas de anticipación.",
+        label_motivo_cambio: "Motivo del cambio (opcional)",
+        placeholder_motivo_cambio: "Ej: Me cambiaron el turno en el trabajo.",
+        btn_confirmar_posponer: "Guardar la nueva fecha",
+        btn_volver: "Volver",
+        exito_posponer: "Listo, tu hora quedó para el {fecha}.",
+        error_posponer: "No pudimos cambiar la fecha. Inténtalo nuevamente.",
+        cancelar_titulo: "Cancelar tu hora",
+        cancelar_desc: "Se liberará el horario del profesional. Si después la necesitas, tendrás que reservar de nuevo.",
+        label_motivo_cancelacion: "Motivo (opcional)",
+        placeholder_motivo_cancelacion: "Ej: Ya no puedo asistir ese día.",
+        btn_confirmar_cancelar: "Sí, cancelar mi hora",
+        btn_no_cancelar: "No, mantenerla",
+        exito_cancelar: "Tu hora quedó cancelada.",
+        error_cancelar: "No pudimos cancelar la hora. Inténtalo nuevamente."
+    },
+
     // HORAS DISPONIBLES QUE PUBLICA EL PROFESIONAL
     pm_disponibilidad: {
         titulo: "Mis horas disponibles",
@@ -1293,6 +1353,7 @@ export const TEXTOS_SITIO = {
         mi_video: "Mis videos",
         mis_citas: "Mis citas",
         reservar_hora: "Reservar hora",
+        seguimiento: "Seguir mi hora",
         mi_agenda: "Mi agenda",
         mis_horas: "Mis horas",
         cerrar_sesion: "Salir"

@@ -42,6 +42,12 @@ export class Login implements OnInit {
     // Si el interceptor nos redirigió por sesión expirada, mostramos el aviso
     if (this.route.snapshot.queryParamMap.get('expirada')) {
       this.errorMessage = this.t().login.alerta_sesion_expirada;
+    } else if (this.route.snapshot.queryParamMap.get('volverA')) {
+      // Llegó aquí rebotado por la guarda de sesión del panel. Sin este aviso,
+      // la pantalla simplemente cambia y parece que la aplicación falló, sobre
+      // todo si la persona ya tiene sesión de paciente o de profesional: esas
+      // son otras identidades y no sirven para el panel.
+      this.errorMessage = this.t().login.aviso_requiere_admin;
     }
   }
 

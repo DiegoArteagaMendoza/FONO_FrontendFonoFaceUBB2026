@@ -18,6 +18,21 @@
         </p>
       </div>
 
+      <!-- El código es lo único con lo que un invitado puede volver a su hora,
+           así que se muestra grande y aparte, no perdido en un párrafo. -->
+      <div class="info-alert mt-3" *ngIf="citaCreada.codigo_seguimiento">
+        <strong>{{ t().pmc_reservar.codigo_titulo }}</strong>
+        <p class="mt-2 mb-2" style="font-family: monospace; font-size: 1.6rem;
+           letter-spacing: 0.2em; font-weight: 700; color: var(--fono-texto);">
+          {{ citaCreada.codigo_seguimiento }}
+        </p>
+        <p class="m-0">
+          {{ citaCreada.correo_enviado === false
+               ? t().pmc_reservar.codigo_sin_correo
+               : t().pmc_reservar.codigo_desc }}
+        </p>
+      </div>
+
       <!-- A quien reservó sin cuenta se le explica qué pasó con su ficha -->
       <div class="info-alert mt-3" *ngIf="reservoSinSesion">
         {{ t().pmc_reservar.exito_invitado_cuenta }}
@@ -30,6 +45,9 @@
         </button>
         <button type="button" class="btn-secondary" (click)="irAMisCitas()" *ngIf="!reservoSinSesion">
           {{ t().pmc_reservar.btn_ver_mis_citas }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="irAlSeguimiento()" *ngIf="reservoSinSesion">
+          {{ t().pmc_reservar.btn_ir_seguimiento }}
         </button>
         <button type="button" class="btn-secondary" (click)="irARegistro()" *ngIf="reservoSinSesion">
           {{ t().pmc_reservar.btn_crear_cuenta }}
