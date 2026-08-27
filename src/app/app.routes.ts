@@ -57,6 +57,7 @@ import { PmClienteRegistroComponent } from '../proyectos/portalMedico/features/c
 import { PmClienteVideoComponent } from '../proyectos/portalMedico/features/cliente/video/video';
 import { PmClienteMisCitasComponent } from '../proyectos/portalMedico/features/cliente/citas/mis-citas/mis-citas';
 import { PmClienteReservarCitaComponent } from '../proyectos/portalMedico/features/cliente/citas/reservar/reservar';
+import { PmClienteSeguimientoCitaComponent } from '../proyectos/portalMedico/features/cliente/citas/seguimiento/seguimiento';
 // Agenda del profesional (app PmCita, lado del fonoaudiólogo)
 import { PmAgendaComponent } from '../proyectos/portalMedico/features/agenda/agenda';
 import { PmDisponibilidadComponent } from '../proyectos/portalMedico/features/disponibilidad/disponibilidad';
@@ -147,6 +148,10 @@ export const routes: Routes = [
       // dejar claro el orden de lectura; no hay conflicto de rutas entre ambas.
       { path: 'paciente/citas', component: PmClienteMisCitasComponent },
       { path: 'paciente/citas/reservar', component: PmClienteReservarCitaComponent },
+
+      // Seguimiento con el código del correo: público, es la vía de quien
+      // reservó sin cuenta para gestionar su hora.
+      { path: 'cita/seguimiento', component: PmClienteSeguimientoCitaComponent },
 
       { path: '', redirectTo: 'inicio', pathMatch: 'full' },
     ]

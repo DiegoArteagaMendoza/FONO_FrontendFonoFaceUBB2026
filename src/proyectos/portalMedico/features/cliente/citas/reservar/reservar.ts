@@ -392,6 +392,13 @@ export class PmClienteReservarCitaComponent implements OnInit {
     this.router.navigate(['/portalmedico/paciente/citas']);
   }
 
+  /** Al seguimiento con el código ya puesto, para no tener que teclearlo. */
+  irAlSeguimiento(): void {
+    this.router.navigate(['/portalmedico/cita/seguimiento'], {
+      queryParams: { codigo: this.citaCreada?.codigo_seguimiento }
+    });
+  }
+
   irAlVideo(): void {
     const id = this.citaCreada?.id_cita;
     this.router.navigate(['/portalmedico/paciente/video'], {

@@ -46,8 +46,34 @@ export interface Cita {
   esta_activa: boolean;
   ya_paso: boolean;
 
-  /** Solo llega al reservar: indica si la cita se creó sin sesión iniciada. */
+  /** Solo llegan al reservar. */
   reservada_sin_sesion?: boolean;
+  codigo_seguimiento?: string;
+  correo_enviado?: boolean;
+}
+
+/**
+ * Cita vista desde el seguimiento por código, sin sesión. El backend entrega
+ * aquí los nombres ya resueltos y omite los ids internos, así que esta forma
+ * NO coincide con la de Cita.
+ */
+export interface CitaSeguimiento {
+  codigo_seguimiento: string;
+  fecha_hora: string;
+  duracion_minutos: number;
+  motivo_consulta: string | null;
+  estado: EstadoCita;
+  estado_display: string;
+  profesional_nombre: string;
+  paciente_nombre: string;
+  motivo_cancelacion: string | null;
+  fecha_hora_original: string | null;
+  veces_reprogramada: number;
+  esta_activa: boolean;
+  ya_paso: boolean;
+  permite_cambios: boolean;
+  reprogramaciones_restantes: number;
+  permite_carga_video: boolean;
 }
 
 /** Hora publicada por un profesional, tal como la ve el paciente al elegir. */
@@ -261,6 +287,32 @@ export class PmCitaService {
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.profesionalMarcarRealizada(idCita)}`,
       {},
       { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  // --- Seguimiento por código (sin sesión) ---
+
+  /**
+   * Consulta una cita con el código que llegó por correo. No lleva cabeceras
+   * de autorización: el código es la credencial.
+   */
+  getPorCodigo(codigo: string): Observable<CitaSeguimiento> {
+    return this.http.get<CitaSeguimiento>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.seguimiento(codigo)}`
+    );
+  }
+
+  cancelarPorCodigo(codigo: string, datos: CancelarCitaPayload = {}): Observable<CitaSeguimiento> {
+    return this.http.patch<CitaSeguimiento>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.seguimientoCancelar(codigo)}`,
+      datos
+    );
+  }
+
+  posponerPorCodigo(codigo: string, datos: PosponerCitaPayload): Observable<CitaSeguimiento> {
+    return this.http.patch<CitaSeguimiento>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.seguimientoPosponer(codigo)}`,
+      datos
     );
   }
 

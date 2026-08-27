@@ -134,6 +134,12 @@ export const API_ENDPOINTS = {
     disponibilidadMias: '/disponibilidad/mias/',
     disponibilidadMiasTodas: '/disponibilidad/mias/?todas=true',
     disponibilidadRetirar: (idDisponibilidad: number) => `/disponibilidad/${idDisponibilidad}/retirar/`,
-    disponibilidadDeProfesional: (idProfesional: number) => `/disponibilidad/profesional/${idProfesional}/`
+    disponibilidadDeProfesional: (idProfesional: number) => `/disponibilidad/profesional/${idProfesional}/`,
+
+    // Seguimiento por código: para quien reservó sin cuenta. El código que
+    // recibió por correo hace de credencial, por eso no llevan token.
+    seguimiento: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/`,
+    seguimientoCancelar: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/cancelar/`,
+    seguimientoPosponer: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/posponer/`
   }
 };
