@@ -141,5 +141,19 @@ export const API_ENDPOINTS = {
     seguimiento: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/`,
     seguimientoCancelar: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/cancelar/`,
     seguimientoPosponer: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/posponer/`
+  },
+
+  // Autoevaluación / diagnóstico rápido (backend FonoApp, app FonoAppDiagnostico).
+  // Listar, detalle y responder son públicos: el cliente del portal responde el
+  // test sin cuenta propia. Crear, editar, eliminar y ver respuestas exigen el
+  // token de una cuenta de administración (cualquier rol).
+  diagnostico: {
+    listar: '/diagnostico/formularios/listar/',
+    detalle: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/`,
+    crear: '/diagnostico/formularios/crear/',
+    editar: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/editar/`,
+    eliminar: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/eliminar/`,
+    responder: '/diagnostico/respuestas/crear/',
+    respuestasDeFormulario: (idFormulario: number) => `/diagnostico/respuestas/formulario/${idFormulario}/`
   }
 };

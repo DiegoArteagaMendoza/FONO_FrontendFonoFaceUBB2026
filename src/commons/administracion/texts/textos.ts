@@ -395,6 +395,81 @@ export const TEXTOS_SITIO = {
         btn_actualizando: "Actualizando...",
         btn_actualizar: "Guardar Cambios"
     },
+    // GESTION DIAGNOSTICO (AUTOEVALUACION)
+    gestion_diagnostico: {
+        titulo: "Gestión de Autoevaluaciones",
+        subtitulo: "Crea y publica los formularios de autoevaluación que responderán tus clientes.",
+        nuevo_formulario: "Nuevo Formulario",
+        columna_preguntas: "N° Preguntas",
+        preguntas_totales: "preguntas",
+        boton_resultados: "Resultados"
+    },
+
+    // CREACION DIAGNOSTICO (AUTOEVALUACION)
+    creacion_diagnostico: {
+        titulo: "Crear Formulario de Autoevaluación",
+        subtitulo: "Define el nombre, la escala de valores y las subescalas con sus preguntas.",
+        label_nombre: "Nombre del formulario",
+        placeholder_nombre: "Ej. Índice de Fatiga Vocal",
+        alerta_nombre: "El nombre es obligatorio.",
+        label_descripcion: "Descripción / instrucciones para el paciente",
+        placeholder_descripcion: "Ej. 0 = Nunca, 1 = Casi nunca, 2 = Algunas veces, 3 = Casi siempre, 4 = Siempre",
+        alerta_descripcion: "La descripción es obligatoria.",
+        label_valor_minimo: "Valor mínimo de la escala",
+        label_valor_maximo: "Valor máximo de la escala",
+        alerta_escala: "El valor máximo debe ser mayor al mínimo.",
+        subescalas_titulo: "Subescalas y preguntas",
+        subescalas_ayuda: "Agrupa las preguntas por subescala (ej. \"Parte 1\", \"Funcional\"). Si el test no distingue partes, usa una única subescala general.",
+        subescala_nombre_label: "Nombre de la subescala",
+        subescala_nombre_placeholder: "Ej. Parte 1",
+        btn_agregar_subescala: "+ Agregar subescala",
+        btn_quitar_subescala: "Quitar subescala",
+        pregunta_placeholder: "Escribe el enunciado de la pregunta...",
+        btn_agregar_pregunta: "+ Agregar pregunta",
+        btn_quitar_pregunta: "Quitar",
+        alerta_subescalas: "Agrega al menos una subescala con una pregunta.",
+        alerta_pregunta_vacia: "Cada pregunta debe tener un enunciado.",
+        interpretacion_total_titulo: "Interpretación del puntaje total (opcional)",
+        interpretacion_subescala_titulo: "Interpretación de esta subescala (opcional)",
+        interpretacion_ayuda: "Define rangos de puntaje sin solape para mostrar un resultado clínico (ej. 0-10 = Leve). Déjalo vacío si no aplica.",
+        interpretacion_min_label: "Desde",
+        interpretacion_max_label: "Hasta",
+        interpretacion_etiqueta_label: "Etiqueta (resultado)",
+        interpretacion_etiqueta_placeholder: "Ej. Leve",
+        interpretacion_descripcion_label: "Recomendación para el paciente",
+        interpretacion_descripcion_placeholder: "Ej. No se detectan signos de fatiga vocal...",
+        btn_agregar_rango: "+ Agregar rango",
+        btn_quitar_rango: "Quitar rango",
+        alerta_interpretacion_solape: "Los rangos de interpretación no pueden solaparse entre sí.",
+        btn_guardando: "Publicando...",
+        btn_guardar: "Publicar Formulario"
+    },
+
+    // EDICION DIAGNOSTICO (AUTOEVALUACION)
+    edicion_diagnostico: {
+        titulo: "Editar Formulario de Autoevaluación",
+        subtitulo: "Modifica el nombre, la descripción, la escala o el estado de publicación.",
+        cargando_datos: "Cargando datos del formulario...",
+        error_no_encontrado: "No se encontró el formulario solicitado.",
+        label_estado: "Publicado (visible para los clientes)",
+        aviso_estructura: "Las subescalas y preguntas no se pueden modificar una vez publicado el formulario; si necesitas cambiarlas, despublica este formulario y crea uno nuevo.",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
+
+    // RESULTADOS REGISTRADOS DE UN FORMULARIO DE DIAGNOSTICO
+    resultados_diagnostico: {
+        titulo: "Resultados de",
+        subtitulo: "Historial de aplicaciones registradas para este formulario.",
+        volver: "← Volver a Autoevaluaciones",
+        paciente_tabla: "Paciente",
+        fecha_tabla: "Fecha",
+        puntaje_tabla: "Puntaje total",
+        interpretacion_tabla: "Interpretación",
+        detalle_tabla: "Detalle por subescala",
+        sin_resultados: "Aún no hay resultados registrados para este formulario."
+    },
+
     footer: {
         descripcion: "Sistema integral de administración FonoFace. Simplificando la gestión y el cuidado paso a paso.",
         contacto_email: "contacto@fonoface.cl",
@@ -484,7 +559,11 @@ export const TEXTOS_SITIO = {
         cuidados: "Cuidados",
         noticias: "Noticias",
         portal_medico: "Portal Médico",
-        acceso_admin: "Acceso Admin"
+        acceso_admin: "Acceso Admin",
+        menu_autoevaluacion: "Autoevaluación",
+        autoevaluacion_cargando: "Cargando formularios...",
+        autoevaluacion_vacio: "Aún no hay formularios publicados.",
+        autoevaluacion_ver_todas: "Ver todas →"
     },
 
     // VISTA INICIO DEL PORTAL CLIENTE
@@ -540,6 +619,37 @@ export const TEXTOS_SITIO = {
         cargando: "Cargando recomendación...",
         regresar: "Regresar",
         fuente: "Fuente:"
+    },
+
+    // VISTA LISTADO DE AUTOEVALUACIÓN DEL PORTAL CLIENTE
+    portal_autoevaluacion: {
+        titulo: "Autoevaluación",
+        subtitulo: "Responde uno de estos formularios y obtén tu resultado al instante.",
+        cargando: "Cargando formularios...",
+        vacio: "No hay formularios de autoevaluación disponibles en este momento.",
+        preguntas_totales: "preguntas",
+        responder: "Responder →"
+    },
+
+    // VISTA RESPONDER / RESULTADO DE UN FORMULARIO DE AUTOEVALUACIÓN
+    portal_autoevaluacion_detalle: {
+        volver: "← Volver a Autoevaluación",
+        cargando: "Cargando formulario...",
+        regresar: "Regresar",
+        error_no_encontrado: "Este formulario no existe o ya no está disponible.",
+        label_nombre: "Tu nombre completo",
+        placeholder_nombre: "Ej. Juan Pérez",
+        alerta_nombre: "Ingresa tu nombre completo.",
+        label_fecha_nacimiento: "Fecha de nacimiento (opcional)",
+        alerta_pregunta_sin_responder: "Debes responder todas las preguntas antes de continuar.",
+        btn_enviando: "Calculando resultado...",
+        btn_enviar: "Ver mi resultado",
+        error_envio: "Ocurrió un error al enviar tus respuestas. Intenta nuevamente.",
+        resultado_titulo: "Tu resultado",
+        resultado_puntaje_total: "Puntaje total",
+        resultado_detalle_subescalas: "Detalle por subescala",
+        btn_responder_otra_vez: "Responder de nuevo",
+        btn_ver_otros: "Ver otras autoevaluaciones"
     },
 
     // VISTA LA VOZ DEL PORTAL CLIENTE

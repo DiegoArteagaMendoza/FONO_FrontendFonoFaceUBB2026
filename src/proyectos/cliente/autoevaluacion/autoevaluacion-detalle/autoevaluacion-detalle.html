@@ -1,0 +1,105 @@
+<div class="detalle-page">
+
+  <div class="nav-back">
+    <button (click)="volver()" class="btn-back">
+      {{ t().portal_autoevaluacion_detalle.volver }}
+    </button>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().portal_autoevaluacion_detalle.cargando }}</p>
+  </div>
+
+  <div *ngIf="errorCarga" class="error-state">
+    <p>{{ errorCarga }}</p>
+    <button (click)="volver()" class="btn-primary">{{ t().portal_autoevaluacion_detalle.regresar }}</button>
+  </div>
+
+  <!-- FORMULARIO A RESPONDER -->
+  <article class="formulario-content" *ngIf="!cargando && formulario && !resultado">
+    <header class="formulario-header">
+      <h1>{{ formulario.nombre }}</h1>
+      <p class="descripcion">{{ formulario.descripcion }}</p>
+    </header>
+
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form [formGroup]="respuestaForm" (ngSubmit)="onSubmit()" class="respuesta-form">
+
+      <div class="datos-paciente">
+        <div class="form-group">
+          <label for="paciente_nombre">{{ t().portal_autoevaluacion_detalle.label_nombre }}</label>
+          <input id="paciente_nombre" type="text" formControlName="paciente_nombre" [placeholder]="t().portal_autoevaluacion_detalle.placeholder_nombre">
+          <small class="error-text" *ngIf="respuestaForm.get('paciente_nombre')?.invalid && respuestaForm.get('paciente_nombre')?.touched">
+            {{ t().portal_autoevaluacion_detalle.alerta_nombre }}
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="paciente_fecha_nacimiento">{{ t().portal_autoevaluacion_detalle.label_fecha_nacimiento }}</label>
+          <input id="paciente_fecha_nacimiento" type="date" formControlName="paciente_fecha_nacimiento">
+        </div>
+      </div>
+
+      <div formArrayName="subescalas">
+        <div class="subescala-block" *ngFor="let subescalaData of formulario.subescalas; let iSub = index" [formGroupName]="iSub">
+          <h2 class="subescala-titulo">{{ subescalaData.nombre }}</h2>
+
+          <div formArrayName="preguntas">
+            <div class="pregunta-block" *ngFor="let preguntaData of subescalaData.preguntas; let iPreg = index" [formGroupName]="iPreg">
+              <p class="pregunta-texto">{{ preguntaData.orden }}. {{ preguntaData.texto }}</p>
+
+              <div class="escala-opciones">
+                <label class="opcion" *ngFor="let opcion of escalaOpciones">
+                  <input type="radio" formControlName="valor" [value]="opcion">
+                  <span>{{ opcion }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="enviando">
+          {{ enviando ? t().portal_autoevaluacion_detalle.btn_enviando : t().portal_autoevaluacion_detalle.btn_enviar }}
+        </button>
+      </div>
+    </form>
+  </article>
+
+  <!-- RESULTADO -->
+  <article class="resultado-content" *ngIf="!cargando && resultado">
+    <h1>{{ t().portal_autoevaluacion_detalle.resultado_titulo }}</h1>
+
+    <div class="puntaje-total">
+      <span class="label">{{ t().portal_autoevaluacion_detalle.resultado_puntaje_total }}</span>
+      <span class="valor">{{ resultado.puntaje_total }}</span>
+      <div class="interpretacion-badge" *ngIf="resultado.interpretacion_total">
+        <span class="etiqueta">{{ resultado.interpretacion_total.etiqueta }}</span>
+        <p class="descripcion" *ngIf="resultado.interpretacion_total.descripcion">{{ resultado.interpretacion_total.descripcion }}</p>
+      </div>
+    </div>
+
+    <div class="detalle-subescalas" *ngIf="resultado.subescalas.length > 0">
+      <h3>{{ t().portal_autoevaluacion_detalle.resultado_detalle_subescalas }}</h3>
+      <ul>
+        <li *ngFor="let sub of resultado.subescalas">
+          <div class="subescala-linea">
+            <span>{{ sub.subescala }}</span>
+            <strong>{{ sub.puntaje }}</strong>
+          </div>
+          <div class="interpretacion-badge" *ngIf="sub.interpretacion">
+            <span class="etiqueta">{{ sub.interpretacion.etiqueta }}</span>
+            <p class="descripcion" *ngIf="sub.interpretacion.descripcion">{{ sub.interpretacion.descripcion }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-secondary" (click)="responderOtraVez()">{{ t().portal_autoevaluacion_detalle.btn_responder_otra_vez }}</button>
+      <button class="btn-primary" (click)="verOtras()">{{ t().portal_autoevaluacion_detalle.btn_ver_otros }}</button>
+    </div>
+  </article>
+</div>

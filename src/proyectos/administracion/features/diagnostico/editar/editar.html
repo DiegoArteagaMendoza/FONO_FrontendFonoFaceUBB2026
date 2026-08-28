@@ -1,0 +1,62 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().edicion_diagnostico.titulo }}</h2>
+      <p>{{ t().edicion_diagnostico.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargandoDatos" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().edicion_diagnostico.cargando_datos }}</p>
+  </div>
+
+  <div class="form-card" *ngIf="!cargandoDatos">
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form [formGroup]="editarForm" (ngSubmit)="onSubmit()" class="custom-form">
+      <div class="form-group">
+        <label for="nombre">{{ t().creacion_diagnostico.label_nombre }}</label>
+        <input id="nombre" type="text" formControlName="nombre">
+        <small class="error-text" *ngIf="editarForm.get('nombre')?.invalid && editarForm.get('nombre')?.touched">
+          {{ t().creacion_diagnostico.alerta_nombre }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">{{ t().creacion_diagnostico.label_descripcion }}</label>
+        <textarea id="descripcion" formControlName="descripcion" rows="3"></textarea>
+        <small class="error-text" *ngIf="editarForm.get('descripcion')?.invalid && editarForm.get('descripcion')?.touched">
+          {{ t().creacion_diagnostico.alerta_descripcion }}
+        </small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="valor_minimo">{{ t().creacion_diagnostico.label_valor_minimo }}</label>
+          <input id="valor_minimo" type="number" formControlName="valor_minimo">
+        </div>
+        <div class="form-group flex-1">
+          <label for="valor_maximo">{{ t().creacion_diagnostico.label_valor_maximo }}</label>
+          <input id="valor_maximo" type="number" formControlName="valor_maximo">
+        </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" formControlName="estado">
+          {{ t().edicion_diagnostico.label_estado }}
+        </label>
+      </div>
+
+      <p class="help-text">{{ t().edicion_diagnostico.aviso_estructura }}</p>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volver()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().edicion_diagnostico.btn_actualizando : t().edicion_diagnostico.btn_actualizar }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

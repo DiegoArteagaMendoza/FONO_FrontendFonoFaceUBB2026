@@ -37,6 +37,25 @@
 
       <a routerLink="/portal/cuidados" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.cuidados }}</a>
       <a routerLink="/portal/noticias" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.noticias }}</a>
+
+      <!-- DESPLEGABLE DE AUTOEVALUACIÓN: lista los formularios de diagnóstico publicados -->
+      <div class="dropdown">
+        <span class="dropdown-trigger">
+          {{ t().portal_navbar.menu_autoevaluacion }}
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </span>
+        <div class="dropdown-menu">
+          <span *ngIf="cargandoAutoevaluacion" class="dropdown-info">{{ t().portal_navbar.autoevaluacion_cargando }}</span>
+          <span *ngIf="!cargandoAutoevaluacion && formulariosAutoevaluacion.length === 0" class="dropdown-info">{{ t().portal_navbar.autoevaluacion_vacio }}</span>
+          <a *ngFor="let formulario of formulariosAutoevaluacion"
+             [routerLink]="['/portal/autoevaluacion', formulario.id_formulario]"
+             routerLinkActive="active-link"
+             (click)="closeMenu()">{{ formulario.nombre }}</a>
+          <a routerLink="/portal/autoevaluacion" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">{{ t().portal_navbar.autoevaluacion_ver_todas }}</a>
+        </div>
+      </div>
       <a routerLink="/portalmedico/inicio" routerLinkActive="active-link" (click)="closeMenu()">{{ t().portal_navbar.portal_medico }}</a>
 
       <div class="admin-access">

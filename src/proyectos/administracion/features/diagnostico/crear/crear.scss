@@ -1,0 +1,84 @@
+.subescalas-section {
+  margin-top: 1rem;
+
+  h3 {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.subescala-box {
+  border: 1px solid var(--fono-borde, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--fono-superficie-2, #f8fafc);
+}
+
+.subescala-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-quitar {
+  height: fit-content;
+}
+
+.preguntas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.pregunta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  .pregunta-numero {
+    font-weight: 600;
+    min-width: 1.5rem;
+  }
+
+  input {
+    flex: 1;
+  }
+}
+
+.btn-agregar-pregunta {
+  font-size: 0.9rem;
+}
+
+.flex-3 { flex: 3; min-width: 220px; }
+
+/* --- Interpretación de resultado (rangos de puntaje -> etiqueta clínica) --- */
+.interpretaciones-block {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--fono-borde, #e2e8f0);
+
+  h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  &.interpretaciones-total {
+    margin-top: 1.5rem;
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+.interpretacion-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+
+  .btn-icon {
+    height: fit-content;
+  }
+}

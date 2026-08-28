@@ -17,6 +17,10 @@ import { EditarVoz } from '../proyectos/administracion/features/voz/editar/edita
 import { NoticiasAdminComponent } from '../proyectos/administracion/features/noticias/noticias';
 import { CrearNoticia } from '../proyectos/administracion/features/noticias/crear/crear';
 import { EditarNoticia } from '../proyectos/administracion/features/noticias/editar/editar';
+import { Diagnostico } from '../proyectos/administracion/features/diagnostico/diagnostico';
+import { CrearDiagnostico } from '../proyectos/administracion/features/diagnostico/crear/crear';
+import { EditarDiagnostico } from '../proyectos/administracion/features/diagnostico/editar/editar';
+import { ResultadosDiagnostico } from '../proyectos/administracion/features/diagnostico/resultados/resultados';
 import { AdministracionInicioComponent } from '../proyectos/administracion/features/administracion/inicio/administracion-inicio';
 import { AdministracionInicioCrearComponent } from '../proyectos/administracion/features/administracion/inicio/crear/administracion-inicio-crear';
 import { AdministracionUsuarioComponent } from '../proyectos/administracion/features/administracion/usuarios/administracion-usuarios';
@@ -40,6 +44,8 @@ import { FarmacosClienteComponent } from '../proyectos/cliente/farmacos/farmacos
 import { PromocionClienteComponent } from '../proyectos/cliente/promocion/promocion';
 import { NoticiasClienteComponent } from '../proyectos/cliente/noticias/noticias';
 import { NoticiasDetalleComponent } from '../proyectos/cliente/noticias/noticias-detalle/noticias-detalle';
+import { AutoevaluacionClienteComponent } from '../proyectos/cliente/autoevaluacion/autoevaluacion';
+import { AutoevaluacionDetalleComponent } from '../proyectos/cliente/autoevaluacion/autoevaluacion-detalle/autoevaluacion-detalle';
 // import { FarmacosDetalleComponent } from '../proyectos/cliente/farmacos-detalle/farmacos-detalle';
 
 // IMPORTACIONES DEL PORTAL MÉDICO (profesionales fonoaudiólogos, backend FonoAppPortalMedico)
@@ -105,6 +111,11 @@ export const routes: Routes = [
       // RUTAS DE CUIDADOS
       { path: 'cuidados', component: CuidadosClienteComponent },
       { path: 'cuidados/:id', component: CuidadosDetalleComponent },
+
+      // RUTAS DE AUTOEVALUACIÓN (backend FonoApp, app FonoAppDiagnostico).
+      // Públicas: el cliente responde el test sin necesidad de cuenta propia.
+      { path: 'autoevaluacion', component: AutoevaluacionClienteComponent },
+      { path: 'autoevaluacion/:id', component: AutoevaluacionDetalleComponent },
     ]
   },
 
@@ -190,6 +201,11 @@ export const routes: Routes = [
       { path: 'administracion/noticias', component: NoticiasAdminComponent },
       { path: 'administracion/noticias/crear', component: CrearNoticia },
       { path: 'administracion/noticias/editar/:id', component: EditarNoticia },
+      // DIAGNOSTICO (AUTOEVALUACION): lo puede crear cualquier rol de administrador
+      { path: 'administracion/diagnostico', component: Diagnostico },
+      { path: 'administracion/diagnostico/crear', component: CrearDiagnostico },
+      { path: 'administracion/diagnostico/editar/:id', component: EditarDiagnostico },
+      { path: 'administracion/diagnostico/:id/resultados', component: ResultadosDiagnostico },
       // ADMINISTRACION BANNER
       { path: 'administracion/carrusel/inicio', component: AdministracionInicioComponent },
       { path: 'administracion/carrusel/inicio/crear', component: AdministracionInicioCrearComponent},
