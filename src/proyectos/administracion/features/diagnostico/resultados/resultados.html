@@ -1,0 +1,48 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <button class="btn-back" (click)="volver()">{{ t().resultados_diagnostico.volver }}</button>
+      <h2>{{ t().resultados_diagnostico.titulo }} {{ formulario?.nombre }}</h2>
+      <p>{{ t().resultados_diagnostico.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().resultados_diagnostico.paciente_tabla }}</th>
+          <th>{{ t().resultados_diagnostico.fecha_tabla }}</th>
+          <th>{{ t().resultados_diagnostico.puntaje_tabla }}</th>
+          <th>{{ t().resultados_diagnostico.interpretacion_tabla }}</th>
+          <th>{{ t().resultados_diagnostico.detalle_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="respuestas.length === 0">
+          <td colspan="5" class="empty-state">{{ t().resultados_diagnostico.sin_resultados }}</td>
+        </tr>
+
+        <tr *ngFor="let item of respuestas">
+          <td class="td-title">{{ item.paciente_nombre }}</td>
+          <td>{{ item.fecha_diligenciamiento }}</td>
+          <td>{{ item.puntaje_total }}</td>
+          <td>
+            <span *ngIf="item.interpretacion_total" class="badge">{{ item.interpretacion_total.etiqueta }}</span>
+            <span *ngIf="!item.interpretacion_total" class="text-muted">N/A</span>
+          </td>
+          <td>
+            <span *ngFor="let sub of item.detalle_subescalas" class="badge">
+              {{ sub.subescala }}: {{ sub.puntaje }}<ng-container *ngIf="sub.interpretacion"> ({{ sub.interpretacion.etiqueta }})</ng-container>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

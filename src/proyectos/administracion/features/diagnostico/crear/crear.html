@@ -1,0 +1,153 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().creacion_diagnostico.titulo }}</h2>
+      <p>{{ t().creacion_diagnostico.subtitulo }}</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+    <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
+      <div class="form-group">
+        <label for="nombre">{{ t().creacion_diagnostico.label_nombre }}</label>
+        <input id="nombre" type="text" formControlName="nombre" [placeholder]="t().creacion_diagnostico.placeholder_nombre">
+        <small class="error-text" *ngIf="crearForm.get('nombre')?.invalid && crearForm.get('nombre')?.touched">
+          {{ t().creacion_diagnostico.alerta_nombre }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">{{ t().creacion_diagnostico.label_descripcion }}</label>
+        <textarea id="descripcion" formControlName="descripcion" rows="3" [placeholder]="t().creacion_diagnostico.placeholder_descripcion"></textarea>
+        <small class="error-text" *ngIf="crearForm.get('descripcion')?.invalid && crearForm.get('descripcion')?.touched">
+          {{ t().creacion_diagnostico.alerta_descripcion }}
+        </small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label for="valor_minimo">{{ t().creacion_diagnostico.label_valor_minimo }}</label>
+          <input id="valor_minimo" type="number" formControlName="valor_minimo">
+        </div>
+        <div class="form-group flex-1">
+          <label for="valor_maximo">{{ t().creacion_diagnostico.label_valor_maximo }}</label>
+          <input id="valor_maximo" type="number" formControlName="valor_maximo">
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="subescalas-section">
+        <h3>{{ t().creacion_diagnostico.subescalas_titulo }}</h3>
+        <p class="help-text">{{ t().creacion_diagnostico.subescalas_ayuda }}</p>
+
+        <div formArrayName="subescalas">
+          <div class="subescala-box" *ngFor="let subescala of subescalas.controls; let iSub = index" [formGroupName]="iSub">
+            <div class="subescala-header">
+              <div class="form-group flex-2">
+                <label>{{ t().creacion_diagnostico.subescala_nombre_label }}</label>
+                <input type="text" formControlName="nombre" [placeholder]="t().creacion_diagnostico.subescala_nombre_placeholder">
+              </div>
+              <button type="button" class="btn-secondary btn-quitar" (click)="quitarSubescala(iSub)" *ngIf="subescalas.length > 1">
+                {{ t().creacion_diagnostico.btn_quitar_subescala }}
+              </button>
+            </div>
+
+            <div formArrayName="preguntas" class="preguntas-list">
+              <div class="pregunta-row" *ngFor="let pregunta of preguntasDe(subescala).controls; let iPreg = index" [formGroupName]="iPreg">
+                <span class="pregunta-numero">{{ iPreg + 1 }}.</span>
+                <input type="text" formControlName="texto" [placeholder]="t().creacion_diagnostico.pregunta_placeholder">
+                <button type="button" class="btn-icon delete" (click)="quitarPregunta(iSub, iPreg)" *ngIf="preguntasDe(subescala).length > 1">
+                  {{ t().creacion_diagnostico.btn_quitar_pregunta }}
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="btn-secondary btn-agregar-pregunta" (click)="agregarPregunta(iSub)">
+              {{ t().creacion_diagnostico.btn_agregar_pregunta }}
+            </button>
+
+            <!-- INTERPRETACIÓN DE ESTA SUBESCALA (OPCIONAL) -->
+            <div class="interpretaciones-block" formArrayName="interpretaciones">
+              <h4>{{ t().creacion_diagnostico.interpretacion_subescala_titulo }}</h4>
+
+              <div class="interpretacion-row" *ngFor="let interpretacion of interpretacionesDe(subescala).controls; let iInterp = index" [formGroupName]="iInterp">
+                <div class="form-group flex-1">
+                  <label>{{ t().creacion_diagnostico.interpretacion_min_label }}</label>
+                  <input type="number" formControlName="valor_minimo">
+                </div>
+                <div class="form-group flex-1">
+                  <label>{{ t().creacion_diagnostico.interpretacion_max_label }}</label>
+                  <input type="number" formControlName="valor_maximo">
+                </div>
+                <div class="form-group flex-2">
+                  <label>{{ t().creacion_diagnostico.interpretacion_etiqueta_label }}</label>
+                  <input type="text" formControlName="etiqueta" [placeholder]="t().creacion_diagnostico.interpretacion_etiqueta_placeholder">
+                </div>
+                <div class="form-group flex-3">
+                  <label>{{ t().creacion_diagnostico.interpretacion_descripcion_label }}</label>
+                  <input type="text" formControlName="descripcion" [placeholder]="t().creacion_diagnostico.interpretacion_descripcion_placeholder">
+                </div>
+                <button type="button" class="btn-icon delete" (click)="quitarInterpretacionSubescala(iSub, iInterp)">
+                  {{ t().creacion_diagnostico.btn_quitar_rango }}
+                </button>
+              </div>
+
+              <button type="button" class="btn-secondary" (click)="agregarInterpretacionSubescala(iSub)">
+                {{ t().creacion_diagnostico.btn_agregar_rango }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="agregarSubescala()">
+          {{ t().creacion_diagnostico.btn_agregar_subescala }}
+        </button>
+      </div>
+
+      <hr>
+
+      <div class="interpretaciones-block interpretaciones-total">
+        <h3>{{ t().creacion_diagnostico.interpretacion_total_titulo }}</h3>
+        <p class="help-text">{{ t().creacion_diagnostico.interpretacion_ayuda }}</p>
+
+        <div formArrayName="interpretaciones">
+          <div class="interpretacion-row" *ngFor="let interpretacion of interpretacionesTotal.controls; let iInterp = index" [formGroupName]="iInterp">
+            <div class="form-group flex-1">
+              <label>{{ t().creacion_diagnostico.interpretacion_min_label }}</label>
+              <input type="number" formControlName="valor_minimo">
+            </div>
+            <div class="form-group flex-1">
+              <label>{{ t().creacion_diagnostico.interpretacion_max_label }}</label>
+              <input type="number" formControlName="valor_maximo">
+            </div>
+            <div class="form-group flex-2">
+              <label>{{ t().creacion_diagnostico.interpretacion_etiqueta_label }}</label>
+              <input type="text" formControlName="etiqueta" [placeholder]="t().creacion_diagnostico.interpretacion_etiqueta_placeholder">
+            </div>
+            <div class="form-group flex-3">
+              <label>{{ t().creacion_diagnostico.interpretacion_descripcion_label }}</label>
+              <input type="text" formControlName="descripcion" [placeholder]="t().creacion_diagnostico.interpretacion_descripcion_placeholder">
+            </div>
+            <button type="button" class="btn-icon delete" (click)="quitarInterpretacionTotal(iInterp)">
+              {{ t().creacion_diagnostico.btn_quitar_rango }}
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="agregarInterpretacionTotal()">
+          {{ t().creacion_diagnostico.btn_agregar_rango }}
+        </button>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_diagnostico.btn_guardando : t().creacion_diagnostico.btn_guardar }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

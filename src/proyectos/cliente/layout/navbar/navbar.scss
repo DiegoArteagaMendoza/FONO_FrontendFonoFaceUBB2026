@@ -139,6 +139,15 @@ $border-color: var(--fono-borde);
         color: $primary-color;
       }
     }
+
+    /* Estado de carga/vacío del listado dinámico de autoevaluaciones */
+    .dropdown-info {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--fono-texto-tenue, #94a3b8);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
   }
 
   /* Mostrar al hacer hover */
