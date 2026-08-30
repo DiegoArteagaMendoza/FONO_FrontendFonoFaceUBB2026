@@ -408,7 +408,7 @@ export const TEXTOS_SITIO = {
     // CREACION DIAGNOSTICO (AUTOEVALUACION)
     creacion_diagnostico: {
         titulo: "Crear Formulario de Autoevaluación",
-        subtitulo: "Define el nombre, la escala de valores y las subescalas con sus preguntas.",
+        subtitulo: "Define el nombre, la escala de valores y las secciones con sus preguntas.",
         label_nombre: "Nombre del formulario",
         placeholder_nombre: "Ej. Índice de Fatiga Vocal",
         alerta_nombre: "El nombre es obligatorio.",
@@ -418,19 +418,19 @@ export const TEXTOS_SITIO = {
         label_valor_minimo: "Valor mínimo de la escala",
         label_valor_maximo: "Valor máximo de la escala",
         alerta_escala: "El valor máximo debe ser mayor al mínimo.",
-        subescalas_titulo: "Subescalas y preguntas",
-        subescalas_ayuda: "Agrupa las preguntas por subescala (ej. \"Parte 1\", \"Funcional\"). Si el test no distingue partes, usa una única subescala general.",
-        subescala_nombre_label: "Nombre de la subescala",
+        subescalas_titulo: "Secciones y preguntas",
+        subescalas_ayuda: "Agrupa las preguntas por sección (ej. \"Parte 1\", \"Funcional\"). Si el test no distingue partes, usa una única sección general.",
+        subescala_nombre_label: "Nombre de la sección",
         subescala_nombre_placeholder: "Ej. Parte 1",
-        btn_agregar_subescala: "+ Agregar subescala",
-        btn_quitar_subescala: "Quitar subescala",
+        btn_agregar_subescala: "+ Agregar sección",
+        btn_quitar_subescala: "Quitar sección",
         pregunta_placeholder: "Escribe el enunciado de la pregunta...",
         btn_agregar_pregunta: "+ Agregar pregunta",
         btn_quitar_pregunta: "Quitar",
-        alerta_subescalas: "Agrega al menos una subescala con una pregunta.",
+        alerta_subescalas: "Agrega al menos una sección con una pregunta.",
         alerta_pregunta_vacia: "Cada pregunta debe tener un enunciado.",
         interpretacion_total_titulo: "Interpretación del puntaje total (opcional)",
-        interpretacion_subescala_titulo: "Interpretación de esta subescala (opcional)",
+        interpretacion_subescala_titulo: "Interpretación de esta sección (opcional)",
         interpretacion_ayuda: "Define rangos de puntaje sin solape para mostrar un resultado clínico (ej. 0-10 = Leve). Déjalo vacío si no aplica.",
         interpretacion_min_label: "Desde",
         interpretacion_max_label: "Hasta",
@@ -441,8 +441,14 @@ export const TEXTOS_SITIO = {
         btn_agregar_rango: "+ Agregar rango",
         btn_quitar_rango: "Quitar rango",
         alerta_interpretacion_solape: "Los rangos de interpretación no pueden solaparse entre sí.",
+        btn_previsualizar: "Previsualizar Formulario",
         btn_guardando: "Publicando...",
-        btn_guardar: "Publicar Formulario"
+        btn_guardar: "Publicar Formulario",
+        // PREVISUALIZACIÓN (pop up previo al registro)
+        preview_titulo: "Previsualización del Formulario",
+        preview_aviso: "Así lo verá el paciente. Revisa que todo esté correcto antes de publicarlo.",
+        preview_escala_label: "Escala de respuesta",
+        btn_volver_editar: "Volver a editar"
     },
 
     // EDICION DIAGNOSTICO (AUTOEVALUACION)
@@ -452,7 +458,7 @@ export const TEXTOS_SITIO = {
         cargando_datos: "Cargando datos del formulario...",
         error_no_encontrado: "No se encontró el formulario solicitado.",
         label_estado: "Publicado (visible para los clientes)",
-        aviso_estructura: "Las subescalas y preguntas no se pueden modificar una vez publicado el formulario; si necesitas cambiarlas, despublica este formulario y crea uno nuevo.",
+        aviso_estructura: "Las secciones y preguntas no se pueden modificar una vez publicado el formulario; si necesitas cambiarlas, despublica este formulario y crea uno nuevo.",
         btn_actualizando: "Actualizando...",
         btn_actualizar: "Guardar Cambios"
     },

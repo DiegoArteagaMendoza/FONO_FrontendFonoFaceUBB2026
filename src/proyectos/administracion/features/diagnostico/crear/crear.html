@@ -145,9 +145,76 @@
       <div class="form-actions">
         <button type="button" class="btn-secondary" (click)="cancelar()" [disabled]="isSubmitting">{{ t().globales.boton_cancelar }}</button>
         <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-          {{ isSubmitting ? t().creacion_diagnostico.btn_guardando : t().creacion_diagnostico.btn_guardar }}
+          {{ t().creacion_diagnostico.btn_previsualizar }}
         </button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Previsualización del formulario antes de registrarlo -->
+<div class="modal-overlay" *ngIf="mostrarPreview" (click)="cerrarPreview()">
+  <div class="modal-content modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ t().creacion_diagnostico.preview_titulo }}</h3>
+      <button class="btn-close" (click)="cerrarPreview()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="payloadPreview as formulario">
+      <p class="preview-aviso">{{ t().creacion_diagnostico.preview_aviso }}</p>
+
+      <article class="preview-formulario">
+        <header class="formulario-header">
+          <h1>{{ formulario.nombre }}</h1>
+          <p class="descripcion">{{ formulario.descripcion }}</p>
+        </header>
+
+        <div class="preview-escala">
+          <span class="preview-escala-label">{{ t().creacion_diagnostico.preview_escala_label }}</span>
+          <div class="escala-opciones">
+            <span class="opcion" *ngFor="let opcion of escalaOpcionesPreview">{{ opcion }}</span>
+          </div>
+        </div>
+
+        <div class="subescala-block" *ngFor="let subescala of formulario.subescalas">
+          <h2 class="subescala-titulo">{{ subescala.nombre }}</h2>
+
+          <div class="pregunta-block" *ngFor="let pregunta of subescala.preguntas; let iPreg = index">
+            <p class="pregunta-texto">{{ iPreg + 1 }}. {{ pregunta.texto }}</p>
+          </div>
+
+          <div class="preview-interpretaciones" *ngIf="subescala.interpretaciones && subescala.interpretaciones.length > 0">
+            <h4>{{ t().creacion_diagnostico.interpretacion_subescala_titulo }}</h4>
+            <ul>
+              <li *ngFor="let interp of subescala.interpretaciones">
+                <strong>{{ interp.valor_minimo }} - {{ interp.valor_maximo }}:</strong> {{ interp.etiqueta }}
+                <span *ngIf="interp.descripcion"> — {{ interp.descripcion }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="preview-interpretaciones preview-interpretaciones-total" *ngIf="formulario.interpretaciones && formulario.interpretaciones.length > 0">
+          <h4>{{ t().creacion_diagnostico.interpretacion_total_titulo }}</h4>
+          <ul>
+            <li *ngFor="let interp of formulario.interpretaciones">
+              <strong>{{ interp.valor_minimo }} - {{ interp.valor_maximo }}:</strong> {{ interp.etiqueta }}
+              <span *ngIf="interp.descripcion"> — {{ interp.descripcion }}</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cerrarPreview()" [disabled]="isSubmitting">
+          {{ t().creacion_diagnostico.btn_volver_editar }}
+        </button>
+        <button type="button" class="btn-primary" (click)="confirmarPublicacion()" [disabled]="isSubmitting">
+          {{ isSubmitting ? t().creacion_diagnostico.btn_guardando : t().creacion_diagnostico.btn_guardar }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>

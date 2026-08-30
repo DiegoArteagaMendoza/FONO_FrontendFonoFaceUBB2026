@@ -82,3 +82,111 @@
     height: fit-content;
   }
 }
+
+/* --- Previsualización del formulario (pop up previo al registro) --- */
+.modal-content.modal-lg {
+  max-width: 800px;
+}
+
+.preview-aviso {
+  color: var(--fono-texto-suave);
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.preview-formulario {
+  .formulario-header {
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--fono-texto-fuerte, var(--fono-texto-cuerpo));
+      margin: 0 0 0.5rem 0;
+    }
+
+    .descripcion {
+      color: var(--fono-texto-suave);
+      font-size: 1rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+  }
+
+  .subescala-block {
+    margin-bottom: 2rem;
+
+    .subescala-titulo {
+      font-size: 1.15rem;
+      color: var(--fono-texto-fuerte, var(--fono-texto-cuerpo));
+      border-bottom: 2px solid var(--fono-borde, #e2e8f0);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .pregunta-block .pregunta-texto {
+    font-size: 1rem;
+    color: var(--fono-texto-cuerpo);
+    margin: 0 0 0.75rem 0;
+  }
+}
+
+.preview-escala {
+  margin-bottom: 1.75rem;
+
+  .preview-escala-label {
+    display: block;
+    font-weight: 600;
+    color: var(--fono-texto-cuerpo);
+    margin-bottom: 0.5rem;
+  }
+}
+
+.escala-opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+
+  .opcion {
+    background: var(--fono-superficie-2, #f8fafc);
+    border: 1px solid var(--fono-borde, #e2e8f0);
+    border-radius: 8px;
+    padding: 0.4rem 0.85rem;
+    font-weight: 600;
+    color: var(--fono-texto-cuerpo);
+  }
+}
+
+.preview-interpretaciones {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--fono-borde, #e2e8f0);
+
+  h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    color: var(--fono-texto-cuerpo);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding: 0.5rem 0.75rem;
+    background: var(--fono-superficie-2, #f8fafc);
+    border-radius: 8px;
+    margin-bottom: 0.4rem;
+    color: var(--fono-texto-cuerpo);
+    font-size: 0.9rem;
+  }
+
+  &.preview-interpretaciones-total {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 1.5rem;
+  }
+}

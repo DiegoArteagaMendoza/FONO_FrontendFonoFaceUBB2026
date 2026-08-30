@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DiagnosticoService } from '@core/services/diagnostico/diagnostico';
+import { DiagnosticoFormularioCrear } from '@core/services/diagnostico/interface/diagnostico.interface';
 import { TextosService } from '@core/services/textos/textos';
 
 @Component({
@@ -19,6 +20,11 @@ export class CrearDiagnostico {
   crearForm: FormGroup;
   isSubmitting = false;
   errorMensaje = '';
+
+  // --- Previsualización previa al registro ---
+  mostrarPreview = false;
+  payloadPreview: DiagnosticoFormularioCrear | null = null;
+  escalaOpcionesPreview: number[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -142,6 +148,18 @@ export class CrearDiagnostico {
     }));
   }
 
+  // Réplica de la escala de opciones que verá el paciente al responder (ver
+  // AutoevaluacionDetalleComponent.construirEscala), para mostrarla en la previsualización.
+  private construirEscalaOpciones(minimo: number, maximo: number): number[] {
+    const opciones: number[] = [];
+    for (let valor = minimo; valor <= maximo; valor++) {
+      opciones.push(valor);
+    }
+    return opciones;
+  }
+
+  // Valida el formulario y arma el payload, pero en vez de registrarlo de inmediato
+  // abre el pop up de previsualización para que el administrador lo valide antes de publicarlo.
   onSubmit(): void {
     if (this.crearForm.invalid) {
       this.crearForm.markAllAsTouched();
@@ -174,10 +192,8 @@ export class CrearDiagnostico {
       return;
     }
 
-    this.isSubmitting = true;
     this.errorMensaje = '';
-
-    const payload = {
+    this.payloadPreview = {
       nombre: this.crearForm.get('nombre')?.value,
       descripcion: this.crearForm.get('descripcion')?.value,
       valor_minimo: valorMinimo,
@@ -185,10 +201,28 @@ export class CrearDiagnostico {
       subescalas,
       interpretaciones: interpretacionesTotal
     };
+    this.escalaOpcionesPreview = this.construirEscalaOpciones(valorMinimo, valorMaximo);
+    this.mostrarPreview = true;
+  }
 
-    this.diagnosticoService.crearFormulario(payload).subscribe({
+  // Vuelve al formulario sin perder lo ya completado, para seguir editando.
+  cerrarPreview(): void {
+    this.mostrarPreview = false;
+  }
+
+  // Registro definitivo, disparado desde el botón de confirmación del pop up de previsualización.
+  confirmarPublicacion(): void {
+    if (!this.payloadPreview) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.errorMensaje = '';
+
+    this.diagnosticoService.crearFormulario(this.payloadPreview).subscribe({
       next: () => {
         this.isSubmitting = false;
+        this.mostrarPreview = false;
         this.router.navigate(['administracion/diagnostico']);
       },
       error: (err) => {
