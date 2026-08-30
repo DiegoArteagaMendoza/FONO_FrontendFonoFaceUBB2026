@@ -27,6 +27,18 @@ export class AutoevaluacionDetalleComponent implements OnInit {
   errorMensaje = '';
   errorCarga = '';
   resultado: DiagnosticoResultado | null = null;
+  // Id de la respuesta ya registrada, para pedir el envío de SU resultado por correo.
+  idRespuesta: number | null = null;
+
+  // Envío del resultado por correo: el correo se escribe recién acá, no forma
+  // parte de la respuesta del test ni se guarda en ningún lado (ver
+  // DiagnosticoService.enviarResultadoPorCorreo); el backend solo lo usa para
+  // este envío puntual, con la misma configuración de correo que usa el
+  // Portal Médico para confirmar una reserva de hora.
+  correoForm: FormGroup;
+  correoEnviando = false;
+  correoEnviado = false;
+  correoError = '';
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +51,10 @@ export class AutoevaluacionDetalleComponent implements OnInit {
       paciente_nombre: ['', Validators.required],
       paciente_fecha_nacimiento: [''],
       subescalas: this.fb.array([])
+    });
+
+    this.correoForm = this.fb.group({
+      correo: ['', [Validators.required, Validators.email]]
     });
   }
 
@@ -128,6 +144,7 @@ export class AutoevaluacionDetalleComponent implements OnInit {
     }).subscribe({
       next: (respuesta) => {
         this.resultado = respuesta.resultado;
+        this.idRespuesta = respuesta.id_respuesta;
         this.enviando = false;
         this.cdr.detectChanges();
       },
@@ -142,11 +159,53 @@ export class AutoevaluacionDetalleComponent implements OnInit {
 
   responderOtraVez(): void {
     this.resultado = null;
+    this.idRespuesta = null;
     if (this.formulario) {
       this.construirFormulario(this.formulario);
     }
     this.respuestaForm.patchValue({ paciente_nombre: '', paciente_fecha_nacimiento: '' });
+    this.correoForm.reset();
+    this.correoEnviando = false;
+    this.correoEnviado = false;
+    this.correoError = '';
     this.cdr.detectChanges();
+  }
+
+  // Le pide al backend que envíe el resultado ya calculado (guardado al responder
+  // el test) al correo recién ingresado. El correo no se guarda en ningún lado;
+  // el backend solo lo usa para este envío puntual (ver DiagnosticoService).
+  enviarPorCorreo(): void {
+    if (this.correoForm.invalid) {
+      this.correoForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.idRespuesta) {
+      return;
+    }
+
+    this.correoEnviando = true;
+    this.correoEnviado = false;
+    this.correoError = '';
+
+    const destino = this.correoForm.get('correo')?.value;
+    this.diagnosticoService.enviarResultadoPorCorreo(this.idRespuesta, destino).subscribe({
+      next: (respuesta) => {
+        this.correoEnviando = false;
+        if (respuesta.correo_enviado) {
+          this.correoEnviado = true;
+        } else {
+          this.correoError = this.t().portal_autoevaluacion_detalle.correo_sin_enviar;
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al enviar el resultado por correo', err);
+        this.correoEnviando = false;
+        this.correoError = this.t().portal_autoevaluacion_detalle.correo_sin_enviar;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   verOtras(): void {

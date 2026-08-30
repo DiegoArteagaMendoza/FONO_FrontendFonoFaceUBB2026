@@ -1,6 +1,6 @@
-# FonoFace — Frontend (UBB 2026)
+# Vocare UBB — Frontend (UBB 2026)
 
-Frontend en Angular del proyecto FonoFace de la Universidad del Bío-Bío: una plataforma de información y cuidados de la voz que expone dos experiencias distintas dentro de la misma aplicación Angular:
+Frontend en Angular del proyecto Vocare UBB de la Universidad del Bío-Bío: una plataforma de información y cuidados de la voz que expone dos experiencias distintas dentro de la misma aplicación Angular:
 
 - **Portal Cliente**: sitio público (`/portal/...`) donde cualquier visitante consulta información, cuidados, noticias, fármacos y promoción de la voz.
 - **Panel de Administración**: zona privada (`/administracion/...`, `/login`) donde usuarios autenticados gestionan el contenido que se muestra en el portal público.
@@ -11,7 +11,7 @@ Ambas experiencias viven en **un solo proyecto Angular** (no son builds separado
 
 - Node.js 20+ (probado con Node 24)
 - [pnpm](https://pnpm.io/) como gestor de paquetes (el repo usa `pnpm-lock.yaml`)
-- Acceso a la API backend (Django) de FonoFace, corriendo localmente o desplegada
+- Acceso a la API backend (Django) de Vocare UBB, corriendo localmente o desplegada
 
 Instalación de dependencias:
 
@@ -44,7 +44,7 @@ Las rutas concretas de cada endpoint (login, informacion, cuidados, noticias, et
 pnpm build
 ```
 
-Compila la aplicación y deja los artefactos en `dist/FrontendFonoFaceUBB2026/`. Por defecto usa la configuración `production` (optimizada) y el `environment.ts` de producción.
+Compila la aplicación y deja los artefactos en `dist/FrontendVocareUBB/`. Por defecto usa la configuración `production` (optimizada) y el `environment.ts` de producción.
 
 ## Tests
 

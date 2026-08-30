@@ -6,7 +6,7 @@
 
 ## 0. Qué es esta app para efectos del deploy
 
-FonoFace Frontend es un **SPA 100% estático** (sin SSR, sin servidor Node en runtime — ver [ARQUITECTURA.md §1](./ARQUITECTURA.md#1-visión-general)). `pnpm build` genera HTML/JS/CSS/assets en `dist/FrontendFonoFaceUBB2026/browser/`; ese directorio es literalmente todo lo que hay que subir al hosting. El plan Emprendedor de V2Networks ofrece cPanel con soporte para Node.js y Python además de PHP, pero **no lo necesitamos**: basta con su capa de hosting de archivos estáticos (Apache + FTP/File Manager), igual que para un sitio HTML clásico.
+Vocare UBB Frontend es un **SPA 100% estático** (sin SSR, sin servidor Node en runtime — ver [ARQUITECTURA.md §1](./ARQUITECTURA.md#1-visión-general)). `pnpm build` genera HTML/JS/CSS/assets en `dist/FrontendVocareUBB/browser/`; ese directorio es literalmente todo lo que hay que subir al hosting. El plan Emprendedor de V2Networks ofrece cPanel con soporte para Node.js y Python además de PHP, pero **no lo necesitamos**: basta con su capa de hosting de archivos estáticos (Apache + FTP/File Manager), igual que para un sitio HTML clásico.
 
 Del Plan Emprendedor usamos en concreto:
 
@@ -22,7 +22,7 @@ Del Plan Emprendedor usamos en concreto:
    - `apiUrlPortalMedico`: placeholder `https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/medicos` — **hay que reemplazarlo por la URL real** antes del build, o el módulo Portal Médico quedará roto en producción (ver [ARQUITECTURA.md §5.1](./ARQUITECTURA.md#51-nota-operativa)).
 2. **CORS habilitado en ambos backends Django** para el dominio final donde vivirá el frontend (p. ej. `https://tudominio.cl`). Si el backend solo permite `localhost`, todas las peticiones del sitio en producción fallarán en el navegador aunque el build esté perfecto.
 3. **Dominio apuntando a V2Networks** (registros DNS `A`/`CNAME` ya propagados) si vas a usar un dominio propio en vez del subdominio temporal que entrega el hosting.
-4. Decide si el sitio vivirá en la **raíz** del dominio (`https://tudominio.cl/`) o en una **subcarpeta** (`https://tudominio.cl/fonoface/`). `index.html` trae `<base href="/">` por defecto, pensado para la raíz — ver ajuste en el paso 3 si usas subcarpeta.
+4. Decide si el sitio vivirá en la **raíz** del dominio (`https://tudominio.cl/`) o en una **subcarpeta** (`https://tudominio.cl/vocare-ubb/`). `index.html` trae `<base href="/">` por defecto, pensado para la raíz — ver ajuste en el paso 3 si usas subcarpeta.
 
 ## 2. Activar el `.htaccess` y buildear
 
@@ -42,7 +42,7 @@ pnpm build
 Esto usa la configuración `production` por defecto (`outputHashing: all`, minificado) y deja el resultado en:
 
 ```
-dist/FrontendFonoFaceUBB2026/browser/
+dist/FrontendVocareUBB/browser/
 ├── index.html
 ├── main-XXXXXXXX.js
 ├── styles-XXXXXXXX.css
@@ -54,7 +54,7 @@ dist/FrontendFonoFaceUBB2026/browser/
 Si vas a desplegar bajo una subcarpeta (no en la raíz del dominio), rebuildea con:
 
 ```bash
-pnpm build -- --base-href /fonoface/
+pnpm build -- --base-href /vocare-ubb/
 ```
 
 y ajusta `RewriteBase` en `public/.htaccess` (tu copia ya activada) antes del build — está comentado ahí mismo, con instrucciones.
@@ -66,14 +66,14 @@ y ajusta `RewriteBase` en `public/.htaccess` (tu copia ya activada) antes del bu
 1. Entra a cPanel → **Administrador de archivos**.
 2. Ve a `public_html/` (si el dominio es el principal de la cuenta) o a la carpeta del dominio/subdominio correspondiente si configuraste uno adicional (cPanel las crea bajo `public_html/nombre-subdominio/` o donde la hayas apuntado en **Dominios**).
 3. Si es un redeploy, borra el contenido anterior (o sube a una carpeta nueva y luego cambia el *document root* del dominio) para no mezclar archivos de builds distintos — Angular hashea los nombres de sus bundles en cada build, así que dejar bundles viejos sueltos no rompe nada, pero sí ensucia el hosting.
-4. Sube **el contenido** de `dist/FrontendFonoFaceUBB2026/browser/` (no la carpeta contenedora) directo a la raíz elegida. La forma más simple: comprime esa carpeta en un `.zip` localmente, súbela con el botón **Subir**, y usa **Extraer** en el Administrador de archivos.
+4. Sube **el contenido** de `dist/FrontendVocareUBB/browser/` (no la carpeta contenedora) directo a la raíz elegida. La forma más simple: comprime esa carpeta en un `.zip` localmente, súbela con el botón **Subir**, y usa **Extraer** en el Administrador de archivos.
 5. Confirma que `.htaccess` quedó en la raíz junto a `index.html` (el Administrador de archivos a veces oculta archivos que empiezan con punto — activa "Mostrar archivos ocultos" en Configuración, arriba a la derecha).
 
 ### Opción B — Cliente FTP (FileZilla u otro)
 
 1. En cPanel → **Cuentas FTP**, crea una cuenta FTP (o usa las credenciales de la cuenta principal) apuntando al directorio del dominio/subdominio de destino.
 2. Conéctate con FileZilla (Host: el que indique cPanel, normalmente `ftp.tudominio.cl`; usuario/clave de la cuenta FTP creada; puerto 21, o SFTP por 22 si el plan lo habilita).
-3. Sube el **contenido** de `dist/FrontendFonoFaceUBB2026/browser/` al directorio remoto (`public_html/` o el que corresponda).
+3. Sube el **contenido** de `dist/FrontendVocareUBB/browser/` al directorio remoto (`public_html/` o el que corresponda).
 
 Esta es exactamente la opción que se automatiza con GitHub Actions — ver [CI_CD_GITHUB_ACTIONS.md](./CI_CD_GITHUB_ACTIONS.md).
 

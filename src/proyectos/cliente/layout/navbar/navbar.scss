@@ -32,7 +32,9 @@ $border-color: var(--fono-borde);
   color: $primary-color;
   text-decoration: none;
   letter-spacing: -0.5px;
-  
+  white-space: nowrap;
+  flex-shrink: 0;
+
   &:hover {
     color: $primary-hover;
   }
@@ -54,8 +56,9 @@ $border-color: var(--fono-borde);
 
 .navbar-links {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 2rem;
+  gap: 1.75rem;
 
   /* Aplica a los links normales (fuera del admin y del dropdown menu) */
   > a:not(.btn-admin) {
@@ -63,6 +66,8 @@ $border-color: var(--fono-borde);
     text-decoration: none;
     font-weight: 500;
     font-size: 1rem;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: color 0.2s ease;
     padding: 0.5rem 0;
     position: relative;
@@ -90,11 +95,13 @@ $border-color: var(--fono-borde);
   position: relative;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 
   .dropdown-trigger {
     color: $text-color;
     font-weight: 500;
     font-size: 1rem;
+    white-space: nowrap;
     padding: 0.5rem 0;
     cursor: pointer;
     display: flex;
@@ -161,6 +168,7 @@ $border-color: var(--fono-borde);
 .admin-access {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 0.75rem;
   margin-left: 1rem;
   padding-left: 1.5rem;
@@ -181,6 +189,7 @@ $border-color: var(--fono-borde);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
+  white-space: nowrap;
   transition: all 0.2s ease;
 
   &:hover {

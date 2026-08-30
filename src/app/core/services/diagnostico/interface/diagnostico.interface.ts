@@ -113,6 +113,14 @@ export interface DiagnosticoRespuesta {
   resultado: DiagnosticoResultado;
 }
 
+// Respuesta al pedir el envío del resultado por correo (ver
+// DiagnosticoService.enviarResultadoPorCorreo). El correo ingresado nunca se
+// guarda; el backend solo informa si el envío se pudo hacer o no, igual que
+// hace PmCita al confirmar una reserva de hora.
+export interface DiagnosticoEnvioCorreo {
+  correo_enviado: boolean;
+}
+
 // Versión liviana usada para listar resultados ya registrados de un formulario
 // (panel de administración).
 export interface DiagnosticoRespuestaListado {

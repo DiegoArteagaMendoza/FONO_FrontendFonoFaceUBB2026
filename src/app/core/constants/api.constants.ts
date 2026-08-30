@@ -154,6 +154,8 @@ export const API_ENDPOINTS = {
     editar: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/editar/`,
     eliminar: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/eliminar/`,
     responder: '/diagnostico/respuestas/crear/',
+    // Público también: el paciente lo escribe recién al ver su resultado, no se guarda.
+    enviarCorreo: (idRespuesta: number) => `/diagnostico/respuestas/${idRespuesta}/enviar-correo/`,
     respuestasDeFormulario: (idFormulario: number) => `/diagnostico/respuestas/formulario/${idFormulario}/`
   }
 };

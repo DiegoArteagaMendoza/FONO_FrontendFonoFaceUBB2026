@@ -1,10 +1,10 @@
-# Arquitectura — FonoFace Frontend
+# Arquitectura — Vocare UBB Frontend
 
 > Ver también: [Reglas de negocio](./REGLAS_DE_NEGOCIO.md) · [Deploy en V2Networks](./DEPLOY_V2NETWORKS.md) · [CI/CD con GitHub Actions](./CI_CD_GITHUB_ACTIONS.md)
 
 ## 1. Visión general
 
-FonoFace es una **Single Page Application (SPA) de Angular 22**, sin Server-Side Rendering (SSR): `angular.json` solo define un target `browser` (no hay `server.ts` ni configuración de `@angular/ssr`), y el build de producción genera únicamente estáticos en `dist/FrontendFonoFaceUBB2026/browser/` (HTML + JS + CSS + assets). Esto es clave para el deploy: **no requiere un servidor Node corriendo**, solo un host de archivos estáticos con reglas de reescritura de rutas (ver [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md)).
+Vocare UBB es una **Single Page Application (SPA) de Angular 22**, sin Server-Side Rendering (SSR): `angular.json` solo define un target `browser` (no hay `server.ts` ni configuración de `@angular/ssr`), y el build de producción genera únicamente estáticos en `dist/FrontendVocareUBB/browser/` (HTML + JS + CSS + assets). Esto es clave para el deploy: **no requiere un servidor Node corriendo**, solo un host de archivos estáticos con reglas de reescritura de rutas (ver [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md)).
 
 Un único proyecto Angular expone **tres experiencias** distintas, separadas por prefijo de ruta y por identidad de sesión:
 
@@ -86,14 +86,14 @@ Los endpoints concretos de cada API viven centralizados en `src/app/core/constan
 
 ## 6. Configuración de build
 
-`angular.json` define un único proyecto (`FrontendFonoFaceUBB2026`) con dos configuraciones:
+`angular.json` define un único proyecto (`FrontendVocareUBB`) con dos configuraciones:
 
 - **`production`** (default): optimizado, `outputHashing: all` (cache-busting de assets), presupuestos de tamaño (500kB warning / 1MB error para el bundle inicial). Usa `environment.ts`.
 - **`development`**: sin optimizar, sourcemaps, usa `environment.development.ts` vía `fileReplacements`.
 
-El build de producción (`pnpm build` ≡ `ng build`) emite a `dist/FrontendFonoFaceUBB2026/browser/`. Ese es el directorio que se sube al hosting — ver [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md).
+El build de producción (`pnpm build` ≡ `ng build`) emite a `dist/FrontendVocareUBB/browser/`. Ese es el directorio que se sube al hosting — ver [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md).
 
-`src/index.html` fija `<base href="/">`: la app está pensada para vivir en la **raíz** de un dominio o subdominio. Si en algún momento se despliega bajo una subcarpeta (p. ej. `midominio.cl/fonoface/`), hay que rebuildear con `--base-href /fonoface/` (ver detalle en la guía de deploy).
+`src/index.html` fija `<base href="/">`: la app está pensada para vivir en la **raíz** de un dominio o subdominio. Si en algún momento se despliega bajo una subcarpeta (p. ej. `midominio.cl/vocare-ubb/`), hay que rebuildear con `--base-href /vocare-ubb/` (ver detalle en la guía de deploy).
 
 ## 7. Requisitos de entorno
 
