@@ -1,4 +1,4 @@
-# Documentación FonoFace — deploy y CI/CD (pendiente de implementar)
+# Documentación Vocare UBB — deploy y CI/CD (pendiente de implementar)
 
 Todo lo que hay en esta carpeta es **documentación y plantillas aisladas**: nada de lo que contiene está conectado todavía al proyecto real. `public/` sigue solo con el favicon, y no existe carpeta `.github/workflows/` en la raíz del repo. La idea es que esta carpeta se pueda leer, discutir y ajustar sin que nada se active por accidente, y activarla recién cuando corresponda.
 

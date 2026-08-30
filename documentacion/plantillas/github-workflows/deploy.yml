@@ -55,7 +55,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          local-dir: ./dist/FrontendFonoFaceUBB2026/browser/
+          local-dir: ./dist/FrontendVocareUBB/browser/
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           # Evita borrar en el servidor archivos propios de cPanel que no
           # vienen del build (p. ej. certificados o carpetas de otras apps

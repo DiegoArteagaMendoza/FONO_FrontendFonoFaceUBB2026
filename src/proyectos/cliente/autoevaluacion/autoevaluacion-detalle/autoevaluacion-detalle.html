@@ -97,6 +97,28 @@
       </ul>
     </div>
 
+    <!-- ENVÍO DEL RESULTADO POR CORREO (el correo no se guarda, solo se usa para este envío) -->
+    <form [formGroup]="correoForm" (ngSubmit)="enviarPorCorreo()" class="envio-correo">
+      <h3>{{ t().portal_autoevaluacion_detalle.correo_titulo }}</h3>
+      <p class="correo-ayuda">{{ t().portal_autoevaluacion_detalle.correo_ayuda }}</p>
+
+      <div class="correo-fila">
+        <div class="form-group">
+          <label for="correo">{{ t().portal_autoevaluacion_detalle.label_correo }}</label>
+          <input id="correo" type="email" formControlName="correo" [placeholder]="t().portal_autoevaluacion_detalle.placeholder_correo">
+          <small class="error-text" *ngIf="correoForm.get('correo')?.invalid && correoForm.get('correo')?.touched">
+            {{ t().portal_autoevaluacion_detalle.alerta_correo }}
+          </small>
+        </div>
+        <button type="submit" class="btn-secondary" [disabled]="correoEnviando">
+          {{ correoEnviando ? t().portal_autoevaluacion_detalle.btn_enviando_correo : t().portal_autoevaluacion_detalle.btn_enviar_correo }}
+        </button>
+      </div>
+
+      <p class="correo-confirmacion" *ngIf="correoEnviado">{{ t().portal_autoevaluacion_detalle.correo_confirmacion }}</p>
+      <p class="error-text" *ngIf="correoError">{{ correoError }}</p>
+    </form>
+
     <div class="form-actions">
       <button class="btn-secondary" (click)="responderOtraVez()">{{ t().portal_autoevaluacion_detalle.btn_responder_otra_vez }}</button>
       <button class="btn-primary" (click)="verOtras()">{{ t().portal_autoevaluacion_detalle.btn_ver_otros }}</button>

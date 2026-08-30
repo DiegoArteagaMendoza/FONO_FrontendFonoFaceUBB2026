@@ -1,4 +1,4 @@
-# Reglas de negocio — FonoFace Frontend
+# Reglas de negocio — Vocare UBB Frontend
 
 > Ver también: [Arquitectura](./ARQUITECTURA.md) · [Deploy en V2Networks](./DEPLOY_V2NETWORKS.md) · [CI/CD con GitHub Actions](./CI_CD_GITHUB_ACTIONS.md)
 

@@ -9,7 +9,8 @@ import {
   DiagnosticoFormularioEditable,
   DiagnosticoRespuesta,
   DiagnosticoRespuestaCrear,
-  DiagnosticoRespuestaListado
+  DiagnosticoRespuestaListado,
+  DiagnosticoEnvioCorreo
 } from './interface/diagnostico.interface';
 
 @Injectable({
@@ -68,5 +69,13 @@ export class DiagnosticoService {
   listarRespuestas(idFormulario: number): Observable<DiagnosticoRespuestaListado[]> {
     const url = `${this.apiUrl}${API_ENDPOINTS.diagnostico.respuestasDeFormulario(idFormulario)}`;
     return this.http.get<DiagnosticoRespuestaListado[]>(url, { headers: this.getAuthHeaders() });
+  }
+
+  // 8. Enviar el resultado ya calculado por correo POST - Acceso Público
+  // (el paciente lo escribe recién al ver su resultado). El correo no se
+  // guarda en ningún lado, solo se usa para este envío.
+  enviarResultadoPorCorreo(idRespuesta: number, correo: string): Observable<DiagnosticoEnvioCorreo> {
+    const url = `${this.apiUrl}${API_ENDPOINTS.diagnostico.enviarCorreo(idRespuesta)}`;
+    return this.http.post<DiagnosticoEnvioCorreo>(url, { correo });
   }
 }

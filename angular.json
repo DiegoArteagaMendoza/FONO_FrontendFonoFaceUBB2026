@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "FrontendFonoFaceUBB2026": {
+    "FrontendVocareUBB": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -67,10 +67,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "FrontendFonoFaceUBB2026:build:production"
+              "buildTarget": "FrontendVocareUBB:build:production"
             },
             "development": {
-              "buildTarget": "FrontendFonoFaceUBB2026:build:development"
+              "buildTarget": "FrontendVocareUBB:build:development"
             }
           },
           "defaultConfiguration": "development"

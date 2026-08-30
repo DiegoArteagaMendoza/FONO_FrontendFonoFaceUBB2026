@@ -2,7 +2,7 @@ export const TEXTOS_SITIO = {
     // TEXTOS GLOBALES
     
     globales: {
-        marca: "FonoFace",
+        marca: "Vocare UBB",
         boton_guardar: "Guardar Cambios",
         boton_cancelar: "Cancelar",
         boton_volver: "Volver",
@@ -265,7 +265,7 @@ export const TEXTOS_SITIO = {
 
     // LOGIN
     login: {
-        titulo: "Bienvenido a FonoFace",
+        titulo: "Bienvenido a Vocare UBB",
         subtitulo: "Ingresa tus credenciales para continuar",
         label_email: "Correo Electrónico",
         placeholder_email: "ejemplo@correo.com",
@@ -477,8 +477,8 @@ export const TEXTOS_SITIO = {
     },
 
     footer: {
-        descripcion: "Sistema integral de administración FonoFace. Simplificando la gestión y el cuidado paso a paso.",
-        contacto_email: "contacto@fonoface.cl",
+        descripcion: "Sistema integral de administración Vocare UBB. Simplificando la gestión y el cuidado paso a paso.",
+        contacto_email: "contacto@vocare-ubb.cl",
         contacto_telefono: "+56 9 1234 5678",
         derechos: "Todos los derechos reservados.",
         enlaces: [
@@ -555,7 +555,7 @@ export const TEXTOS_SITIO = {
 
     // NAVBAR DEL PORTAL CLIENTE
     portal_navbar: {
-        marca: "FonoFace",
+        marca: "Vocare UBB",
         inicio: "Inicio",
         la_voz: "La Voz",
         menu_informacion: "Información",
@@ -654,6 +654,16 @@ export const TEXTOS_SITIO = {
         resultado_titulo: "Tu resultado",
         resultado_puntaje_total: "Puntaje total",
         resultado_detalle_subescalas: "Detalle por sección",
+        // Envío del resultado por correo (el correo no se guarda, solo se usa para este envío)
+        correo_titulo: "Recibe tu resultado por correo",
+        correo_ayuda: "No almacenamos tu correo: solo se usa para enviarte este resultado.",
+        label_correo: "Correo electrónico",
+        placeholder_correo: "tu@correo.com",
+        alerta_correo: "Ingresa un correo electrónico válido.",
+        btn_enviar_correo: "Enviar resultado a mi correo",
+        btn_enviando_correo: "Enviando...",
+        correo_confirmacion: "¡Listo! Te enviamos el resultado a tu correo.",
+        correo_sin_enviar: "No pudimos enviarte el correo. Intenta nuevamente o revisa la dirección ingresada.",
         btn_responder_otra_vez: "Responder de nuevo",
         btn_ver_otros: "Ver otras autoevaluaciones"
     },
@@ -680,9 +690,9 @@ export const TEXTOS_SITIO = {
         descripcion: "Plataforma de información y cuidados de la voz de la Universidad del Bío-Bío. Recursos especializados para niños, profesores, cantantes, locutores y público general.",
         titulo_enlaces: "Enlaces Rápidos",
         titulo_contacto: "Contacto",
-        contacto_email: "contacto@fonoface.cl",
+        contacto_email: "contacto@vocare-ubb.cl",
         contacto_direccion: "Universidad del Bío-Bío, Concepción, Chile",
-        derechos: "FonoFace — Universidad del Bío-Bío. Todos los derechos reservados.",
+        derechos: "Vocare UBB — Universidad del Bío-Bío. Todos los derechos reservados.",
         enlaces: [
         { label: "Inicio", path: "/portal/inicio" },
         { label: "La Voz", path: "/portal/lavoz" },
@@ -789,7 +799,7 @@ export const TEXTOS_SITIO = {
 
     // INICIO DEL PORTAL MÉDICO (landing: fonoaudiólogo vs. quien busca atención)
     pm_inicio: {
-        titulo: "Portal Médico FonoFace",
+        titulo: "Portal Médico Vocare UBB",
         subtitulo: "El punto de encuentro entre fonoaudiólogos acreditados y quienes buscan atención personalizada de la voz.",
 
         card_fono_titulo: "¿Eres fonoaudiólogo/a?",
@@ -839,7 +849,7 @@ export const TEXTOS_SITIO = {
 
     // LOGIN DEL PROFESIONAL
     pm_login: {
-        titulo: "Portal Médico FonoFace",
+        titulo: "Portal Médico Vocare UBB",
         subtitulo: "Ingresa con tu correo o RUT para gestionar tu acreditación",
         label_identificador: "Correo o RUT",
         placeholder_identificador: "ejemplo@correo.com o 12345678-9",

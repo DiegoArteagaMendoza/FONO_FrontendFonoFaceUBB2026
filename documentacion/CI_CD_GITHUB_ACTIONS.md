@@ -26,7 +26,7 @@ Luego crea los secrets del paso 2 de abajo y haz commit + push de `.github/workf
 
 1. Se dispara en cada `push` a `master` (ajusta el nombre de rama en el workflow si tu flujo de release usa otra).
 2. Instala Node.js y `pnpm` con caché de dependencias.
-3. Corre `pnpm build`, generando `dist/FrontendFonoFaceUBB2026/browser/` (incluye el `.htaccess` solo si ya copiaste la plantilla a `public/.htaccess` — ver [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md)).
+3. Corre `pnpm build`, generando `dist/FrontendVocareUBB/browser/` (incluye el `.htaccess` solo si ya copiaste la plantilla a `public/.htaccess` — ver [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md)).
 4. Sube **el contenido** de esa carpeta por FTP a la ruta configurada en el hosting, usando la acción [`SamKirkland/FTP-Deploy-Action`](https://github.com/SamKirkland/FTP-Deploy-Action). Esta acción hace un diff contra el estado anterior (guarda un log de sync) y solo transfiere lo que cambió, en vez de resubir todo el sitio en cada deploy.
 
 Es exactamente el mismo resultado que subir manualmente por FileZilla (paso 3, Opción B de la guía de deploy) — solo que automatizado en cada push.

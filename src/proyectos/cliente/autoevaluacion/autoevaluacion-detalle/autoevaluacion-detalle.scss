@@ -266,6 +266,57 @@
   justify-content: center;
 }
 
+/* --- Envío del resultado por correo (solo lógica de frontend) --- */
+.envio-correo {
+  text-align: left;
+  max-width: 500px;
+  margin: 0 auto 2.5rem auto;
+  padding: 1.5rem;
+  background: var(--fono-superficie-2, #f8fafc);
+  border-radius: 12px;
+
+  h3 {
+    color: var(--fono-texto-fuerte);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+  }
+
+  .correo-ayuda {
+    color: var(--fono-texto-suave);
+    font-size: 0.85rem;
+    margin: 0 0 1rem 0;
+  }
+
+  .form-group {
+    flex: 1;
+  }
+}
+
+.correo-fila {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .btn-secondary {
+    margin-top: 1.85rem;
+    white-space: nowrap;
+  }
+}
+
+.correo-confirmacion {
+  color: #15803d;
+  font-size: 0.9rem;
+  margin: 1rem 0 0 0;
+}
+
+@media (max-width: 480px) {
+  .correo-fila .btn-secondary {
+    margin-top: 0;
+    width: 100%;
+  }
+}
+
 /* --- Estados --- */
 .loading-state, .error-state {
   text-align: center;

@@ -1,4 +1,4 @@
-# .htaccess para servir el SPA Angular (FonoFace) en un hosting Apache/cPanel
+# .htaccess para servir el SPA Angular (Vocare UBB) en un hosting Apache/cPanel
 # (V2Networks Plan Emprendedor u otro equivalente).
 #
 # Angular vive en el navegador: para el servidor, TODAS las rutas de la app
@@ -13,14 +13,14 @@
 #   cp documentacion/plantillas/.htaccess public/.htaccess
 #
 # Recién ahí `ng build` lo copiará automáticamente a
-# dist/FrontendFonoFaceUBB2026/browser/ (ver "assets" en angular.json).
+# dist/FrontendVocareUBB/browser/ (ver "assets" en angular.json).
 # Ver documentacion/DEPLOY_V2NETWORKS.md para el resto del proceso.
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Si ya despliegas bajo una subcarpeta (ej. /fonoface/), descomenta y ajusta:
-  # RewriteBase /fonoface/
+  # Si ya despliegas bajo una subcarpeta (ej. /vocare-ubb/), descomenta y ajusta:
+  # RewriteBase /vocare-ubb/
 
   # No reescribir peticiones a archivos o carpetas que sí existen
   # (index.html, main-*.js, styles-*.css, favicon.ico, assets/, etc.)
