@@ -472,7 +472,7 @@ export const TEXTOS_SITIO = {
         fecha_tabla: "Fecha",
         puntaje_tabla: "Puntaje total",
         interpretacion_tabla: "Interpretación",
-        detalle_tabla: "Detalle por subescala",
+        detalle_tabla: "Detalle por sección",
         sin_resultados: "Aún no hay resultados registrados para este formulario."
     },
 
@@ -653,7 +653,7 @@ export const TEXTOS_SITIO = {
         error_envio: "Ocurrió un error al enviar tus respuestas. Intenta nuevamente.",
         resultado_titulo: "Tu resultado",
         resultado_puntaje_total: "Puntaje total",
-        resultado_detalle_subescalas: "Detalle por subescala",
+        resultado_detalle_subescalas: "Detalle por sección",
         btn_responder_otra_vez: "Responder de nuevo",
         btn_ver_otros: "Ver otras autoevaluaciones"
     },
