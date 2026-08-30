@@ -1,0 +1,95 @@
+<div class="page-container">
+
+  <div class="mb-5">
+    <h1 class="text-2xl font-bold m-0" style="color: var(--fono-texto);">{{ textoSaludo }}</h1>
+  </div>
+
+  @if (cargando) {
+    <div class="loading-state"><div class="spinner"></div></div>
+  } @else if (errorMensaje) {
+    <div class="error-alert">{{ errorMensaje }}</div>
+  } @else if (cita) {
+
+    <!-- ============ LA HORA ============
+         Una sola tarjeta, grande, con lo que la persona vino a saber. -->
+    <div class="form-card mb-5" style="max-width: none;">
+      <p class="m-0 text-sm font-semibold" style="color: var(--fono-texto-suave);
+         text-transform: uppercase; letter-spacing: 0.05em;">
+        {{ t().pmc_proxima_hora.titulo }}
+      </p>
+
+      <p class="mt-2 mb-0 text-2xl font-bold" style="color: var(--fono-texto);">
+        {{ cita.fecha_hora | date:'EEEE d \'de\' MMMM, HH:mm' }}
+      </p>
+
+      <p class="mt-1 mb-0" style="color: var(--fono-texto-cuerpo);" *ngIf="nombreProfesional">
+        {{ textoConProfesional }}
+      </p>
+
+      <p class="mt-1 mb-3 text-sm" style="color: var(--fono-texto-suave);">{{ textoTermina }}</p>
+
+      <span class="badge badge-cita-reservada">{{ textoFalta }}</span>
+    </div>
+
+    <!-- ============ LO QUE FALTA ============
+         Solo lo accionable. Si no hay nada pendiente, el bloque no aparece. -->
+    @if (hayPendientes) {
+      <div class="form-card mb-5" style="max-width: none;">
+        <h2 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">
+          {{ t().pmc_proxima_hora.pendientes_titulo }}
+        </h2>
+
+        @if (pendiente.video) {
+          <p class="mt-0 mb-2" style="color: var(--fono-texto-cuerpo);">
+            {{ t().pmc_proxima_hora.pendiente_video }}
+          </p>
+          <button type="button" class="btn-primary mb-4" (click)="irAlVideo()">
+            {{ t().pmc_proxima_hora.pendiente_video_btn }}
+          </button>
+        }
+
+        @if (pendiente.videoListo) {
+          <p class="mt-0 mb-4 text-sm" style="color: var(--fono-texto-suave);">
+            ✓ {{ t().pmc_proxima_hora.pendiente_video_listo }}
+          </p>
+        }
+
+        @if (pendiente.cambios) {
+          <p class="mt-0 mb-2" style="color: var(--fono-texto-cuerpo);">
+            {{ t().pmc_proxima_hora.pendiente_cambios }}
+          </p>
+          <button type="button" class="btn-secondary" (click)="irAMisCitas()">
+            {{ t().pmc_proxima_hora.pendiente_cambios_btn }}
+          </button>
+        }
+      </div>
+    }
+
+  } @else {
+
+    <!-- ============ SIN HORAS ============
+         Una sola acción: no hay nada más que ofrecer aquí. -->
+    <div class="empty-state">
+      <p class="m-0 text-lg font-semibold" style="color: var(--fono-texto);">
+        {{ t().pmc_proxima_hora.vacio_titulo }}
+      </p>
+      <p class="mt-2 mb-4" style="color: var(--fono-texto-suave);">
+        {{ t().pmc_proxima_hora.vacio_desc }}
+      </p>
+      <button type="button" class="btn-primary" (click)="irAReservar()">
+        {{ t().pmc_proxima_hora.vacio_btn }}
+      </button>
+    </div>
+
+  }
+
+  @if (!cargando) {
+    <div class="mt-4">
+      <a routerLink="/portalmedico/paciente/citas" class="text-sm"
+         style="color: var(--fono-primario);">
+        {{ t().pmc_proxima_hora.ver_todas }}
+      </a>
+    </div>
+  }
+
+</div>

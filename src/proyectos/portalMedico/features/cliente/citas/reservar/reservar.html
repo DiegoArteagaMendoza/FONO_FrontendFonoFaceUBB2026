@@ -39,8 +39,11 @@
       </div>
 
       <div class="form-actions mt-4">
+        <!-- Solo a quien tiene sesión: la pantalla de video exige cuenta de
+             paciente, así que ofrecérselo a un invitado era mandarlo al login
+             sin explicación. A él se le habla de la cuenta más abajo. -->
         <button type="button" class="btn-primary" (click)="irAlVideo()"
-                *ngIf="pmCitaService.admiteVideo(citaCreada)">
+                *ngIf="!reservoSinSesion && pmCitaService.admiteVideo(citaCreada)">
           {{ t().pmc_reservar.btn_adjuntar_video }}
         </button>
         <button type="button" class="btn-secondary" (click)="irAMisCitas()" *ngIf="!reservoSinSesion">

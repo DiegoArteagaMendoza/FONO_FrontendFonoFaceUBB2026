@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 
 import { PortalMedicoService } from '@core/services/portal-medico/portal-medico';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { Disponibilidad } from '@core/services/portal-medico/interface/pm-cita.interface';
 import {
-  PmCitaService,
-  Disponibilidad,
   CITA_DURACIONES_SUGERIDAS,
   CITA_DURACION_MINUTOS_DEFECTO
-} from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cita.const';
 import { TextosService } from '@core/services/textos/textos';
 
 /**

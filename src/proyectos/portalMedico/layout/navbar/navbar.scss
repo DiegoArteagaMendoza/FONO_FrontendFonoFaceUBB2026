@@ -9,6 +9,28 @@
   coincide con nada.
 */
 
+/* Círculo con las iniciales: la señal de sesión iniciada.
+   Va sobre el azul de la barra, así que sus colores son propios y no los del
+   tema — de ahí que estén escritos aquí y no con variables de superficie. */
+.avatar-sesion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  /* Sin esto, un nombre de una sola palabra deja el círculo descentrado */
+  text-align: center;
+}
+
 /* Opciones del menú desplegable "Mi perfil".
    El panel se dibuja sobre la superficie del tema, no sobre el azul de la
    barra, así que necesita los colores de texto normales: sin esto hereda el

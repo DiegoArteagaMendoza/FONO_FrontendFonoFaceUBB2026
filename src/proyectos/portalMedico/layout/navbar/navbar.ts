@@ -26,9 +26,10 @@ export class PortalMedicoNavbar {
   isMenuOpen = false;
 
   /**
-   * Menú "Mi perfil" del profesional. Agrupa perfil, documentos, especialidades
-   * y acreditación, que antes iban sueltos en la barra: con la agenda y las
-   * horas publicadas eran ocho enlaces seguidos y se apretaban entre sí.
+   * Menú de la cuenta. Cuelga del avatar con las iniciales, que es además la
+   * señal de "estás dentro y como quién": antes el profesional lo deducía
+   * porque aparecían enlaces nuevos y el paciente porque había un botón suelto
+   * de salir, y ninguna de las dos contesta esa pregunta de un vistazo.
    */
   menuPerfilAbierto = false;
 
@@ -56,6 +57,55 @@ export class PortalMedicoNavbar {
   @HostListener('document:keydown.escape')
   alPulsarEscape(): void {
     this.menuPerfilAbierto = false;
+  }
+
+  // ---------------------------------------------------------------------
+  // Identidad visible
+  // ---------------------------------------------------------------------
+
+  get esProfesional(): boolean {
+    return !!this.portalMedicoService.profesionalActual();
+  }
+
+  get esPaciente(): boolean {
+    // El profesional manda si por alguna razón conviven las dos sesiones en el
+    // mismo navegador, igual que en el despachador del inicio.
+    return !this.esProfesional && !!this.pmClienteService.clienteActual();
+  }
+
+  get haySesion(): boolean {
+    return this.esProfesional || this.esPaciente;
+  }
+
+  /** Nombre completo de quien tiene la sesión, para el avatar y su menú. */
+  get nombreSesion(): string {
+    if (this.esProfesional) {
+      return this.portalMedicoService.profesionalActual()?.nombres_profesional ?? '';
+    }
+
+    const cliente = this.pmClienteService.clienteActual();
+    return cliente ? `${cliente.nombres_cliente} ${cliente.apellidos_clientes}` : '';
+  }
+
+  /** Qué tipo de cuenta es, porque el nombre por sí solo no lo dice. */
+  get etiquetaSesion(): string {
+    return this.esProfesional
+      ? this.t().pm_navbar.sesion_profesional
+      : this.t().pm_navbar.sesion_paciente;
+  }
+
+  /**
+   * Hasta dos iniciales del nombre. Se toman las dos primeras palabras porque
+   * la sesión del profesional solo trae nombres (sin apellidos) y la del
+   * paciente trae ambos: así una y otra dan una inicial razonable.
+   */
+  get iniciales(): string {
+    return this.nombreSesion
+      .split(' ')
+      .filter(parte => parte.length > 0)
+      .slice(0, 2)
+      .map(parte => parte[0].toUpperCase())
+      .join('');
   }
 
   alternarMenuPerfil(evento: MouseEvent): void {

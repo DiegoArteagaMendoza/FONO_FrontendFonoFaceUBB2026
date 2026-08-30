@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { soloVisitantes } from './core/guards/solo-visitantes.guard';
 import { requiereSesion } from './core/guards/requiere-sesion.guard';
+import { sinProfesional } from './core/guards/sin-profesional.guard';
 import { Layout } from '../proyectos/administracion/layout/layout';
 import { Login } from '../proyectos/administracion/features/auth/login/login';
 import { Inicio } from '../proyectos/administracion/features/dashboard/inicio/inicio';
@@ -130,7 +131,9 @@ export const routes: Routes = [
       { path: 'inicio', component: PortalMedicoInicioComponent },
       { path: 'login', component: PortalMedicoLoginComponent, canActivate: [soloVisitantes('portalMedico')] },
       { path: 'registro', component: PortalMedicoRegistroComponent, canActivate: [soloVisitantes('profesional')] },
-      { path: 'directorio', component: PortalMedicoDirectorioComponent },
+      // El directorio es la vitrina donde el paciente busca con quién atenderse.
+      // Al fonoaudiólogo no le corresponde: ahí solo vería a sus colegas.
+      { path: 'directorio', component: PortalMedicoDirectorioComponent, canActivate: [sinProfesional] },
       { path: 'perfil', component: PortalMedicoPerfilComponent },
       { path: 'documentos', component: PortalMedicoDocumentosComponent },
       { path: 'especialidades', component: PortalMedicoEspecialidadesComponent },
