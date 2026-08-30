@@ -746,7 +746,7 @@ export const TEXTOS_SITIO = {
 
     // NAVBAR DEL PORTAL MÉDICO
     pm_navbar: {
-        marca: "Portal Médico",
+        marca: "Vocare UBB Portal Médico",
         inicio: "Inicio",
         directorio: "Directorio",
         mi_perfil: "Mi Perfil",
