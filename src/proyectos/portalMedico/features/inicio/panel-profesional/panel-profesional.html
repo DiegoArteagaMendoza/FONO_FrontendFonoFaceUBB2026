@@ -1,0 +1,100 @@
+<div class="page-container">
+
+  <div class="mb-5">
+    <h1 class="text-2xl font-bold m-0" style="color: var(--fono-texto);">{{ textoSaludo }}</h1>
+    <p class="mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pm_panel.subtitulo }}</p>
+  </div>
+
+  <!-- ============ ACREDITACIÓN ============
+       Solo cuando falta algo. Estar aprobado es lo normal y no merece ocupar
+       espacio en la pantalla de todos los días. -->
+  @if (acreditacionPendiente) {
+    <div class="info-alert mb-5">
+      <strong>{{ textoAcreditacion }}</strong>
+      <p class="mt-1 mb-3">{{ t().pm_panel.acreditacion_desc }}</p>
+      <button type="button" class="btn-secondary" (click)="irALaAcreditacion()">
+        {{ t().pm_panel.acreditacion_btn }}
+      </button>
+    </div>
+  }
+
+  <!-- ============ AVISO DE HORAS ============
+       El más importante del panel: sin horas publicadas el profesional es
+       invisible para quien busca reservar. -->
+  @if (sinHorasProximas) {
+    <div class="error-alert mb-5">
+      <strong>{{ t().pm_panel.sin_horas_titulo }}</strong>
+      <p class="mt-1 mb-3">{{ textoSinHoras }}</p>
+      <button type="button" class="btn-primary" (click)="irAPublicarHoras()">
+        {{ t().pm_panel.sin_horas_btn }}
+      </button>
+    </div>
+  }
+
+  <!-- ============ HOY ============ -->
+  <div class="form-card mb-5" style="max-width: none;">
+    <h2 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">
+      {{ t().pm_panel.hoy_titulo }}
+    </h2>
+
+    @if (cargandoAgenda) {
+      <div class="loading-state"><div class="spinner"></div></div>
+    } @else if (errorAgenda) {
+      <div class="error-alert">{{ t().pm_panel.hoy_error }}</div>
+    } @else if (citasDeHoy.length === 0) {
+      <p class="m-0" style="color: var(--fono-texto-suave);">{{ t().pm_panel.hoy_vacio }}</p>
+    } @else {
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        @for (cita of citasDeHoy; track cita.id_cita) {
+          <div class="flex flex-wrap items-start justify-between gap-3"
+               style="padding: 0.75rem; border: 1px solid var(--fono-borde); border-radius: 0.5rem;">
+            <div>
+              <p class="m-0 font-semibold" style="color: var(--fono-texto);">
+                {{ horaDe(cita) }} · {{ nombrePacienteDe(cita) }}
+              </p>
+              <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">
+                {{ cita.motivo_consulta || t().pm_panel.hoy_sin_motivo }}
+              </p>
+            </div>
+
+            <button type="button" class="btn-secondary"
+                    (click)="marcarRealizada(cita)" [disabled]="estaMarcando(cita)">
+              {{ t().pm_panel.hoy_btn_realizada }}
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ============ CIFRAS ============ -->
+  @if (!cargandoHoras && !errorHoras && horas) {
+    <div class="grid gap-4 mb-5" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <div class="form-card" style="max-width: none; text-align: center;">
+        <p class="m-0 text-2xl font-bold" style="color: var(--fono-texto);">{{ totalProximas }}</p>
+        <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">{{ textoCifraProximas }}</p>
+      </div>
+      <div class="form-card" style="max-width: none; text-align: center;">
+        <p class="m-0 text-2xl font-bold" style="color: var(--fono-texto);">{{ horas.libres }}</p>
+        <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">{{ t().pm_panel.cifra_libres }}</p>
+      </div>
+      <div class="form-card" style="max-width: none; text-align: center;">
+        <p class="m-0 text-2xl font-bold" style="color: var(--fono-texto);">{{ horas.reservadas }}</p>
+        <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">{{ t().pm_panel.cifra_reservadas }}</p>
+      </div>
+    </div>
+  } @else if (errorHoras) {
+    <div class="error-alert mb-5">{{ t().pm_panel.cifras_error }}</div>
+  }
+
+  <!-- ============ ACCESOS ============ -->
+  <div class="form-actions">
+    <button type="button" class="btn-primary" (click)="irAPublicarHoras()">
+      {{ t().pm_panel.btn_publicar }}
+    </button>
+    <button type="button" class="btn-secondary" (click)="irALaAgenda()">
+      {{ t().pm_panel.btn_agenda }}
+    </button>
+  </div>
+
+</div>

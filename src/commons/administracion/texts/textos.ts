@@ -756,7 +756,45 @@ export const TEXTOS_SITIO = {
         iniciar_sesion: "Iniciar Sesión",
         registrarme: "Registrarme",
         cerrar_sesion: "Cerrar Sesión",
-        volver_portal: "← Volver al portal público"
+        volver_portal: "← Volver al portal público",
+        // Menú de la cuenta: cuelga del avatar con las iniciales, que es la
+        // señal visible de "estás dentro y como quién".
+        aria_menu_cuenta: "Abrir el menú de tu cuenta",
+        sesion_profesional: "Fonoaudiólogo/a",
+        sesion_paciente: "Paciente"
+    },
+
+    // PANEL DEL FONOAUDIÓLOGO (lo que ve en el inicio cuando tiene sesión)
+    pm_panel: {
+        saludo: "Hola, {nombre}",
+        subtitulo: "Este es el resumen de tu día.",
+
+        // Acreditación: solo se avisa cuando falta algo. Estar aprobado es lo
+        // normal y no merece ocupar espacio.
+        acreditacion_titulo: "Tu acreditación está {estado}",
+        acreditacion_desc: "Mientras no esté aprobada no apareces en el directorio ni puedes publicar horas.",
+        acreditacion_btn: "Ver qué me falta",
+
+        hoy_titulo: "Hoy",
+        hoy_vacio: "No tienes atenciones agendadas para hoy.",
+        hoy_paciente: "Paciente",
+        hoy_sin_motivo: "Sin motivo indicado",
+        hoy_btn_realizada: "Marcar realizada",
+        hoy_error: "No pudimos cargar tus citas de hoy.",
+
+        cifra_proximas: "Citas en los próximos {dias} días",
+        cifra_libres: "Horas libres publicadas",
+        cifra_reservadas: "Horas ya reservadas",
+        cifras_error: "No pudimos cargar el resumen de tus horas.",
+
+        // El aviso más útil del panel: sin horas publicadas nadie puede
+        // reservarle, y hasta ahora nada se lo decía.
+        sin_horas_titulo: "No tienes horas publicadas",
+        sin_horas_desc: "Sin horas disponibles en los próximos {dias} días, los pacientes no pueden reservar contigo.",
+        sin_horas_btn: "Publicar horas",
+
+        btn_publicar: "Publicar horas",
+        btn_agenda: "Ver agenda completa"
     },
 
     // INICIO DEL PORTAL MÉDICO (landing: fonoaudiólogo vs. quien busca atención)
@@ -1145,12 +1183,16 @@ export const TEXTOS_SITIO = {
         sin_registro_desc: "Para asociar el video a tu ficha, necesitamos tus datos de contacto.",
         btn_ir_registro: "Ir al registro",
         identificado_como: "Subiendo como:",
-        label_cita: "¿Es para una cita en particular? (opcional)",
-        placeholder_cita: "Sin asociar a ninguna cita",
-        ayuda_cita: "Si lo asocias, el fonoaudiólogo de esa cita lo verá junto a tu motivo de consulta.",
+        // El video siempre acompaña a una atención concreta: primero se toma la
+        // hora, después se graba. Por eso la cita dejó de ser opcional.
+        label_cita: "¿Para cuál de tus horas es?",
+        placeholder_cita: "Elige una de tus horas",
+        ayuda_cita: "El fonoaudiólogo de esa hora lo verá junto a tu motivo de consulta.",
+        alerta_cita_req: "Elige la hora a la que quieres adjuntar el video.",
         opcion_cita: "{fecha} — {profesional}",
         opcion_cita_simple: "{fecha}",
-        sin_citas_disponibles: "No tienes citas reservadas a las que adjuntar el video.",
+        sin_citas_titulo: "Primero reserva tu hora",
+        sin_citas_disponibles: "El video acompaña a una atención, así que primero necesitas tener una hora reservada. Después podrás grabarlo y adjuntarlo.",
         btn_reservar_hora: "Reservar una hora",
         label_video: "Tu video",
         ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}.",
@@ -1232,7 +1274,7 @@ export const TEXTOS_SITIO = {
         exito_titulo: "¡Hora reservada!",
         exito_desc: "Te esperamos el {fecha}. La encontrarás en «Mis citas».",
         exito_desc_invitado: "Te esperamos el {fecha}. Te contactaremos al correo que indicaste.",
-        exito_invitado_cuenta: "Creamos tu ficha con el RUT que ingresaste. Si te registras con ese mismo RUT podrás ver y gestionar tus horas desde el portal.",
+        exito_invitado_cuenta: "Creamos tu ficha con el RUT que ingresaste. Si te registras con ese mismo RUT podrás ver y gestionar tus horas desde el portal, y adjuntarle un video con tus síntomas.",
         codigo_titulo: "Tu código de seguimiento",
         codigo_desc: "Guárdalo. Con él puedes ver tu hora, cambiarla o cancelarla sin tener cuenta. También te lo enviamos por correo.",
         codigo_sin_correo: "No pudimos enviarte el correo de confirmación, así que anota este código: es la única forma de gestionar tu hora sin cuenta.",
@@ -1422,7 +1464,40 @@ export const TEXTOS_SITIO = {
         btn_confirmar_cancelar: "Sí, cancelar mi hora",
         btn_no_cancelar: "No, mantenerla",
         exito_cancelar: "Tu hora quedó cancelada.",
-        error_cancelar: "No pudimos cancelar la hora. Inténtalo nuevamente."
+        error_cancelar: "No pudimos cancelar la hora. Inténtalo nuevamente.",
+
+        // VIDEO DE SÍNTOMAS: quien reservó sin cuenta lo gestiona aquí, con su
+        // código. Es lo mismo que el paciente registrado hace desde su sesión.
+        video_titulo: "Tu video de síntomas",
+        video_desc: "Graba un video corto mostrando tus síntomas: tu fonoaudiólogo/a podrá revisarlo antes de atenderte. No es obligatorio.",
+        video_label: "Tu video",
+        video_ayuda: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}.",
+        video_label_descripcion: "¿Qué quieres mostrar? (opcional)",
+        video_placeholder_descripcion: "Ej: La voz se me apaga al final de la frase.",
+        video_seleccionado: "Archivo:",
+        video_duracion: "Duración:",
+        video_segundos: "segundos",
+        video_privacidad: "Tu video es material clínico: solo lo verán profesionales acreditados y se elimina solo a los {dias} días.",
+        btn_enviar_video: "Enviar mi video",
+        btn_enviando_video: "Enviando...",
+        video_exito: "Listo, tu video quedó adjunto a esta hora.",
+
+        // Ya hay uno adjunto
+        video_adjunto_titulo: "Ya adjuntaste un video a esta hora",
+        video_adjunto_vence: "Se elimina solo en {dias} días.",
+        btn_quitar_video: "Quitar el video",
+        video_confirmar_quitar: "¿Seguro que quieres quitar tu video? Tendrás que grabar otro si lo necesitas.",
+        video_exito_quitar: "Quitamos tu video.",
+
+        // Errores
+        video_error_formato: "Ese formato no está permitido. Usa {formatos}.",
+        video_error_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        video_error_duracion: "El video dura {duracion} segundos y el máximo son {maximo}.",
+        video_error_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        video_error_req: "Selecciona un video antes de enviarlo.",
+        video_error_subir: "No pudimos enviar tu video. Inténtalo nuevamente.",
+        video_error_demasiados: "Has enviado demasiados videos seguidos. Espera un momento e inténtalo de nuevo.",
+        video_error_quitar: "No pudimos quitar el video. Inténtalo nuevamente."
     },
 
     // HORAS DISPONIBLES QUE PUBLICA EL PROFESIONAL
@@ -1483,5 +1558,33 @@ export const TEXTOS_SITIO = {
         mi_agenda: "Mi agenda",
         mis_horas: "Mis horas",
         cerrar_sesion: "Salir"
+    },
+
+    // INICIO DEL PACIENTE CON SESIÓN: no es un tablero de cifras, responde una
+    // sola pregunta — cuándo es mi hora y qué me falta.
+    pmc_proxima_hora: {
+        saludo: "Hola, {nombre}",
+
+        titulo: "Tu próxima hora",
+        con_profesional: "con {profesional}",
+        // Cuánto falta, en las palabras que usaría una persona.
+        falta_hoy: "Es hoy",
+        falta_manana: "Es mañana",
+        falta_dias: "En {dias} días",
+        termina_a_las: "Termina cerca de las {hora}.",
+
+        pendientes_titulo: "Antes de tu atención",
+        pendiente_video: "Graba un video corto mostrando tus síntomas: tu fonoaudiólogo/a podrá revisarlo antes de atenderte.",
+        pendiente_video_btn: "Adjuntar un video",
+        pendiente_video_listo: "Ya adjuntaste un video a esta hora.",
+        pendiente_cambios: "¿No te acomoda? Puedes cambiar la fecha o cancelarla.",
+        pendiente_cambios_btn: "Gestionar mi hora",
+
+        vacio_titulo: "No tienes horas reservadas",
+        vacio_desc: "Reserva con un fonoaudiólogo acreditado. No necesitas más trámites: eliges profesional y horario.",
+        vacio_btn: "Reservar una hora",
+
+        ver_todas: "Ver todas mis horas",
+        error_servidor: "No pudimos cargar tus horas. Inténtalo nuevamente."
     }
 };
