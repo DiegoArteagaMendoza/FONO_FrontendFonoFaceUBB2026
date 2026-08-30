@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { AdministracionService } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
-import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.constants';
+import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.const';
 import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({

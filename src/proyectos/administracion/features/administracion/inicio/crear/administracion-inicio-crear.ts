@@ -5,7 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AdministracionService } from '@core/services/administracion/administracion';
 // Inject the service
 import { TextosService } from '@core/services/textos/textos';
-import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.constants';
+import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.const';
 
 @Component({
   selector: 'app-crear-inicio',

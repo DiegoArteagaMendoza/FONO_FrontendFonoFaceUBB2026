@@ -1,16 +1,17 @@
 import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
+import { VideoSintomas } from '@core/services/portal-medico/interface/pm-cliente.interface';
 import {
-  PmClienteService,
-  VideoSintomas,
   VIDEO_DURACION_MAXIMA_SEGUNDOS,
   VIDEO_TAMANO_MAXIMO_MB,
   VIDEO_EXTENSIONES_PERMITIDAS,
   VIDEO_DIAS_VIGENCIA
-} from '@core/services/portal-medico/pm-cliente';
-import { PmCitaService, Cita } from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cliente.const';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
 import { PortalMedicoService, ProfesionalDirectorio } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
 
@@ -52,6 +53,7 @@ export class PmClienteVideoComponent implements OnInit {
   // Citas a las que se puede adjuntar el video: solo las que el backend acepta
   // (activas y con permite_carga_video). Ver PmVideo/serializer.validate.
   citasDisponibles: Cita[] = [];
+  cargandoCitas = true;
   private nombresProfesional = new Map<number, string>();
 
   // Reglas expuestas a la plantilla
@@ -63,7 +65,9 @@ export class PmClienteVideoComponent implements OnInit {
   constructor() {
     this.formulario = this.fb.group({
       descripcion: [''],
-      cita: ['']
+      // Obligatoria: el video existe para que el fonoaudiólogo lo revise antes
+      // de una atención concreta. Primero se toma la hora, después se graba.
+      cita: ['', [Validators.required]]
     });
   }
 
@@ -90,11 +94,16 @@ export class PmClienteVideoComponent implements OnInit {
     this.pmCitaService.getMisCitas(idCliente, true).subscribe({
       next: (citas) => {
         this.citasDisponibles = citas.filter(cita => this.pmCitaService.admiteVideo(cita));
+        this.cargandoCitas = false;
         this.preseleccionarCitaDeLaUrl();
         this.cdr.detectChanges();
       },
-      // Sin el listado el video se puede subir igual, solo sin asociar a una cita.
-      error: () => this.cdr.detectChanges()
+      // Sin el listado no hay a qué adjuntar: la pantalla queda en su estado
+      // vacío, que lleva a reservar.
+      error: () => {
+        this.cargandoCitas = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -282,6 +291,12 @@ export class PmClienteVideoComponent implements OnInit {
       return;
     }
 
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      this.errorMensaje = this.t().pmc_video.alerta_cita_req;
+      return;
+    }
+
     this.subiendo = true;
     this.errorMensaje = null;
 
@@ -295,11 +310,7 @@ export class PmClienteVideoComponent implements OnInit {
       datos.append('descripcion', descripcion);
     }
 
-    // La cita es opcional: solo viaja si el paciente eligió una.
-    const cita = this.formulario.get('cita')?.value;
-    if (cita) {
-      datos.append('cita', cita);
-    }
+    datos.append('cita', this.formulario.get('cita')?.value);
 
     this.pmClienteService.subirVideo(datos).subscribe({
       next: () => {

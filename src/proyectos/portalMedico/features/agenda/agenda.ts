@@ -4,17 +4,18 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 
 import { PortalMedicoService } from '@core/services/portal-medico/portal-medico';
-import { PmClienteService, VideoSintomas } from '@core/services/portal-medico/pm-cliente';
+import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
+import { VideoSintomas } from '@core/services/portal-medico/interface/pm-cliente.interface';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
 import {
-  PmCitaService,
-  Cita,
   CITA_HORAS_MINIMAS_ANTICIPACION,
   CITA_REPROGRAMACIONES_MAXIMAS
-} from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cita.const';
 import { TextosService } from '@core/services/textos/textos';
 import { environment } from '../../../../environments/environment';
 
-type AccionCita = 'posponer' | 'cancelar' | null;
+import { AccionCita } from './interface/agenda.interface';
 
 /**
  * Agenda del fonoaudiólogo: las citas que sus pacientes reservaron con él.

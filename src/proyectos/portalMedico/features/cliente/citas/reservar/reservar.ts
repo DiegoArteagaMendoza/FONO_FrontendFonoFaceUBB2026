@@ -9,20 +9,18 @@ import {
   ProfesionalDirectorio,
   Especialidad
 } from '@core/services/portal-medico/portal-medico';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
 import {
-  PmCitaService,
   Cita,
-  DisponibilidadPublica,
+  DisponibilidadPublica
+} from '@core/services/portal-medico/interface/pm-cita.interface';
+import {
   CITA_HORAS_MINIMAS_ANTICIPACION,
   CITA_REPROGRAMACIONES_MAXIMAS
-} from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cita.const';
 import { TextosService } from '@core/services/textos/textos';
 
-/** Horas disponibles agrupadas por día, que es como las lee una persona. */
-interface DiaConHoras {
-  fecha: string;               // ISO del primer bloque, para el pipe date
-  horas: DisponibilidadPublica[];
-}
+import { DiaConHoras } from './interface/reservar.interface';
 
 /**
  * Reserva de una hora de atención.

@@ -4,7 +4,7 @@ import { CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth/auth';
 import { PortalMedicoService } from '../services/portal-medico/portal-medico';
 import { PmClienteService } from '../services/portal-medico/pm-cliente';
-import { IdentidadPortal } from './solo-visitantes.guard';
+import { IdentidadPortal } from './interface/solo-visitantes.interface';
 
 /**
  * Exige que la identidad indicada tenga la sesión iniciada para entrar a la

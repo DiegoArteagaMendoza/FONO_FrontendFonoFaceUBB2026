@@ -4,18 +4,16 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { CitaSeguimiento } from '@core/services/portal-medico/interface/pm-cita.interface';
 import {
-  PmCitaService,
-  CitaSeguimiento,
   CITA_HORAS_MINIMAS_ANTICIPACION,
   CITA_REPROGRAMACIONES_MAXIMAS
-} from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cita.const';
 import { TextosService } from '@core/services/textos/textos';
 
-/** Largo del código, espejo de LONGITUD_CODIGO_SEGUIMIENTO en el backend. */
-const LARGO_CODIGO = 8;
-
-type AccionSeguimiento = 'posponer' | 'cancelar' | null;
+import { AccionSeguimiento } from './interface/seguimiento.interface';
+import { LARGO_CODIGO } from './constants/seguimiento.const';
 
 /**
  * Consulta y gestión de una hora con el código que llegó por correo.

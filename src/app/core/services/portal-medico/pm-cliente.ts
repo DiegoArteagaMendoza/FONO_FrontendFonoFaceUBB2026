@@ -4,82 +4,21 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../constants/api.constants';
 
-// =========================================================
-// INTERFACES (reflejan los serializers de PmCliente y PmVideo)
-// =========================================================
-
-export interface PmCliente {
-  id_cliente: number;
-  nombres_cliente: string;
-  apellidos_clientes: string;
-  rut_cliente: string;
-  fecha_nacimiento_cliente: string;   // AAAA-MM-DD
-  email_cliente: string;
-  telefono_cliente: string;
-  fecha_creacion: string;
-  fecha_actualizacion: string;
-  estado: boolean;
-}
-
-export interface RegistroClientePayload {
-  nombres_cliente: string;
-  apellidos_clientes: string;
-  rut_cliente: string;
-  fecha_nacimiento_cliente: string;
-  email_cliente: string;
-  telefono_cliente: string;
-  password: string;
-}
-
-export interface LoginClienteResponse {
-  refresh: string;
-  access: string;
-  cliente: {
-    id_cliente: number;
-    nombres_cliente: string;
-    apellidos_clientes: string;
-    email_cliente: string;
-  };
-}
-
-export interface VideoSintomas {
-  id_video: number;
-  cliente: number;
-  /** Cita a la que se adjuntó el video, si el paciente eligió una. */
-  cita: number | null;
-  video: string;
-  descripcion: string | null;
-  duracion_segundos: number;
-  fecha_subida: string;
-  fecha_expiracion: string;
-  estado: boolean;
-  fecha_eliminacion: string | null;
-  motivo_eliminacion: string | null;
-  dias_restantes: number;
-  esta_vigente: boolean;
-}
-
-/**
- * Reglas del video, espejo de las constantes del backend
- * (FonoAppPortalMedico/PmVideo/models.py). Se validan aquí para dar feedback
- * inmediato, pero el backend las vuelve a validar: es él quien manda.
- */
-export const VIDEO_DURACION_MAXIMA_SEGUNDOS = 30;
-export const VIDEO_TAMANO_MAXIMO_MB = 50;
-export const VIDEO_EXTENSIONES_PERMITIDAS = ['mp4', 'webm', 'mov'];
-export const VIDEO_DIAS_VIGENCIA = 30;
-
-// Claves de localStorage propias del paciente: distintas a las del profesional
-// ('pm_*') y a las del administrador de FonoApp ('access_token'), porque son
-// tres identidades separadas que pueden convivir en el mismo navegador.
-const CLAVE_PMC_ACCESS = 'pmc_access_token';
-const CLAVE_PMC_REFRESH = 'pmc_refresh_token';
-const CLAVE_PMC_CLIENTE = 'pmc_cliente_data';
-
-// Token del profesional: hace falta para el único endpoint de este archivo que
-// no consulta el propio paciente, sino el fonoaudiólogo (el listado de pacientes
-// que usa la agenda para poner nombres a las citas).
-const CLAVE_PM_ACCESS = 'pm_access_token';
+import {
+  PmCliente,
+  RegistroClientePayload,
+  LoginClienteResponse,
+  VideoSintomas
+} from './interface/pm-cliente.interface';
+import {
+  VIDEO_DURACION_MAXIMA_SEGUNDOS,
+  VIDEO_TAMANO_MAXIMO_MB,
+  VIDEO_EXTENSIONES_PERMITIDAS,
+  CLAVE_PMC_ACCESS,
+  CLAVE_PMC_REFRESH,
+  CLAVE_PMC_CLIENTE,
+  CLAVE_PM_ACCESS
+} from './constants/pm-cliente.const';
 
 @Injectable({
   providedIn: 'root'
