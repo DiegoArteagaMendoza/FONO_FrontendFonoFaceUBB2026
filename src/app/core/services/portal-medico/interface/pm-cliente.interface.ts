@@ -56,3 +56,42 @@ export interface VideoSintomas {
   dias_restantes: number;
   esta_vigente: boolean;
 }
+
+/**
+ * El video visto por quien llega con su código de seguimiento, sin sesión.
+ *
+ * Trae menos campos que VideoSintomas a propósito: el backend no entrega
+ * ningún identificador a quien se autentica con un código (regla 4 del Specs
+ * del backend). No hace falta ninguno, porque el video se gestiona a través de
+ * la cita, que ya viene dada por el propio código.
+ */
+export interface VideoSeguimiento {
+  video: string;
+  descripcion: string | null;
+  duracion_segundos: number;
+  fecha_subida: string;
+  fecha_expiracion: string;
+  dias_restantes: number;
+  esta_vigente: boolean;
+}
+
+/** Por qué se rechazó un archivo de video antes de enviarlo. */
+export type MotivoVideoInvalido = 'formato' | 'peso' | 'duracion' | 'ilegible';
+
+/**
+ * Resultado de revisar un archivo en el navegador.
+ *
+ * El servicio devuelve el motivo y los números, no el mensaje: los textos viven
+ * en textos.ts y los arma cada pantalla. Así las reglas (formato, peso,
+ * duración) se escriben una sola vez aunque las usen dos pantallas distintas
+ * —la del paciente con cuenta y la del seguimiento por código—, que es donde
+ * antes se habrían duplicado.
+ */
+export interface ResultadoValidacionVideo {
+  valido: boolean;
+  motivo?: MotivoVideoInvalido;
+  /** Duración leída, cuando se pudo leer. */
+  duracionSegundos?: number;
+  /** Peso en MB, redondeado a un decimal. */
+  tamanoMb?: number;
+}

@@ -101,7 +101,13 @@ export const API_ENDPOINTS = {
     eliminar: (idVideo: number) => `/${idVideo}/eliminar/`,
 
     // Videos adjuntos a una cita concreta (solo el profesional que la atiende)
-    listarPorCita: (idCita: number) => `/listar/?cita=${idCita}`
+    listarPorCita: (idCita: number) => `/listar/?cita=${idCita}`,
+
+    // Quien reservó sin cuenta gestiona su video con el código del correo.
+    // No llevan token ni ids: la cita sale del código y el dueño, de la cita.
+    seguimientoListar: (codigo: string) => `/seguimiento/${codigo}/`,
+    seguimientoSubir: (codigo: string) => `/seguimiento/${codigo}/subir/`,
+    seguimientoEliminar: (codigo: string) => `/seguimiento/${codigo}/eliminar/`
   },
 
   // Portal Médico — citas telemáticas (app PmCita del backend FonoAppPortalMedico).

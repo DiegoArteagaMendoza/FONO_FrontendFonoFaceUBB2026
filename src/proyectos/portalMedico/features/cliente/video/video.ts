@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
-import { VideoSintomas } from '@core/services/portal-medico/interface/pm-cliente.interface';
+import {
+  VideoSintomas,
+  ResultadoValidacionVideo
+} from '@core/services/portal-medico/interface/pm-cliente.interface';
 import {
   VIDEO_DURACION_MAXIMA_SEGUNDOS,
   VIDEO_TAMANO_MAXIMO_MB,
@@ -232,57 +235,41 @@ export class PmClienteVideoComponent implements OnInit {
 
     if (!archivo) return;
 
-    // 1. Formato
-    const extension = archivo.name.toLowerCase().split('.').pop() ?? '';
-    if (!this.formatos.includes(extension)) {
-      this.errorMensaje = this.textosService.reemplazarVariables(
-        this.t().pmc_video.alerta_video_formato,
-        { formatos: this.formatos.join(', ') }
-      );
-      input.value = '';
-      this.cdr.detectChanges();
-      return;
-    }
+    const revision = await this.pmClienteService.validarArchivoDeVideo(archivo);
 
-    // 2. Peso
-    const mb = archivo.size / (1024 * 1024);
-    if (mb > this.pesoMaximo) {
-      this.errorMensaje = this.textosService.reemplazarVariables(
-        this.t().pmc_video.alerta_video_peso,
-        { peso: mb.toFixed(1), maximo: this.pesoMaximo + '' }
-      );
-      input.value = '';
-      this.cdr.detectChanges();
-      return;
-    }
-
-    // 3. Duración real del video
-    try {
-      const duracion = await this.pmClienteService.obtenerDuracionSegundos(archivo);
-
-      if (duracion > this.duracionMaxima) {
-        this.errorMensaje = this.textosService.reemplazarVariables(
-          this.t().pmc_video.alerta_video_duracion,
-          { duracion: duracion + '', maximo: this.duracionMaxima + '' }
-        );
-        input.value = '';
-        this.cdr.detectChanges();
-        return;
-      }
-
-      this.duracionSegundos = duracion;
-    } catch {
-      // Si el navegador no logra leer los metadatos, dejamos que el backend decida
-      this.duracionSegundos = null;
-      this.errorMensaje = this.t().pmc_video.alerta_video_req;
+    if (!revision.valido) {
+      this.errorMensaje = this.mensajeDeMotivo(revision);
       input.value = '';
       this.cdr.detectChanges();
       return;
     }
 
     this.archivo = archivo;
-    this.tamanoMb = Number(mb.toFixed(1));
+    this.duracionSegundos = revision.duracionSegundos ?? null;
+    this.tamanoMb = revision.tamanoMb ?? null;
     this.cdr.detectChanges();
+  }
+
+  /** Traduce el motivo del rechazo al texto que ve la persona. */
+  private mensajeDeMotivo(revision: ResultadoValidacionVideo): string {
+    const textos = this.t().pmc_video;
+
+    switch (revision.motivo) {
+      case 'formato':
+        return this.textosService.reemplazarVariables(textos.alerta_video_formato, {
+          formatos: this.formatos.join(', ')
+        });
+      case 'peso':
+        return this.textosService.reemplazarVariables(textos.alerta_video_peso, {
+          peso: (revision.tamanoMb ?? 0) + '', maximo: this.pesoMaximo + ''
+        });
+      case 'duracion':
+        return this.textosService.reemplazarVariables(textos.alerta_video_duracion, {
+          duracion: (revision.duracionSegundos ?? 0) + '', maximo: this.duracionMaxima + ''
+        });
+      default:
+        return textos.alerta_video_req;
+    }
   }
 
   onSubmit(): void {

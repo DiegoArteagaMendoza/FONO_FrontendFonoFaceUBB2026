@@ -1454,7 +1454,40 @@ export const TEXTOS_SITIO = {
         btn_confirmar_cancelar: "Sí, cancelar mi hora",
         btn_no_cancelar: "No, mantenerla",
         exito_cancelar: "Tu hora quedó cancelada.",
-        error_cancelar: "No pudimos cancelar la hora. Inténtalo nuevamente."
+        error_cancelar: "No pudimos cancelar la hora. Inténtalo nuevamente.",
+
+        // VIDEO DE SÍNTOMAS: quien reservó sin cuenta lo gestiona aquí, con su
+        // código. Es lo mismo que el paciente registrado hace desde su sesión.
+        video_titulo: "Tu video de síntomas",
+        video_desc: "Graba un video corto mostrando tus síntomas: tu fonoaudiólogo/a podrá revisarlo antes de atenderte. No es obligatorio.",
+        video_label: "Tu video",
+        video_ayuda: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}.",
+        video_label_descripcion: "¿Qué quieres mostrar? (opcional)",
+        video_placeholder_descripcion: "Ej: La voz se me apaga al final de la frase.",
+        video_seleccionado: "Archivo:",
+        video_duracion: "Duración:",
+        video_segundos: "segundos",
+        video_privacidad: "Tu video es material clínico: solo lo verán profesionales acreditados y se elimina solo a los {dias} días.",
+        btn_enviar_video: "Enviar mi video",
+        btn_enviando_video: "Enviando...",
+        video_exito: "Listo, tu video quedó adjunto a esta hora.",
+
+        // Ya hay uno adjunto
+        video_adjunto_titulo: "Ya adjuntaste un video a esta hora",
+        video_adjunto_vence: "Se elimina solo en {dias} días.",
+        btn_quitar_video: "Quitar el video",
+        video_confirmar_quitar: "¿Seguro que quieres quitar tu video? Tendrás que grabar otro si lo necesitas.",
+        video_exito_quitar: "Quitamos tu video.",
+
+        // Errores
+        video_error_formato: "Ese formato no está permitido. Usa {formatos}.",
+        video_error_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        video_error_duracion: "El video dura {duracion} segundos y el máximo son {maximo}.",
+        video_error_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        video_error_req: "Selecciona un video antes de enviarlo.",
+        video_error_subir: "No pudimos enviar tu video. Inténtalo nuevamente.",
+        video_error_demasiados: "Has enviado demasiados videos seguidos. Espera un momento e inténtalo de nuevo.",
+        video_error_quitar: "No pudimos quitar el video. Inténtalo nuevamente."
     },
 
     // HORAS DISPONIBLES QUE PUBLICA EL PROFESIONAL
