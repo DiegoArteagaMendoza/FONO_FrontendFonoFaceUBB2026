@@ -221,16 +221,36 @@ Con los dos backends levantados y el dev server corriendo:
    video, lleva a reservar.
 6. Como invitado, la pantalla de éxito de la reserva no ofrece adjuntar video.
 
-## Tarea diferida: video del invitado
+## Video del invitado — hecho el 2026-08-29
 
-Para que quien reservó sin cuenta pueda subir su video haría falta, en el
-backend `FonoAppPortalMedico`:
+Se implementó tal como estaba previsto, con tres endpoints anónimos en
+`FonoAppPortalMedico/PmVideo` que resuelven la cita con
+`PmCita.objects.por_codigo()`:
 
-- Un endpoint de subida que se autentique con el código de seguimiento en vez del
-  JWT del paciente, resolviendo la cita con `PmCita_Queryset.por_codigo()`.
-- Limitar la subida a la cita de ese código y a las que admiten video, para que
-  el código no sirva para colgar archivos en cualquier parte.
-- Rate limiting, que ya está pendiente para el resto de los endpoints por código.
+- `GET  /api/pm/videos/seguimiento/<codigo>/` — el video adjunto, si lo hay.
+- `POST /api/pm/videos/seguimiento/<codigo>/subir/`
+- `DELETE /api/pm/videos/seguimiento/<codigo>/eliminar/`
 
-En el frontend, la pantalla de seguimiento sumaría el bloque de subida cuando la
-cita lo admita.
+Decisiones que se tomaron al construirlo:
+
+- **Ningún identificador viaja al frontend** (regla 4 del Specs del backend).
+  `PmVideoSeguimientoSerializer` omite `id_video`, `cita` y `cliente`: el video
+  se gestiona a través de su cita, que ya viene dada por el código.
+- **Uno por hora.** Sin ese tope, el código serviría para subir archivos de
+  50 MB uno tras otro. Para cambiarlo hay que retirar el anterior.
+- **El borrado no recibe id.** La hora determina cuál es, así que el endpoint no
+  sirve para borrar material de otra ficha probando números. Si la hora tuviera
+  más de un video —solo posible si además usó su cuenta— responde 409 y deriva
+  a la sesión.
+- **Límite de 10 subidas por hora y por IP**, configurable con la variable de
+  entorno `PM_VIDEO_SUBIDA_POR_CODIGO`. Es el único endpoint anónimo que recibe
+  archivos pesados.
+
+Además se corrigió un fallo que existía desde antes y afectaba también a la
+subida con sesión: cuando Cloudinary rechazaba el archivo (un `.mp4` que no es
+un video, uno truncado), la excepción salía como error 500 con una página de
+Django. Ahora las dos vistas de subida devuelven un 400 con explicación.
+
+Sigue pendiente el rate limiting de los **otros** endpoints por código (los de
+`PmCita`: consultar, cancelar y reprogramar), que es donde tendría sentido
+atacar por fuerza bruta.

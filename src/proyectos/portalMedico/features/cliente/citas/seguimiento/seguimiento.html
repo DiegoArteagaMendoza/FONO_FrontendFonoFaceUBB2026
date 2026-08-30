@@ -173,6 +173,74 @@
           </div>
         </form>
       </div>
+
+      <!-- ============ VIDEO DE SÍNTOMAS ============
+           Quien reservó sin cuenta no puede entrar a la pantalla de videos, así
+           que lo gestiona aquí con el mismo código. Solo aparece mientras la
+           hora siga en pie y admita video; una vez cancelada, deja de tener
+           sentido y desaparece. -->
+      <div class="form-card mt-5" style="max-width: none;" *ngIf="admiteVideo">
+        <h3 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">
+          {{ t().pmc_seguimiento.video_titulo }}
+        </h3>
+
+        <div *ngIf="mensajeVideo" class="success-alert mb-3">{{ mensajeVideo }}</div>
+        <div *ngIf="errorVideo" class="error-alert mb-3">{{ errorVideo }}</div>
+
+        <!-- Ya hay uno adjunto: se confirma y se ofrece quitarlo -->
+        <ng-container *ngIf="tieneVideo">
+          <p class="mt-2 mb-1" style="color: var(--fono-texto-cuerpo);">
+            ✓ {{ t().pmc_seguimiento.video_adjunto_titulo }}
+          </p>
+          <p class="mt-0 mb-3 text-sm" style="color: var(--fono-texto-suave);">{{ textoVenceVideo }}</p>
+
+          <div class="form-actions">
+            <button type="button" class="btn-icon delete" (click)="quitarVideo()">
+              {{ t().pmc_seguimiento.btn_quitar_video }}
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Todavía no hay: el formulario de subida -->
+        <ng-container *ngIf="!tieneVideo">
+          <p class="mt-1 mb-3 text-sm" style="color: var(--fono-texto-suave);">
+            {{ t().pmc_seguimiento.video_desc }}
+          </p>
+
+          <div class="form-group file-upload-section">
+            <label for="video-seguimiento">{{ t().pmc_seguimiento.video_label }}</label>
+            <input id="video-seguimiento" type="file" accept="video/*"
+                   (change)="alElegirVideo($event)" class="file-input">
+            <small class="help-text">{{ textoAyudaVideo }}</small>
+
+            <div class="preview-files" *ngIf="archivoVideo">
+              <p class="m-0">
+                <strong>{{ t().pmc_seguimiento.video_seleccionado }}</strong>
+                {{ archivoVideo.name }} ({{ tamanoVideoMb }} MB)
+              </p>
+              <p class="m-0" *ngIf="duracionVideo !== null">
+                <strong>{{ t().pmc_seguimiento.video_duracion }}</strong>
+                {{ duracionVideo }} {{ t().pmc_seguimiento.video_segundos }}
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion-video">{{ t().pmc_seguimiento.video_label_descripcion }}</label>
+            <textarea id="descripcion-video" rows="2" [(ngModel)]="descripcionVideo"
+                      [placeholder]="t().pmc_seguimiento.video_placeholder_descripcion"></textarea>
+          </div>
+
+          <p class="text-sm" style="color: var(--fono-texto-suave);">{{ textoPrivacidadVideo }}</p>
+
+          <div class="form-actions">
+            <button type="button" class="btn-primary" (click)="enviarVideo()"
+                    [disabled]="!archivoVideo || subiendoVideo">
+              {{ subiendoVideo ? t().pmc_seguimiento.btn_enviando_video : t().pmc_seguimiento.btn_enviar_video }}
+            </button>
+          </div>
+        </ng-container>
+      </div>
     </ng-container>
 
   </div>
