@@ -90,6 +90,16 @@
       <div class="info-alert mt-3" *ngIf="sinReprogramaciones">{{ textoSinReprogramaciones }}</div>
       <div class="info-alert mt-3" *ngIf="cita.esta_activa && cita.ya_paso">{{ t().pmc_seguimiento.ya_paso }}</div>
 
+      <!-- Cita realizada sin cuenta: la terapia sigue en el portal con sesión -->
+      <div class="info-alert mt-3" *ngIf="necesitaCuentaParaTerapia">
+        {{ t().pmc_seguimiento.terapia_sin_cuenta }}
+        <div class="mt-2">
+          <button type="button" class="btn-primary" (click)="irARegistro()">
+            {{ t().pmc_seguimiento.btn_crear_cuenta }}
+          </button>
+        </div>
+      </div>
+
       <!-- ============ ACCIONES ============ -->
       <div class="form-actions mt-4" *ngIf="accion === null">
         <button type="button" class="btn-secondary" *ngIf="puedePosponer" (click)="abrirPosponer()">

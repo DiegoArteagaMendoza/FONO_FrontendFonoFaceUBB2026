@@ -71,6 +71,8 @@ export interface CitaSeguimiento {
   permite_cambios: boolean;
   reprogramaciones_restantes: number;
   permite_carga_video: boolean;
+  /** Si es false y la cita ya se realizó, se invita a crear la cuenta para la terapia. */
+  paciente_tiene_cuenta: boolean;
 }
 
 /** Hora publicada por un profesional, tal como la ve el paciente al elegir. */

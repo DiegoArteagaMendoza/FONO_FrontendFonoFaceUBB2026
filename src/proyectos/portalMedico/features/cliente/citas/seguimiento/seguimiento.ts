@@ -240,6 +240,14 @@ export class PmClienteSeguimientoCitaComponent implements OnInit {
     return !!this.cita && this.cita.permite_cambios;
   }
 
+  /**
+   * Cita ya realizada y paciente sin cuenta: la terapia que le haya dejado el
+   * fonoaudiólogo solo se ve con sesión, así que se le invita a crearla.
+   */
+  get necesitaCuentaParaTerapia(): boolean {
+    return !!this.cita && this.cita.estado === 'RZ' && !this.cita.paciente_tiene_cuenta;
+  }
+
   claseEstado(): string {
     if (!this.cita) return 'badge-pendiente';
     switch (this.cita.estado) {
@@ -520,5 +528,9 @@ export class PmClienteSeguimientoCitaComponent implements OnInit {
 
   irALogin(): void {
     this.router.navigate(['/portalmedico/login'], { queryParams: { tipo: 'paciente' } });
+  }
+
+  irARegistro(): void {
+    this.router.navigate(['/portalmedico/paciente/registro']);
   }
 }
