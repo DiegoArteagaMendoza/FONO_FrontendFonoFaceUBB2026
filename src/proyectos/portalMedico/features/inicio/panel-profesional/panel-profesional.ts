@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { PortalMedicoService } from '@core/services/portal-medico/portal-medico';
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
 import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { PmTerapiaService } from '@core/services/portal-medico/pm-terapia';
 import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
 import { TextosService } from '@core/services/textos/textos';
 
@@ -37,6 +38,7 @@ export class PmPanelProfesionalComponent implements OnInit {
   public pmCitaService = inject(PmCitaService);
 
   private pmClienteService = inject(PmClienteService);
+  private pmTerapiaService = inject(PmTerapiaService);
   private router = inject(Router);
   // App sin zone.js: cada respuesta HTTP necesita su detectChanges().
   private cdr = inject(ChangeDetectorRef);
@@ -52,6 +54,12 @@ export class PmPanelProfesionalComponent implements OnInit {
   cargandoHoras = true;
   errorHoras = false;
 
+  /**
+   * Pacientes con plan de terapia que van atrasados. Es la única cifra de
+   * terapia que merece el panel: es la que pide acción hoy.
+   */
+  pacientesAtrasados: number | null = null;
+
   /** Solo se avisa cuando falta algo: estar aprobado es lo normal. */
   estadoAcreditacion: string | null = null;
   acreditacionPendiente = false;
@@ -64,6 +72,22 @@ export class PmPanelProfesionalComponent implements OnInit {
     this.cargarHoras();
     this.cargarAcreditacion();
     this.cargarNombresPaciente();
+    this.cargarAtrasados();
+  }
+
+  /** Sin terapia no hay cifra: si falla, el bloque no aparece y el panel sigue. */
+  private cargarAtrasados(): void {
+    this.pmTerapiaService.getMisPlanes().subscribe({
+      next: (planes) => {
+        this.pacientesAtrasados = planes.filter(p => !p.al_dia).length;
+        this.cdr.detectChanges();
+      },
+      error: () => this.cdr.detectChanges()
+    });
+  }
+
+  irAlSeguimiento(): void {
+    this.router.navigate(['/portalmedico/seguimiento']);
   }
 
   get nombreProfesional(): string {

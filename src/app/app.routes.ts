@@ -72,6 +72,8 @@ import { PmDisponibilidadComponent } from '../proyectos/portalMedico/features/di
 import { PmEjerciciosComponent } from '../proyectos/portalMedico/features/ejercicios/ejercicios';
 import { PmPlanTerapiaComponent } from '../proyectos/portalMedico/features/terapia/plan/plan';
 import { PmClienteMiTerapiaComponent } from '../proyectos/portalMedico/features/cliente/terapia/mi-terapia';
+import { PmSeguimientoComponent } from '../proyectos/portalMedico/features/terapia/seguimiento/seguimiento';
+import { PmSeguimientoDetalleComponent } from '../proyectos/portalMedico/features/terapia/seguimiento/detalle/detalle';
 // Panel de administración del Portal Médico: se renderiza dentro del Layout de
 // administracion/ (mismo sidebar/sesión de FonoApp), por eso se registra como hijo
 // de ese Layout más abajo en vez de dentro del bloque 'portalmedico/*'.
@@ -150,6 +152,9 @@ export const routes: Routes = [
       { path: 'ejercicios', component: PmEjerciciosComponent },
       // Asignar o ajustar el plan de un paciente; se llega desde la agenda con ?cita=<id>
       { path: 'terapia/plan', component: PmPlanTerapiaComponent },
+      // Seguimiento de terapia: pacientes con plan (semáforo) y detalle con retroalimentación
+      { path: 'seguimiento', component: PmSeguimientoComponent },
+      { path: 'seguimiento/:id', component: PmSeguimientoDetalleComponent },
 
       // LADO PACIENTE: registro, sesión propia y videos de síntomas.
       // Usa su propia identidad JWT (claim 'id_cliente'), separada de la del

@@ -82,6 +82,14 @@
         <p class="m-0 text-2xl font-bold" style="color: var(--fono-texto);">{{ horas.reservadas }}</p>
         <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">{{ t().pm_panel.cifra_reservadas }}</p>
       </div>
+      <!-- Terapia: solo la cifra que pide acción. En rojo si hay alguien. -->
+      <div class="form-card" style="max-width: none; text-align: center; cursor: pointer;"
+           *ngIf="pacientesAtrasados !== null" (click)="irAlSeguimiento()">
+        <p class="m-0 text-2xl font-bold" [style.color]="pacientesAtrasados > 0 ? 'var(--fono-error, #b91c1c)' : 'var(--fono-texto)'">
+          {{ pacientesAtrasados }}
+        </p>
+        <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">{{ t().pm_panel.cifra_atrasados }}</p>
+      </div>
     </div>
   } @else if (errorHoras) {
     <div class="error-alert mb-5">{{ t().pm_panel.cifras_error }}</div>

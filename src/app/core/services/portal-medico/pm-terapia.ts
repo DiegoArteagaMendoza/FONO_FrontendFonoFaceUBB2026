@@ -9,7 +9,8 @@ import {
   PlanTerapia,
   PlanTerapiaPayload,
   ContextoPlanDeCita,
-  VideoProgreso
+  VideoProgreso,
+  PlanSeguimiento
 } from './interface/pm-terapia.interface';
 import { CLAVE_PM_ACCESS, CLAVE_PMC_ACCESS } from './constants/pm-cliente.const';
 
@@ -134,6 +135,35 @@ export class PmTerapiaService {
   getPlanDeCita(idCita: number): Observable<ContextoPlanDeCita> {
     return this.http.get<ContextoPlanDeCita>(
       `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planDeCita(idCita)}`,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // Seguimiento (fonoaudiólogo)
+  // ---------------------------------------------------------------------
+
+  /** El plan con sus periodos cerrados y qué faltó en cada uno. */
+  getSeguimiento(idPlan: number): Observable<PlanSeguimiento> {
+    return this.http.get<PlanSeguimiento>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planSeguimiento(idPlan)}`,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /** Historial del plan como lo ve el fonoaudiólogo, del más nuevo al más viejo. */
+  getVideosDelPlan(idPlan: number): Observable<VideoProgreso[]> {
+    return this.http.get<VideoProgreso[]>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planVideos(idPlan)}`,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /** Texto vacío borra la retroalimentación. */
+  retroalimentar(idVideo: number, retroalimentacion: string): Observable<VideoProgreso> {
+    return this.http.patch<VideoProgreso>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.videoRetroalimentar(idVideo)}`,
+      { retroalimentacion },
       { headers: this.getProfesionalAuthHeaders() }
     );
   }

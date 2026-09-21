@@ -1,0 +1,118 @@
+<div class="page-container">
+
+  <div class="loading-state" *ngIf="cargando"><div class="spinner"></div></div>
+  <div *ngIf="errorMensaje" class="error-alert mb-4">{{ errorMensaje }}</div>
+
+  <div class="form-actions mb-4" *ngIf="errorMensaje">
+    <button type="button" class="btn-secondary" (click)="volver()">{{ t().pm_seguimiento.btn_volver }}</button>
+  </div>
+
+  <ng-container *ngIf="plan">
+
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+      <div>
+        <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ titulo }}</h2>
+        <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">
+          {{ textoPeriodicidad() }} · {{ textoPlanDesde }} {{ textoPeriodoActual }}
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="btn-secondary" (click)="ajustarPlan()">{{ t().pm_seguimiento.btn_ajustar_plan }}</button>
+        <button type="button" class="btn-secondary" (click)="volver()">{{ t().pm_seguimiento.btn_volver }}</button>
+      </div>
+    </div>
+
+    <!-- ============ SEMÁFORO + INDICACIONES ============ -->
+    <div class="form-card mb-4" style="max-width: none;">
+      <span class="badge" [class.badge-cita-realizada]="plan.al_dia" [class.badge-cita-cancelada]="!plan.al_dia">
+        {{ plan.al_dia ? t().pm_seguimiento.al_dia : t().pm_seguimiento.atrasado }}
+      </span>
+
+      <div class="info-alert mt-3" *ngIf="plan.indicaciones">
+        <strong>{{ t().pm_seguimiento.indicaciones_titulo }}</strong>
+        <p class="mt-1 mb-0" style="white-space: pre-line;">{{ plan.indicaciones }}</p>
+      </div>
+
+      <p class="mt-3 mb-1 text-xs font-semibold" style="color: var(--fono-texto-suave); text-transform: uppercase; letter-spacing: 0.05em;">
+        {{ t().pm_seguimiento.ejercicios_titulo }}
+      </p>
+      <ul class="m-0" style="padding-left: 1.25rem; color: var(--fono-texto-cuerpo);">
+        <li *ngFor="let pe of plan.ejercicios">
+          {{ pe.ejercicio.nombre }}<span *ngIf="pe.indicaciones"> — {{ pe.indicaciones }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ============ PERIODOS CERRADOS ============ -->
+    <div class="form-card mb-4" style="max-width: none;">
+      <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">{{ t().pm_seguimiento.periodos_titulo }}</h3>
+
+      <p class="m-0 text-sm" style="color: var(--fono-texto-suave);" *ngIf="plan.periodos_cerrados.length === 0">
+        {{ t().pm_seguimiento.periodos_vacio }}
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;" *ngIf="plan.periodos_cerrados.length > 0">
+        <div class="flex flex-wrap items-center gap-3" *ngFor="let periodo of plan.periodos_cerrados"
+             style="padding: 0.5rem 0.75rem; border: 1px solid var(--fono-borde); border-radius: 0.5rem;">
+          <span class="badge" [class.badge-cita-realizada]="periodo.cumplido" [class.badge-cita-cancelada]="!periodo.cumplido">
+            {{ periodo.cumplido ? t().pm_seguimiento.periodo_cumplido : textoFaltan(periodo) }}
+          </span>
+          <span class="text-sm" style="color: var(--fono-texto-cuerpo);">
+            <strong>{{ nombrePeriodo(periodo.numero) }}</strong> {{ rangoPeriodo(periodo) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ VIDEOS CON RETROALIMENTACIÓN ============ -->
+    <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">{{ t().pm_seguimiento.videos_titulo }}</h3>
+
+    <p class="m-0 text-sm" style="color: var(--fono-texto-suave);" *ngIf="videos.length === 0">
+      {{ t().pm_seguimiento.videos_vacio }}
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;" *ngIf="videos.length > 0">
+      <div class="form-card" style="max-width: none;" *ngFor="let video of videos">
+
+        <p class="m-0 font-semibold" style="color: var(--fono-texto);">{{ video.ejercicio_nombre }}</p>
+        <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">
+          {{ video.fecha_subida | date:'EEEE d \'de\' MMMM, HH:mm' }} · {{ nombrePeriodo(video.numero_periodo) }}
+          · {{ video.esta_vigente ? textoVence(video) : t().pm_seguimiento.video_vencido }}
+        </p>
+
+        <video *ngIf="video.video" [src]="video.video" controls preload="metadata" class="mt-3"
+               style="width: 100%; max-width: 420px; border-radius: 8px; background: #000;"></video>
+
+        <p class="mt-2 mb-0 text-sm" style="color: var(--fono-texto-cuerpo);" *ngIf="video.comentario">
+          <strong>{{ t().pm_seguimiento.video_comentario }}</strong> {{ video.comentario }}
+        </p>
+
+        <!-- La retroalimentación se escribe aquí mismo, bajo el video -->
+        <div class="form-group mt-3 mb-0" *ngIf="edicionDe(video) as edicion">
+          <label [for]="'retro-' + video.id_video">
+            {{ t().pm_seguimiento.retro_label }}
+            <span class="text-xs font-normal" style="color: var(--fono-texto-suave);" *ngIf="video.tiene_retroalimentacion">
+              · {{ textoRetroGuardada(video) }}
+            </span>
+          </label>
+          <textarea [id]="'retro-' + video.id_video" rows="3" [(ngModel)]="edicion.texto"
+                    [name]="'retro-' + video.id_video" (ngModelChange)="alEscribir(video)"
+                    [placeholder]="t().pm_seguimiento.retro_placeholder"></textarea>
+
+          <div *ngIf="edicion.error" class="error-text mt-1">{{ edicion.error }}</div>
+          <div *ngIf="edicion.guardado" class="text-sm mt-1" style="color: var(--fono-exito, #15803d);">
+            {{ t().pm_seguimiento.retro_exito }}
+          </div>
+
+          <div class="form-actions mt-2" *ngIf="hayCambios(video)">
+            <button type="button" class="btn-primary" (click)="guardarRetro(video)" [disabled]="edicion.guardando">
+              {{ edicion.guardando ? t().pm_seguimiento.btn_retro_guardando : t().pm_seguimiento.btn_retro_guardar }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

@@ -39,6 +39,12 @@
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pmc_navbar.mis_horas }}
           </a>
+          <!-- El seguimiento es trabajo de revisión periódica: va en la barra,
+               no en el menú de la cuenta. -->
+          <a routerLink="/portalmedico/seguimiento" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pm_navbar.seguimiento }}
+          </a>
 
           <!-- El desplegable de la cuenta ya no va aquí: cuelga del avatar,
                al extremo derecho de la barra. -->
@@ -189,6 +195,7 @@
         @if (esProfesional) {
           <a routerLink="/portalmedico/agenda" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_agenda }}</a>
           <a routerLink="/portalmedico/disponibilidad" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mis_horas }}</a>
+          <a routerLink="/portalmedico/seguimiento" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.seguimiento }}</a>
           <a routerLink="/portalmedico/perfil" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.mi_perfil }}</a>
           <a routerLink="/portalmedico/documentos" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.documentos }}</a>
           <a routerLink="/portalmedico/especialidades" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.especialidades }}</a>
