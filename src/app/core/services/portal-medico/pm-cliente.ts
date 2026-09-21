@@ -10,7 +10,8 @@ import {
   LoginClienteResponse,
   VideoSintomas,
   VideoSeguimiento,
-  ResultadoValidacionVideo
+  ResultadoValidacionVideo,
+  LimitesVideo
 } from './interface/pm-cliente.interface';
 import {
   VIDEO_DURACION_MAXIMA_SEGUNDOS,
@@ -214,28 +215,35 @@ export class PmClienteService {
    * Revisa formato, peso y duración de un archivo antes de enviarlo.
    *
    * Vive aquí y no en cada componente porque son las mismas tres reglas para
-   * las dos pantallas que suben video: la del paciente con cuenta y la del
-   * seguimiento por código. Devuelve el motivo, no el mensaje: los textos están
-   * en textos.ts y los arma quien llama.
+   * todos los videos del portal: síntomas, ejemplo de un ejercicio, progreso
+   * de terapia. Cambian los topes, no la regla, por eso van por parámetro (sin
+   * ellos, los del video de síntomas). Devuelve el motivo, no el mensaje: los
+   * textos están en textos.ts y los arma quien llama.
    *
    * El backend vuelve a validar todo —es la fuente de verdad—, pero así la
    * persona se entera al instante en vez de tras subir 40 MB.
    */
-  async validarArchivoDeVideo(archivo: File): Promise<ResultadoValidacionVideo> {
+  async validarArchivoDeVideo(
+    archivo: File,
+    limites: LimitesVideo = {
+      duracionMaximaSegundos: VIDEO_DURACION_MAXIMA_SEGUNDOS,
+      tamanoMaximoMb: VIDEO_TAMANO_MAXIMO_MB
+    }
+  ): Promise<ResultadoValidacionVideo> {
     const extension = archivo.name.toLowerCase().split('.').pop() ?? '';
     if (!VIDEO_EXTENSIONES_PERMITIDAS.includes(extension)) {
       return { valido: false, motivo: 'formato' };
     }
 
     const mb = archivo.size / (1024 * 1024);
-    if (mb > VIDEO_TAMANO_MAXIMO_MB) {
+    if (mb > limites.tamanoMaximoMb) {
       return { valido: false, motivo: 'peso', tamanoMb: Number(mb.toFixed(1)) };
     }
 
     try {
       const duracion = await this.obtenerDuracionSegundos(archivo);
 
-      if (duracion > VIDEO_DURACION_MAXIMA_SEGUNDOS) {
+      if (duracion > limites.duracionMaximaSegundos) {
         return { valido: false, motivo: 'duracion', duracionSegundos: duracion };
       }
 

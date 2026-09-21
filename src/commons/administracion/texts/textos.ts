@@ -760,8 +760,56 @@ export const TEXTOS_SITIO = {
         // Menú de la cuenta: cuelga del avatar con las iniciales, que es la
         // señal visible de "estás dentro y como quién".
         aria_menu_cuenta: "Abrir el menú de tu cuenta",
+        mis_ejercicios: "Mis ejercicios",
         sesion_profesional: "Fonoaudiólogo/a",
         sesion_paciente: "Paciente"
+    },
+
+    // CATÁLOGO DE EJERCICIOS DEL FONOAUDIÓLOGO (terapia)
+    pm_ejercicios: {
+        titulo: "Mis ejercicios",
+        subtitulo: "Los ejercicios que dejas de tarea a tus pacientes, cada uno con un video corto que muestra cómo se hace.",
+        btn_nuevo: "Nuevo ejercicio",
+        vacio_titulo: "Todavía no tienes ejercicios",
+        vacio_desc: "Crea tu primer ejercicio con un video de ejemplo. Después podrás asignarlo a tus pacientes en su plan de terapia.",
+        error_servidor: "No pudimos cargar tus ejercicios. Inténtalo nuevamente.",
+
+        // Tarjeta
+        duracion_ejemplo: "Ejemplo de {segundos} s",
+        btn_editar: "Editar",
+        btn_eliminar: "Eliminar",
+        confirmar_eliminar: "¿Eliminar este ejercicio de tu catálogo? Los pacientes que ya lo tengan asignado lo seguirán viendo.",
+        exito_eliminar: "Ejercicio eliminado de tu catálogo.",
+        error_eliminar: "No pudimos eliminar el ejercicio. Inténtalo nuevamente.",
+
+        // Formulario (crear y editar)
+        form_titulo_nuevo: "Nuevo ejercicio",
+        form_titulo_editar: "Editar ejercicio",
+        label_nombre: "Nombre",
+        placeholder_nombre: "Ej: Vibración labial",
+        alerta_nombre: "El nombre es obligatorio.",
+        label_instrucciones: "Cómo se hace",
+        placeholder_instrucciones: "Explica paso a paso lo que el paciente debe hacer, cuántas repeticiones y qué debe sentir.",
+        alerta_instrucciones: "Las instrucciones son obligatorias.",
+        label_video: "Video de ejemplo",
+        label_video_editar: "Cambiar el video de ejemplo (opcional)",
+        ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}. Este video no vence: acompaña al ejercicio mientras exista.",
+        video_actual: "Video actual",
+        archivo_seleccionado: "Archivo:",
+        duracion_detectada: "Duración:",
+        segundos: "segundos",
+        alerta_video_req: "Selecciona un video de ejemplo.",
+        alerta_video_formato: "Ese formato no está permitido. Usa {formatos}.",
+        alerta_video_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        alerta_video_duracion: "El video dura {duracion} segundos y el máximo son {maximo}. Recorta a lo esencial: es una demostración, no una clase.",
+        alerta_video_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        btn_guardando: "Guardando...",
+        btn_crear: "Crear ejercicio",
+        btn_guardar: "Guardar cambios",
+        btn_cancelar: "Cancelar",
+        exito_crear: "Ejercicio creado.",
+        exito_editar: "Cambios guardados.",
+        error_guardar: "No pudimos guardar el ejercicio. Inténtalo nuevamente."
     },
 
     // PANEL DEL FONOAUDIÓLOGO (lo que ve en el inicio cuando tiene sesión)

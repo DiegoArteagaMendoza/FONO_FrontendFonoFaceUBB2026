@@ -75,6 +75,12 @@ export interface VideoSeguimiento {
   esta_vigente: boolean;
 }
 
+/** Topes que cambian según el tipo de video; el formato es el mismo para todos. */
+export interface LimitesVideo {
+  duracionMaximaSegundos: number;
+  tamanoMaximoMb: number;
+}
+
 /** Por qué se rechazó un archivo de video antes de enviarlo. */
 export type MotivoVideoInvalido = 'formato' | 'peso' | 'duracion' | 'ilegible';
 

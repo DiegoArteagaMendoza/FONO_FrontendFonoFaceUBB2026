@@ -149,6 +149,17 @@ export const API_ENDPOINTS = {
     seguimientoPosponer: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/posponer/`
   },
 
+  // Portal Médico — terapia (app PmTerapia del backend FonoAppPortalMedico).
+  // Rutas relativas a environment.apiUrlPortalMedicoTerapia.
+  portalMedicoTerapia: {
+    // Catálogo de ejercicios del fonoaudiólogo: privado, todo con su token.
+    // Crear y editar van en FormData porque llevan el video de ejemplo.
+    ejercicios: '/ejercicios/',
+    ejercicioCrear: '/ejercicios/crear/',
+    ejercicioEditar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/editar/`,
+    ejercicioEliminar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/eliminar/`
+  },
+
   // Autoevaluación / diagnóstico rápido (backend FonoApp, app FonoAppDiagnostico).
   // Listar, detalle y responder son públicos: el cliente del portal responde el
   // test sin cuenta propia. Crear, editar, eliminar y ver respuestas exigen el
