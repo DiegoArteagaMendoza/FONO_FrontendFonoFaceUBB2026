@@ -29,6 +29,8 @@ export interface PlanEjercicio {
   /** Indicaciones específicas para este paciente; puede ir vacío. */
   indicaciones: string;
   ejercicio: Ejercicio;
+  /** Ya hay un video de este ejercicio en el periodo en curso. */
+  enviado_periodo_actual: boolean;
 }
 
 /** El periodo en curso, ya calculado por el backend en hora de Chile. */
@@ -92,4 +94,28 @@ export interface ContextoPlanDeCita {
   /** Sin cuenta el backend rechaza el plan: se explica antes, no después. */
   paciente_tiene_cuenta: boolean;
   cita_realizada: boolean;
+}
+
+/**
+ * Un video del paciente practicando un ejercicio de su plan.
+ *
+ * 'video' viene null cuando el archivo ya venció o se retiró: el registro
+ * sigue valiendo por su fecha y por la retroalimentación del fonoaudiólogo.
+ */
+export interface VideoProgreso {
+  id_video: number;
+  plan_ejercicio: number;
+  ejercicio_nombre: string;
+  video: string | null;
+  duracion_segundos: number;
+  comentario: string;
+  fecha_subida: string;
+  fecha_expiracion: string;
+  numero_periodo: number;
+  retroalimentacion: string | null;
+  fecha_retroalimentacion: string | null;
+  tiene_retroalimentacion: boolean;
+  estado: boolean;
+  dias_restantes: number;
+  esta_vigente: boolean;
 }

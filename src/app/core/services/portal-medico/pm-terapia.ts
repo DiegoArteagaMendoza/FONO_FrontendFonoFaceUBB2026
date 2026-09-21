@@ -8,7 +8,8 @@ import {
   Ejercicio,
   PlanTerapia,
   PlanTerapiaPayload,
-  ContextoPlanDeCita
+  ContextoPlanDeCita,
+  VideoProgreso
 } from './interface/pm-terapia.interface';
 import { CLAVE_PM_ACCESS, CLAVE_PMC_ACCESS } from './constants/pm-cliente.const';
 
@@ -145,6 +146,34 @@ export class PmTerapiaService {
   getMisPlanesComoPaciente(): Observable<PlanTerapia[]> {
     return this.http.get<PlanTerapia[]>(
       `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.misPlanes}`,
+      { headers: this.getClienteAuthHeaders() }
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // Videos de progreso (paciente)
+  // ---------------------------------------------------------------------
+
+  /** FormData: id_plan_ejercicio, video, duracion_segundos y comentario opcional. */
+  subirVideoProgreso(idPlan: number, datos: FormData): Observable<VideoProgreso> {
+    return this.http.post<VideoProgreso>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.miPlanVideoSubir(idPlan)}`,
+      datos,
+      { headers: this.getClienteAuthHeaders() }
+    );
+  }
+
+  /** Historial del plan, vigentes y vencidos, del más nuevo al más viejo. */
+  getVideosDeMiPlan(idPlan: number): Observable<VideoProgreso[]> {
+    return this.http.get<VideoProgreso[]>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.miPlanVideos(idPlan)}`,
+      { headers: this.getClienteAuthHeaders() }
+    );
+  }
+
+  eliminarMiVideoProgreso(idVideo: number): Observable<{ mensaje: string }> {
+    return this.http.delete<{ mensaje: string }>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.miVideoProgresoEliminar(idVideo)}`,
       { headers: this.getClienteAuthHeaders() }
     );
   }
