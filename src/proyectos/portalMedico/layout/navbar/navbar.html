@@ -141,6 +141,9 @@
                   <a routerLink="/portalmedico/paciente/video" role="menuitem" class="menu-perfil-opcion">
                     {{ t().pmc_navbar.mi_video }}
                   </a>
+                  <a routerLink="/portalmedico/paciente/terapia" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pmc_navbar.mi_terapia }}
+                  </a>
 
                   <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
 
@@ -197,6 +200,7 @@
           <a routerLink="/portalmedico/paciente/citas" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mis_citas }}</a>
           <a routerLink="/portalmedico/paciente/citas/reservar" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.reservar_hora }}</a>
           <a routerLink="/portalmedico/paciente/video" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_video }}</a>
+          <a routerLink="/portalmedico/paciente/terapia" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_terapia }}</a>
           <button (click)="cerrarSesionPaciente()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pmc_navbar.cerrar_sesion }}</button>
         } @else {
           <!-- Sin sesión: se puede reservar igual, y el acceso es uno solo con

@@ -1,0 +1,109 @@
+<div class="page-container">
+
+  <div class="mb-5">
+    <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ titulo }}</h2>
+    <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);" *ngIf="!cargando && !errorCarga">
+      {{ subtitulo }}
+    </p>
+  </div>
+
+  <div class="loading-state" *ngIf="cargando"><div class="spinner"></div></div>
+
+  <ng-container *ngIf="!cargando">
+
+    <div *ngIf="errorCarga" class="error-alert mb-4">{{ errorCarga }}</div>
+
+    <!-- No se va a poder asignar: se dice de entrada, no tras llenar todo -->
+    <div *ngIf="!errorCarga && bloqueado" class="info-alert mb-4">{{ textoBloqueo }}</div>
+
+    <div *ngIf="mensajeExito" class="success-alert mb-4">{{ mensajeExito }}</div>
+    <div *ngIf="errorGuardar" class="error-alert mb-4">{{ errorGuardar }}</div>
+
+    <div class="form-actions mb-4" *ngIf="errorCarga || bloqueado">
+      <button type="button" class="btn-secondary" (click)="volverALaAgenda()">
+        {{ t().pm_plan.btn_volver }}
+      </button>
+    </div>
+
+    <form class="custom-form" (ngSubmit)="guardar()" *ngIf="!errorCarga && !bloqueado">
+
+      <!-- ============ PERIODICIDAD ============ -->
+      <div class="form-card mb-4" style="max-width: none;">
+        <label class="m-0 mb-2 block font-semibold" style="color: var(--fono-texto);">
+          {{ t().pm_plan.label_periodicidad }}
+        </label>
+
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let p of periodicidades" class="flex items-center gap-2"
+                 style="padding: 0.5rem 0.9rem; border: 1px solid var(--fono-borde); border-radius: 0.5rem; cursor: pointer;"
+                 [style.background-color]="periodicidad === p ? 'var(--fono-superficie-2)' : 'transparent'">
+            <input type="radio" name="periodicidad" [value]="p" [(ngModel)]="periodicidad">
+            <span style="color: var(--fono-texto-cuerpo);">{{ etiquetaPeriodicidad(p) }}</span>
+          </label>
+        </div>
+
+        <div class="info-alert mt-3" *ngIf="cambiaPeriodicidad">{{ t().pm_plan.aviso_cambio_periodicidad }}</div>
+      </div>
+
+      <!-- ============ EJERCICIOS ============ -->
+      <div class="form-card mb-4" style="max-width: none;">
+        <label class="m-0 mb-1 block font-semibold" style="color: var(--fono-texto);">{{ textoLabelEjercicios }}</label>
+        <p class="mt-0 mb-3 text-sm" style="color: var(--fono-texto-suave);">{{ t().pm_plan.ayuda_ejercicios }}</p>
+
+        <!-- Sin catálogo no hay nada que asignar: se manda a crearlo -->
+        <div class="empty-state" *ngIf="ejercicios.length === 0">
+          <p class="mt-0 mb-3" style="color: var(--fono-texto-suave);">{{ t().pm_plan.sin_catalogo }}</p>
+          <button type="button" class="btn-primary" (click)="irAlCatalogo()">{{ t().pm_plan.btn_ir_catalogo }}</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;" *ngIf="ejercicios.length > 0">
+          <div *ngFor="let e of ejercicios"
+               style="padding: 0.75rem; border: 1px solid var(--fono-borde); border-radius: 0.5rem;"
+               [style.opacity]="!e.elegido && alcanzoElMaximo() ? 0.55 : 1">
+
+            <label class="flex items-start gap-3" style="cursor: pointer;">
+              <input type="checkbox" [checked]="e.elegido" (change)="alternar(e)"
+                     [disabled]="!e.elegido && alcanzoElMaximo()" style="margin-top: 0.3rem;">
+              <span style="flex-grow: 1;">
+                <span class="block font-semibold" style="color: var(--fono-texto);">{{ e.nombre }}</span>
+                <span class="block text-sm mt-1" style="color: var(--fono-texto-suave); white-space: pre-line;">{{ e.instrucciones }}</span>
+              </span>
+            </label>
+
+            <!-- La indicación específica solo tiene sentido si va en el plan -->
+            <div class="form-group mt-2 mb-0" *ngIf="e.elegido">
+              <input type="text" [(ngModel)]="e.indicaciones" [name]="'indicacion-' + e.id_ejercicio"
+                     [placeholder]="t().pm_plan.placeholder_indicacion_ejercicio">
+            </div>
+          </div>
+        </div>
+
+        <small class="help-text mt-2" *ngIf="alcanzoElMaximo()">{{ textoAlertaMaximo }}</small>
+      </div>
+
+      <!-- ============ INDICACIONES GENERALES ============ -->
+      <div class="form-card mb-4" style="max-width: none;">
+        <div class="form-group mb-0">
+          <label for="indicaciones">{{ t().pm_plan.label_indicaciones }}</label>
+          <textarea id="indicaciones" name="indicaciones" rows="3" [(ngModel)]="indicaciones"
+                    [placeholder]="t().pm_plan.placeholder_indicaciones"></textarea>
+        </div>
+      </div>
+
+      <!-- ============ ACCIONES ============ -->
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="guardando || ejercicios.length === 0">
+          {{ guardando ? t().pm_plan.btn_guardando : (esAjuste ? t().pm_plan.btn_guardar : t().pm_plan.btn_crear) }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="volverALaAgenda()" [disabled]="guardando">
+          {{ t().pm_plan.btn_volver }}
+        </button>
+        <button type="button" class="btn-icon delete" (click)="cerrarPlan()" *ngIf="esAjuste" [disabled]="guardando">
+          {{ t().pm_plan.btn_cerrar_plan }}
+        </button>
+      </div>
+    </form>
+
+  </ng-container>
+
+</div>

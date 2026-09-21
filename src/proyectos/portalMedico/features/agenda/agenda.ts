@@ -450,4 +450,9 @@ export class PmAgendaComponent implements OnInit {
   irALaAcreditacion(): void {
     this.router.navigate(['/portalmedico/acreditacion']);
   }
+
+  /** Al formulario del plan, que crea o ajusta según tenga o no uno activo. */
+  irAlPlan(cita: Cita): void {
+    this.router.navigate(['/portalmedico/terapia/plan'], { queryParams: { cita: cita.id_cita } });
+  }
 }

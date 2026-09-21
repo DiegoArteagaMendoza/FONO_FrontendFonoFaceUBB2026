@@ -157,7 +157,21 @@ export const API_ENDPOINTS = {
     ejercicios: '/ejercicios/',
     ejercicioCrear: '/ejercicios/crear/',
     ejercicioEditar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/editar/`,
-    ejercicioEliminar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/eliminar/`
+    ejercicioEliminar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/eliminar/`,
+
+    // Plan de terapia, lado del fonoaudiólogo. Un plan activo por paciente.
+    planCrear: '/planes/crear/',
+    planes: '/planes/',
+    planesTodos: '/planes/?todos=true',
+    planDetalle: (idPlan: number) => `/planes/${idPlan}/`,
+    planAjustar: (idPlan: number) => `/planes/${idPlan}/ajustar/`,
+    planCerrar: (idPlan: number) => `/planes/${idPlan}/cerrar/`,
+    // El plan activo del paciente de esa cita: la agenda decide con esto si
+    // ofrece "Asignar plan" o "Ajustar plan". Responde { plan: ... | null }.
+    planDeCita: (idCita: number) => `/planes/de-cita/${idCita}/`,
+
+    // Plan de terapia, lado del paciente (token del paciente)
+    misPlanes: '/mis-planes/'
   },
 
   // Autoevaluación / diagnóstico rápido (backend FonoApp, app FonoAppDiagnostico).
