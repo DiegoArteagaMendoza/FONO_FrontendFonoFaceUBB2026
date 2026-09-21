@@ -61,6 +61,10 @@ export interface PlanTerapia {
   estado: EstadoPlan;
   esta_activo: boolean;
   periodo_actual: PeriodoActual;
+  /** Semáforo: false si algún periodo ya cerrado quedó sin todos sus videos. */
+  al_dia: boolean;
+  /** Fecha del último video que cuenta como reporte, o null. */
+  ultimo_video: string | null;
   ejercicios: PlanEjercicio[];
   fecha_creacion: string;
   fecha_actualizacion: string;
@@ -118,4 +122,18 @@ export interface VideoProgreso {
   estado: boolean;
   dias_restantes: number;
   esta_vigente: boolean;
+}
+
+/** Un periodo ya terminado, con qué ejercicios quedaron sin video. */
+export interface PeriodoCerrado {
+  numero: number;
+  desde: string;
+  hasta: string;
+  cumplido: boolean;
+  faltan: string[];
+}
+
+/** El plan en el detalle del seguimiento: lo mismo más los periodos cerrados. */
+export interface PlanSeguimiento extends PlanTerapia {
+  periodos_cerrados: PeriodoCerrado[];
 }

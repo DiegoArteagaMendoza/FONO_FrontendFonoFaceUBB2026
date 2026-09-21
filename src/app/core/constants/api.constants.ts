@@ -170,6 +170,12 @@ export const API_ENDPOINTS = {
     // ofrece "Asignar plan" o "Ajustar plan". Responde { plan: ... | null }.
     planDeCita: (idCita: number) => `/planes/de-cita/${idCita}/`,
 
+    // Seguimiento, lado del fonoaudiólogo: periodos cumplidos, historial del
+    // plan y retroalimentación. El semáforo viene en el propio listado de planes.
+    planSeguimiento: (idPlan: number) => `/planes/${idPlan}/seguimiento/`,
+    planVideos: (idPlan: number) => `/planes/${idPlan}/videos/`,
+    videoRetroalimentar: (idVideo: number) => `/videos/${idVideo}/retroalimentar/`,
+
     // Plan de terapia, lado del paciente (token del paciente)
     misPlanes: '/mis-planes/',
 

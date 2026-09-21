@@ -761,6 +761,7 @@ export const TEXTOS_SITIO = {
         // señal visible de "estás dentro y como quién".
         aria_menu_cuenta: "Abrir el menú de tu cuenta",
         mis_ejercicios: "Mis ejercicios",
+        seguimiento: "Seguimiento",
         sesion_profesional: "Fonoaudiólogo/a",
         sesion_paciente: "Paciente"
     },
@@ -924,6 +925,62 @@ export const TEXTOS_SITIO = {
         error_historial: "No pudimos cargar tus videos."
     },
 
+    // SEGUIMIENTO DE TERAPIA (fonoaudiólogo): lista con semáforo y detalle
+    pm_seguimiento: {
+        titulo: "Seguimiento",
+        subtitulo: "Tus pacientes con plan de terapia, y si van al día con sus videos.",
+        error_servidor: "No pudimos cargar el seguimiento. Inténtalo nuevamente.",
+        vacio_titulo: "Todavía no tienes pacientes en terapia",
+        vacio_desc: "Después de una cita realizada, asígnale un plan desde tu agenda y aparecerá aquí.",
+        btn_agenda: "Ir a mi agenda",
+        filtro_todos: "Todos",
+        filtro_atrasados: "Atrasados",
+        sin_atrasados: "Nadie va atrasado. Todos tus pacientes están al día.",
+
+        // Lista
+        al_dia: "Al día",
+        atrasado: "Atrasado",
+        ultimo_video: "Último video: {fecha}",
+        sin_videos: "Sin videos todavía",
+        periodicidad_DIARIA: "Reporta a diario",
+        periodicidad_SEMANAL: "Reporta cada semana",
+        periodicidad_QUINCENAL: "Reporta cada quince días",
+        btn_ver: "Ver seguimiento",
+
+        // Detalle
+        detalle_titulo: "Seguimiento de {paciente}",
+        btn_volver: "Volver al seguimiento",
+        btn_ajustar_plan: "Ajustar plan",
+        plan_desde: "Plan activo desde el {inicio}.",
+        periodo_actual: "Periodo en curso: del {desde} al {hasta}.",
+        periodo_actual_dia: "Periodo en curso: hoy, {desde}.",
+        indicaciones_titulo: "Tus indicaciones",
+        ejercicios_titulo: "Ejercicios del plan",
+
+        periodos_titulo: "Periodos cerrados",
+        periodos_vacio: "El primer periodo todavía no termina.",
+        periodo_nombre: "Periodo {numero}",
+        periodo_rango: "del {desde} al {hasta}",
+        periodo_cumplido: "Cumplido",
+        periodo_faltan: "Faltó: {ejercicios}",
+
+        videos_titulo: "Videos enviados",
+        videos_vacio: "Este paciente todavía no ha enviado videos.",
+        videos_error: "No pudimos cargar los videos.",
+        video_periodo: "Periodo {numero}",
+        video_vence: "Se elimina en {dias} días",
+        video_vencido: "Video ya eliminado — el paciente sigue viendo tu comentario",
+        video_comentario: "Comentario del paciente:",
+
+        retro_label: "Tu retroalimentación",
+        retro_placeholder: "Qué hizo bien, qué corregir y cómo. El paciente lo lee en su portal.",
+        retro_guardada: "Escrita el {fecha}",
+        btn_retro_guardar: "Guardar",
+        btn_retro_guardando: "Guardando...",
+        retro_exito: "Retroalimentación guardada.",
+        retro_error: "No pudimos guardar la retroalimentación. Inténtalo nuevamente."
+    },
+
     // PANEL DEL FONOAUDIÓLOGO (lo que ve en el inicio cuando tiene sesión)
     pm_panel: {
         saludo: "Hola, {nombre}",
@@ -946,6 +1003,7 @@ export const TEXTOS_SITIO = {
         cifra_libres: "Horas libres publicadas",
         cifra_reservadas: "Horas ya reservadas",
         cifras_error: "No pudimos cargar el resumen de tus horas.",
+        cifra_atrasados: "Pacientes atrasados en su terapia",
 
         // El aviso más útil del panel: sin horas publicadas nadie puede
         // reservarle, y hasta ahora nada se lo decía.
