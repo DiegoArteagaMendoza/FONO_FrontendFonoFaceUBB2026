@@ -133,6 +133,14 @@
         </div>
       </div>
 
+      <!-- Tras la atención, el plan de terapia. La pantalla decide sola si
+           lo crea o lo ajusta, así que aquí basta un botón. -->
+      <div class="form-actions mt-3" *ngIf="cita.estado === 'RZ'">
+        <button type="button" class="btn-primary" (click)="irAlPlan(cita)">
+          {{ t().pm_agenda.btn_plan_terapia }}
+        </button>
+      </div>
+
       <!-- ============ ACCIONES ============ -->
       <div class="form-actions mt-3" *ngIf="cita.esta_activa && accion === null">
         <button type="button" class="btn-primary" (click)="marcarRealizada(cita)">

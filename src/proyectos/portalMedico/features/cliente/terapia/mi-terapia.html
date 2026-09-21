@@ -1,0 +1,65 @@
+<div class="page-container">
+
+  <div class="mb-5">
+    <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pmc_terapia.titulo }}</h2>
+    <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pmc_terapia.subtitulo }}</p>
+  </div>
+
+  <div class="loading-state" *ngIf="cargando"><div class="spinner"></div></div>
+  <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+  <!-- ============ SIN PLAN ============ -->
+  <div class="empty-state" *ngIf="!cargando && !errorMensaje && planes.length === 0">
+    <p class="m-0 text-lg font-semibold" style="color: var(--fono-texto);">{{ t().pmc_terapia.vacio_titulo }}</p>
+    <p class="mt-2 mb-4" style="color: var(--fono-texto-suave);">{{ t().pmc_terapia.vacio_desc }}</p>
+    <button type="button" class="btn-primary" (click)="irAReservar()">{{ t().pmc_terapia.vacio_btn }}</button>
+  </div>
+
+  <!-- ============ UN BLOQUE POR PLAN (normalmente uno) ============ -->
+  <div *ngFor="let plan of planes" class="mb-6">
+
+    <div class="form-card mb-4" style="max-width: none;">
+      <h3 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">{{ textoConProfesional(plan) }}</h3>
+      <p class="m-0" style="color: var(--fono-texto-cuerpo);">{{ textoPeriodicidad(plan) }}</p>
+      <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">{{ textoPeriodoActual(plan) }}</p>
+
+      <div class="info-alert mt-3" *ngIf="plan.indicaciones">
+        <strong>{{ t().pmc_terapia.indicaciones_titulo }}</strong>
+        <p class="mt-1 mb-0" style="white-space: pre-line;">{{ plan.indicaciones }}</p>
+      </div>
+    </div>
+
+    <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">{{ t().pmc_terapia.ejercicios_titulo }}</h3>
+
+    <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+      <div class="form-card" style="max-width: none; display: flex; flex-direction: column;"
+           *ngFor="let pe of plan.ejercicios">
+
+        <div class="flex items-center gap-2 mb-2">
+          <span class="badge badge-cita-reservada">{{ pe.orden }}</span>
+          <h4 class="m-0 font-semibold" style="color: var(--fono-texto);">{{ pe.ejercicio.nombre }}</h4>
+        </div>
+
+        <!-- El ejemplo del fonoaudiólogo: cómo se hace -->
+        <p class="m-0 mb-1 text-xs font-semibold" style="color: var(--fono-texto-suave); text-transform: uppercase; letter-spacing: 0.05em;">
+          {{ t().pmc_terapia.ejemplo_titulo }}
+        </p>
+        <video [src]="pe.ejercicio.video_ejemplo" controls preload="metadata"
+               style="width: 100%; border-radius: 8px; background: #000;"></video>
+
+        <p class="mt-3 mb-0 text-sm" style="color: var(--fono-texto-cuerpo); white-space: pre-line;">{{ pe.ejercicio.instrucciones }}</p>
+
+        <!-- La indicación específica para este paciente, si el fono la dejó -->
+        <p class="mt-2 mb-0 text-sm" style="color: var(--fono-texto);" *ngIf="tieneIndicacion(pe)">
+          <strong>{{ t().pmc_terapia.indicacion_paciente }}</strong> {{ pe.indicaciones }}
+        </p>
+
+        <p class="mt-3 mb-0 text-xs" style="color: var(--fono-texto-suave); flex-grow: 1; display: flex; align-items: flex-end;">
+          {{ t().pmc_terapia.proximamente_video }}
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</div>

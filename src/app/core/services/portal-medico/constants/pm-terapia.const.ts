@@ -1,3 +1,5 @@
+import { Periodicidad } from '../interface/pm-terapia.interface';
+
 // Constantes de la terapia. Separadas del servicio según Specs.md.
 
 /**
@@ -13,3 +15,16 @@ export const EJEMPLO_TAMANO_MAXIMO_MB = 30;
 
 /** Ejercicios que caben en un plan. Lo fijó el fonoaudiólogo: más no se cumplen. */
 export const EJERCICIOS_MAXIMOS_POR_PLAN = 3;
+
+/**
+ * Periodicidades ofrecidas en el formulario, en el orden en que se muestran.
+ * El texto visible sale de textos.ts (pm_plan.periodicidad_*).
+ */
+export const PERIODICIDADES: Periodicidad[] = ['DIARIA', 'SEMANAL', 'QUINCENAL'];
+
+/** Días de cada periodicidad, para explicar el periodo en pantalla. */
+export const DIAS_POR_PERIODICIDAD: Record<Periodicidad, number> = {
+  DIARIA: 1,
+  SEMANAL: 7,
+  QUINCENAL: 15
+};

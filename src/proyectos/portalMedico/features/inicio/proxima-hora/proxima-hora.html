@@ -83,6 +83,21 @@
 
   }
 
+  <!-- ============ TERAPIA EN CURSO ============
+       Va antes del enlace a "todas mis horas" porque es lo que tiene tarea
+       pendiente: los ejercicios de esta semana no esperan a la próxima cita. -->
+  @if (planActivo) {
+    <div class="form-card mb-5" style="max-width: none;">
+      <h2 class="text-base font-semibold mt-0 mb-1" style="color: var(--fono-texto);">
+        {{ t().pmc_proxima_hora.terapia_titulo }}
+      </h2>
+      <p class="mt-0 mb-3" style="color: var(--fono-texto-cuerpo);">{{ textoTerapia }}</p>
+      <button type="button" class="btn-primary" (click)="irAMiTerapia()">
+        {{ t().pmc_proxima_hora.terapia_btn }}
+      </button>
+    </div>
+  }
+
   @if (!cargando) {
     <div class="mt-4">
       <a routerLink="/portalmedico/paciente/citas" class="text-sm"

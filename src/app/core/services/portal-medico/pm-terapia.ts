@@ -4,15 +4,21 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../constants/api.constants';
 
-import { Ejercicio } from './interface/pm-terapia.interface';
-import { CLAVE_PM_ACCESS } from './constants/pm-cliente.const';
+import {
+  Ejercicio,
+  PlanTerapia,
+  PlanTerapiaPayload,
+  ContextoPlanDeCita
+} from './interface/pm-terapia.interface';
+import { CLAVE_PM_ACCESS, CLAVE_PMC_ACCESS } from './constants/pm-cliente.const';
 
 /**
  * Terapia del Portal Médico (app PmTerapia): el catálogo de ejercicios del
- * fonoaudiólogo y, en entregas siguientes, los planes y el seguimiento.
+ * fonoaudiólogo, los planes de terapia de sus pacientes y, en entregas
+ * siguientes, los videos de progreso y el seguimiento.
  *
- * Todo lo del catálogo va con el token del profesional: los ejercicios son
- * privados y el backend rechaza cualquier otro.
+ * El catálogo y los planes van con el token del profesional; la lectura del
+ * propio plan, con el del paciente. El backend rechaza cualquier cruce.
  */
 @Injectable({
   providedIn: 'root'
@@ -23,6 +29,10 @@ export class PmTerapiaService {
 
   private getProfesionalAuthHeaders(): HttpHeaders {
     return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PM_ACCESS)}` });
+  }
+
+  private getClienteAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PMC_ACCESS)}` });
   }
 
   // ---------------------------------------------------------------------
@@ -61,6 +71,81 @@ export class PmTerapiaService {
     return this.http.delete<{ mensaje: string }>(
       `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.ejercicioEliminar(idEjercicio)}`,
       { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // Plan de terapia (fonoaudiólogo)
+  // ---------------------------------------------------------------------
+
+  /** Crea el plan desde una cita realizada. El cuerpo lleva id_cita. */
+  crearPlan(datos: PlanTerapiaPayload): Observable<PlanTerapia> {
+    return this.http.post<PlanTerapia>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planCrear}`,
+      datos,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  getMisPlanes(incluirCerrados = false): Observable<PlanTerapia[]> {
+    const ruta = incluirCerrados
+      ? API_ENDPOINTS.portalMedicoTerapia.planesTodos
+      : API_ENDPOINTS.portalMedicoTerapia.planes;
+
+    return this.http.get<PlanTerapia[]>(`${this.apiTerapia}${ruta}`, {
+      headers: this.getProfesionalAuthHeaders()
+    });
+  }
+
+  getPlan(idPlan: number): Observable<PlanTerapia> {
+    return this.http.get<PlanTerapia>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planDetalle(idPlan)}`,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /**
+   * Ajusta ejercicios, periodicidad o indicaciones. Solo viaja lo que cambia.
+   * Cambiar la periodicidad reinicia el plan a hoy: el backend lo hace, aquí
+   * solo conviene avisarlo antes de enviar.
+   */
+  ajustarPlan(idPlan: number, datos: PlanTerapiaPayload): Observable<PlanTerapia> {
+    return this.http.patch<PlanTerapia>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planAjustar(idPlan)}`,
+      datos,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  cerrarPlan(idPlan: number): Observable<PlanTerapia> {
+    return this.http.post<PlanTerapia>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planCerrar(idPlan)}`,
+      {},
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /**
+   * El plan activo del paciente de esa cita (o null), más el nombre del
+   * paciente y si tiene cuenta. El formulario del plan decide con esto si
+   * crea, ajusta, o explica por qué no se puede.
+   */
+  getPlanDeCita(idCita: number): Observable<ContextoPlanDeCita> {
+    return this.http.get<ContextoPlanDeCita>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.planDeCita(idCita)}`,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // Plan de terapia (paciente)
+  // ---------------------------------------------------------------------
+
+  /** Los planes activos del paciente con sesión, con ejercicios y video de ejemplo. */
+  getMisPlanesComoPaciente(): Observable<PlanTerapia[]> {
+    return this.http.get<PlanTerapia[]>(
+      `${this.apiTerapia}${API_ENDPOINTS.portalMedicoTerapia.misPlanes}`,
+      { headers: this.getClienteAuthHeaders() }
     );
   }
 

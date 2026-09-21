@@ -812,6 +812,78 @@ export const TEXTOS_SITIO = {
         error_guardar: "No pudimos guardar el ejercicio. Inténtalo nuevamente."
     },
 
+    // PLAN DE TERAPIA: formulario del fonoaudiólogo (crear y ajustar)
+    pm_plan: {
+        titulo_crear: "Asignar plan de terapia",
+        titulo_ajustar: "Ajustar plan de terapia",
+        subtitulo_crear: "Elige hasta {maximo} ejercicios de tu catálogo y cada cuánto debe reportar {paciente} con un video.",
+        subtitulo_ajustar: "El plan de {paciente}, activo desde el {inicio}. Los cambios rigen desde ahora.",
+        cargando: "Cargando...",
+        error_servidor: "No pudimos cargar el plan. Inténtalo nuevamente.",
+        error_cita: "No encontramos esa cita en tu agenda.",
+        bloqueo_cita_no_realizada: "El plan se asigna después de la atención: marca la cita como realizada primero.",
+        bloqueo_sin_cuenta: "{paciente} reservó sin crear una cuenta, así que no tiene dónde ver su plan ni subir videos. Pídele que se registre en el portal con el mismo RUT; después podrás asignárselo.",
+
+        // Periodicidad
+        label_periodicidad: "¿Cada cuánto debe enviar sus videos?",
+        periodicidad_DIARIA: "Todos los días",
+        periodicidad_SEMANAL: "Una vez por semana",
+        periodicidad_QUINCENAL: "Cada quince días",
+        aviso_cambio_periodicidad: "Cambiar la periodicidad reinicia el plan desde hoy: el conteo de periodos empieza de nuevo. Los videos anteriores se conservan.",
+
+        // Ejercicios
+        label_ejercicios: "Ejercicios ({elegidos} de {maximo})",
+        ayuda_ejercicios: "Marca los que va a practicar. Puedes agregar una indicación específica para este paciente en cada uno.",
+        sin_catalogo: "Todavía no tienes ejercicios en tu catálogo. Crea al menos uno para poder asignar un plan.",
+        btn_ir_catalogo: "Ir a mis ejercicios",
+        placeholder_indicacion_ejercicio: "Indicación para este paciente (opcional). Ej: 3 series de 10.",
+        alerta_ejercicios: "Elige al menos un ejercicio.",
+        alerta_maximo: "Como máximo {maximo} ejercicios: más de eso no se cumple.",
+
+        // Indicaciones generales
+        label_indicaciones: "Indicaciones generales (opcional)",
+        placeholder_indicaciones: "Lo que el paciente debe tener presente en toda la terapia.",
+
+        // Acciones
+        btn_guardando: "Guardando...",
+        btn_crear: "Asignar plan",
+        btn_guardar: "Guardar cambios",
+        btn_volver: "Volver a la agenda",
+        btn_cerrar_plan: "Cerrar este plan",
+        confirmar_cerrar: "¿Cerrar el plan? El paciente dejará de verlo y no podrá subir más videos. Podrás crear otro desde una próxima cita realizada.",
+        exito_crear: "Plan asignado. El paciente ya lo ve en su portal.",
+        exito_ajustar: "Cambios guardados.",
+        exito_cerrar: "Plan cerrado.",
+        error_guardar: "No pudimos guardar el plan. Inténtalo nuevamente.",
+        error_cerrar: "No pudimos cerrar el plan. Inténtalo nuevamente."
+    },
+
+    // MI TERAPIA: lo que ve el paciente con sesión
+    pmc_terapia: {
+        titulo: "Mi terapia",
+        subtitulo: "Los ejercicios que te dejó tu fonoaudiólogo/a y cada cuánto debes enviarle un video.",
+        error_servidor: "No pudimos cargar tu terapia. Inténtalo nuevamente.",
+
+        vacio_titulo: "Todavía no tienes un plan de terapia",
+        vacio_desc: "Tu fonoaudiólogo/a te lo asignará después de tu primera atención. Cuando lo haga, aparecerá aquí con los ejercicios y sus videos de ejemplo.",
+        vacio_btn: "Reservar una hora",
+
+        con_profesional: "Plan con {profesional}",
+        periodicidad: "Reportas {periodicidad}.",
+        periodicidad_DIARIA: "todos los días",
+        periodicidad_SEMANAL: "una vez por semana",
+        periodicidad_QUINCENAL: "cada quince días",
+        periodo_actual: "Periodo actual: del {desde} al {hasta}.",
+        periodo_actual_dia: "Periodo actual: hoy, {desde}.",
+        indicaciones_titulo: "Indicaciones de tu fonoaudiólogo/a",
+
+        ejercicios_titulo: "Tus ejercicios",
+        ejemplo_titulo: "Así se hace",
+        indicacion_paciente: "Para ti:",
+        // La subida llega en la siguiente entrega; mientras, se anuncia.
+        proximamente_video: "Pronto podrás subir aquí tu video practicando este ejercicio."
+    },
+
     // PANEL DEL FONOAUDIÓLOGO (lo que ve en el inicio cuando tiene sesión)
     pm_panel: {
         saludo: "Hola, {nombre}",
@@ -1433,6 +1505,8 @@ export const TEXTOS_SITIO = {
         videos_error: "No pudimos cargar los videos de esta cita.",
         // Acciones
         btn_marcar_realizada: "Marcar como realizada",
+        // Tras la cita: asignar o ajustar el plan de terapia del paciente
+        btn_plan_terapia: "Plan de terapia",
         btn_posponer: "Reprogramar",
         btn_cancelar: "Cancelar cita",
         confirmar_realizada: "¿Confirmas que atendiste esta cita?",
@@ -1600,6 +1674,7 @@ export const TEXTOS_SITIO = {
         registrarme: "Registrarme",
         iniciar_sesion: "Entrar como paciente",
         mi_video: "Mis videos",
+        mi_terapia: "Mi terapia",
         mis_citas: "Mis citas",
         reservar_hora: "Reservar hora",
         seguimiento: "Seguir mi hora",
@@ -1633,6 +1708,10 @@ export const TEXTOS_SITIO = {
         vacio_btn: "Reservar una hora",
 
         ver_todas: "Ver todas mis horas",
+        // Cuando hay plan de terapia activo
+        terapia_titulo: "Tu terapia",
+        terapia_desc: "Tienes un plan de ejercicios activo con {profesional}.",
+        terapia_btn: "Ver mi terapia",
         error_servidor: "No pudimos cargar tus horas. Inténtalo nuevamente."
     }
 };

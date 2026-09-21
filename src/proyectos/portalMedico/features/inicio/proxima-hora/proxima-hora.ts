@@ -5,7 +5,9 @@ import { Router, RouterModule } from '@angular/router';
 import { PortalMedicoService, ProfesionalDirectorio } from '@core/services/portal-medico/portal-medico';
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
 import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { PmTerapiaService } from '@core/services/portal-medico/pm-terapia';
 import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
+import { PlanTerapia } from '@core/services/portal-medico/interface/pm-terapia.interface';
 import { TextosService } from '@core/services/textos/textos';
 
 import { PendientePaciente } from './interface/proxima-hora.interface';
@@ -32,6 +34,7 @@ export class PmClienteProximaHoraComponent implements OnInit {
   public pmCitaService = inject(PmCitaService);
 
   private portalMedicoService = inject(PortalMedicoService);
+  private pmTerapiaService = inject(PmTerapiaService);
   private router = inject(Router);
   // App sin zone.js: cada respuesta HTTP necesita su detectChanges().
   private cdr = inject(ChangeDetectorRef);
@@ -42,11 +45,40 @@ export class PmClienteProximaHoraComponent implements OnInit {
 
   pendiente: PendientePaciente = { video: false, videoListo: false, cambios: false };
 
+  /** El plan de terapia activo, si el fonoaudiólogo ya le asignó uno. */
+  planActivo: PlanTerapia | null = null;
+
   private nombresProfesional = new Map<number, string>();
 
   ngOnInit(): void {
     this.cargarProximaHora();
     this.cargarNombresProfesional();
+    this.cargarPlan();
+  }
+
+  /**
+   * Independiente de la cita: un paciente puede no tener hora próxima y sí un
+   * plan en curso, y ese es justamente el que necesita el recordatorio a mano.
+   */
+  private cargarPlan(): void {
+    this.pmTerapiaService.getMisPlanesComoPaciente().subscribe({
+      next: (planes) => {
+        this.planActivo = planes[0] ?? null;
+        this.cdr.detectChanges();
+      },
+      // Sin el plan la pantalla sigue sirviendo: solo no aparece el acceso.
+      error: () => this.cdr.detectChanges()
+    });
+  }
+
+  get textoTerapia(): string {
+    return this.textosService.reemplazarVariables(this.t().pmc_proxima_hora.terapia_desc, {
+      profesional: this.planActivo?.profesional_nombre ?? ''
+    });
+  }
+
+  irAMiTerapia(): void {
+    this.router.navigate(['/portalmedico/paciente/terapia']);
   }
 
   get nombreCliente(): string {
