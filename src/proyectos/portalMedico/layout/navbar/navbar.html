@@ -121,6 +121,15 @@
 
                   <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
 
+                  <!-- Herramienta de terapia: no es de la cuenta, pero tampoco
+                       de uso diario como la agenda. En el menú queda a mano
+                       sin apretar la barra. -->
+                  <a routerLink="/portalmedico/ejercicios" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pm_navbar.mis_ejercicios }}
+                  </a>
+
+                  <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
+
                   <button type="button" role="menuitem" (click)="cerrarSesion()"
                           class="menu-perfil-opcion menu-perfil-salir">
                     {{ t().pm_navbar.cerrar_sesion }}
@@ -181,6 +190,7 @@
           <a routerLink="/portalmedico/documentos" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.documentos }}</a>
           <a routerLink="/portalmedico/especialidades" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.especialidades }}</a>
           <a routerLink="/portalmedico/acreditacion" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.acreditacion }}</a>
+          <a routerLink="/portalmedico/ejercicios" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.mis_ejercicios }}</a>
           <button (click)="cerrarSesion()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.cerrar_sesion }}</button>
         } @else if (pmClienteService.clienteActual()) {
           <!-- Paciente autenticado -->

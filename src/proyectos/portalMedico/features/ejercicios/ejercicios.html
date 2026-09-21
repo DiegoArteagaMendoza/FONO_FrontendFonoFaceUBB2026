@@ -1,0 +1,115 @@
+<div class="page-container">
+
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+    <div>
+      <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pm_ejercicios.titulo }}</h2>
+      <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pm_ejercicios.subtitulo }}</p>
+    </div>
+    <button type="button" class="btn-primary" (click)="abrirCrear()" *ngIf="modo === 'listado'">
+      {{ t().pm_ejercicios.btn_nuevo }}
+    </button>
+  </div>
+
+  <!-- ============ FORMULARIO (crear / editar) ============ -->
+  <div class="form-card mb-5" style="max-width: none;" *ngIf="modo !== 'listado'">
+    <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">{{ tituloFormulario }}</h3>
+
+    <div *ngIf="errorFormulario" class="error-alert mb-3">{{ errorFormulario }}</div>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" class="custom-form">
+
+      <div class="form-group">
+        <label for="nombre">{{ t().pm_ejercicios.label_nombre }}</label>
+        <input id="nombre" type="text" formControlName="nombre" maxlength="120"
+               [placeholder]="t().pm_ejercicios.placeholder_nombre">
+        <small class="error-text" *ngIf="campoInvalido('nombre')">{{ t().pm_ejercicios.alerta_nombre }}</small>
+      </div>
+
+      <div class="form-group">
+        <label for="instrucciones">{{ t().pm_ejercicios.label_instrucciones }}</label>
+        <textarea id="instrucciones" formControlName="instrucciones" rows="4"
+                  [placeholder]="t().pm_ejercicios.placeholder_instrucciones"></textarea>
+        <small class="error-text" *ngIf="campoInvalido('instrucciones')">{{ t().pm_ejercicios.alerta_instrucciones }}</small>
+      </div>
+
+      <!-- Al editar, el video actual se muestra y cambiarlo es opcional -->
+      <div class="form-group" *ngIf="modo === 'editar' && editando">
+        <label>{{ t().pm_ejercicios.video_actual }}</label>
+        <video [src]="editando.video_ejemplo" controls preload="metadata"
+               style="width: 100%; max-width: 360px; border-radius: 8px;"></video>
+      </div>
+
+      <div class="form-group file-upload-section">
+        <label for="video-ejemplo">
+          {{ modo === 'editar' ? t().pm_ejercicios.label_video_editar : t().pm_ejercicios.label_video }}
+        </label>
+        <input id="video-ejemplo" type="file" accept="video/*" (change)="alElegirVideo($event)" class="file-input">
+        <small class="help-text">{{ textoAyudaVideo }}</small>
+
+        <div class="preview-files" *ngIf="archivo">
+          <p class="m-0">
+            <strong>{{ t().pm_ejercicios.archivo_seleccionado }}</strong> {{ archivo.name }} ({{ tamanoMb }} MB)
+          </p>
+          <p class="m-0" *ngIf="duracionSegundos !== null">
+            <strong>{{ t().pm_ejercicios.duracion_detectada }}</strong>
+            {{ duracionSegundos }} {{ t().pm_ejercicios.segundos }}
+          </p>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="guardando">
+          {{ guardando ? t().pm_ejercicios.btn_guardando
+                       : (modo === 'editar' ? t().pm_ejercicios.btn_guardar : t().pm_ejercicios.btn_crear) }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="cerrarFormulario()" [disabled]="guardando">
+          {{ t().pm_ejercicios.btn_cancelar }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ============ CATÁLOGO ============ -->
+  <ng-container *ngIf="modo === 'listado'">
+
+    <div *ngIf="mensajeListado" class="success-alert mb-4">{{ mensajeListado }}</div>
+    <div *ngIf="errorListado" class="error-alert mb-4">{{ errorListado }}</div>
+
+    <div class="loading-state" *ngIf="cargando"><div class="spinner"></div></div>
+
+    <div class="empty-state" *ngIf="!cargando && ejercicios.length === 0">
+      <p class="m-0 text-lg font-semibold" style="color: var(--fono-texto);">{{ t().pm_ejercicios.vacio_titulo }}</p>
+      <p class="mt-2 mb-4" style="color: var(--fono-texto-suave);">{{ t().pm_ejercicios.vacio_desc }}</p>
+      <button type="button" class="btn-primary" (click)="abrirCrear()">{{ t().pm_ejercicios.btn_nuevo }}</button>
+    </div>
+
+    <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"
+         *ngIf="!cargando && ejercicios.length > 0">
+      <div class="form-card" style="max-width: none; display: flex; flex-direction: column;"
+           *ngFor="let ejercicio of ejercicios">
+
+        <!-- El ejemplo primero: es lo que distingue a un ejercicio de otro de un vistazo -->
+        <video [src]="ejercicio.video_ejemplo" controls preload="metadata"
+               style="width: 100%; border-radius: 8px; background: #000;"></video>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 mt-3">
+          <h3 class="m-0 font-semibold" style="color: var(--fono-texto);">{{ ejercicio.nombre }}</h3>
+          <span class="badge badge-pendiente">{{ textoDuracion(ejercicio) }}</span>
+        </div>
+
+        <p class="mt-2 mb-0 text-sm" style="color: var(--fono-texto-cuerpo); white-space: pre-line; flex-grow: 1;">{{ ejercicio.instrucciones }}</p>
+
+        <div class="form-actions mt-3">
+          <button type="button" class="btn-secondary" (click)="abrirEditar(ejercicio)">
+            {{ t().pm_ejercicios.btn_editar }}
+          </button>
+          <button type="button" class="btn-icon delete" (click)="eliminar(ejercicio)">
+            {{ t().pm_ejercicios.btn_eliminar }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>
