@@ -28,3 +28,11 @@ export const DIAS_POR_PERIODICIDAD: Record<Periodicidad, number> = {
   SEMANAL: 7,
   QUINCENAL: 15
 };
+
+/**
+ * Reglas del video de progreso, espejo de PmTerapia/models.py: mismos topes
+ * que el de síntomas, pero vive solo 7 días.
+ */
+export const PROGRESO_DURACION_MAXIMA_SEGUNDOS = 30;
+export const PROGRESO_TAMANO_MAXIMO_MB = 50;
+export const PROGRESO_DIAS_VIGENCIA = 7;

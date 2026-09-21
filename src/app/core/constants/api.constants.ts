@@ -171,7 +171,13 @@ export const API_ENDPOINTS = {
     planDeCita: (idCita: number) => `/planes/de-cita/${idCita}/`,
 
     // Plan de terapia, lado del paciente (token del paciente)
-    misPlanes: '/mis-planes/'
+    misPlanes: '/mis-planes/',
+
+    // Videos de progreso del paciente: uno por ejercicio en cada periodo,
+    // viven 7 días. Subir va en FormData.
+    miPlanVideoSubir: (idPlan: number) => `/mis-planes/${idPlan}/videos/subir/`,
+    miPlanVideos: (idPlan: number) => `/mis-planes/${idPlan}/videos/`,
+    miVideoProgresoEliminar: (idVideo: number) => `/mis-videos/${idVideo}/eliminar/`
   },
 
   // Autoevaluación / diagnóstico rápido (backend FonoApp, app FonoAppDiagnostico).

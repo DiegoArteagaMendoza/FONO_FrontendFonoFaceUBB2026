@@ -880,8 +880,48 @@ export const TEXTOS_SITIO = {
         ejercicios_titulo: "Tus ejercicios",
         ejemplo_titulo: "Así se hace",
         indicacion_paciente: "Para ti:",
-        // La subida llega en la siguiente entrega; mientras, se anuncia.
-        proximamente_video: "Pronto podrás subir aquí tu video practicando este ejercicio."
+
+        // Estado del ejercicio en el periodo en curso
+        estado_enviado: "Enviado en este periodo",
+        estado_falta: "Falta tu video de este periodo",
+
+        // Subida del video de progreso
+        btn_subir: "Subir mi video",
+        btn_subir_otro: "Subir otro",
+        btn_cancelar: "Cancelar",
+        subir_titulo: "Tu video practicando: {ejercicio}",
+        subir_desc: "Grábate haciendo el ejercicio tal como lo practicas. Tu fonoaudiólogo/a lo revisará y te dejará comentarios.",
+        label_video: "Tu video",
+        ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}. Se elimina solo a los {dias} días; los comentarios que te dejen se conservan.",
+        archivo_seleccionado: "Archivo:",
+        duracion_detectada: "Duración:",
+        segundos: "segundos",
+        label_comentario: "¿Algo que contarle? (opcional)",
+        placeholder_comentario: "Ej: Me costó la última serie, sentí la garganta apretada.",
+        btn_enviando: "Enviando...",
+        btn_enviar: "Enviar",
+        alerta_video_req: "Selecciona un video antes de enviarlo.",
+        alerta_video_formato: "Ese formato no está permitido. Usa {formatos}.",
+        alerta_video_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        alerta_video_duracion: "El video dura {duracion} segundos y el máximo son {maximo}.",
+        alerta_video_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        exito_subir: "Listo, tu video quedó enviado.",
+        error_subir: "No pudimos enviar tu video. Inténtalo nuevamente.",
+
+        // Historial
+        historial_titulo: "Tus videos enviados",
+        historial_vacio: "Todavía no has enviado ningún video.",
+        historial_periodo: "Periodo {numero}",
+        historial_vence: "Se elimina en {dias} días",
+        historial_vencido: "Video ya eliminado",
+        historial_comentario: "Tu comentario:",
+        retro_titulo: "Comentario de tu fonoaudiólogo/a",
+        retro_pendiente: "Aún sin comentarios.",
+        btn_quitar: "Quitar",
+        confirmar_quitar: "¿Quitar este video? Si era el de este periodo, tendrás que grabar otro.",
+        exito_quitar: "Video quitado.",
+        error_quitar: "No pudimos quitar el video. Inténtalo nuevamente.",
+        error_historial: "No pudimos cargar tus videos."
     },
 
     // PANEL DEL FONOAUDIÓLOGO (lo que ve en el inicio cuando tiene sesión)
