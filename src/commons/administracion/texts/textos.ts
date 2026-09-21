@@ -1661,6 +1661,9 @@ export const TEXTOS_SITIO = {
         cambios_cerrados: "Ya no admite cambios: faltan menos de {horas} horas.",
         sin_reprogramaciones: "Alcanzó el máximo de {maximas} cambios de fecha. Si ya no te sirve, cancélala.",
         ya_paso: "Esta hora ya pasó.",
+        // Cita realizada vista con código: la terapia necesita cuenta
+        terapia_sin_cuenta: "Si tu fonoaudiólogo te dejó ejercicios para la casa, los verás en el portal con una cuenta. Créala con el mismo RUT con el que reservaste esta hora.",
+        btn_crear_cuenta: "Crear mi cuenta",
         btn_otro_codigo: "Consultar otro código",
         // Acciones
         btn_posponer: "Cambiar fecha",
