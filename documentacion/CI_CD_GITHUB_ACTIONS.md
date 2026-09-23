@@ -37,7 +37,7 @@ En el repo: **Settings → Secrets and variables → Actions → New repository 
 
 | Secret | Valor | Dónde se obtiene |
 |---|---|---|
-| `FTP_SERVER` | Host FTP, p. ej. `ftp.tudominio.cl` | cPanel → Cuentas FTP (o el resumen de la cuenta de hosting) |
+| `FTP_SERVER` | Host FTP, p. ej. `ftp.vocare-ubb.cl` | cPanel → Cuentas FTP (o el resumen de la cuenta de hosting) |
 | `FTP_USERNAME` | Usuario de la cuenta FTP | cPanel → Cuentas FTP |
 | `FTP_PASSWORD` | Contraseña de esa cuenta FTP | La que definiste al crear la cuenta FTP |
 | `FTP_SERVER_DIR` | Ruta remota destino, p. ej. `/public_html/` | La carpeta del dominio/subdominio en cPanel |

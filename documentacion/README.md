@@ -18,9 +18,9 @@ Solo los dos últimos grupos (`.htaccess` y los `.yml`) son "plantillas" en el s
 
 ## Checklist para implementarlo cuando llegue el momento
 
-1. **Backend del Portal Médico desplegado** y `apiUrlPortalMedico` en `src/environments/environment.ts` actualizado (hoy es un placeholder) — ver [ARQUITECTURA.md §5.1](./ARQUITECTURA.md#51-nota-operativa).
+1. **Confirmar backend(s) de destino.** `apiUrl`/`apiUrlPortalMedico*` en `src/environments/environment.ts` ya no son placeholders: apuntan al entorno *develop* (`dev-api.vocare-ubb.cl`, `dev-portal.vocare-ubb.cl`) — ver [ARQUITECTURA.md §5.1](./ARQUITECTURA.md#51-nota-operativa). Si el deploy real es a producción sobre `vocare-ubb.cl` (sin `dev-`) con backends distintos, actualizar el archivo antes de este paso.
 2. **CORS** habilitado en ambos backends Django para el dominio final del frontend.
-3. **Contratar/activar el hosting** (V2Networks Plan Emprendedor u otro) y apuntar el dominio.
+3. **Hosting activo** (V2Networks Plan Emprendedor) con el dominio `vocare-ubb.cl` y sus subdominios ya apuntando ahí.
 4. Activar el `.htaccess`:
    ```bash
    cp documentacion/plantillas/.htaccess public/.htaccess

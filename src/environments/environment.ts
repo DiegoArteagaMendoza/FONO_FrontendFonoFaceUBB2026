@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  // Entorno "develop" en cPanel (V2Networks), ver DOCUMENTACION_DESPLIEGUE.md.
+  // Entorno "develop" en cPanel (V2Networks), ver documentacion/DEPLOY_V2NETWORKS.md.
   apiUrl: 'https://dev-api.vocare-ubb.cl/api',
 
   // Backend del Portal Médico (FonoAppPortalMedico), mismo entorno develop.

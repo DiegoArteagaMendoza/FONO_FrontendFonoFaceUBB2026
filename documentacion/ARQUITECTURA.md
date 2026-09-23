@@ -69,16 +69,21 @@ Un solo `Routes[]` en `app.routes.ts`, con tres bloques de nivel superior envuel
 Dos APIs Django independientes, cada una con su propia base URL en `src/environments/`:
 
 ```ts
-// environment.ts (producción)
-apiUrl:               'https://proyectofonoaudiologiafaceubb2026.onrender.com/api'
-apiUrlPortalMedico:   'https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/medicos' // placeholder, ver §5.1
+// environment.ts (build "production" de Angular, apuntando hoy al entorno develop en V2Networks)
+apiUrl:                        'https://dev-api.vocare-ubb.cl/api'
+apiUrlPortalMedico:            'https://dev-portal.vocare-ubb.cl/api/pm/medicos'
+apiUrlPortalMedicoClientes:    'https://dev-portal.vocare-ubb.cl/api/pm/clientes'
+apiUrlPortalMedicoVideos:      'https://dev-portal.vocare-ubb.cl/api/pm/videos'
+apiUrlPortalMedicoCitas:       'https://dev-portal.vocare-ubb.cl/api/pm/citas'
 ```
+
+Las cuatro URLs de `apiUrlPortalMedico*` apuntan al mismo backend Django (`FonoAppPortalMedico`, host `dev-portal.vocare-ubb.cl`), solo cambia el prefijo de recurso: `medicos` (directorio/perfil/acreditación de profesionales), `clientes` (registro de pacientes que buscan atención telemática), `videos` (subida de videos de síntomas) y `citas` (agenda de citas telemáticas).
 
 Los endpoints concretos de cada API viven centralizados en `src/app/core/constants/api.constants.ts` (objeto `API_ENDPOINTS`), para no repetir strings en los servicios. Cada servicio de `core/services/*` es un cliente HTTP delgado sobre uno de estos dos backends; no hay lógica de negocio relevante en los servicios más allá de construir URLs, adjuntar el header `Authorization: Bearer <token>` correcto y traducir errores del backend a mensajes legibles (`PortalMedicoService.extraerMensajeError`).
 
 ### 5.1 Nota operativa
 
-`environment.ts` de producción todavía tiene `apiUrlPortalMedico` apuntando a un placeholder (`TU-DEPLOY-PORTAL-MEDICO.onrender.com`). **Antes de un build de producción real, hay que reemplazar esa URL por el deploy definitivo del backend `FonoAppPortalMedico`**, o el módulo Portal Médico completo (login, registro, directorio, acreditación) quedará roto en producción aunque el resto de la app funcione.
+`environment.ts` ya no usa placeholders: las cinco URLs de API apuntan al entorno **develop** desplegado en V2Networks (`dev-api.vocare-ubb.cl`, `dev-portal.vocare-ubb.cl`), como indica el comentario en el propio archivo. **Esto no es necesariamente el dominio final de producción** (`vocare-ubb.cl` sin el subdominio `dev-`) — si el proyecto pasa de este entorno de desarrollo a producción definitiva, hay que decidir si se reutilizan estos mismos backends `dev-*` o se despliegan backends nuevos bajo el dominio raíz, y actualizar `environment.ts` en consecuencia antes de ese build (ver checklist en [DEPLOY_V2NETWORKS.md](./DEPLOY_V2NETWORKS.md)).
 
 ### 5.2 Interceptor de autenticación
 

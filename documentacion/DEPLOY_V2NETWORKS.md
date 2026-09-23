@@ -13,16 +13,19 @@ Del Plan Emprendedor usamos en concreto:
 - **cPanel** como panel de administración del hosting.
 - **Cuentas FTP** para subir los archivos (o el **Administrador de archivos** web de cPanel para hacerlo manualmente).
 - **SSL gratis (AutoSSL)** para servir por HTTPS.
-- **Dominios/subdominios adicionales ilimitados**, útil si además del dominio principal se quiere un subdominio de staging (p. ej. `staging.tudominio.cl`).
+- **Dominios/subdominios adicionales ilimitados**, ya en uso para separar el entorno de desarrollo (`dev-api.vocare-ubb.cl`, `dev-portal.vocare-ubb.cl`) del dominio principal.
 
 ## 1. Antes de desplegar: checklist
 
-1. **Backend(s) desplegados y accesibles por HTTPS.** El frontend en producción usa `src/environments/environment.ts`, que hoy apunta a:
-   - `apiUrl`: `https://proyectofonoaudiologiafaceubb2026.onrender.com/api`
-   - `apiUrlPortalMedico`: placeholder `https://TU-DEPLOY-PORTAL-MEDICO.onrender.com/api/pm/medicos` — **hay que reemplazarlo por la URL real** antes del build, o el módulo Portal Médico quedará roto en producción (ver [ARQUITECTURA.md §5.1](./ARQUITECTURA.md#51-nota-operativa)).
-2. **CORS habilitado en ambos backends Django** para el dominio final donde vivirá el frontend (p. ej. `https://tudominio.cl`). Si el backend solo permite `localhost`, todas las peticiones del sitio en producción fallarán en el navegador aunque el build esté perfecto.
-3. **Dominio apuntando a V2Networks** (registros DNS `A`/`CNAME` ya propagados) si vas a usar un dominio propio en vez del subdominio temporal que entrega el hosting.
-4. Decide si el sitio vivirá en la **raíz** del dominio (`https://tudominio.cl/`) o en una **subcarpeta** (`https://tudominio.cl/vocare-ubb/`). `index.html` trae `<base href="/">` por defecto, pensado para la raíz — ver ajuste en el paso 3 si usas subcarpeta.
+1. **Backend(s) desplegados y accesibles por HTTPS.** El frontend usa `src/environments/environment.ts`, que hoy ya **no tiene placeholders** y apunta al entorno *develop* en V2Networks:
+   - `apiUrl`: `https://dev-api.vocare-ubb.cl/api`
+   - `apiUrlPortalMedico`: `https://dev-portal.vocare-ubb.cl/api/pm/medicos`
+   - `apiUrlPortalMedicoClientes` / `apiUrlPortalMedicoVideos` / `apiUrlPortalMedicoCitas`: mismo host `dev-portal.vocare-ubb.cl`, distinto recurso (ver [ARQUITECTURA.md §5.1](./ARQUITECTURA.md#51-nota-operativa)).
+
+   Estas son URLs de un entorno de **desarrollo**, no necesariamente el dominio final de producción (`vocare-ubb.cl` sin el subdominio `dev-`). Si el destino final del deploy es otro dominio/subdominio, o backends distintos, hay que actualizar `environment.ts` **antes** del build — de lo contrario el sitio compila bien pero llama a las APIs equivocadas.
+2. **CORS habilitado en ambos backends Django** para el dominio donde vivirá el frontend (hoy `dev-api.vocare-ubb.cl` / `dev-portal.vocare-ubb.cl`; si cambia el dominio de destino, actualizar CORS también). Si el backend solo permite `localhost`, todas las peticiones del sitio en producción fallarán en el navegador aunque el build esté perfecto.
+3. **Dominio apuntando a V2Networks** (registros DNS `A`/`CNAME` ya propagados) — en este caso `vocare-ubb.cl` y sus subdominios `dev-*`.
+4. Decide si el sitio vivirá en la **raíz** del dominio (`https://vocare-ubb.cl/`) o en una **subcarpeta** (`https://vocare-ubb.cl/vocare-ubb/`). `index.html` trae `<base href="/">` por defecto, pensado para la raíz — ver ajuste en el paso 3 si usas subcarpeta.
 
 ## 2. Activar el `.htaccess` y buildear
 
@@ -72,7 +75,7 @@ y ajusta `RewriteBase` en `public/.htaccess` (tu copia ya activada) antes del bu
 ### Opción B — Cliente FTP (FileZilla u otro)
 
 1. En cPanel → **Cuentas FTP**, crea una cuenta FTP (o usa las credenciales de la cuenta principal) apuntando al directorio del dominio/subdominio de destino.
-2. Conéctate con FileZilla (Host: el que indique cPanel, normalmente `ftp.tudominio.cl`; usuario/clave de la cuenta FTP creada; puerto 21, o SFTP por 22 si el plan lo habilita).
+2. Conéctate con FileZilla (Host: el que indique cPanel, normalmente `ftp.vocare-ubb.cl`; usuario/clave de la cuenta FTP creada; puerto 21, o SFTP por 22 si el plan lo habilita).
 3. Sube el **contenido** de `dist/FrontendVocareUBB/browser/` al directorio remoto (`public_html/` o el que corresponda).
 
 Esta es exactamente la opción que se automatiza con GitHub Actions — ver [CI_CD_GITHUB_ACTIONS.md](./CI_CD_GITHUB_ACTIONS.md).
@@ -83,7 +86,7 @@ En cPanel → **SSL/TLS Status** (o **AutoSSL**) → selecciona el dominio → *
 
 ## 5. Verificación post-deploy
 
-- Cargar `https://tudominio.cl/` → debe verse el portal público (`/portal/inicio` por el redirect de `app.routes.ts`).
+- Cargar `https://vocare-ubb.cl/` (o el subdominio `dev-*` correspondiente) → debe verse el portal público (`/portal/inicio` por el redirect de `app.routes.ts`).
 - Navegar a una ruta con parámetro y **recargar la página** ahí (p. ej. `/portal/lavoz/1`) → si aparece un 404 de Apache en vez de la app, revisa que `.htaccess` esté presente y que `mod_rewrite` esté habilitado (en cPanel compartido normalmente lo está por defecto).
 - Abrir la consola del navegador y confirmar que no hay errores de **CORS** ni `Mixed Content` (peticiones `http://` desde una página `https://`) al listar contenido del portal.
 - Probar login del panel admin (`/login`) y del Portal Médico (`/portalmedico/login`) contra los backends reales.
