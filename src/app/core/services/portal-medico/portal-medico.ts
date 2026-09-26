@@ -3,6 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../constants/api.constants';
+import {
+  ResultadoBajaProfesional,
+  ResultadoAltaProfesional
+} from './interface/pm-medico.interface';
 
 // =========================================================
 // INTERFACES (reflejan los serializers de PmMedico)
@@ -324,6 +328,27 @@ export class PortalMedicoService {
   getProfesionalDetalle(idProfesional: number): Observable<ProfesionalPerfil> {
     return this.http.get<ProfesionalPerfil>(
       `${this.apiUrl}${API_ENDPOINTS.portalMedico.detalle(idProfesional)}`,
+      { headers: this.getAdminAuthHeaders() }
+    );
+  }
+
+  // 1.b Estado de la cuenta del profesional
+  /**
+   * Da de baja la cuenta. Arrastra citas futuras (avisando al paciente), horas
+   * publicadas y planes de terapia; la respuesta dice cuántos de cada uno.
+   */
+  deshabilitarProfesional(idProfesional: number, motivo: string): Observable<ResultadoBajaProfesional> {
+    return this.http.patch<ResultadoBajaProfesional>(
+      `${this.apiUrl}${API_ENDPOINTS.portalMedico.profesionalDeshabilitar(idProfesional)}`,
+      { motivo },
+      { headers: this.getAdminAuthHeaders() }
+    );
+  }
+
+  habilitarProfesional(idProfesional: number): Observable<ResultadoAltaProfesional> {
+    return this.http.patch<ResultadoAltaProfesional>(
+      `${this.apiUrl}${API_ENDPOINTS.portalMedico.profesionalHabilitar(idProfesional)}`,
+      {},
       { headers: this.getAdminAuthHeaders() }
     );
   }

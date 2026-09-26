@@ -118,7 +118,9 @@ export class PortalMedicoLoginComponent implements OnInit {
       next: (respuesta) => {
         this.portalMedicoService.setSesionProfesional(respuesta);
         this.isSubmitting = false;
-        this.router.navigate(['/portalmedico/perfil']);
+        // Al inicio, no al perfil: lo primero que necesita ver al entrar es su
+        // jornada de hoy y lo que le falta, no sus datos de contacto.
+        this.router.navigate(['/portalmedico/inicio']);
       },
       error: (err) => this.manejarError(err, this.t().pm_login.error_credenciales, this.t().pm_login.error_servidor)
     });

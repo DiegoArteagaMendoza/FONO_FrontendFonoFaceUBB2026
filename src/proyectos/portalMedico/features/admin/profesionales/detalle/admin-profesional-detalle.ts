@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
@@ -13,7 +14,7 @@ import { TextosService } from '@core/services/textos/textos';
 @Component({
   selector: 'app-pm-admin-profesional-detalle',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './admin-profesional-detalle.html'
 })
 export class PmAdminProfesionalDetalleComponent implements OnInit {
@@ -30,6 +31,12 @@ export class PmAdminProfesionalDetalleComponent implements OnInit {
   // Documento que se está revisando en el visor (null = visor cerrado)
   documentoAbierto: DocumentoRespaldo | null = null;
   urlDocumentoSegura: SafeResourceUrl | null = null;
+
+  // Baja / alta de la cuenta. La baja pide motivo antes de ejecutarse: lo que
+  // se escriba viaja en el correo a los pacientes cuya hora se cancela.
+  confirmandoBaja = false;
+  motivoBaja = '';
+  procesandoEstado = false;
 
   private sanitizer = inject(DomSanitizer);
 
@@ -103,6 +110,82 @@ export class PmAdminProfesionalDetalleComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  // ---------------------------------------------------------------------
+  // Estado de la cuenta
+  // ---------------------------------------------------------------------
+
+  abrirBaja(): void {
+    this.confirmandoBaja = true;
+    this.motivoBaja = '';
+    this.errorMensaje = null;
+    this.mensajeExito = null;
+  }
+
+  cerrarBaja(): void {
+    this.confirmandoBaja = false;
+    this.motivoBaja = '';
+  }
+
+  deshabilitarCuenta(): void {
+    if (!this.profesional) return;
+
+    const idProfesional = this.profesional.id_profesional;
+    this.procesandoEstado = true;
+    this.errorMensaje = null;
+    this.mensajeExito = null;
+
+    this.portalMedicoService.deshabilitarProfesional(idProfesional, this.motivoBaja.trim()).subscribe({
+      next: (resultado) => {
+        this.procesandoEstado = false;
+        this.confirmandoBaja = false;
+        this.motivoBaja = '';
+        // El resumen se muestra tal cual: al administrador le importa saber a
+        // cuántos pacientes se les canceló la hora y si les llegó el aviso.
+        this.mensajeExito = this.textosService.reemplazarVariables(
+          this.t().pm_profesional_detalle.exito_baja,
+          {
+            citas: resultado.citas_canceladas + '',
+            avisados: resultado.pacientes_avisados + '',
+            bloques: resultado.bloques_retirados + '',
+            planes: resultado.planes_cerrados + ''
+          }
+        );
+        this.cargarDetalle(idProfesional);
+      },
+      error: (err) => this.manejarErrorEstado(err)
+    });
+  }
+
+  habilitarCuenta(): void {
+    if (!this.profesional) return;
+    if (!confirm(this.t().pm_profesional_detalle.confirmar_habilitar)) return;
+
+    const idProfesional = this.profesional.id_profesional;
+    this.procesandoEstado = true;
+    this.errorMensaje = null;
+    this.mensajeExito = null;
+
+    this.portalMedicoService.habilitarProfesional(idProfesional).subscribe({
+      next: () => {
+        this.procesandoEstado = false;
+        this.mensajeExito = this.t().pm_profesional_detalle.exito_habilitar;
+        this.cargarDetalle(idProfesional);
+      },
+      error: (err) => this.manejarErrorEstado(err)
+    });
+  }
+
+  private manejarErrorEstado(err: any): void {
+    this.procesandoEstado = false;
+    this.errorMensaje = this.portalMedicoService.extraerMensajeError(
+      err,
+      err.status === 403
+        ? this.t().pm_profesional_detalle.error_permisos
+        : this.t().pm_profesional_detalle.error_estado
+    );
+    this.cdr.detectChanges();
   }
 
   toggleValidezDocumento(idDocumento: number, esValidoActual: boolean): void {
