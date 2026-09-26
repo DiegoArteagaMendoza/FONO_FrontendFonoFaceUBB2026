@@ -55,9 +55,11 @@ export class PmPanelProfesionalComponent implements OnInit {
   errorHoras = false;
 
   /**
-   * Pacientes con plan de terapia que van atrasados. Es la única cifra de
-   * terapia que merece el panel: es la que pide acción hoy.
+   * Terapias en curso (planes activos) y, de esas, cuántos pacientes van
+   * atrasados. La primera dice cuánta terapia tiene andando; la segunda es la
+   * que pide acción hoy. Ambas salen del mismo listado, en una sola consulta.
    */
+  terapiasEnCurso: number | null = null;
   pacientesAtrasados: number | null = null;
 
   /** Solo se avisa cuando falta algo: estar aprobado es lo normal. */
@@ -72,13 +74,14 @@ export class PmPanelProfesionalComponent implements OnInit {
     this.cargarHoras();
     this.cargarAcreditacion();
     this.cargarNombresPaciente();
-    this.cargarAtrasados();
+    this.cargarTerapia();
   }
 
-  /** Sin terapia no hay cifra: si falla, el bloque no aparece y el panel sigue. */
-  private cargarAtrasados(): void {
+  /** Sin terapia no hay cifras: si falla, esos bloques no aparecen y el panel sigue. */
+  private cargarTerapia(): void {
     this.pmTerapiaService.getMisPlanes().subscribe({
       next: (planes) => {
+        this.terapiasEnCurso = planes.length;
         this.pacientesAtrasados = planes.filter(p => !p.al_dia).length;
         this.cdr.detectChanges();
       },

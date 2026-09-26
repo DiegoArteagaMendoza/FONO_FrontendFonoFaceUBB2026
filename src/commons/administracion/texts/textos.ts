@@ -1003,6 +1003,7 @@ export const TEXTOS_SITIO = {
         cifra_libres: "Horas libres publicadas",
         cifra_reservadas: "Horas ya reservadas",
         cifras_error: "No pudimos cargar el resumen de tus horas.",
+        cifra_terapias: "Terapias en seguimiento",
         cifra_atrasados: "Pacientes atrasados en su terapia",
 
         // El aviso más útil del panel: sin horas publicadas nadie puede
@@ -1270,7 +1271,27 @@ export const TEXTOS_SITIO = {
         error_validar: "No se pudo actualizar el documento. Verifica que tengas permisos de administrador (rol Admin o SuperAdmin).",
 
         seccion_especialidades: "Especialidades",
-        sin_especialidades: "El profesional no tiene especialidades asignadas."
+        sin_especialidades: "El profesional no tiene especialidades asignadas.",
+
+        // Estado de la cuenta: habilitar / deshabilitar
+        seccion_estado: "Estado de la cuenta",
+        estado_habilitada: "Habilitada",
+        estado_deshabilitada: "Deshabilitada",
+        estado_desc_habilitada: "Puede iniciar sesión, publicar horas y atender. Aparece en el directorio si su acreditación está aprobada.",
+        estado_desc_deshabilitada: "No puede iniciar sesión ni aparece en el directorio. Sus horas y planes de terapia fueron retirados al darlo de baja.",
+        btn_deshabilitar: "Deshabilitar cuenta",
+        btn_habilitar: "Habilitar cuenta",
+        baja_titulo: "Deshabilitar esta cuenta",
+        baja_advertencia: "Al deshabilitarla, sus horas futuras se retiran, sus citas ya reservadas se cancelan avisando por correo a cada paciente, y sus planes de terapia activos se cierran. Nada de eso se recupera al volver a habilitarla.",
+        baja_label_motivo: "Motivo (opcional)",
+        baja_placeholder_motivo: "Se incluye en el correo que reciben los pacientes. Ej: el profesional ya no forma parte del equipo.",
+        btn_confirmar_baja: "Sí, deshabilitar",
+        btn_cancelar_baja: "Volver",
+        procesando_estado: "Procesando...",
+        confirmar_habilitar: "¿Confirmas habilitar esta cuenta? El profesional podrá volver a entrar y publicar horas, pero sus citas canceladas no se recuperan.",
+        exito_habilitar: "Cuenta habilitada correctamente.",
+        exito_baja: "Cuenta deshabilitada. Citas canceladas: {citas} (pacientes avisados: {avisados}). Horas retiradas: {bloques}. Planes de terapia cerrados: {planes}.",
+        error_estado: "No se pudo cambiar el estado de la cuenta. Inténtalo nuevamente."
     },
 
     // CATÁLOGO ADMIN DE ESPECIALIDADES

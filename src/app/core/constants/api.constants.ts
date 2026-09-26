@@ -49,6 +49,10 @@ export const API_ENDPOINTS = {
     detalle: (idProfesional: number) => `/${idProfesional}/`,
     directorio: '/directorio/',
 
+    // Estado de la cuenta del profesional (solo administrador)
+    profesionalDeshabilitar: (idProfesional: number) => `/${idProfesional}/deshabilitar/`,
+    profesionalHabilitar: (idProfesional: number) => `/${idProfesional}/habilitar/`,
+
     // Documentos de respaldo
     documentoSubir: '/documentos/subir/',
     documentoEliminar: (idDocumento: number) => `/documentos/${idDocumento}/eliminar/`,
