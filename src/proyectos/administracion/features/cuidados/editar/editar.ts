@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { CuidadosService, Cuidado } from '@core/services/cuidados/cuidados';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-editar-cuidado',
@@ -25,7 +26,6 @@ export class EditarCuidado implements OnInit {
   
   imagenActualUrl: string | null = null;
   nuevaImagenSeleccionada: File | null = null;
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private fb: FormBuilder,
@@ -83,9 +83,7 @@ export class EditarCuidado implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string | null): string {
-    if (!ruta) return '';
-    if (ruta.startsWith('http')) return ruta;
-    return ruta.startsWith('/') ? this.backendUrl + ruta : `${this.backendUrl}/${ruta}`;
+    return resolverUrlImagen(ruta);
   }
 
   onFileChange(event: any): void {

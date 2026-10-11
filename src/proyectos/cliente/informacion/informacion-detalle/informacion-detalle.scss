@@ -17,6 +17,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 2.75rem; /* 44px: área cómoda para el dedo; el texto se ve igual */
   display: flex;
   align-items: center;
   transition: color 0.2s;
@@ -102,7 +103,7 @@
 
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
     gap: 1.5rem;
 
     img {

@@ -6,6 +6,7 @@ import { NoticiasService, ImagenNoticia } from '@core/services/noticias/noticias
 
 // IMPORT DE TEXTOS
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-editar-noticia',
@@ -26,7 +27,6 @@ export class EditarNoticia implements OnInit {
 
   imagenesActuales: ImagenNoticia[] = [];
   imagenesNuevas: File[] = [];
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private fb: FormBuilder,
@@ -80,9 +80,7 @@ export class EditarNoticia implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   eliminarImagen(idImagen: number): void {

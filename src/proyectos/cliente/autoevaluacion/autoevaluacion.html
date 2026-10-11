@@ -1,0 +1,27 @@
+<div class="cliente-page">
+  <div class="page-header text-center">
+    <h1>{{ t().portal_autoevaluacion.titulo }}</h1>
+    <p>{{ t().portal_autoevaluacion.subtitulo }}</p>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().portal_autoevaluacion.cargando }}</p>
+  </div>
+
+  <div class="formularios-grid" *ngIf="!cargando">
+
+    <div *ngIf="formularios.length === 0" class="empty-state">
+      <p>{{ t().portal_autoevaluacion.vacio }}</p>
+    </div>
+
+    <article class="formulario-card" *ngFor="let item of formularios" (click)="responder(item.id_formulario)">
+      <div class="card-content">
+        <h3>{{ item.nombre }}</h3>
+        <p>{{ (item.descripcion.length > 140) ? (item.descripcion | slice:0:140) + '...' : item.descripcion }}</p>
+        <span class="preguntas-badge">{{ totalPreguntas(item) }} {{ t().portal_autoevaluacion.preguntas_totales }}</span>
+        <span class="read-more">{{ t().portal_autoevaluacion.responder }}</span>
+      </div>
+    </article>
+  </div>
+</div>

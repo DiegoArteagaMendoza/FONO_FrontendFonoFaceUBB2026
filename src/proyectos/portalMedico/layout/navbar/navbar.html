@@ -2,11 +2,16 @@
   <div class="max-w-6xl mx-auto px-4">
     <div class="flex items-center justify-between h-16">
 
-      <a routerLink="/portalmedico/inicio" class="text-xl font-bold tracking-wide" (click)="closeMenu()">
+      <a routerLink="/portalmedico/inicio" class="text-xl font-bold tracking-wide whitespace-nowrap shrink-0" (click)="closeMenu()">
         {{ t().pm_navbar.marca }}
       </a>
 
-      <button class="md:hidden text-white" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
+      <!-- El corte a barra completa va en lg (1024px), no en md (768px): con
+           siete elementos (la barra del fonoaudiólogo), entre 768 y ~960px los
+           textos se partían en dos líneas y a 768 la barra se desbordaba. -->
+      <!-- p-2: el área para tocar pasa de 24px (solo el ícono) a 40px. -->
+      <button class="lg:hidden text-white p-2 -mr-2 rounded-md hover:bg-sky-700 dark:hover:bg-slate-700"
+              (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" [attr.aria-label]="t().globales.abrir_menu">
         <svg *ngIf="!isMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
@@ -15,53 +20,61 @@
         </svg>
       </button>
 
-      <div class="hidden md:flex items-center gap-1">
+      <div class="hidden lg:flex items-center gap-1">
         <a routerLink="/portalmedico/inicio" routerLinkActive="bg-sky-700 dark:bg-slate-700" [routerLinkActiveOptions]="{exact: true}"
            class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
           {{ t().pm_navbar.inicio }}
         </a>
-        <a routerLink="/portalmedico/directorio" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-           class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-          {{ t().pm_navbar.directorio }}
-        </a>
+        <!-- El directorio es la vitrina para quien busca atención. Al
+             fonoaudiólogo no le sirve: ahí solo vería a sus colegas. -->
+        @if (!esProfesional) {
+          <a routerLink="/portalmedico/directorio" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
+            {{ t().pm_navbar.directorio }}
+          </a>
+        }
 
-        @if (portalMedicoService.profesionalActual()) {
+        @if (esProfesional) {
           <!-- La agenda va primero: es la pantalla de uso diario del profesional -->
           <a routerLink="/portalmedico/agenda" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
             {{ t().pmc_navbar.mi_agenda }}
           </a>
-          <a routerLink="/portalmedico/perfil" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+          <a routerLink="/portalmedico/disponibilidad" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.mi_perfil }}
+            {{ t().pmc_navbar.mis_horas }}
           </a>
-          <a routerLink="/portalmedico/documentos" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+          <!-- El seguimiento es trabajo de revisión periódica: va en la barra,
+               no en el menú de la cuenta. -->
+          <a routerLink="/portalmedico/seguimiento" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.documentos }}
+            {{ t().pm_navbar.seguimiento }}
           </a>
-          <a routerLink="/portalmedico/especialidades" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+
+          <!-- El desplegable de la cuenta ya no va aquí: cuelga del avatar,
+               al extremo derecho de la barra. -->
+        }
+
+        <!-- Reservar está abierto a cualquiera: no hace falta cuenta para pedir
+             hora. Solo se oculta al profesional, que no reserva nada. -->
+        @if (!esProfesional) {
+          <a routerLink="/portalmedico/paciente/citas/reservar" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.especialidades }}
-          </a>
-          <a routerLink="/portalmedico/acreditacion" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.acreditacion }}
+            {{ t().pmc_navbar.reservar_hora }}
           </a>
         }
 
-        <!-- Sección del paciente autenticado -->
-        @if (!portalMedicoService.profesionalActual() && pmClienteService.clienteActual()) {
-          <a routerLink="/portalmedico/paciente/citas" routerLinkActive="bg-sky-700 dark:bg-slate-700"
+        <!-- El seguimiento por código es la vía de quien reservó sin cuenta.
+             Al paciente con sesión no le hace falta: sus horas están en el
+             menú de su cuenta. -->
+        @if (!haySesion) {
+          <a routerLink="/portalmedico/cita/seguimiento" routerLinkActive="bg-sky-700 dark:bg-slate-700"
              class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pmc_navbar.mis_citas }}
-          </a>
-          <a routerLink="/portalmedico/paciente/video" routerLinkActive="bg-sky-700 dark:bg-slate-700"
-             class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pmc_navbar.mi_video }}
+            {{ t().pmc_navbar.seguimiento }}
           </a>
         }
 
-        <!-- Salida al portal público de FonoFace. Antes solo existía en el menú
+        <!-- Salida al portal público de Vocare UBB. Antes solo existía en el menú
              móvil, así que en escritorio no había forma de volver. -->
         <a routerLink="/portal/inicio"
            class="px-3 py-2 rounded-md text-sm font-medium text-sky-200 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
@@ -70,18 +83,89 @@
 
         <app-boton-tema class="text-white ml-1"></app-boton-tema>
 
-        <!-- Un único acceso: la pantalla de login trae las pestañas para elegir
-             si entras como paciente o como fonoaudiólogo/a. -->
-        @if (portalMedicoService.profesionalActual()) {
-          <button (click)="cerrarSesion()"
-                  class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pm_navbar.cerrar_sesion }}
-          </button>
-        } @else if (pmClienteService.clienteActual()) {
-          <button (click)="cerrarSesionPaciente()"
-                  class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
-            {{ t().pmc_navbar.cerrar_sesion }}
-          </button>
+        <!-- ============ AVATAR DE LA CUENTA ============
+             Al extremo derecho, que es donde la gente lo busca. Contesta de un
+             vistazo "¿estoy dentro y como quién?" y agrupa todo lo de la cuenta,
+             igual para el profesional y para el paciente. -->
+        @if (haySesion) {
+          <div class="relative ml-2">
+            <button type="button" (click)="alternarMenuPerfil($event)"
+                    [attr.aria-expanded]="menuPerfilAbierto" aria-haspopup="true"
+                    [attr.aria-label]="t().pm_navbar.aria_menu_cuenta"
+                    class="pl-1 pr-2 py-1 rounded-full text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors flex items-center gap-2"
+                    [class.bg-sky-700]="menuPerfilAbierto">
+              <span class="avatar-sesion" aria-hidden="true">{{ iniciales }}</span>
+              <span class="hidden lg:inline">{{ nombreSesion }}</span>
+              <svg class="w-4 h-4 transition-transform" [class.rotate-180]="menuPerfilAbierto"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            @if (menuPerfilAbierto) {
+              <div class="absolute right-0 mt-1 py-1 w-56 rounded-md shadow-lg z-50"
+                   style="background-color: var(--fono-superficie); border: 1px solid var(--fono-borde);"
+                   role="menu">
+
+                <!-- Encabezado: el nombre por sí solo no dice con qué tipo de
+                     cuenta se entró, y son dos identidades distintas. -->
+                <div class="px-4 py-2">
+                  <p class="m-0 text-sm font-semibold" style="color: var(--fono-texto);">{{ nombreSesion }}</p>
+                  <p class="m-0 text-xs" style="color: var(--fono-texto-suave);">{{ etiquetaSesion }}</p>
+                </div>
+
+                <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
+
+                @if (esProfesional) {
+                  <a routerLink="/portalmedico/perfil" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pm_navbar.mi_perfil }}
+                  </a>
+                  <a routerLink="/portalmedico/documentos" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pm_navbar.documentos }}
+                  </a>
+                  <a routerLink="/portalmedico/especialidades" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pm_navbar.especialidades }}
+                  </a>
+                  <a routerLink="/portalmedico/acreditacion" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pm_navbar.acreditacion }}
+                  </a>
+
+                  <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
+
+                  <!-- Herramienta de terapia: no es de la cuenta, pero tampoco
+                       de uso diario como la agenda. En el menú queda a mano
+                       sin apretar la barra. -->
+                  <a routerLink="/portalmedico/ejercicios" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pm_navbar.mis_ejercicios }}
+                  </a>
+
+                  <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
+
+                  <button type="button" role="menuitem" (click)="cerrarSesion()"
+                          class="menu-perfil-opcion menu-perfil-salir">
+                    {{ t().pm_navbar.cerrar_sesion }}
+                  </button>
+                } @else {
+                  <a routerLink="/portalmedico/paciente/citas" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pmc_navbar.mis_citas }}
+                  </a>
+                  <a routerLink="/portalmedico/paciente/video" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pmc_navbar.mi_video }}
+                  </a>
+                  <a routerLink="/portalmedico/paciente/terapia" role="menuitem" class="menu-perfil-opcion">
+                    {{ t().pmc_navbar.mi_terapia }}
+                  </a>
+
+                  <hr class="my-1" style="border: 0; border-top: 1px solid var(--fono-borde);">
+
+                  <button type="button" role="menuitem" (click)="cerrarSesionPaciente()"
+                          class="menu-perfil-opcion menu-perfil-salir">
+                    {{ t().pmc_navbar.cerrar_sesion }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
         } @else {
           <a routerLink="/portalmedico/login"
              class="ml-2 px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900 hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
@@ -93,25 +177,51 @@
 
     <!-- Menú móvil -->
     @if (isMenuOpen) {
-      <div class="md:hidden pb-4 flex flex-col gap-1">
-        <a routerLink="/portalmedico/inicio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.inicio }}</a>
-        <a routerLink="/portalmedico/directorio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.directorio }}</a>
+      <!-- Tope de alto con scroll propio: la barra es sticky, así que si el
+           menú fuera más alto que la pantalla (teléfono acostado) sus últimas
+           opciones quedarían fuera de alcance. -->
+      <div class="lg:hidden pb-4 flex flex-col gap-1 overflow-y-auto" style="max-height: calc(100dvh - 4rem);">
 
-        @if (portalMedicoService.profesionalActual()) {
+        <!-- Con quién se entró, también en móvil: aquí no cabe el avatar, así
+             que el nombre y el tipo de cuenta encabezan el menú. -->
+        @if (haySesion) {
+          <div class="px-3 py-2 flex items-center gap-2">
+            <span class="avatar-sesion" aria-hidden="true">{{ iniciales }}</span>
+            <span>
+              <span class="block text-sm font-semibold">{{ nombreSesion }}</span>
+              <span class="block text-xs text-sky-200">{{ etiquetaSesion }}</span>
+            </span>
+          </div>
+        }
+
+        <a routerLink="/portalmedico/inicio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.inicio }}</a>
+
+        @if (!esProfesional) {
+          <a routerLink="/portalmedico/directorio" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.directorio }}</a>
+        }
+
+        @if (esProfesional) {
           <a routerLink="/portalmedico/agenda" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_agenda }}</a>
+          <a routerLink="/portalmedico/disponibilidad" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mis_horas }}</a>
+          <a routerLink="/portalmedico/seguimiento" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.seguimiento }}</a>
           <a routerLink="/portalmedico/perfil" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.mi_perfil }}</a>
           <a routerLink="/portalmedico/documentos" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.documentos }}</a>
           <a routerLink="/portalmedico/especialidades" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.especialidades }}</a>
           <a routerLink="/portalmedico/acreditacion" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.acreditacion }}</a>
+          <a routerLink="/portalmedico/ejercicios" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pm_navbar.mis_ejercicios }}</a>
           <button (click)="cerrarSesion()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.cerrar_sesion }}</button>
         } @else if (pmClienteService.clienteActual()) {
           <!-- Paciente autenticado -->
           <a routerLink="/portalmedico/paciente/citas" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mis_citas }}</a>
           <a routerLink="/portalmedico/paciente/citas/reservar" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.reservar_hora }}</a>
           <a routerLink="/portalmedico/paciente/video" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_video }}</a>
+          <a routerLink="/portalmedico/paciente/terapia" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.mi_terapia }}</a>
           <button (click)="cerrarSesionPaciente()" class="text-left px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pmc_navbar.cerrar_sesion }}</button>
         } @else {
-          <!-- Sin sesión: un único acceso, con pestañas dentro para elegir el tipo de cuenta -->
+          <!-- Sin sesión: se puede reservar igual, y el acceso es uno solo con
+               pestañas dentro para elegir el tipo de cuenta -->
+          <a routerLink="/portalmedico/paciente/citas/reservar" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.reservar_hora }}</a>
+          <a routerLink="/portalmedico/cita/seguimiento" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700">{{ t().pmc_navbar.seguimiento }}</a>
           <a routerLink="/portalmedico/login" (click)="closeMenu()" class="px-3 py-2 rounded-md text-sm font-medium bg-sky-800 dark:bg-slate-900">{{ t().pm_navbar.iniciar_sesion }}</a>
         }
 

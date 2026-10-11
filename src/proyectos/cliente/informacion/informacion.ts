@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { InformacionService, Informacion } from '@core/services/informacion/informacion';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-informacion-cliente',
@@ -17,8 +18,6 @@ export class InformacionClienteComponent implements OnInit {
 
   articulosFiltrados: Informacion[] = []; // Solo necesitamos esta lista
   cargando = true;
-  
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private informacionService: InformacionService,
@@ -50,9 +49,7 @@ export class InformacionClienteComponent implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   verDetalle(idArticulo: number): void {

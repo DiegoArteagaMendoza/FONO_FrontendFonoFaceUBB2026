@@ -1,0 +1,45 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-section">
+      <h2>{{ t().gestion_diagnostico.titulo }}</h2>
+      <p>{{ t().gestion_diagnostico.subtitulo }}</p>
+    </div>
+    <button class="btn-primary" (click)="irACrear()">
+      {{ t().gestion_diagnostico.nuevo_formulario }}
+    </button>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ t().globales.cargando }}</p>
+  </div>
+
+  <div class="table-card" *ngIf="!cargando">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t().tablas.nombre_tabla }}</th>
+          <th>{{ t().tablas.descripcion_tabla }}</th>
+          <th>{{ t().gestion_diagnostico.columna_preguntas }}</th>
+          <th>{{ t().tablas.acciones_tabla }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="listaFormularios.length === 0">
+          <td colspan="4" class="empty-state">{{ t().globales.sin_datos }}</td>
+        </tr>
+
+        <tr *ngFor="let item of listaFormularios">
+          <td class="td-title">{{ item.nombre }}</td>
+          <td>{{ (item.descripcion.length > 80) ? (item.descripcion | slice:0:80) + '...' : item.descripcion }}</td>
+          <td>{{ totalPreguntas(item) }} {{ t().gestion_diagnostico.preguntas_totales }}</td>
+          <td class="td-actions">
+            <button class="btn-icon view" (click)="verResultados(item.id_formulario)">{{ t().gestion_diagnostico.boton_resultados }}</button>
+            <button class="btn-icon edit" (click)="editarFormulario(item.id_formulario)">{{ t().tablas.boton_editar }}</button>
+            <button class="btn-icon delete" (click)="eliminarFormulario(item.id_formulario)">{{ t().tablas.boton_eliminar }}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -2,7 +2,8 @@ export const TEXTOS_SITIO = {
     // TEXTOS GLOBALES
     
     globales: {
-        marca: "FonoFace",
+        marca: "Vocare UBB",
+        abrir_menu: "Abrir el menú",
         boton_guardar: "Guardar Cambios",
         boton_cancelar: "Cancelar",
         boton_volver: "Volver",
@@ -59,7 +60,7 @@ export const TEXTOS_SITIO = {
 
     inicio_admin: {
         bienvenida_titulo: "¡Hola, {nombre}! 👋",
-        bienvenida_desc: "Bienvenido al panel de adminisrtación. Aquí tienes un resumen de la plataforma al",
+        bienvenida_desc: "Bienvenido al panel de administración. Aquí tienes un resumen de la plataforma al",
         accesos_titulo: "Accesos Rápidos",
         actividad_reciente: "Actividad Reciente",
         actividad_vacia: "Pronto podrás ver aquí los últimos registros añadidos al sistema.",
@@ -265,7 +266,7 @@ export const TEXTOS_SITIO = {
 
     // LOGIN
     login: {
-        titulo: "Bienvenido a FonoFace",
+        titulo: "Bienvenido a Vocare UBB",
         subtitulo: "Ingresa tus credenciales para continuar",
         label_email: "Correo Electrónico",
         placeholder_email: "ejemplo@correo.com",
@@ -283,7 +284,8 @@ export const TEXTOS_SITIO = {
         btn_portal: "Portal cliente",
         error_credenciales: "Correo o contraseña incorrectos.",
         error_servidor: "Error al conectar con el servidor.",
-        alerta_sesion_expirada: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+        alerta_sesion_expirada: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+        aviso_requiere_admin: "Esa sección es del panel de administración. Inicia sesión con tu cuenta de administrador para entrar."
     },
 
     // CREACION NOTICIAS
@@ -394,9 +396,90 @@ export const TEXTOS_SITIO = {
         btn_actualizando: "Actualizando...",
         btn_actualizar: "Guardar Cambios"
     },
+    // GESTION DIAGNOSTICO (AUTOEVALUACION)
+    gestion_diagnostico: {
+        titulo: "Gestión de Autoevaluaciones",
+        subtitulo: "Crea y publica los formularios de autoevaluación que responderán tus clientes.",
+        nuevo_formulario: "Nuevo Formulario",
+        columna_preguntas: "N° Preguntas",
+        preguntas_totales: "preguntas",
+        boton_resultados: "Resultados"
+    },
+
+    // CREACION DIAGNOSTICO (AUTOEVALUACION)
+    creacion_diagnostico: {
+        titulo: "Crear Formulario de Autoevaluación",
+        subtitulo: "Define el nombre, la escala de valores y las secciones con sus preguntas.",
+        label_nombre: "Nombre del formulario",
+        placeholder_nombre: "Ej. Índice de Fatiga Vocal",
+        alerta_nombre: "El nombre es obligatorio.",
+        label_descripcion: "Descripción / instrucciones para el paciente",
+        placeholder_descripcion: "Ej. 0 = Nunca, 1 = Casi nunca, 2 = Algunas veces, 3 = Casi siempre, 4 = Siempre",
+        alerta_descripcion: "La descripción es obligatoria.",
+        label_valor_minimo: "Valor mínimo de la escala",
+        label_valor_maximo: "Valor máximo de la escala",
+        alerta_escala: "El valor máximo debe ser mayor al mínimo.",
+        subescalas_titulo: "Secciones y preguntas",
+        subescalas_ayuda: "Agrupa las preguntas por sección (ej. \"Parte 1\", \"Funcional\"). Si el test no distingue partes, usa una única sección general.",
+        subescala_nombre_label: "Nombre de la sección",
+        subescala_nombre_placeholder: "Ej. Parte 1",
+        btn_agregar_subescala: "+ Agregar sección",
+        btn_quitar_subescala: "Quitar sección",
+        pregunta_placeholder: "Escribe el enunciado de la pregunta...",
+        btn_agregar_pregunta: "+ Agregar pregunta",
+        btn_quitar_pregunta: "Quitar",
+        alerta_subescalas: "Agrega al menos una sección con una pregunta.",
+        alerta_pregunta_vacia: "Cada pregunta debe tener un enunciado.",
+        interpretacion_total_titulo: "Interpretación del puntaje total (opcional)",
+        interpretacion_subescala_titulo: "Interpretación de esta sección (opcional)",
+        interpretacion_ayuda: "Define rangos de puntaje sin solape para mostrar un resultado clínico (ej. 0-10 = Leve). Déjalo vacío si no aplica.",
+        interpretacion_min_label: "Desde",
+        interpretacion_max_label: "Hasta",
+        interpretacion_etiqueta_label: "Etiqueta (resultado)",
+        interpretacion_etiqueta_placeholder: "Ej. Leve",
+        interpretacion_descripcion_label: "Recomendación para el paciente",
+        interpretacion_descripcion_placeholder: "Ej. No se detectan signos de fatiga vocal...",
+        btn_agregar_rango: "+ Agregar rango",
+        btn_quitar_rango: "Quitar rango",
+        alerta_interpretacion_solape: "Los rangos de interpretación no pueden solaparse entre sí.",
+        btn_previsualizar: "Previsualizar Formulario",
+        btn_guardando: "Publicando...",
+        btn_guardar: "Publicar Formulario",
+        // PREVISUALIZACIÓN (pop up previo al registro)
+        preview_titulo: "Previsualización del Formulario",
+        preview_aviso: "Así lo verá el paciente. Revisa que todo esté correcto antes de publicarlo.",
+        preview_escala_label: "Escala de respuesta",
+        btn_volver_editar: "Volver a editar"
+    },
+
+    // EDICION DIAGNOSTICO (AUTOEVALUACION)
+    edicion_diagnostico: {
+        titulo: "Editar Formulario de Autoevaluación",
+        subtitulo: "Modifica el nombre, la descripción, la escala o el estado de publicación.",
+        cargando_datos: "Cargando datos del formulario...",
+        error_no_encontrado: "No se encontró el formulario solicitado.",
+        label_estado: "Publicado (visible para los clientes)",
+        aviso_estructura: "Las secciones y preguntas no se pueden modificar una vez publicado el formulario; si necesitas cambiarlas, despublica este formulario y crea uno nuevo.",
+        btn_actualizando: "Actualizando...",
+        btn_actualizar: "Guardar Cambios"
+    },
+
+    // RESULTADOS REGISTRADOS DE UN FORMULARIO DE DIAGNOSTICO
+    resultados_diagnostico: {
+        titulo: "Resultados de",
+        subtitulo: "Historial de aplicaciones registradas para este formulario.",
+        volver: "← Volver a Autoevaluaciones",
+        paciente_tabla: "Paciente",
+        fecha_tabla: "Fecha",
+        puntaje_tabla: "Puntaje total",
+        interpretacion_tabla: "Interpretación",
+        detalle_tabla: "Detalle por sección",
+        sin_resultados: "Aún no hay resultados registrados para este formulario."
+    },
+
     footer: {
-        descripcion: "Sistema integral de administración FonoFace. Simplificando la gestión y el cuidado paso a paso.",
-        contacto_email: "contacto@fonoface.cl",
+        descripcion: "Sistema integral de administración Vocare UBB. Simplificando la gestión y el cuidado paso a paso.",
+        contacto_email: "contacto@vocare-ubb.cl",
         contacto_telefono: "+56 9 1234 5678",
         derechos: "Todos los derechos reservados.",
         enlaces: [
@@ -473,7 +556,7 @@ export const TEXTOS_SITIO = {
 
     // NAVBAR DEL PORTAL CLIENTE
     portal_navbar: {
-        marca: "FonoFace",
+        marca: "Vocare UBB",
         inicio: "Inicio",
         la_voz: "La Voz",
         menu_informacion: "Información",
@@ -483,7 +566,11 @@ export const TEXTOS_SITIO = {
         cuidados: "Cuidados",
         noticias: "Noticias",
         portal_medico: "Portal Médico",
-        acceso_admin: "Acceso Admin"
+        acceso_admin: "Acceso Admin",
+        menu_autoevaluacion: "Autoevaluación",
+        autoevaluacion_cargando: "Cargando formularios...",
+        autoevaluacion_vacio: "Aún no hay formularios publicados.",
+        autoevaluacion_ver_todas: "Ver todas →"
     },
 
     // VISTA INICIO DEL PORTAL CLIENTE
@@ -541,6 +628,47 @@ export const TEXTOS_SITIO = {
         fuente: "Fuente:"
     },
 
+    // VISTA LISTADO DE AUTOEVALUACIÓN DEL PORTAL CLIENTE
+    portal_autoevaluacion: {
+        titulo: "Autoevaluación",
+        subtitulo: "Responde uno de estos formularios y obtén tu resultado al instante.",
+        cargando: "Cargando formularios...",
+        vacio: "No hay formularios de autoevaluación disponibles en este momento.",
+        preguntas_totales: "preguntas",
+        responder: "Responder →"
+    },
+
+    // VISTA RESPONDER / RESULTADO DE UN FORMULARIO DE AUTOEVALUACIÓN
+    portal_autoevaluacion_detalle: {
+        volver: "← Volver a Autoevaluación",
+        cargando: "Cargando formulario...",
+        regresar: "Regresar",
+        error_no_encontrado: "Este formulario no existe o ya no está disponible.",
+        label_nombre: "Tu nombre completo",
+        placeholder_nombre: "Ej. Juan Pérez",
+        alerta_nombre: "Ingresa tu nombre completo.",
+        label_fecha_nacimiento: "Fecha de nacimiento (opcional)",
+        alerta_pregunta_sin_responder: "Debes responder todas las preguntas antes de continuar.",
+        btn_enviando: "Calculando resultado...",
+        btn_enviar: "Ver mi resultado",
+        error_envio: "Ocurrió un error al enviar tus respuestas. Intenta nuevamente.",
+        resultado_titulo: "Tu resultado",
+        resultado_puntaje_total: "Puntaje total",
+        resultado_detalle_subescalas: "Detalle por sección",
+        // Envío del resultado por correo (el correo no se guarda, solo se usa para este envío)
+        correo_titulo: "Recibe tu resultado por correo",
+        correo_ayuda: "No almacenamos tu correo: solo se usa para enviarte este resultado.",
+        label_correo: "Correo electrónico",
+        placeholder_correo: "tu@correo.com",
+        alerta_correo: "Ingresa un correo electrónico válido.",
+        btn_enviar_correo: "Enviar resultado a mi correo",
+        btn_enviando_correo: "Enviando...",
+        correo_confirmacion: "¡Listo! Te enviamos el resultado a tu correo.",
+        correo_sin_enviar: "No pudimos enviarte el correo. Intenta nuevamente o revisa la dirección ingresada.",
+        btn_responder_otra_vez: "Responder de nuevo",
+        btn_ver_otros: "Ver otras autoevaluaciones"
+    },
+
     // VISTA LA VOZ DEL PORTAL CLIENTE
     portal_voz: {
         titulo: "La Voz",
@@ -563,9 +691,9 @@ export const TEXTOS_SITIO = {
         descripcion: "Plataforma de información y cuidados de la voz de la Universidad del Bío-Bío. Recursos especializados para niños, profesores, cantantes, locutores y público general.",
         titulo_enlaces: "Enlaces Rápidos",
         titulo_contacto: "Contacto",
-        contacto_email: "contacto@fonoface.cl",
+        contacto_email: "contacto@vocare-ubb.cl",
         contacto_direccion: "Universidad del Bío-Bío, Concepción, Chile",
-        derechos: "FonoFace — Universidad del Bío-Bío. Todos los derechos reservados.",
+        derechos: "Vocare UBB — Universidad del Bío-Bío. Todos los derechos reservados.",
         enlaces: [
         { label: "Inicio", path: "/portal/inicio" },
         { label: "La Voz", path: "/portal/lavoz" },
@@ -619,7 +747,7 @@ export const TEXTOS_SITIO = {
 
     // NAVBAR DEL PORTAL MÉDICO
     pm_navbar: {
-        marca: "Portal Médico",
+        marca: "Vocare UBB Portal Médico",
         inicio: "Inicio",
         directorio: "Directorio",
         mi_perfil: "Mi Perfil",
@@ -629,12 +757,269 @@ export const TEXTOS_SITIO = {
         iniciar_sesion: "Iniciar Sesión",
         registrarme: "Registrarme",
         cerrar_sesion: "Cerrar Sesión",
-        volver_portal: "← Volver al portal público"
+        volver_portal: "← Volver al portal público",
+        // Menú de la cuenta: cuelga del avatar con las iniciales, que es la
+        // señal visible de "estás dentro y como quién".
+        aria_menu_cuenta: "Abrir el menú de tu cuenta",
+        mis_ejercicios: "Mis ejercicios",
+        seguimiento: "Seguimiento",
+        sesion_profesional: "Fonoaudiólogo/a",
+        sesion_paciente: "Paciente"
+    },
+
+    // CATÁLOGO DE EJERCICIOS DEL FONOAUDIÓLOGO (terapia)
+    pm_ejercicios: {
+        titulo: "Mis ejercicios",
+        subtitulo: "Los ejercicios que dejas de tarea a tus pacientes, cada uno con un video corto que muestra cómo se hace.",
+        btn_nuevo: "Nuevo ejercicio",
+        vacio_titulo: "Todavía no tienes ejercicios",
+        vacio_desc: "Crea tu primer ejercicio con un video de ejemplo. Después podrás asignarlo a tus pacientes en su plan de terapia.",
+        error_servidor: "No pudimos cargar tus ejercicios. Inténtalo nuevamente.",
+
+        // Tarjeta
+        duracion_ejemplo: "Ejemplo de {segundos} s",
+        btn_editar: "Editar",
+        btn_eliminar: "Eliminar",
+        confirmar_eliminar: "¿Eliminar este ejercicio de tu catálogo? Los pacientes que ya lo tengan asignado lo seguirán viendo.",
+        exito_eliminar: "Ejercicio eliminado de tu catálogo.",
+        error_eliminar: "No pudimos eliminar el ejercicio. Inténtalo nuevamente.",
+
+        // Formulario (crear y editar)
+        form_titulo_nuevo: "Nuevo ejercicio",
+        form_titulo_editar: "Editar ejercicio",
+        label_nombre: "Nombre",
+        placeholder_nombre: "Ej: Vibración labial",
+        alerta_nombre: "El nombre es obligatorio.",
+        label_instrucciones: "Cómo se hace",
+        placeholder_instrucciones: "Explica paso a paso lo que el paciente debe hacer, cuántas repeticiones y qué debe sentir.",
+        alerta_instrucciones: "Las instrucciones son obligatorias.",
+        label_video: "Video de ejemplo",
+        label_video_editar: "Cambiar el video de ejemplo (opcional)",
+        ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}. Este video no vence: acompaña al ejercicio mientras exista.",
+        video_actual: "Video actual",
+        archivo_seleccionado: "Archivo:",
+        duracion_detectada: "Duración:",
+        segundos: "segundos",
+        alerta_video_req: "Selecciona un video de ejemplo.",
+        alerta_video_formato: "Ese formato no está permitido. Usa {formatos}.",
+        alerta_video_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        alerta_video_duracion: "El video dura {duracion} segundos y el máximo son {maximo}. Recorta a lo esencial: es una demostración, no una clase.",
+        alerta_video_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        btn_guardando: "Guardando...",
+        btn_crear: "Crear ejercicio",
+        btn_guardar: "Guardar cambios",
+        btn_cancelar: "Cancelar",
+        exito_crear: "Ejercicio creado.",
+        exito_editar: "Cambios guardados.",
+        error_guardar: "No pudimos guardar el ejercicio. Inténtalo nuevamente."
+    },
+
+    // PLAN DE TERAPIA: formulario del fonoaudiólogo (crear y ajustar)
+    pm_plan: {
+        titulo_crear: "Asignar plan de terapia",
+        titulo_ajustar: "Ajustar plan de terapia",
+        subtitulo_crear: "Elige hasta {maximo} ejercicios de tu catálogo y cada cuánto debe reportar {paciente} con un video.",
+        subtitulo_ajustar: "El plan de {paciente}, activo desde el {inicio}. Los cambios rigen desde ahora.",
+        cargando: "Cargando...",
+        error_servidor: "No pudimos cargar el plan. Inténtalo nuevamente.",
+        error_cita: "No encontramos esa cita en tu agenda.",
+        bloqueo_cita_no_realizada: "El plan se asigna después de la atención: marca la cita como realizada primero.",
+        bloqueo_sin_cuenta: "{paciente} reservó sin crear una cuenta, así que no tiene dónde ver su plan ni subir videos. Pídele que se registre en el portal con el mismo RUT; después podrás asignárselo.",
+
+        // Periodicidad
+        label_periodicidad: "¿Cada cuánto debe enviar sus videos?",
+        periodicidad_DIARIA: "Todos los días",
+        periodicidad_SEMANAL: "Una vez por semana",
+        periodicidad_QUINCENAL: "Cada quince días",
+        aviso_cambio_periodicidad: "Cambiar la periodicidad reinicia el plan desde hoy: el conteo de periodos empieza de nuevo. Los videos anteriores se conservan.",
+
+        // Ejercicios
+        label_ejercicios: "Ejercicios ({elegidos} de {maximo})",
+        ayuda_ejercicios: "Marca los que va a practicar. Puedes agregar una indicación específica para este paciente en cada uno.",
+        sin_catalogo: "Todavía no tienes ejercicios en tu catálogo. Crea al menos uno para poder asignar un plan.",
+        btn_ir_catalogo: "Ir a mis ejercicios",
+        placeholder_indicacion_ejercicio: "Indicación para este paciente (opcional). Ej: 3 series de 10.",
+        alerta_ejercicios: "Elige al menos un ejercicio.",
+        alerta_maximo: "Como máximo {maximo} ejercicios: más de eso no se cumple.",
+
+        // Indicaciones generales
+        label_indicaciones: "Indicaciones generales (opcional)",
+        placeholder_indicaciones: "Lo que el paciente debe tener presente en toda la terapia.",
+
+        // Acciones
+        btn_guardando: "Guardando...",
+        btn_crear: "Asignar plan",
+        btn_guardar: "Guardar cambios",
+        btn_volver: "Volver a la agenda",
+        btn_cerrar_plan: "Cerrar este plan",
+        confirmar_cerrar: "¿Cerrar el plan? El paciente dejará de verlo y no podrá subir más videos. Podrás crear otro desde una próxima cita realizada.",
+        exito_crear: "Plan asignado. El paciente ya lo ve en su portal.",
+        exito_ajustar: "Cambios guardados.",
+        exito_cerrar: "Plan cerrado.",
+        error_guardar: "No pudimos guardar el plan. Inténtalo nuevamente.",
+        error_cerrar: "No pudimos cerrar el plan. Inténtalo nuevamente."
+    },
+
+    // MI TERAPIA: lo que ve el paciente con sesión
+    pmc_terapia: {
+        titulo: "Mi terapia",
+        subtitulo: "Los ejercicios que te dejó tu fonoaudiólogo/a y cada cuánto debes enviarle un video.",
+        error_servidor: "No pudimos cargar tu terapia. Inténtalo nuevamente.",
+
+        vacio_titulo: "Todavía no tienes un plan de terapia",
+        vacio_desc: "Tu fonoaudiólogo/a te lo asignará después de tu primera atención. Cuando lo haga, aparecerá aquí con los ejercicios y sus videos de ejemplo.",
+        vacio_btn: "Reservar una hora",
+
+        con_profesional: "Plan con {profesional}",
+        periodicidad: "Reportas {periodicidad}.",
+        periodicidad_DIARIA: "todos los días",
+        periodicidad_SEMANAL: "una vez por semana",
+        periodicidad_QUINCENAL: "cada quince días",
+        periodo_actual: "Periodo actual: del {desde} al {hasta}.",
+        periodo_actual_dia: "Periodo actual: hoy, {desde}.",
+        indicaciones_titulo: "Indicaciones de tu fonoaudiólogo/a",
+
+        ejercicios_titulo: "Tus ejercicios",
+        ejemplo_titulo: "Así se hace",
+        indicacion_paciente: "Para ti:",
+
+        // Estado del ejercicio en el periodo en curso
+        estado_enviado: "Enviado en este periodo",
+        estado_falta: "Falta tu video de este periodo",
+
+        // Subida del video de progreso
+        btn_subir: "Subir mi video",
+        btn_subir_otro: "Subir otro",
+        btn_cancelar: "Cancelar",
+        subir_titulo: "Tu video practicando: {ejercicio}",
+        subir_desc: "Grábate haciendo el ejercicio tal como lo practicas. Tu fonoaudiólogo/a lo revisará y te dejará comentarios.",
+        label_video: "Tu video",
+        ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}. Se elimina solo a los {dias} días; los comentarios que te dejen se conservan.",
+        archivo_seleccionado: "Archivo:",
+        duracion_detectada: "Duración:",
+        segundos: "segundos",
+        label_comentario: "¿Algo que contarle? (opcional)",
+        placeholder_comentario: "Ej: Me costó la última serie, sentí la garganta apretada.",
+        btn_enviando: "Enviando...",
+        btn_enviar: "Enviar",
+        alerta_video_req: "Selecciona un video antes de enviarlo.",
+        alerta_video_formato: "Ese formato no está permitido. Usa {formatos}.",
+        alerta_video_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        alerta_video_duracion: "El video dura {duracion} segundos y el máximo son {maximo}.",
+        alerta_video_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        exito_subir: "Listo, tu video quedó enviado.",
+        error_subir: "No pudimos enviar tu video. Inténtalo nuevamente.",
+
+        // Historial
+        historial_titulo: "Tus videos enviados",
+        historial_vacio: "Todavía no has enviado ningún video.",
+        historial_periodo: "Periodo {numero}",
+        historial_vence: "Se elimina en {dias} días",
+        historial_vencido: "Video ya eliminado",
+        historial_comentario: "Tu comentario:",
+        retro_titulo: "Comentario de tu fonoaudiólogo/a",
+        retro_pendiente: "Aún sin comentarios.",
+        btn_quitar: "Quitar",
+        confirmar_quitar: "¿Quitar este video? Si era el de este periodo, tendrás que grabar otro.",
+        exito_quitar: "Video quitado.",
+        error_quitar: "No pudimos quitar el video. Inténtalo nuevamente.",
+        error_historial: "No pudimos cargar tus videos."
+    },
+
+    // SEGUIMIENTO DE TERAPIA (fonoaudiólogo): lista con semáforo y detalle
+    pm_seguimiento: {
+        titulo: "Seguimiento",
+        subtitulo: "Tus pacientes con plan de terapia, y si van al día con sus videos.",
+        error_servidor: "No pudimos cargar el seguimiento. Inténtalo nuevamente.",
+        vacio_titulo: "Todavía no tienes pacientes en terapia",
+        vacio_desc: "Después de una cita realizada, asígnale un plan desde tu agenda y aparecerá aquí.",
+        btn_agenda: "Ir a mi agenda",
+        filtro_todos: "Todos",
+        filtro_atrasados: "Atrasados",
+        sin_atrasados: "Nadie va atrasado. Todos tus pacientes están al día.",
+
+        // Lista
+        al_dia: "Al día",
+        atrasado: "Atrasado",
+        ultimo_video: "Último video: {fecha}",
+        sin_videos: "Sin videos todavía",
+        periodicidad_DIARIA: "Reporta a diario",
+        periodicidad_SEMANAL: "Reporta cada semana",
+        periodicidad_QUINCENAL: "Reporta cada quince días",
+        btn_ver: "Ver seguimiento",
+
+        // Detalle
+        detalle_titulo: "Seguimiento de {paciente}",
+        btn_volver: "Volver al seguimiento",
+        btn_ajustar_plan: "Ajustar plan",
+        plan_desde: "Plan activo desde el {inicio}.",
+        periodo_actual: "Periodo en curso: del {desde} al {hasta}.",
+        periodo_actual_dia: "Periodo en curso: hoy, {desde}.",
+        indicaciones_titulo: "Tus indicaciones",
+        ejercicios_titulo: "Ejercicios del plan",
+
+        periodos_titulo: "Periodos cerrados",
+        periodos_vacio: "El primer periodo todavía no termina.",
+        periodo_nombre: "Periodo {numero}",
+        periodo_rango: "del {desde} al {hasta}",
+        periodo_cumplido: "Cumplido",
+        periodo_faltan: "Faltó: {ejercicios}",
+
+        videos_titulo: "Videos enviados",
+        videos_vacio: "Este paciente todavía no ha enviado videos.",
+        videos_error: "No pudimos cargar los videos.",
+        video_periodo: "Periodo {numero}",
+        video_vence: "Se elimina en {dias} días",
+        video_vencido: "Video ya eliminado — el paciente sigue viendo tu comentario",
+        video_comentario: "Comentario del paciente:",
+
+        retro_label: "Tu retroalimentación",
+        retro_placeholder: "Qué hizo bien, qué corregir y cómo. El paciente lo lee en su portal.",
+        retro_guardada: "Escrita el {fecha}",
+        btn_retro_guardar: "Guardar",
+        btn_retro_guardando: "Guardando...",
+        retro_exito: "Retroalimentación guardada.",
+        retro_error: "No pudimos guardar la retroalimentación. Inténtalo nuevamente."
+    },
+
+    // PANEL DEL FONOAUDIÓLOGO (lo que ve en el inicio cuando tiene sesión)
+    pm_panel: {
+        saludo: "Hola, {nombre}",
+        subtitulo: "Este es el resumen de tu día.",
+
+        // Acreditación: solo se avisa cuando falta algo. Estar aprobado es lo
+        // normal y no merece ocupar espacio.
+        acreditacion_titulo: "Tu acreditación está {estado}",
+        acreditacion_desc: "Mientras no esté aprobada no apareces en el directorio ni puedes publicar horas.",
+        acreditacion_btn: "Ver qué me falta",
+
+        hoy_titulo: "Hoy",
+        hoy_vacio: "No tienes atenciones agendadas para hoy.",
+        hoy_paciente: "Paciente",
+        hoy_sin_motivo: "Sin motivo indicado",
+        hoy_btn_realizada: "Marcar realizada",
+        hoy_error: "No pudimos cargar tus citas de hoy.",
+
+        cifra_proximas: "Citas en los próximos {dias} días",
+        cifra_libres: "Horas libres publicadas",
+        cifra_reservadas: "Horas ya reservadas",
+        cifras_error: "No pudimos cargar el resumen de tus horas.",
+        cifra_terapias: "Terapias en seguimiento",
+        cifra_atrasados: "Pacientes atrasados en su terapia",
+
+        // El aviso más útil del panel: sin horas publicadas nadie puede
+        // reservarle, y hasta ahora nada se lo decía.
+        sin_horas_titulo: "No tienes horas publicadas",
+        sin_horas_desc: "Sin horas disponibles en los próximos {dias} días, los pacientes no pueden reservar contigo.",
+        sin_horas_btn: "Publicar horas",
+
+        btn_publicar: "Publicar horas",
+        btn_agenda: "Ver agenda completa"
     },
 
     // INICIO DEL PORTAL MÉDICO (landing: fonoaudiólogo vs. quien busca atención)
     pm_inicio: {
-        titulo: "Portal Médico FonoFace",
+        titulo: "Portal Médico Vocare UBB",
         subtitulo: "El punto de encuentro entre fonoaudiólogos acreditados y quienes buscan atención personalizada de la voz.",
 
         card_fono_titulo: "¿Eres fonoaudiólogo/a?",
@@ -684,7 +1069,7 @@ export const TEXTOS_SITIO = {
 
     // LOGIN DEL PROFESIONAL
     pm_login: {
-        titulo: "Portal Médico FonoFace",
+        titulo: "Portal Médico Vocare UBB",
         subtitulo: "Ingresa con tu correo o RUT para gestionar tu acreditación",
         label_identificador: "Correo o RUT",
         placeholder_identificador: "ejemplo@correo.com o 12345678-9",
@@ -795,6 +1180,14 @@ export const TEXTOS_SITIO = {
         btn_subir: "Subir Documento",
         estado_validado: "Validado",
         estado_pendiente: "Pendiente de revisión",
+        // Visor del documento (se abre sobre la ficha, sin salir de la página)
+        visor_titulo: "Documento de respaldo",
+        visor_cargando: "Abriendo el documento...",
+        visor_error_titulo: "No se pudo mostrar el documento",
+        visor_error_desc: "El archivo existe, pero el servicio de almacenamiento está bloqueando su entrega. Un administrador debe habilitar la entrega de PDF en Cloudinary (Settings → Security → Restricted media types).",
+        visor_btn_descargar: "Abrir en una pestaña nueva",
+        visor_btn_cerrar: "Cerrar",
+        btn_ver: "Ver",
         btn_eliminar: "Eliminar",
         confirmar_eliminar: "¿Deseas eliminar este documento? Solo es posible si aún no fue validado.",
         exito_subir: "Documento subido correctamente. Quedó pendiente de revisión.",
@@ -879,7 +1272,27 @@ export const TEXTOS_SITIO = {
         error_validar: "No se pudo actualizar el documento. Verifica que tengas permisos de administrador (rol Admin o SuperAdmin).",
 
         seccion_especialidades: "Especialidades",
-        sin_especialidades: "El profesional no tiene especialidades asignadas."
+        sin_especialidades: "El profesional no tiene especialidades asignadas.",
+
+        // Estado de la cuenta: habilitar / deshabilitar
+        seccion_estado: "Estado de la cuenta",
+        estado_habilitada: "Habilitada",
+        estado_deshabilitada: "Deshabilitada",
+        estado_desc_habilitada: "Puede iniciar sesión, publicar horas y atender. Aparece en el directorio si su acreditación está aprobada.",
+        estado_desc_deshabilitada: "No puede iniciar sesión ni aparece en el directorio. Sus horas y planes de terapia fueron retirados al darlo de baja.",
+        btn_deshabilitar: "Deshabilitar cuenta",
+        btn_habilitar: "Habilitar cuenta",
+        baja_titulo: "Deshabilitar esta cuenta",
+        baja_advertencia: "Al deshabilitarla, sus horas futuras se retiran, sus citas ya reservadas se cancelan avisando por correo a cada paciente, y sus planes de terapia activos se cierran. Nada de eso se recupera al volver a habilitarla.",
+        baja_label_motivo: "Motivo (opcional)",
+        baja_placeholder_motivo: "Se incluye en el correo que reciben los pacientes. Ej: el profesional ya no forma parte del equipo.",
+        btn_confirmar_baja: "Sí, deshabilitar",
+        btn_cancelar_baja: "Volver",
+        procesando_estado: "Procesando...",
+        confirmar_habilitar: "¿Confirmas habilitar esta cuenta? El profesional podrá volver a entrar y publicar horas, pero sus citas canceladas no se recuperan.",
+        exito_habilitar: "Cuenta habilitada correctamente.",
+        exito_baja: "Cuenta deshabilitada. Citas canceladas: {citas} (pacientes avisados: {avisados}). Horas retiradas: {bloques}. Planes de terapia cerrados: {planes}.",
+        error_estado: "No se pudo cambiar el estado de la cuenta. Inténtalo nuevamente."
     },
 
     // CATÁLOGO ADMIN DE ESPECIALIDADES
@@ -1010,12 +1423,16 @@ export const TEXTOS_SITIO = {
         sin_registro_desc: "Para asociar el video a tu ficha, necesitamos tus datos de contacto.",
         btn_ir_registro: "Ir al registro",
         identificado_como: "Subiendo como:",
-        label_cita: "¿Es para una cita en particular? (opcional)",
-        placeholder_cita: "Sin asociar a ninguna cita",
-        ayuda_cita: "Si lo asocias, el fonoaudiólogo de esa cita lo verá junto a tu motivo de consulta.",
+        // El video siempre acompaña a una atención concreta: primero se toma la
+        // hora, después se graba. Por eso la cita dejó de ser opcional.
+        label_cita: "¿Para cuál de tus horas es?",
+        placeholder_cita: "Elige una de tus horas",
+        ayuda_cita: "El fonoaudiólogo de esa hora lo verá junto a tu motivo de consulta.",
+        alerta_cita_req: "Elige la hora a la que quieres adjuntar el video.",
         opcion_cita: "{fecha} — {profesional}",
         opcion_cita_simple: "{fecha}",
-        sin_citas_disponibles: "No tienes citas reservadas a las que adjuntar el video.",
+        sin_citas_titulo: "Primero reserva tu hora",
+        sin_citas_disponibles: "El video acompaña a una atención, así que primero necesitas tener una hora reservada. Después podrás grabarlo y adjuntarlo.",
         btn_reservar_hora: "Reservar una hora",
         label_video: "Tu video",
         ayuda_video: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}.",
@@ -1047,11 +1464,17 @@ export const TEXTOS_SITIO = {
         subtitulo: "Elige al fonoaudiólogo y el horario que te acomode. Podrás cancelarla o cambiarla después.",
         identificado_como: "Reservando como:",
         paso_profesional: "1. ¿Con quién quieres atenderte?",
-        paso_horario: "2. ¿Cuándo?",
-        paso_motivo: "3. ¿Qué te trae a la consulta?",
+        paso_horario: "2. Elige una hora disponible",
+        paso_motivo: "3. Motivo de consulta",
+        paso_datos: "4. Tus datos",
         cargando_profesionales: "Buscando fonoaudiólogos disponibles...",
         vacio_profesionales_titulo: "Todavía no hay fonoaudiólogos disponibles",
         vacio_profesionales_desc: "Solo aparecen aquí los profesionales con su acreditación aprobada. Vuelve a intentarlo más adelante.",
+        label_especialidad: "Filtrar por especialidad",
+        opcion_todas_especialidades: "Todas las especialidades",
+        ayuda_especialidad: "Opcional. Acota el listado a quienes tratan lo que necesitas.",
+        vacio_por_especialidad: "Ningún fonoaudiólogo acreditado declara esa especialidad. Prueba con otra o quita el filtro.",
+        contador_profesionales: "{cantidad} de {total} profesionales",
         label_profesional: "Fonoaudiólogo",
         placeholder_profesional: "Selecciona un profesional",
         alerta_profesional: "Elige con quién quieres atenderte.",
@@ -1064,6 +1487,16 @@ export const TEXTOS_SITIO = {
         label_duracion: "Duración estimada",
         ayuda_duracion: "Entre {minima} y {maxima} minutos. Por defecto son {defecto}.",
         minutos: "minutos",
+        // Horas publicadas por el profesional
+        elegir_profesional_primero: "Primero elige un fonoaudiólogo y verás las horas que tiene disponibles.",
+        cargando_horas: "Buscando horas disponibles...",
+        vacio_horas_titulo: "Este profesional no tiene horas publicadas",
+        vacio_horas_desc: "Prueba con otro fonoaudiólogo o vuelve más adelante: las horas se publican con anticipación.",
+        error_horas: "No pudimos cargar las horas disponibles. Inténtalo nuevamente.",
+        horas_de_dia: "{cantidad} horas disponibles",
+        hora_seleccionada: "Hora elegida:",
+        btn_cambiar_hora: "Elegir otra hora",
+        duracion_de_la_hora: "Dura {minutos} minutos",
         label_motivo: "Motivo de la consulta (opcional)",
         placeholder_motivo: "Ej: Se me entrecorta la voz al final del día.",
         ayuda_motivo: "Ayuda al profesional a preparar la atención.",
@@ -1073,8 +1506,20 @@ export const TEXTOS_SITIO = {
         regla_anticipacion: "Se reserva con al menos {horas} horas de anticipación, y ese mismo margen aplica para cancelar o cambiarla.",
         regla_reprogramaciones: "Puedes cambiar la fecha hasta {maximas} veces; después habría que cancelar y reservar de nuevo.",
         regla_video: "Mientras la cita siga reservada, puedes adjuntarle un video de síntomas.",
+        // Datos personales de quien reserva sin cuenta
+        datos_desc: "No necesitas registrarte para reservar. Completa tus datos y listo.",
+        datos_con_sesion: "Usaremos los datos de tu cuenta.",
+        aviso_cuenta_existente: "¿Ya tienes cuenta? Inicia sesión y tus datos se completan solos.",
+        btn_iniciar_sesion: "Iniciar sesión",
         exito_titulo: "¡Hora reservada!",
         exito_desc: "Te esperamos el {fecha}. La encontrarás en «Mis citas».",
+        exito_desc_invitado: "Te esperamos el {fecha}. Te contactaremos al correo que indicaste.",
+        exito_invitado_cuenta: "Creamos tu ficha con el RUT que ingresaste. Si te registras con ese mismo RUT podrás ver y gestionar tus horas desde el portal, y adjuntarle un video con tus síntomas.",
+        codigo_titulo: "Tu código de seguimiento",
+        codigo_desc: "Guárdalo. Con él puedes ver tu hora, cambiarla o cancelarla sin tener cuenta. También te lo enviamos por correo.",
+        codigo_sin_correo: "No pudimos enviarte el correo de confirmación, así que anota este código: es la única forma de gestionar tu hora sin cuenta.",
+        btn_ir_seguimiento: "Ir al seguimiento",
+        btn_crear_cuenta: "Crear mi cuenta",
         btn_ver_mis_citas: "Ver mis citas",
         btn_adjuntar_video: "Adjuntar un video de síntomas",
         btn_reservar_otra: "Reservar otra hora",
@@ -1180,6 +1625,8 @@ export const TEXTOS_SITIO = {
         videos_error: "No pudimos cargar los videos de esta cita.",
         // Acciones
         btn_marcar_realizada: "Marcar como realizada",
+        // Tras la cita: asignar o ajustar el plan de terapia del paciente
+        btn_plan_terapia: "Plan de terapia",
         btn_posponer: "Reprogramar",
         btn_cancelar: "Cancelar cita",
         confirmar_realizada: "¿Confirmas que atendiste esta cita?",
@@ -1207,15 +1654,187 @@ export const TEXTOS_SITIO = {
         error_servidor: "No pudimos cargar tu agenda. Inténtalo nuevamente."
     },
 
+    // SEGUIMIENTO DE UNA HORA CON EL CÓDIGO DEL CORREO
+    pmc_seguimiento: {
+        titulo: "Seguimiento de tu hora",
+        subtitulo: "Escribe el código que te enviamos por correo al reservar y podrás ver tu hora, cambiarla o cancelarla.",
+        label_codigo: "Código de seguimiento",
+        placeholder_codigo: "Ej: A7K2M9PQ",
+        ayuda_codigo: "Son {largo} caracteres. Lo encuentras en el correo de confirmación.",
+        alerta_codigo: "Escribe tu código de seguimiento.",
+        btn_buscando: "Buscando...",
+        btn_buscar: "Ver mi hora",
+        error_no_encontrado: "No encontramos ninguna hora con ese código. Revísalo e inténtalo de nuevo.",
+        error_servidor: "No pudimos consultar tu hora. Inténtalo nuevamente.",
+        sin_cuenta_aviso: "¿Tienes cuenta? Inicia sesión y verás todas tus horas juntas.",
+        btn_iniciar_sesion: "Iniciar sesión",
+        // Detalle
+        detalle_titulo: "Tu hora",
+        con_profesional: "Profesional:",
+        paciente: "A nombre de:",
+        duracion: "Duración:",
+        minutos: "minutos",
+        motivo: "Motivo:",
+        sin_motivo: "Sin motivo indicado",
+        termina_a_las: "Termina cerca de las {hora}",
+        reprogramada_veces: "Reprogramada {veces} de {maximas} veces",
+        fecha_original: "Se agendó originalmente para el {fecha}",
+        motivo_cancelacion: "Motivo de la cancelación:",
+        cambios_cerrados: "Ya no admite cambios: faltan menos de {horas} horas.",
+        sin_reprogramaciones: "Alcanzó el máximo de {maximas} cambios de fecha. Si ya no te sirve, cancélala.",
+        ya_paso: "Esta hora ya pasó.",
+        // Cita realizada vista con código: la terapia necesita cuenta
+        terapia_sin_cuenta: "Si tu fonoaudiólogo te dejó ejercicios para la casa, los verás en el portal con una cuenta. Créala con el mismo RUT con el que reservaste esta hora.",
+        btn_crear_cuenta: "Crear mi cuenta",
+        btn_otro_codigo: "Consultar otro código",
+        // Acciones
+        btn_posponer: "Cambiar fecha",
+        btn_cancelar: "Cancelar hora",
+        posponer_titulo: "Cambiar la fecha de tu hora",
+        posponer_actual: "Hoy está agendada para el {fecha}.",
+        posponer_restantes: "Te quedan {restantes} cambios de fecha.",
+        label_nueva_fecha: "Nueva fecha y hora",
+        ayuda_nueva_fecha: "Debe ser con al menos {horas} horas de anticipación.",
+        alerta_anticipacion: "Falta muy poco para ese horario. Elige uno con al menos {horas} horas de anticipación.",
+        label_motivo_cambio: "Motivo del cambio (opcional)",
+        placeholder_motivo_cambio: "Ej: Me cambiaron el turno en el trabajo.",
+        btn_confirmar_posponer: "Guardar la nueva fecha",
+        btn_volver: "Volver",
+        exito_posponer: "Listo, tu hora quedó para el {fecha}.",
+        error_posponer: "No pudimos cambiar la fecha. Inténtalo nuevamente.",
+        cancelar_titulo: "Cancelar tu hora",
+        cancelar_desc: "Se liberará el horario del profesional. Si después la necesitas, tendrás que reservar de nuevo.",
+        label_motivo_cancelacion: "Motivo (opcional)",
+        placeholder_motivo_cancelacion: "Ej: Ya no puedo asistir ese día.",
+        btn_confirmar_cancelar: "Sí, cancelar mi hora",
+        btn_no_cancelar: "No, mantenerla",
+        exito_cancelar: "Tu hora quedó cancelada.",
+        error_cancelar: "No pudimos cancelar la hora. Inténtalo nuevamente.",
+
+        // VIDEO DE SÍNTOMAS: quien reservó sin cuenta lo gestiona aquí, con su
+        // código. Es lo mismo que el paciente registrado hace desde su sesión.
+        video_titulo: "Tu video de síntomas",
+        video_desc: "Graba un video corto mostrando tus síntomas: tu fonoaudiólogo/a podrá revisarlo antes de atenderte. No es obligatorio.",
+        video_label: "Tu video",
+        video_ayuda: "Máximo {segundos} segundos y {peso} MB. Formatos: {formatos}.",
+        video_label_descripcion: "¿Qué quieres mostrar? (opcional)",
+        video_placeholder_descripcion: "Ej: La voz se me apaga al final de la frase.",
+        video_seleccionado: "Archivo:",
+        video_duracion: "Duración:",
+        video_segundos: "segundos",
+        video_privacidad: "Tu video es material clínico: solo lo verán profesionales acreditados y se elimina solo a los {dias} días.",
+        btn_enviar_video: "Enviar mi video",
+        btn_enviando_video: "Enviando...",
+        video_exito: "Listo, tu video quedó adjunto a esta hora.",
+
+        // Ya hay uno adjunto
+        video_adjunto_titulo: "Ya adjuntaste un video a esta hora",
+        video_adjunto_vence: "Se elimina solo en {dias} días.",
+        btn_quitar_video: "Quitar el video",
+        video_confirmar_quitar: "¿Seguro que quieres quitar tu video? Tendrás que grabar otro si lo necesitas.",
+        video_exito_quitar: "Quitamos tu video.",
+
+        // Errores
+        video_error_formato: "Ese formato no está permitido. Usa {formatos}.",
+        video_error_peso: "El video pesa {peso} MB y el máximo es {maximo} MB.",
+        video_error_duracion: "El video dura {duracion} segundos y el máximo son {maximo}.",
+        video_error_ilegible: "No pudimos leer ese archivo. Prueba con otro video.",
+        video_error_req: "Selecciona un video antes de enviarlo.",
+        video_error_subir: "No pudimos enviar tu video. Inténtalo nuevamente.",
+        video_error_demasiados: "Has enviado demasiados videos seguidos. Espera un momento e inténtalo de nuevo.",
+        video_error_quitar: "No pudimos quitar el video. Inténtalo nuevamente."
+    },
+
+    // HORAS DISPONIBLES QUE PUBLICA EL PROFESIONAL
+    pm_disponibilidad: {
+        titulo: "Mis horas disponibles",
+        subtitulo: "Publica las horas en que puedes atender. Los pacientes solo pueden reservar dentro de ellas.",
+        sin_acreditacion_titulo: "Tu cuenta aún no está acreditada",
+        sin_acreditacion_desc: "Puedes publicar horas, pero no aparecerás en el buscador de pacientes hasta que se apruebe tu acreditación.",
+        btn_ir_perfil: "Revisar mi acreditación",
+        // Publicación
+        publicar_titulo: "Publicar horas",
+        label_fecha: "Día",
+        ayuda_fecha: "Solo puedes publicar días de hoy en adelante.",
+        alerta_fecha: "Elige el día.",
+        label_desde: "Desde",
+        label_hasta: "Hasta",
+        alerta_rango: "La hora de término debe ser posterior a la de inicio.",
+        label_duracion: "Duración de cada hora",
+        minutos: "minutos",
+        vista_previa: "Se publicarán {cantidad} horas:",
+        vista_previa_vacia: "Con ese rango y esa duración no alcanza ninguna hora completa.",
+        btn_publicando: "Publicando...",
+        btn_publicar: "Publicar estas horas",
+        exito_publicar: "Se publicaron {cantidad} horas.",
+        parcial_publicar: "Se publicaron {creadas} horas. {rechazadas} no se pudieron publicar:",
+        ninguna_publicada: "No se publicó ninguna hora:",
+        error_publicar: "No pudimos publicar las horas. Inténtalo nuevamente.",
+        // Listado
+        listado_titulo: "Horas publicadas",
+        cargando: "Cargando tus horas...",
+        filtro_proximas: "Próximas",
+        filtro_todas: "Incluir pasadas",
+        vacio_titulo: "Todavía no has publicado horas",
+        vacio_desc: "Mientras no publiques ninguna, los pacientes no podrán reservar contigo.",
+        estado_libre: "Libre",
+        estado_reservada: "Reservada",
+        estado_pasada: "Ya pasó",
+        estado_retirada: "Retirada",
+        termina_a_las: "hasta las {hora}",
+        btn_retirar: "Retirar",
+        confirmar_retirar: "¿Retirar esta hora? Dejará de ofrecerse a los pacientes.",
+        exito_retirar: "La hora se retiró y ya no se ofrece.",
+        error_retirar: "No pudimos retirar la hora.",
+        aviso_reservada: "Esta hora ya tiene paciente. Si no puedes atenderla, cancélala desde tu agenda indicando el motivo.",
+        btn_ir_agenda: "Ir a mi agenda",
+        error_servidor: "No pudimos cargar tus horas. Inténtalo nuevamente."
+    },
+
     // NAVEGACIÓN DEL PACIENTE (se suma al navbar del portal médico)
     pmc_navbar: {
         soy_paciente: "Soy paciente",
         registrarme: "Registrarme",
         iniciar_sesion: "Entrar como paciente",
         mi_video: "Mis videos",
+        mi_terapia: "Mi terapia",
         mis_citas: "Mis citas",
         reservar_hora: "Reservar hora",
+        seguimiento: "Seguir mi hora",
         mi_agenda: "Mi agenda",
+        mis_horas: "Mis horas",
         cerrar_sesion: "Salir"
+    },
+
+    // INICIO DEL PACIENTE CON SESIÓN: no es un tablero de cifras, responde una
+    // sola pregunta — cuándo es mi hora y qué me falta.
+    pmc_proxima_hora: {
+        saludo: "Hola, {nombre}",
+
+        titulo: "Tu próxima hora",
+        con_profesional: "con {profesional}",
+        // Cuánto falta, en las palabras que usaría una persona.
+        falta_hoy: "Es hoy",
+        falta_manana: "Es mañana",
+        falta_dias: "En {dias} días",
+        termina_a_las: "Termina cerca de las {hora}.",
+
+        pendientes_titulo: "Antes de tu atención",
+        pendiente_video: "Graba un video corto mostrando tus síntomas: tu fonoaudiólogo/a podrá revisarlo antes de atenderte.",
+        pendiente_video_btn: "Adjuntar un video",
+        pendiente_video_listo: "Ya adjuntaste un video a esta hora.",
+        pendiente_cambios: "¿No te acomoda? Puedes cambiar la fecha o cancelarla.",
+        pendiente_cambios_btn: "Gestionar mi hora",
+
+        vacio_titulo: "No tienes horas reservadas",
+        vacio_desc: "Reserva con un fonoaudiólogo acreditado. No necesitas más trámites: eliges profesional y horario.",
+        vacio_btn: "Reservar una hora",
+
+        ver_todas: "Ver todas mis horas",
+        // Cuando hay plan de terapia activo
+        terapia_titulo: "Tu terapia",
+        terapia_desc: "Tienes un plan de ejercicios activo con {profesional}.",
+        terapia_btn: "Ver mi terapia",
+        error_servidor: "No pudimos cargar tus horas. Inténtalo nuevamente."
     }
 };

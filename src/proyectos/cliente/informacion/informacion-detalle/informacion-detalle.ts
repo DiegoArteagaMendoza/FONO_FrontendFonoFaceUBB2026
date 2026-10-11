@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InformacionService, Informacion } from '@core/services/informacion/informacion';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-informacion-detalle',
@@ -18,7 +19,6 @@ export class InformacionDetalleComponent implements OnInit {
   articulo: Informacion | null = null;
   cargando = true;
   errorMensaje = '';
-  public backendUrl = 'http://127.0.0.1:8000';
 
   // 1. Agregamos el arreglo de categorías
   categorias = [
@@ -69,9 +69,7 @@ export class InformacionDetalleComponent implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string): string {
-    if (!ruta) return '';
-    if (ruta.startsWith('http')) return ruta;
-    return ruta.startsWith('/') ? this.backendUrl + ruta : `${this.backendUrl}/${ruta}`;
+    return resolverUrlImagen(ruta);
   }
 
   // 2. Agregamos el método para obtener el nombre completo

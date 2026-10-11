@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { InformacionService, Informacion } from '@core/services/informacion/informacion';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-farmacos-cliente',
@@ -17,8 +18,6 @@ export class FarmacosClienteComponent implements OnInit {
 
   articulosFiltrados: Informacion[] = []; 
   cargando = true;
-  
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private informacionService: InformacionService,
@@ -50,15 +49,7 @@ export class FarmacosClienteComponent implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    
-    // Parche de seguridad para asegurar la ruta de medios de Django
-    if (!rutaImagen.includes('/media/')) {
-      const limpia = rutaImagen.startsWith('/') ? rutaImagen.slice(1) : rutaImagen;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   verDetalle(idArticulo: number): void {

@@ -1,0 +1,60 @@
+<div class="page-container">
+
+  <div class="mb-5">
+    <h2 class="text-xl font-bold m-0" style="color: var(--fono-texto);">{{ t().pm_seguimiento.titulo }}</h2>
+    <p class="text-sm mt-1 mb-0" style="color: var(--fono-texto-suave);">{{ t().pm_seguimiento.subtitulo }}</p>
+  </div>
+
+  <div class="loading-state" *ngIf="cargando"><div class="spinner"></div></div>
+  <div *ngIf="errorMensaje" class="error-alert">{{ errorMensaje }}</div>
+
+  <!-- ============ SIN PACIENTES ============ -->
+  <div class="empty-state" *ngIf="!cargando && !errorMensaje && planes.length === 0">
+    <p class="m-0 text-lg font-semibold" style="color: var(--fono-texto);">{{ t().pm_seguimiento.vacio_titulo }}</p>
+    <p class="mt-2 mb-4" style="color: var(--fono-texto-suave);">{{ t().pm_seguimiento.vacio_desc }}</p>
+    <button type="button" class="btn-primary" (click)="irALaAgenda()">{{ t().pm_seguimiento.btn_agenda }}</button>
+  </div>
+
+  <ng-container *ngIf="!cargando && planes.length > 0">
+
+    <!-- Filtro: todos / atrasados, con el conteo de atrasados a la vista -->
+    <div class="tabs-cuenta mb-4" role="tablist">
+      <button type="button" role="tab" [attr.aria-selected]="filtro === 'todos'" (click)="cambiarFiltro('todos')"
+              class="btn-secondary" [class.btn-primary]="filtro === 'todos'">
+        {{ t().pm_seguimiento.filtro_todos }} ({{ planes.length }})
+      </button>
+      <button type="button" role="tab" [attr.aria-selected]="filtro === 'atrasados'" (click)="cambiarFiltro('atrasados')"
+              class="btn-secondary" [class.btn-primary]="filtro === 'atrasados'">
+        {{ t().pm_seguimiento.filtro_atrasados }} ({{ totalAtrasados }})
+      </button>
+    </div>
+
+    <p class="m-0" style="color: var(--fono-texto-suave);" *ngIf="filtro === 'atrasados' && visibles.length === 0">
+      {{ t().pm_seguimiento.sin_atrasados }}
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <div class="form-card" style="max-width: none;" *ngFor="let plan of visibles">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <!-- El semáforo: lo primero que se lee de cada fila -->
+              <span class="badge" [class.badge-cita-realizada]="plan.al_dia" [class.badge-cita-cancelada]="!plan.al_dia">
+                {{ plan.al_dia ? t().pm_seguimiento.al_dia : t().pm_seguimiento.atrasado }}
+              </span>
+              <h3 class="m-0 font-semibold" style="color: var(--fono-texto);">{{ plan.paciente_nombre }}</h3>
+            </div>
+            <p class="mt-1 mb-0 text-sm" style="color: var(--fono-texto-suave);">
+              {{ textoPeriodicidad(plan) }} · {{ textoUltimoVideo(plan) }}
+            </p>
+          </div>
+          <button type="button" class="btn-primary" (click)="verDetalle(plan)">
+            {{ t().pm_seguimiento.btn_ver }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

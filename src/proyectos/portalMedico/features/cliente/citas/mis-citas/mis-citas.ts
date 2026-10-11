@@ -5,16 +5,15 @@ import { Router, RouterModule } from '@angular/router';
 
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
 import { PortalMedicoService, ProfesionalDirectorio } from '@core/services/portal-medico/portal-medico';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
 import {
-  PmCitaService,
-  Cita,
   CITA_HORAS_MINIMAS_ANTICIPACION,
   CITA_REPROGRAMACIONES_MAXIMAS
-} from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cita.const';
 import { TextosService } from '@core/services/textos/textos';
 
-/** Acción abierta sobre una cita concreta (solo una a la vez). */
-type AccionCita = 'posponer' | 'cancelar' | null;
+import { AccionCita } from './interface/mis-citas.interface';
 
 /**
  * Citas del paciente: próximas e historial, con cancelación y cambio de fecha.

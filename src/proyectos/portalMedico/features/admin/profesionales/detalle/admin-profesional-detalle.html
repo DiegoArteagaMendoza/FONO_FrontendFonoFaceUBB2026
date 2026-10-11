@@ -23,7 +23,7 @@
     <!-- DATOS DEL PROFESIONAL -->
     <div class="form-card" style="max-width: none;">
       <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_datos }}</h3>
-      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));">
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_nombre }}</strong><br>{{ profesional.nombres_profesional }} {{ profesional.apellidos_profesional }}</p>
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_rut }}</strong><br>{{ profesional.rut_profesional }}</p>
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_email }}</strong><br>{{ profesional.email_profesional }}</p>
@@ -31,6 +31,72 @@
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_numero_registro }}</strong><br>{{ profesional.numero_registro_salud_profesional || '—' }}</p>
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_registrado_desde }}</strong><br>{{ profesional.fecha_creacion | date:'dd/MM/yyyy' }}</p>
       </div>
+    </div>
+
+    <!-- ESTADO DE LA CUENTA -->
+    <div class="form-card" style="max-width: none;">
+      <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_estado }}</h3>
+
+      <span class="badge mb-3" style="display: inline-block;"
+            [ngClass]="profesional.estado_cuenta_profesional ? 'badge-aprobado' : 'badge-rechazado'">
+        {{ profesional.estado_cuenta_profesional
+             ? t().pm_profesional_detalle.estado_habilitada
+             : t().pm_profesional_detalle.estado_deshabilitada }}
+      </span>
+
+      <p class="text-sm" style="color: var(--fono-texto-suave);">
+        {{ profesional.estado_cuenta_profesional
+             ? t().pm_profesional_detalle.estado_desc_habilitada
+             : t().pm_profesional_detalle.estado_desc_deshabilitada }}
+      </p>
+
+      <!-- Solo el rol máximo cambia el estado, igual que en la acreditación -->
+      <ng-container *ngIf="adminService.usuarioActual()?.is_staff; else sinPermisoEstado">
+
+        <div class="td-actions" *ngIf="!confirmandoBaja">
+          <button *ngIf="profesional.estado_cuenta_profesional" class="btn-icon delete"
+                  [disabled]="procesandoEstado" (click)="abrirBaja()">
+            {{ t().pm_profesional_detalle.btn_deshabilitar }}
+          </button>
+          <button *ngIf="!profesional.estado_cuenta_profesional" class="btn-icon view"
+                  [disabled]="procesandoEstado" (click)="habilitarCuenta()">
+            {{ procesandoEstado
+                 ? t().pm_profesional_detalle.procesando_estado
+                 : t().pm_profesional_detalle.btn_habilitar }}
+          </button>
+        </div>
+
+        <!-- Confirmación con motivo: lo que se escriba aquí le llega al paciente -->
+        <div *ngIf="confirmandoBaja" style="border-top: 1px solid var(--fono-borde); padding-top: 1rem;">
+          <h4 class="mt-0 mb-1" style="color: var(--fono-texto-fuerte);">
+            {{ t().pm_profesional_detalle.baja_titulo }}
+          </h4>
+          <div class="error-alert">{{ t().pm_profesional_detalle.baja_advertencia }}</div>
+
+          <div class="form-group mt-3">
+            <label for="motivo-baja">{{ t().pm_profesional_detalle.baja_label_motivo }}</label>
+            <textarea id="motivo-baja" rows="2" [(ngModel)]="motivoBaja" name="motivo-baja"
+                      [placeholder]="t().pm_profesional_detalle.baja_placeholder_motivo"></textarea>
+          </div>
+
+          <div class="td-actions">
+            <button class="btn-icon delete" [disabled]="procesandoEstado" (click)="deshabilitarCuenta()">
+              {{ procesandoEstado
+                   ? t().pm_profesional_detalle.procesando_estado
+                   : t().pm_profesional_detalle.btn_confirmar_baja }}
+            </button>
+            <button class="btn-icon view" [disabled]="procesandoEstado" (click)="cerrarBaja()">
+              {{ t().pm_profesional_detalle.btn_cancelar_baja }}
+            </button>
+          </div>
+        </div>
+
+      </ng-container>
+      <ng-template #sinPermisoEstado>
+        <p class="text-sm" style="color: var(--fono-texto-tenue); font-style: italic;">
+          {{ t().pm_profesional_detalle.error_permisos }}
+        </p>
+      </ng-template>
     </div>
 
     <!-- ACREDITACIÓN -->
@@ -88,9 +154,12 @@
           <tbody>
             <tr *ngFor="let documento of profesional.documentos">
               <td class="td-title">
-                <a [href]="documento.url_documento_profesional" target="_blank" rel="noopener">
+                <!-- Abre el visor sobre la ficha en vez de saltar a otra pestaña,
+                     para no perder el contexto de la revisión. -->
+                <button type="button" class="enlace-documento"
+                        (click)="abrirDocumento(documento)">
                   {{ t().pm_tipos_documento[documento.tipo_documeto_profesional] }}
-                </a>
+                </button>
               </td>
               <td>{{ documento.fecha_subida_documento_profesional | date:'dd/MM/yyyy HH:mm' }}</td>
               <td>
@@ -126,6 +195,45 @@
           {{ relacion.especialidad.nombre_especialidad_profesional }}
         </span>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ VISOR DEL DOCUMENTO ============ -->
+<!-- Se muestra sobre la ficha para revisar el respaldo sin perder el contexto.
+     El <object> intenta incrustar el PDF y, si el navegador o el servicio de
+     almacenamiento no lo permiten, cae en el bloque de respaldo de dentro. -->
+<div class="modal-overlay" *ngIf="documentoAbierto" (click)="cerrarDocumento()">
+  <div class="modal-content" style="max-width: 900px; width: 92vw;" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h3 class="m-0">
+        {{ t().pm_documentos.visor_titulo }} ·
+        {{ t().pm_tipos_documento[documentoAbierto.tipo_documeto_profesional] }}
+      </h3>
+      <button type="button" class="btn-icon" (click)="cerrarDocumento()"
+              [attr.aria-label]="t().pm_documentos.visor_btn_cerrar">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <object [data]="urlDocumentoSegura" type="application/pdf"
+              style="width: 100%; height: 70vh; border: 0;">
+        <div class="error-alert">
+          <strong>{{ t().pm_documentos.visor_error_titulo }}</strong>
+          <p class="mt-1 mb-0">{{ t().pm_documentos.visor_error_desc }}</p>
+        </div>
+      </object>
+    </div>
+
+    <div class="form-actions">
+      <a class="btn-secondary" [href]="documentoAbierto.url_documento_profesional"
+         target="_blank" rel="noopener">
+        {{ t().pm_documentos.visor_btn_descargar }}
+      </a>
+      <button type="button" class="btn-secondary" (click)="cerrarDocumento()">
+        {{ t().pm_documentos.visor_btn_cerrar }}
+      </button>
     </div>
 
   </div>

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { AdministracionService } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { RUTA_LISTADO_CARRUSEL } from '@core/constants/rutas.const';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-editar-inicio',
@@ -25,7 +27,6 @@ export class AdministracionInicioEditarComponent implements OnInit {
 
   imagenActualUrl: string | null = null;
   nuevaImagenSeleccionada: File | null = null;
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private fb: FormBuilder,
@@ -83,13 +84,7 @@ export class AdministracionInicioEditarComponent implements OnInit {
   }
 
   obtenerUrlImagen(ruta: string | null): string {
-    if (!ruta) return '';
-    if (ruta.startsWith('http')) return ruta;
-    if (!ruta.includes('/media/')) {
-      const limpia = ruta.startsWith('/') ? ruta.slice(1) : ruta;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return ruta.startsWith('/') ? this.backendUrl + ruta : `${this.backendUrl}/${ruta}`;
+    return resolverUrlImagen(ruta);
   }
 
   onFileChange(event: any): void {
@@ -138,6 +133,8 @@ export class AdministracionInicioEditarComponent implements OnInit {
   }
 
   volver(): void {
-    this.router.navigate(['/administracion/inicio']);
+    // Al listado del carrusel, no al dashboard: '/administracion/inicio'
+    // renderiza el panel de inicio, no la lista de la que se venía.
+    this.router.navigate([RUTA_LISTADO_CARRUSEL]);
   }
 }

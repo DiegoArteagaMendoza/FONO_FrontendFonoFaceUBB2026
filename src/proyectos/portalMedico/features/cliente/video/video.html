@@ -23,7 +23,21 @@
       </div>
     </div>
 
-    <ng-container *ngIf="!exito">
+    <!-- Sin ninguna hora a la que adjuntar, no hay formulario que mostrar: el
+         video acompaña a una atención, así que el único camino es reservar. -->
+    <div *ngIf="!exito && !cargandoCitas && citasDisponibles.length === 0" class="empty-state">
+      <p class="m-0 text-lg font-semibold" style="color: var(--fono-texto);">
+        {{ t().pmc_video.sin_citas_titulo }}
+      </p>
+      <p class="mt-2 mb-4" style="color: var(--fono-texto-suave);">
+        {{ t().pmc_video.sin_citas_disponibles }}
+      </p>
+      <button type="button" class="btn-primary" (click)="irAReservar()">
+        {{ t().pmc_video.btn_reservar_hora }}
+      </button>
+    </div>
+
+    <ng-container *ngIf="!exito && citasDisponibles.length > 0">
       <p class="text-sm mb-4" style="color: var(--fono-texto-suave);">
         {{ t().pmc_video.identificado_como }} <strong style="color: var(--fono-texto-cuerpo);">{{ nombreCliente }}</strong>
       </p>
@@ -55,26 +69,19 @@
           </div>
         </div>
 
-        <!-- Cita a la que se adjunta (opcional): solo se ofrecen las que el
-             backend acepta, es decir reservadas y con carga de video permitida -->
+        <!-- Cita a la que se adjunta. Obligatoria: el video existe para que el
+             fonoaudiólogo lo revise antes de una atención concreta. Solo se
+             ofrecen las que el backend acepta, es decir reservadas y con carga
+             de video permitida. -->
         <div class="form-group">
           <label for="cita">{{ t().pmc_video.label_cita }}</label>
-          <select id="cita" formControlName="cita" *ngIf="citasDisponibles.length > 0">
+          <select id="cita" formControlName="cita">
             <option value="">{{ t().pmc_video.placeholder_cita }}</option>
             <option *ngFor="let cita of citasDisponibles" [value]="cita.id_cita">
               {{ etiquetaCita(cita) }}
             </option>
           </select>
-          <small class="help-text" *ngIf="citasDisponibles.length > 0">{{ t().pmc_video.ayuda_cita }}</small>
-
-          <ng-container *ngIf="citasDisponibles.length === 0">
-            <small class="help-text">{{ t().pmc_video.sin_citas_disponibles }}</small>
-            <div class="mt-2">
-              <button type="button" class="btn-secondary" (click)="irAReservar()">
-                {{ t().pmc_video.btn_reservar_hora }}
-              </button>
-            </div>
-          </ng-container>
+          <small class="help-text">{{ t().pmc_video.ayuda_cita }}</small>
         </div>
 
         <div class="form-group">

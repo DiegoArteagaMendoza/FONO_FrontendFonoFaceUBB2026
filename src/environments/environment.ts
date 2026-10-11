@@ -12,5 +12,9 @@ export const environment = {
   apiUrlPortalMedicoVideos: 'https://dev-portal.vocare-ubb.cl/api/pm/videos',
 
   // App PmCita: agenda de citas telemáticas entre paciente y fonoaudiólogo.
-  apiUrlPortalMedicoCitas: 'https://dev-portal.vocare-ubb.cl/api/pm/citas'
+  apiUrlPortalMedicoCitas: 'https://dev-portal.vocare-ubb.cl/api/pm/citas',
+
+  // App PmTerapia: ejercicios del fonoaudiólogo y seguimiento de terapia
+  // (planes, videos de progreso, retroalimentación).
+  apiUrlPortalMedicoTerapia: 'https://dev-portal.vocare-ubb.cl/api/pm/terapia'
 };

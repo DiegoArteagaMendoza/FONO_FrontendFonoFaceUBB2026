@@ -3,92 +3,26 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../constants/api.constants';
-import { VideoSintomas } from './pm-cliente';
+import { VideoSintomas } from './interface/pm-cliente.interface';
 
-// =========================================================
-// INTERFACES (reflejan PmCita/serializer.py)
-// =========================================================
-
-/** Estados de una cita, tal como los define PmCita.Estado en el backend. */
-export type EstadoCita = 'RE' | 'CC' | 'CM' | 'RZ';
-
-/** Quién originó una cancelación o una reprogramación (PmCita.Origen). */
-export type OrigenCambio = 'CLIENTE' | 'PROFESIONAL';
-
-export interface Cita {
-  id_cita: number;
-  cliente: number;
-  profesional: number;
-  fecha_hora: string;
-  duracion_minutos: number;
-  motivo_consulta: string | null;
-  estado: EstadoCita;
-  permite_carga_video: boolean;
-  fecha_creacion: string;
-  fecha_actualizacion: string;
-
-  // Cancelación
-  motivo_cancelacion: string | null;
-  fecha_cancelacion: string | null;
-  cancelada_por: OrigenCambio | null;
-
-  // Reprogramación
-  fecha_hora_original: string | null;
-  veces_reprogramada: number;
-  motivo_reprogramacion: string | null;
-  reprogramada_por: OrigenCambio | null;
-  fecha_ultima_reprogramacion: string | null;
-
-  // Atención
-  fecha_marcada_realizada: string | null;
-
-  // Calculados por el backend
-  esta_activa: boolean;
-  ya_paso: boolean;
-}
-
-/**
- * Cuerpo de POST /reservar/. No incluye el id del paciente: el backend lo toma
- * del token, igual que en la subida de videos. Mandarlo no serviría de nada.
- */
-export interface ReservarCitaPayload {
-  id_profesional: number;
-  fecha_hora: string;
-  motivo_consulta?: string;
-  duracion_minutos?: number;
-}
-
-export interface PosponerCitaPayload {
-  fecha_hora: string;
-  motivo?: string;
-}
-
-export interface CancelarCitaPayload {
-  motivo?: string;
-}
-
-// =========================================================
-// REGLAS DEL NEGOCIO
-// Espejo de las constantes de FonoAppPortalMedico/PmCita/models.py. Se usan
-// aquí para guiar el formulario (mínimos del selector de fecha, tope de
-// reprogramaciones, avisos), pero el backend las vuelve a validar siempre:
-// es él quien manda. Si allá cambian, hay que actualizarlas aquí.
-// =========================================================
-
-export const CITA_DURACION_MINUTOS_DEFECTO = 45;
-export const CITA_DURACION_MINUTOS_MINIMA = 15;
-export const CITA_DURACION_MINUTOS_MAXIMA = 120;
-export const CITA_HORAS_MINIMAS_ANTICIPACION = 2;
-export const CITA_REPROGRAMACIONES_MAXIMAS = 3;
-
-/** Duraciones ofrecidas en el formulario, todas dentro del rango permitido. */
-export const CITA_DURACIONES_SUGERIDAS = [15, 30, 45, 60, 90, 120];
-
-// Las mismas claves que usan PmClienteService y PortalMedicoService. Se leen
-// aquí directamente (igual que en auth.interceptor.ts) porque este servicio
-// atiende a las dos identidades: el paciente y el fonoaudiólogo.
-const CLAVE_PMC_ACCESS = 'pmc_access_token';
-const CLAVE_PM_ACCESS = 'pm_access_token';
+import {
+  Cita,
+  CitaSeguimiento,
+  Disponibilidad,
+  DisponibilidadPublica,
+  ResultadoPublicacion,
+  ReservarCitaPayload,
+  PosponerCitaPayload,
+  CancelarCitaPayload
+} from './interface/pm-cita.interface';
+import {
+  CITA_HORAS_MINIMAS_ANTICIPACION,
+  CITA_REPROGRAMACIONES_MAXIMAS
+} from './constants/pm-cita.const';
+// Las mismas claves que usan PmClienteService y PortalMedicoService: se leen
+// desde aquí (igual que en auth.interceptor.ts) porque este servicio atiende a
+// las dos identidades, la del paciente y la del fonoaudiólogo.
+import { CLAVE_PMC_ACCESS, CLAVE_PM_ACCESS } from './constants/pm-cliente.const';
 
 @Injectable({
   providedIn: 'root'
@@ -106,6 +40,19 @@ export class PmCitaService {
     return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PMC_ACCESS)}` });
   }
 
+  /**
+   * Cabeceras para reservar, que ahora funciona con y sin sesión. Si no hay
+   * token, se devuelve un objeto vacío en vez de "Bearer null": mandar una
+   * cabecera de autorización inválida hace que el backend responda 401 en vez
+   * de tratar la petición como anónima.
+   */
+  private getHeadersOpcionalesDeCliente(): HttpHeaders {
+    const token = localStorage.getItem(CLAVE_PMC_ACCESS);
+    return token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : new HttpHeaders();
+  }
+
   private getProfesionalAuthHeaders(): HttpHeaders {
     return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem(CLAVE_PM_ACCESS)}` });
   }
@@ -114,11 +61,26 @@ export class PmCitaService {
   // Lado del paciente
   // ---------------------------------------------------------------------
 
+  /**
+   * Reserva tomando una hora publicada. Funciona con y sin sesión: si hay
+   * token va como el paciente autenticado, y si no, el payload debe traer
+   * 'paciente' con sus datos personales.
+   */
   reservar(datos: ReservarCitaPayload): Observable<Cita> {
     return this.http.post<Cita>(
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.reservar}`,
       datos,
-      { headers: this.getClienteAuthHeaders() }
+      { headers: this.getHeadersOpcionalesDeCliente() }
+    );
+  }
+
+  /**
+   * Horas libres de un profesional. Endpoint público: el paciente necesita
+   * verlas antes de decidir si se registra.
+   */
+  getDisponibilidadDeProfesional(idProfesional: number): Observable<DisponibilidadPublica[]> {
+    return this.http.get<DisponibilidadPublica[]>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadDeProfesional(idProfesional)}`
     );
   }
 
@@ -188,6 +150,68 @@ export class PmCitaService {
     return this.http.patch<Cita>(
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.profesionalMarcarRealizada(idCita)}`,
       {},
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  // --- Seguimiento por código (sin sesión) ---
+
+  /**
+   * Consulta una cita con el código que llegó por correo. No lleva cabeceras
+   * de autorización: el código es la credencial.
+   */
+  getPorCodigo(codigo: string): Observable<CitaSeguimiento> {
+    return this.http.get<CitaSeguimiento>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.seguimiento(codigo)}`
+    );
+  }
+
+  cancelarPorCodigo(codigo: string, datos: CancelarCitaPayload = {}): Observable<CitaSeguimiento> {
+    return this.http.patch<CitaSeguimiento>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.seguimientoCancelar(codigo)}`,
+      datos
+    );
+  }
+
+  posponerPorCodigo(codigo: string, datos: PosponerCitaPayload): Observable<CitaSeguimiento> {
+    return this.http.patch<CitaSeguimiento>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.seguimientoPosponer(codigo)}`,
+      datos
+    );
+  }
+
+  // --- Disponibilidad publicada por el profesional ---
+
+  /**
+   * Publica varias horas de una vez. La respuesta separa las creadas de las
+   * rechazadas: un solape en una hora no debe obligar a repetir la jornada.
+   */
+  publicarDisponibilidad(fechasHora: string[], duracionMinutos?: number): Observable<ResultadoPublicacion> {
+    const cuerpo: { fechas_hora: string[]; duracion_minutos?: number } = { fechas_hora: fechasHora };
+    if (duracionMinutos) cuerpo.duracion_minutos = duracionMinutos;
+
+    return this.http.post<ResultadoPublicacion>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadPublicar}`,
+      cuerpo,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /** Horas publicadas por el profesional autenticado, con su estado. */
+  getMisDisponibilidades(incluirPasadas = false): Observable<Disponibilidad[]> {
+    const ruta = incluirPasadas
+      ? API_ENDPOINTS.portalMedicoCitas.disponibilidadMiasTodas
+      : API_ENDPOINTS.portalMedicoCitas.disponibilidadMias;
+
+    return this.http.get<Disponibilidad[]>(`${this.apiCitas}${ruta}`, {
+      headers: this.getProfesionalAuthHeaders()
+    });
+  }
+
+  /** Retira una hora publicada. El backend rechaza las que ya tienen cita. */
+  retirarDisponibilidad(idDisponibilidad: number): Observable<Disponibilidad> {
+    return this.http.delete<Disponibilidad>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadRetirar(idDisponibilidad)}`,
       { headers: this.getProfesionalAuthHeaders() }
     );
   }

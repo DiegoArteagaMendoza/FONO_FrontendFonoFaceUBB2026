@@ -1,16 +1,20 @@
 import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
 import {
-  PmClienteService,
   VideoSintomas,
+  ResultadoValidacionVideo
+} from '@core/services/portal-medico/interface/pm-cliente.interface';
+import {
   VIDEO_DURACION_MAXIMA_SEGUNDOS,
   VIDEO_TAMANO_MAXIMO_MB,
   VIDEO_EXTENSIONES_PERMITIDAS,
   VIDEO_DIAS_VIGENCIA
-} from '@core/services/portal-medico/pm-cliente';
-import { PmCitaService, Cita } from '@core/services/portal-medico/pm-cita';
+} from '@core/services/portal-medico/constants/pm-cliente.const';
+import { PmCitaService } from '@core/services/portal-medico/pm-cita';
+import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
 import { PortalMedicoService, ProfesionalDirectorio } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
 
@@ -52,6 +56,7 @@ export class PmClienteVideoComponent implements OnInit {
   // Citas a las que se puede adjuntar el video: solo las que el backend acepta
   // (activas y con permite_carga_video). Ver PmVideo/serializer.validate.
   citasDisponibles: Cita[] = [];
+  cargandoCitas = true;
   private nombresProfesional = new Map<number, string>();
 
   // Reglas expuestas a la plantilla
@@ -63,7 +68,9 @@ export class PmClienteVideoComponent implements OnInit {
   constructor() {
     this.formulario = this.fb.group({
       descripcion: [''],
-      cita: ['']
+      // Obligatoria: el video existe para que el fonoaudiólogo lo revise antes
+      // de una atención concreta. Primero se toma la hora, después se graba.
+      cita: ['', [Validators.required]]
     });
   }
 
@@ -90,11 +97,16 @@ export class PmClienteVideoComponent implements OnInit {
     this.pmCitaService.getMisCitas(idCliente, true).subscribe({
       next: (citas) => {
         this.citasDisponibles = citas.filter(cita => this.pmCitaService.admiteVideo(cita));
+        this.cargandoCitas = false;
         this.preseleccionarCitaDeLaUrl();
         this.cdr.detectChanges();
       },
-      // Sin el listado el video se puede subir igual, solo sin asociar a una cita.
-      error: () => this.cdr.detectChanges()
+      // Sin el listado no hay a qué adjuntar: la pantalla queda en su estado
+      // vacío, que lleva a reservar.
+      error: () => {
+        this.cargandoCitas = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -223,62 +235,52 @@ export class PmClienteVideoComponent implements OnInit {
 
     if (!archivo) return;
 
-    // 1. Formato
-    const extension = archivo.name.toLowerCase().split('.').pop() ?? '';
-    if (!this.formatos.includes(extension)) {
-      this.errorMensaje = this.textosService.reemplazarVariables(
-        this.t().pmc_video.alerta_video_formato,
-        { formatos: this.formatos.join(', ') }
-      );
-      input.value = '';
-      this.cdr.detectChanges();
-      return;
-    }
+    const revision = await this.pmClienteService.validarArchivoDeVideo(archivo);
 
-    // 2. Peso
-    const mb = archivo.size / (1024 * 1024);
-    if (mb > this.pesoMaximo) {
-      this.errorMensaje = this.textosService.reemplazarVariables(
-        this.t().pmc_video.alerta_video_peso,
-        { peso: mb.toFixed(1), maximo: this.pesoMaximo + '' }
-      );
-      input.value = '';
-      this.cdr.detectChanges();
-      return;
-    }
-
-    // 3. Duración real del video
-    try {
-      const duracion = await this.pmClienteService.obtenerDuracionSegundos(archivo);
-
-      if (duracion > this.duracionMaxima) {
-        this.errorMensaje = this.textosService.reemplazarVariables(
-          this.t().pmc_video.alerta_video_duracion,
-          { duracion: duracion + '', maximo: this.duracionMaxima + '' }
-        );
-        input.value = '';
-        this.cdr.detectChanges();
-        return;
-      }
-
-      this.duracionSegundos = duracion;
-    } catch {
-      // Si el navegador no logra leer los metadatos, dejamos que el backend decida
-      this.duracionSegundos = null;
-      this.errorMensaje = this.t().pmc_video.alerta_video_req;
+    if (!revision.valido) {
+      this.errorMensaje = this.mensajeDeMotivo(revision);
       input.value = '';
       this.cdr.detectChanges();
       return;
     }
 
     this.archivo = archivo;
-    this.tamanoMb = Number(mb.toFixed(1));
+    this.duracionSegundos = revision.duracionSegundos ?? null;
+    this.tamanoMb = revision.tamanoMb ?? null;
     this.cdr.detectChanges();
+  }
+
+  /** Traduce el motivo del rechazo al texto que ve la persona. */
+  private mensajeDeMotivo(revision: ResultadoValidacionVideo): string {
+    const textos = this.t().pmc_video;
+
+    switch (revision.motivo) {
+      case 'formato':
+        return this.textosService.reemplazarVariables(textos.alerta_video_formato, {
+          formatos: this.formatos.join(', ')
+        });
+      case 'peso':
+        return this.textosService.reemplazarVariables(textos.alerta_video_peso, {
+          peso: (revision.tamanoMb ?? 0) + '', maximo: this.pesoMaximo + ''
+        });
+      case 'duracion':
+        return this.textosService.reemplazarVariables(textos.alerta_video_duracion, {
+          duracion: (revision.duracionSegundos ?? 0) + '', maximo: this.duracionMaxima + ''
+        });
+      default:
+        return textos.alerta_video_req;
+    }
   }
 
   onSubmit(): void {
     if (!this.archivo || this.duracionSegundos === null) {
       this.errorMensaje = this.t().pmc_video.alerta_video_req;
+      return;
+    }
+
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      this.errorMensaje = this.t().pmc_video.alerta_cita_req;
       return;
     }
 
@@ -295,11 +297,7 @@ export class PmClienteVideoComponent implements OnInit {
       datos.append('descripcion', descripcion);
     }
 
-    // La cita es opcional: solo viaja si el paciente eligió una.
-    const cita = this.formulario.get('cita')?.value;
-    if (cita) {
-      datos.append('cita', cita);
-    }
+    datos.append('cita', this.formulario.get('cita')?.value);
 
     this.pmClienteService.subirVideo(datos).subscribe({
       next: () => {

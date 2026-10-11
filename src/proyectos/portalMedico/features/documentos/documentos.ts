@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { PortalMedicoService, DocumentoRespaldo, TipoDocumento } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-pm-documentos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TablaResponsivaDirective],
   templateUrl: './documentos.html'
 })
 export class PortalMedicoDocumentosComponent implements OnInit {

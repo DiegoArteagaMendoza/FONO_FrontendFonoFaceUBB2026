@@ -49,6 +49,10 @@ export const API_ENDPOINTS = {
     detalle: (idProfesional: number) => `/${idProfesional}/`,
     directorio: '/directorio/',
 
+    // Estado de la cuenta del profesional (solo administrador)
+    profesionalDeshabilitar: (idProfesional: number) => `/${idProfesional}/deshabilitar/`,
+    profesionalHabilitar: (idProfesional: number) => `/${idProfesional}/habilitar/`,
+
     // Documentos de respaldo
     documentoSubir: '/documentos/subir/',
     documentoEliminar: (idDocumento: number) => `/documentos/${idDocumento}/eliminar/`,
@@ -101,7 +105,13 @@ export const API_ENDPOINTS = {
     eliminar: (idVideo: number) => `/${idVideo}/eliminar/`,
 
     // Videos adjuntos a una cita concreta (solo el profesional que la atiende)
-    listarPorCita: (idCita: number) => `/listar/?cita=${idCita}`
+    listarPorCita: (idCita: number) => `/listar/?cita=${idCita}`,
+
+    // Quien reservó sin cuenta gestiona su video con el código del correo.
+    // No llevan token ni ids: la cita sale del código y el dueño, de la cita.
+    seguimientoListar: (codigo: string) => `/seguimiento/${codigo}/`,
+    seguimientoSubir: (codigo: string) => `/seguimiento/${codigo}/subir/`,
+    seguimientoEliminar: (codigo: string) => `/seguimiento/${codigo}/eliminar/`
   },
 
   // Portal Médico — citas telemáticas (app PmCita del backend FonoAppPortalMedico).
@@ -126,6 +136,73 @@ export const API_ENDPOINTS = {
     detalle: (idCita: number) => `/${idCita}/`,
 
     // Listado administrativo con filtros combinables
-    listar: '/listar/'
+    listar: '/listar/',
+
+    // Disponibilidad: horas que el profesional publica para ser reservadas.
+    // El listado por profesional es público porque se puede reservar sin cuenta.
+    disponibilidadPublicar: '/disponibilidad/publicar/',
+    disponibilidadMias: '/disponibilidad/mias/',
+    disponibilidadMiasTodas: '/disponibilidad/mias/?todas=true',
+    disponibilidadRetirar: (idDisponibilidad: number) => `/disponibilidad/${idDisponibilidad}/retirar/`,
+    disponibilidadDeProfesional: (idProfesional: number) => `/disponibilidad/profesional/${idProfesional}/`,
+
+    // Seguimiento por código: para quien reservó sin cuenta. El código que
+    // recibió por correo hace de credencial, por eso no llevan token.
+    seguimiento: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/`,
+    seguimientoCancelar: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/cancelar/`,
+    seguimientoPosponer: (codigo: string) => `/seguimiento/${encodeURIComponent(codigo)}/posponer/`
+  },
+
+  // Portal Médico — terapia (app PmTerapia del backend FonoAppPortalMedico).
+  // Rutas relativas a environment.apiUrlPortalMedicoTerapia.
+  portalMedicoTerapia: {
+    // Catálogo de ejercicios del fonoaudiólogo: privado, todo con su token.
+    // Crear y editar van en FormData porque llevan el video de ejemplo.
+    ejercicios: '/ejercicios/',
+    ejercicioCrear: '/ejercicios/crear/',
+    ejercicioEditar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/editar/`,
+    ejercicioEliminar: (idEjercicio: number) => `/ejercicios/${idEjercicio}/eliminar/`,
+
+    // Plan de terapia, lado del fonoaudiólogo. Un plan activo por paciente.
+    planCrear: '/planes/crear/',
+    planes: '/planes/',
+    planesTodos: '/planes/?todos=true',
+    planDetalle: (idPlan: number) => `/planes/${idPlan}/`,
+    planAjustar: (idPlan: number) => `/planes/${idPlan}/ajustar/`,
+    planCerrar: (idPlan: number) => `/planes/${idPlan}/cerrar/`,
+    // El plan activo del paciente de esa cita: la agenda decide con esto si
+    // ofrece "Asignar plan" o "Ajustar plan". Responde { plan: ... | null }.
+    planDeCita: (idCita: number) => `/planes/de-cita/${idCita}/`,
+
+    // Seguimiento, lado del fonoaudiólogo: periodos cumplidos, historial del
+    // plan y retroalimentación. El semáforo viene en el propio listado de planes.
+    planSeguimiento: (idPlan: number) => `/planes/${idPlan}/seguimiento/`,
+    planVideos: (idPlan: number) => `/planes/${idPlan}/videos/`,
+    videoRetroalimentar: (idVideo: number) => `/videos/${idVideo}/retroalimentar/`,
+
+    // Plan de terapia, lado del paciente (token del paciente)
+    misPlanes: '/mis-planes/',
+
+    // Videos de progreso del paciente: uno por ejercicio en cada periodo,
+    // viven 7 días. Subir va en FormData.
+    miPlanVideoSubir: (idPlan: number) => `/mis-planes/${idPlan}/videos/subir/`,
+    miPlanVideos: (idPlan: number) => `/mis-planes/${idPlan}/videos/`,
+    miVideoProgresoEliminar: (idVideo: number) => `/mis-videos/${idVideo}/eliminar/`
+  },
+
+  // Autoevaluación / diagnóstico rápido (backend FonoApp, app FonoAppDiagnostico).
+  // Listar, detalle y responder son públicos: el cliente del portal responde el
+  // test sin cuenta propia. Crear, editar, eliminar y ver respuestas exigen el
+  // token de una cuenta de administración (cualquier rol).
+  diagnostico: {
+    listar: '/diagnostico/formularios/listar/',
+    detalle: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/`,
+    crear: '/diagnostico/formularios/crear/',
+    editar: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/editar/`,
+    eliminar: (idFormulario: number) => `/diagnostico/formularios/${idFormulario}/eliminar/`,
+    responder: '/diagnostico/respuestas/crear/',
+    // Público también: el paciente lo escribe recién al ver su resultado, no se guarda.
+    enviarCorreo: (idRespuesta: number) => `/diagnostico/respuestas/${idRespuesta}/enviar-correo/`,
+    respuestasDeFormulario: (idFormulario: number) => `/diagnostico/respuestas/formulario/${idFormulario}/`
   }
 };

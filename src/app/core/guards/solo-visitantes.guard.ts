@@ -5,13 +5,7 @@ import { AuthService } from '../services/auth/auth';
 import { PortalMedicoService } from '../services/portal-medico/portal-medico';
 import { PmClienteService } from '../services/portal-medico/pm-cliente';
 
-/**
- * Las identidades que conviven en la aplicación.
- * 'portalMedico' cubre la pantalla de login unificada, que sirve tanto a
- * pacientes como a profesionales mediante pestañas: basta con que una de las
- * dos sesiones esté activa para que no tenga sentido volver a ese formulario.
- */
-export type IdentidadPortal = 'admin' | 'profesional' | 'paciente' | 'portalMedico';
+import { IdentidadPortal } from './interface/solo-visitantes.interface';
 
 /**
  * Impide entrar a las pantallas de acceso (login / registro) cuando esa misma

@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AdministracionService, CarruselItem } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-administracion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './administracion-inicio.html'
 })
 export class AdministracionInicioComponent implements OnInit {
@@ -17,7 +19,6 @@ export class AdministracionInicioComponent implements OnInit {
   listaItems: CarruselItem[] = [];
   cargando = true;
   itemSeleccionado: CarruselItem | null = null; // <- Nueva variable para el modal
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private adminService: AdministracionService,
@@ -46,14 +47,7 @@ export class AdministracionInicioComponent implements OnInit {
   }
 
   obtenerUrlImagen(rutaImagen: string | null): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    
-    if (!rutaImagen.includes('/media/')) {
-      const limpia = rutaImagen.startsWith('/') ? rutaImagen.slice(1) : rutaImagen;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   irACrear(): void {

@@ -179,9 +179,16 @@ export class Inicio implements OnInit {
       informacion: this.informacionService.getInformacion().pipe(catchError(() => of([]))),
       cuidados: this.cuidadosService.getCuidados().pipe(catchError(() => of([]))),
       noticias: this.noticiasService.getNoticias().pipe(catchError(() => of([]))),
-      pendientes: this.portalMedicoService.getProfesionales('PENDIENTE').pipe(catchError(() => of([] as ProfesionalPerfil[])))
+      // La cola de revisión son DOS estados, no uno. Una acreditación nace en
+      // PENDIENTE y pasa a EN_REVISION en cuanto el profesional sube su primer
+      // documento (ver subir_documento en PmMedico/queryset.py). Pidiendo solo
+      // PENDIENTE, el profesional desaparecía de aquí justo cuando adjuntaba lo
+      // que hacía falta para revisarlo, que es exactamente al revés. Es el mismo
+      // criterio que usa PM_AcreditacionQueryset.pendientes() en el backend.
+      pendientes: this.portalMedicoService.getProfesionales('PENDIENTE').pipe(catchError(() => of([] as ProfesionalPerfil[]))),
+      enRevision: this.portalMedicoService.getProfesionales('EN_REVISION').pipe(catchError(() => of([] as ProfesionalPerfil[])))
     }).subscribe({
-      next: ({ informacion, cuidados, noticias, pendientes }) => {
+      next: ({ informacion, cuidados, noticias, pendientes, enRevision }) => {
         const items: ActividadItem[] = [
           ...informacion.map(item => ({
             tipo: 'informacion' as const,
@@ -221,7 +228,7 @@ export class Inicio implements OnInit {
           .sort((a, b) => b.claveOrden - a.claveOrden)
           .slice(0, MAX_ACTIVIDAD);
 
-        this.profesionalesPendientes = pendientes
+        this.profesionalesPendientes = [...pendientes, ...enRevision]
           .map(profesional => {
             const acreditacion = profesional.acreditaciones?.[0];
             const fechaSolicitud = acreditacion?.fecha_solicitud_profesional || profesional.fecha_creacion;

@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { InformacionService, Informacion, ImagenInformacion } from '@core/services/informacion/informacion';
 
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-editar',
@@ -25,7 +26,6 @@ export class EditarInformacion implements OnInit {
   
   // Nuevas variables para las imágenes
   imagenesActuales: ImagenInformacion[] = [];
-  public backendUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private fb: FormBuilder,
@@ -80,11 +80,8 @@ export class EditarInformacion implements OnInit {
     });
   }
 
-  // Método para obtener la URL correcta de la imagen
   obtenerUrlImagen(rutaImagen: string): string {
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(rutaImagen);
   }
 
   // Lógica preparada para eliminar la imagen

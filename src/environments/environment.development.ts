@@ -14,5 +14,9 @@ export const environment = {
     apiUrlPortalMedicoVideos: 'http://127.0.0.1:8001/api/pm/videos',
 
     // App PmCita: agenda de citas telemáticas entre paciente y fonoaudiólogo.
-    apiUrlPortalMedicoCitas: 'http://127.0.0.1:8001/api/pm/citas'
+    apiUrlPortalMedicoCitas: 'http://127.0.0.1:8001/api/pm/citas',
+
+    // App PmTerapia: ejercicios del fonoaudiólogo y seguimiento de terapia
+    // (planes, videos de progreso, retroalimentación).
+    apiUrlPortalMedicoTerapia: 'http://127.0.0.1:8001/api/pm/terapia'
 };

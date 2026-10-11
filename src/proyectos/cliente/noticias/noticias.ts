@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { NoticiasService, Noticia } from '@core/services/noticias/noticias';
 import { TextosService } from '@core/services/textos/textos';
+import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
 
 @Component({
   selector: 'app-noticias-cliente',
@@ -15,8 +16,6 @@ import { TextosService } from '@core/services/textos/textos';
 export class NoticiasClienteComponent implements OnInit, OnDestroy {
   public textosService = inject(TextosService);
   public t = this.textosService.t;
-
-  public backendUrl = 'http://127.0.0.1:8000';
 
   noticias: Noticia[] = [];
   destacadas: Noticia[] = [];   // Las que van en el carrusel (máx. 5)
@@ -77,17 +76,7 @@ export class NoticiasClienteComponent implements OnInit, OnDestroy {
 
   obtenerUrlImagen(noticia: Noticia): string {
     if (!noticia.imagenes || noticia.imagenes.length === 0) return '';
-    const rutaImagen = noticia.imagenes[0].imagen;
-
-    if (!rutaImagen) return '';
-    if (rutaImagen.startsWith('http')) return rutaImagen;
-
-    // Parche de seguridad para asegurar la ruta de medios de Django
-    if (!rutaImagen.includes('/media/')) {
-      const limpia = rutaImagen.startsWith('/') ? rutaImagen.slice(1) : rutaImagen;
-      return `${this.backendUrl}/media/${limpia}`;
-    }
-    return rutaImagen.startsWith('/') ? this.backendUrl + rutaImagen : `${this.backendUrl}/${rutaImagen}`;
+    return resolverUrlImagen(noticia.imagenes[0].imagen);
   }
 
   verDetalle(idNoticia: number): void {
