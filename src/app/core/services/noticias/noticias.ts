@@ -42,6 +42,13 @@ export class NoticiasService {
     return this.http.post<{ mensaje: string }>(url, { email });
   }
 
+  // Público: lo usa la página de baja a la que lleva el enlace de cada correo
+  // del newsletter. El token es el correo firmado por el backend, no un id.
+  darDeBajaNewsletter(token: string): Observable<{ mensaje: string }> {
+    const url = `${this.apiUrl}${API_ENDPOINTS.noticias.newsletterBaja}`;
+    return this.http.post<{ mensaje: string }>(url, { token });
+  }
+
   crearNoticia(datos: FormData): Observable<any> {
     // Obtenemos el token guardado en el login
     const token = localStorage.getItem('access_token');

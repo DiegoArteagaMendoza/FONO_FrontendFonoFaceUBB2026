@@ -45,6 +45,7 @@ import { FarmacosClienteComponent } from '../proyectos/cliente/farmacos/farmacos
 import { PromocionClienteComponent } from '../proyectos/cliente/promocion/promocion';
 import { NoticiasClienteComponent } from '../proyectos/cliente/noticias/noticias';
 import { NoticiasDetalleComponent } from '../proyectos/cliente/noticias/noticias-detalle/noticias-detalle';
+import { NewsletterBajaComponent } from '../proyectos/cliente/noticias/newsletter-baja/newsletter-baja';
 import { AutoevaluacionClienteComponent } from '../proyectos/cliente/autoevaluacion/autoevaluacion';
 import { AutoevaluacionDetalleComponent } from '../proyectos/cliente/autoevaluacion/autoevaluacion-detalle/autoevaluacion-detalle';
 // import { FarmacosDetalleComponent } from '../proyectos/cliente/farmacos-detalle/farmacos-detalle';
@@ -114,6 +115,8 @@ export const routes: Routes = [
       // RUTAS DE NOTICIAS
       { path: 'noticias', component: NoticiasClienteComponent },
       { path: 'noticias/:id', component: NoticiasDetalleComponent },
+      // Baja del newsletter: destino del enlace "darse de baja" de cada correo
+      { path: 'noticias/newsletter/baja', component: NewsletterBajaComponent },
 
       // RUTAS DE CUIDADOS
       { path: 'cuidados', component: CuidadosClienteComponent },

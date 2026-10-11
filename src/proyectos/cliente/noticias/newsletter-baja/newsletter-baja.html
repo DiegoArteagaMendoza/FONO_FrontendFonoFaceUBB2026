@@ -1,0 +1,36 @@
+<div class="baja-page">
+  <section class="baja-card">
+
+    <ng-container *ngIf="estado === 'confirmar' || estado === 'procesando'">
+      <h1>{{ t().portal_newsletter_baja.titulo }}</h1>
+      <p>{{ t().portal_newsletter_baja.descripcion }}</p>
+      <button class="btn-primary" (click)="confirmarBaja()" [disabled]="estado === 'procesando'">
+        {{ estado === 'procesando' ? t().portal_newsletter_baja.procesando : t().portal_newsletter_baja.confirmar }}
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="estado === 'listo'">
+      <h1>{{ t().portal_newsletter_baja.listo_titulo }}</h1>
+      <p>{{ t().portal_newsletter_baja.listo_descripcion }}</p>
+      <small>{{ t().portal_newsletter_baja.listo_nota }}</small>
+    </ng-container>
+
+    <ng-container *ngIf="estado === 'invalido'">
+      <h1>{{ t().portal_newsletter_baja.invalido_titulo }}</h1>
+      <p>{{ t().portal_newsletter_baja.invalido_descripcion }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="estado === 'error'">
+      <h1>{{ t().portal_newsletter_baja.error_titulo }}</h1>
+      <p>{{ t().portal_newsletter_baja.error_descripcion }}</p>
+      <button class="btn-primary" (click)="confirmarBaja()">
+        {{ t().portal_newsletter_baja.confirmar }}
+      </button>
+    </ng-container>
+
+    <button *ngIf="estado !== 'confirmar' && estado !== 'procesando'" class="btn-link" (click)="irANoticias()">
+      {{ t().portal_newsletter_baja.ir_noticias }}
+    </button>
+
+  </section>
+</div>

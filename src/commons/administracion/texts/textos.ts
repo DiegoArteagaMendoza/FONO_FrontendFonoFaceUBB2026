@@ -724,6 +724,22 @@ export const TEXTOS_SITIO = {
         publicada: "Publicada el"
     },
 
+    // VISTA BAJA DEL NEWSLETTER (enlace "darse de baja" de los correos)
+    portal_newsletter_baja: {
+        titulo: "Darse de baja del newsletter",
+        descripcion: "Si confirmas, dejarás de recibir los avisos de noticias nuevas del Portal Vocare UBB.",
+        confirmar: "Confirmar baja",
+        procesando: "Procesando...",
+        listo_titulo: "Listo",
+        listo_descripcion: "Te diste de baja del newsletter. Ya no recibirás avisos de noticias nuevas.",
+        listo_nota: "Si fue un error, puedes volver a suscribirte desde el portal cuando quieras.",
+        invalido_titulo: "Enlace no válido",
+        invalido_descripcion: "Este enlace de baja no es válido o está incompleto. Ábrelo de nuevo directamente desde el correo.",
+        error_titulo: "No pudimos completar la baja",
+        error_descripcion: "Ocurrió un problema al procesar tu solicitud. Inténtalo nuevamente en unos minutos.",
+        ir_noticias: "Ir a Noticias"
+    },
+
     // VISTA NOTICIAS DEL PORTAL CLIENTE
     portal_noticias: {
         titulo: "Noticias",
