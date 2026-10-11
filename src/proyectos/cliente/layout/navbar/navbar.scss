@@ -204,7 +204,10 @@ $border-color: var(--fono-borde);
 }
 
 /* ======== MEDIA QUERIES (Responsive) ======== */
-@media (max-width: 768px) {
+/* El menú plegable se usa hasta 1199px, no solo en teléfonos: la barra
+   completa (nueve enlaces, tema y "Acceso Admin") necesita ~1130px, y entre
+   769 y ~1160px los enlaces no cabían y se desbordaban. */
+@media (max-width: 1199px) {
   .navbar-container {
     padding: 0 1.5rem;
   }
@@ -227,8 +230,14 @@ $border-color: var(--fono-borde);
     transition: max-height 0.3s ease-out;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
+    /* Abierto: hasta el borde inferior de la pantalla y con scroll propio si
+       no alcanza. Con un tope fijo de 600px, el menú completo (729px) quedaba
+       cortado y "Acceso Admin" no se podía tocar; en un teléfono acostado,
+       menos aún. */
     &.active {
-      max-height: 600px; /* Expandido para alojar el submenú */
+      max-height: calc(100vh - 70px);
+      max-height: calc(100dvh - 70px);
+      overflow-y: auto;
     }
 
     > a:not(.btn-admin) {

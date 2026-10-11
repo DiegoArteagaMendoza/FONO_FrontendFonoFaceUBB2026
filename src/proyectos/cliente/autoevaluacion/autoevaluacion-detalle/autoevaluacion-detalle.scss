@@ -17,6 +17,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 2.75rem; /* 44px: área cómoda para el dedo; el texto se ve igual */
   display: flex;
   align-items: center;
   transition: color 0.2s;
@@ -54,7 +55,7 @@
 
 .datos-paciente {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 1.25rem;
   margin-bottom: 2.5rem;
 }

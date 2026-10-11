@@ -76,7 +76,7 @@
     <!-- ============ EJERCICIOS ============ -->
     <h3 class="text-base font-semibold mt-0 mb-3" style="color: var(--fono-texto);">{{ t().pmc_terapia.ejercicios_titulo }}</h3>
 
-    <div class="grid gap-4 mb-6" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+    <div class="grid gap-4 mb-6" style="grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));">
       <div class="form-card" style="max-width: none; display: flex; flex-direction: column;"
            *ngFor="let pe of plan.ejercicios">
 

@@ -37,9 +37,14 @@
             <span *ngIf="!item.interpretacion_total" class="text-muted">N/A</span>
           </td>
           <td>
-            <span *ngFor="let sub of item.detalle_subescalas" class="badge">
-              {{ sub.subescala }}: {{ sub.puntaje }}<ng-container *ngIf="sub.interpretacion"> ({{ sub.interpretacion.etiqueta }})</ng-container>
-            </span>
+            <!-- Contenedor flexible: las insignias son de una línea cada una y,
+                 sin espacio entre ellas, se pegaban en una sola tira imposible
+                 de cortar (más de 900px). Así bajan de línea de a una. -->
+            <div class="flex flex-wrap gap-1">
+              <span *ngFor="let sub of item.detalle_subescalas" class="badge">
+                {{ sub.subescala }}: {{ sub.puntaje }}<ng-container *ngIf="sub.interpretacion"> ({{ sub.interpretacion.etiqueta }})</ng-container>
+              </span>
+            </div>
           </td>
         </tr>
       </tbody>

@@ -61,6 +61,7 @@
   color: var(--fono-texto-suave);
   font-weight: 600;
   cursor: pointer;
+  min-height: 2.75rem; /* 44px: área cómoda para el dedo; el texto se ve igual */
   margin-bottom: 1rem;
   padding: 0;
   display: flex;

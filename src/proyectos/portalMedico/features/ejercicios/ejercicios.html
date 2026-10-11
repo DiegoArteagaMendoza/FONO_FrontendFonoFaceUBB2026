@@ -83,7 +83,7 @@
       <button type="button" class="btn-primary" (click)="abrirCrear()">{{ t().pm_ejercicios.btn_nuevo }}</button>
     </div>
 
-    <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"
+    <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));"
          *ngIf="!cargando && ejercicios.length > 0">
       <div class="form-card" style="max-width: none; display: flex; flex-direction: column;"
            *ngFor="let ejercicio of ejercicios">

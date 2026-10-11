@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Sidebar } from './sidebar/sidebar';
 import { Footer } from './footer/footer';
+import { TextosService } from '@core/services/textos/textos';
 
 @Component({
   selector: 'app-layout',
@@ -10,6 +11,9 @@ import { Footer } from './footer/footer';
   templateUrl: './layout.html',
 })
 export class Layout {
+  public textosService = inject(TextosService);
+  public t = this.textosService.t;
+
   // Signal para manejar el estado del menú en móviles
   isSidebarOpen = signal(false);
 

@@ -36,7 +36,7 @@
           <span class="badge" [ngClass]="{
                   'badge-aprobado': paso.completado,
                   'badge-pendiente': !paso.completado && esPasoActual(i)
-                }" style="font-size: 0.7rem;">
+                }" style="font-size: 0.75rem;">
             {{ paso.completado ? t().pm_pasos.estado_completado
                                : (esPasoActual(i) ? t().pm_pasos.estado_actual : t().pm_pasos.estado_pendiente) }}
           </span>

@@ -10,11 +10,12 @@ import {
 } from '@core/services/portal-medico/portal-medico';
 import { AdministracionService } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-pm-admin-profesional-detalle',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TablaResponsivaDirective],
   templateUrl: './admin-profesional-detalle.html'
 })
 export class PmAdminProfesionalDetalleComponent implements OnInit {

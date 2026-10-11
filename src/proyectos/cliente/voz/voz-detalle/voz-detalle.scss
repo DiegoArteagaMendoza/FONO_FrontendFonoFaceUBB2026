@@ -17,6 +17,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  min-height: 2.75rem; /* 44px: área cómoda para el dedo; el texto se ve igual */
   display: flex;
   align-items: center;
   transition: color 0.2s;

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AdministracionService, InfoGeneralItem } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-info-general',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TablaResponsivaDirective],
   templateUrl: './infoGeneral.html'
   // styleUrls: ['./infoGeneral.scss'] // Desactivado para usar estilos globales
 })
