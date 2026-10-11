@@ -31,7 +31,8 @@ export const API_ENDPOINTS = {
     eliminar: (id: number) => `/noticias/${id}/eliminar/`,
     imagenAgregar: (idNoticia: number) => `/noticias/${idNoticia}/imagenes/agregar/`,
     imagenEliminar: (idImagen: number) => `/noticias/imagenes/${idImagen}/eliminar/`,
-    newsletterSuscribir: '/noticias/newsletter/suscribir/'
+    newsletterSuscribir: '/noticias/newsletter/suscribir/',
+    newsletterBaja: '/noticias/newsletter/baja/'
   },
   // Endpoints del backend FonoAppPortalMedico (app PmMedico). Rutas relativas a
   // environment.apiUrlPortalMedico, no a environment.apiUrl (es otro proyecto Django).
