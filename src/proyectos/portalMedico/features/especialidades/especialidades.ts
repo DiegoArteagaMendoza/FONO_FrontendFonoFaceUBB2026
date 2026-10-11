@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PortalMedicoService, Especialidad, ProfesionalEspecialidad } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-pm-especialidades',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './especialidades.html'
 })
 export class PortalMedicoEspecialidadesComponent implements OnInit {

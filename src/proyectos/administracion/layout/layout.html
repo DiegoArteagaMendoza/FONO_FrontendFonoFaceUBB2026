@@ -1,15 +1,37 @@
 <div class="admin-theme flex h-screen w-full overflow-hidden bg-gray-50 dark:bg-slate-900">
-  
-  <app-sidebar class="w-0 md:w-64 flex-shrink-0 z-50"></app-sidebar> 
 
-  <div class="flex-1 flex flex-col h-screen overflow-y-auto">
-    
+  <!-- En escritorio la barra lateral está siempre a la vista. En pantallas
+       chicas se esconde y la abre el botón de la barra superior; se cierra
+       sola al elegir una sección (ver Sidebar.onClose). -->
+  <app-sidebar class="w-0 md:w-64 flex-shrink-0 z-50"
+               [isOpen]="isSidebarOpen()"
+               (closeSidebar)="isSidebarOpen.set(false)"></app-sidebar>
+
+  <!-- min-w-0: sin esto, una columna flex no se deja achicar por debajo del
+       ancho de su contenido y las tablas empujarían la página hacia el lado. -->
+  <div class="flex-1 flex flex-col h-screen overflow-y-auto min-w-0">
+
+    <!-- Barra superior, solo en pantallas chicas: es la única forma de llegar
+         al menú cuando la barra lateral está escondida. -->
+    <header class="md:hidden sticky top-0 z-30 flex items-center gap-3 h-14 px-4 bg-fonoPrimary dark:bg-slate-800 text-white shadow-md">
+      <button type="button"
+              class="p-2 -ml-2 rounded-md hover:bg-sky-700 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              [attr.aria-label]="t().globales.abrir_menu"
+              [attr.aria-expanded]="isSidebarOpen()"
+              (click)="toggleSidebar()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+      <span class="text-lg font-bold tracking-wider">{{ t().globales.marca }}</span>
+    </header>
+
     <main class="flex-1 w-full">
-      <router-outlet></router-outlet> 
+      <router-outlet></router-outlet>
     </main>
 
     <app-footer></app-footer>
-    
+
   </div>
 
 </div>

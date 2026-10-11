@@ -6,11 +6,12 @@ import { NoticiasService, Noticia } from '@core/services/noticias/noticias';
 // IMPORT DE TEXTOS
 import { TextosService } from '@core/services/textos/textos';
 import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-noticias-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './noticias.html',
   styleUrls: ['./noticias.scss']
 })

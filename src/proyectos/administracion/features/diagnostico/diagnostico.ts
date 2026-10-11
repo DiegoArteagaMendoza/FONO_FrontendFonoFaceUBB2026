@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { DiagnosticoService } from '@core/services/diagnostico/diagnostico';
 import { DiagnosticoFormulario } from '@core/services/diagnostico/interface/diagnostico.interface';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-diagnostico',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './diagnostico.html'
 })
 export class Diagnostico implements OnInit {

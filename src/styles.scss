@@ -10,6 +10,12 @@ body {
   background-color: var(--fono-fondo-portal);
   color: var(--fono-texto-cuerpo);
   margin: 0;
+  /* Una palabra que no cabe en su línea (una URL de una fuente científica,
+     un correo largo) se parte en vez de salirse de la pantalla. Solo actúa
+     cuando no hay otro punto de corte: el texto normal no cambia. Sin esto,
+     una URL en un contenido publicado quedaba en una línea de 800px en un
+     teléfono, cortada e ilegible. */
+  overflow-wrap: break-word;
 }
 
 /* ==========================================================================
@@ -25,7 +31,6 @@ body {
   @import './commons/administracion/styles/estilo_tablas.scss';
   @import './commons/administracion/styles/filtros_badges.scss';
   @import './commons/administracion/styles/marcos_creacion.scss';
-  @import './commons/administracion/styles/mediaqueries_globales.scss';
   @import './commons/administracion/styles/modales.scss';
 
   /* El contenedor principal de las vistas de administración */
@@ -35,5 +40,10 @@ body {
     max-width: 1200px;
     margin: 0 auto;
   }
+
+  /* Las reglas responsive van AL FINAL: tienen la misma especificidad que las
+     de escritorio, así que gana la que se declara después. Antes se importaban
+     en medio y el padding de .page-container de arriba pisaba al de móvil. */
+  @import './commons/administracion/styles/mediaqueries_globales.scss';
 
 }

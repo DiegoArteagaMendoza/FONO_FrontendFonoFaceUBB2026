@@ -8,6 +8,11 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   width: 100%;
+  /* La tabla decide su forma según el ancho que le queda a ELLA, no según la
+     pantalla: en el admin la barra lateral se come 256px, así que en una
+     tablet la tabla tiene menos espacio que en el portal médico con la misma
+     pantalla. Ver el bloque @container al final. */
+  container-type: inline-size;
 }
 
 .data-table {
@@ -38,9 +43,14 @@
     border-bottom: none;
   }
 
-  tbody tr:hover { 
-    background-color: var(--fono-superficie-2); 
+  tbody tr:hover {
+    background-color: var(--fono-superficie-2);
   }
+
+  /* Dentro de una celda, una insignia larga (p. ej. la interpretación de una
+     subescala) puede ocupar dos líneas: si no, fija el ancho mínimo de toda
+     la columna y la tabla termina deslizándose de lado. */
+  td .badge { white-space: normal; }
 }
 
 .td-title { 
@@ -94,5 +104,97 @@
   &:focus-visible {
     outline: 2px solid var(--fono-primario);
     outline-offset: 2px;
+  }
+}
+
+/* ==========================================================================
+   TABLAS EN ESPACIOS ANGOSTOS: cada fila pasa a ser una tarjeta
+   --------------------------------------------------------------------------
+   Con 650px de ancho mínimo, en un teléfono se veía menos de la mitad de la
+   tabla y la columna de acciones (editar, eliminar) quedaba fuera de la
+   pantalla. Bajo 640px de ancho disponible, cada fila se apila: una línea por
+   campo, con el título de su columna delante.
+
+   El título sale del atributo data-label de cada celda, que pone solo la
+   directiva TablaResponsivaDirective (core/directives) copiándolo del <th>
+   de su columna. Las celdas sin etiqueta (imagen, acciones, fila vacía)
+   ocupan el ancho completo.
+   ========================================================================== */
+@container (max-width: 640px) {
+  .data-table {
+    min-width: 0;
+    /* En bloque, no en 'table': una tabla crece hasta su contenido más ancho
+       (unas insignias largas la dejaban en 456px dentro de 328px). */
+    display: block;
+    /* Ancla el thead escondido a la propia tabla y no a un ancestro lejano. */
+    position: relative;
+
+    /* Los títulos siguen existiendo para lectores de pantalla. */
+    thead {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    tbody, tr, td { display: block; width: 100%; }
+
+    tbody tr {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--fono-borde);
+    }
+    tbody tr:last-child { border-bottom: none; }
+
+    td {
+      border-bottom: none;
+      padding: 0.3rem 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* Insignias largas (subescalas, estados) bajan de línea en vez de
+       ensanchar la tarjeta. */
+    .badge { white-space: normal; }
+
+    td[data-label]:not([data-label=""]) {
+      display: grid;
+      /* minmax(0, 1fr): la columna del valor puede achicarse por debajo del
+         ancho de su contenido; con '1fr' a secas no se deja. */
+      grid-template-columns: minmax(6rem, 35%) minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: start;
+
+      &::before {
+        content: attr(data-label);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--fono-texto-suave);
+      }
+    }
+
+    /* Acciones: sin etiqueta, a todo el ancho y con botones cómodos de tocar.
+       Sin 'td' delante: en algunas tablas la clase va en la celda y en otras
+       en un div dentro de ella. */
+    .td-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-top: 0.75rem;
+
+      &::before { display: none; }
+
+      .btn-icon { flex: 1 1 auto; min-height: 2.5rem; }
+    }
+
+    /* La miniatura va sola arriba, como cabecera de la tarjeta. */
+    td.td-image {
+      display: block;
+      &::before { display: none; }
+    }
+
+    .empty-state { text-align: center; }
   }
 }

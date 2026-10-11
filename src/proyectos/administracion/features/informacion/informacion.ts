@@ -6,11 +6,12 @@ import { InformacionService, Informacion } from '@core/services/informacion/info
 // IMPORT DE TEXTOS
 import { TextosService } from '@core/services/textos/textos';
 import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-informacion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './informacion.html',
   styleUrls: ['./informacion.scss']
 })

@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { VozService, Voz } from '@core/services/voz/voz';
 import { TextosService } from '@core/services/textos/textos';
 import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-voz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './voz.html',
   // styleUrls: ['./voz.scss'] // O comentado si usas el global
 })

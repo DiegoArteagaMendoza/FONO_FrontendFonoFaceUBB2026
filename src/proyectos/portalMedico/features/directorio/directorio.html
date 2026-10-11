@@ -15,7 +15,7 @@
     {{ t().pm_directorio.vacio }}
   </div>
 
-  <div *ngIf="!cargando && profesionales.length > 0" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+  <div *ngIf="!cargando && profesionales.length > 0" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));">
     <div *ngFor="let profesional of profesionales" class="form-card" style="max-width: none; padding: 1.5rem;">
       <h3 class="m-0 font-bold" style="color: var(--fono-texto-fuerte);">
         {{ profesional.nombres_profesional }} {{ profesional.apellidos_profesional }}

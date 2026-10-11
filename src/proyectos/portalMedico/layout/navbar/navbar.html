@@ -6,7 +6,12 @@
         {{ t().pm_navbar.marca }}
       </a>
 
-      <button class="md:hidden text-white" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
+      <!-- El corte a barra completa va en lg (1024px), no en md (768px): con
+           siete elementos (la barra del fonoaudiólogo), entre 768 y ~960px los
+           textos se partían en dos líneas y a 768 la barra se desbordaba. -->
+      <!-- p-2: el área para tocar pasa de 24px (solo el ícono) a 40px. -->
+      <button class="lg:hidden text-white p-2 -mr-2 rounded-md hover:bg-sky-700 dark:hover:bg-slate-700"
+              (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" [attr.aria-label]="t().globales.abrir_menu">
         <svg *ngIf="!isMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
@@ -15,7 +20,7 @@
         </svg>
       </button>
 
-      <div class="hidden md:flex items-center gap-1">
+      <div class="hidden lg:flex items-center gap-1">
         <a routerLink="/portalmedico/inicio" routerLinkActive="bg-sky-700 dark:bg-slate-700" [routerLinkActiveOptions]="{exact: true}"
            class="px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-700 dark:hover:bg-slate-700 transition-colors">
           {{ t().pm_navbar.inicio }}
@@ -172,7 +177,10 @@
 
     <!-- Menú móvil -->
     @if (isMenuOpen) {
-      <div class="md:hidden pb-4 flex flex-col gap-1">
+      <!-- Tope de alto con scroll propio: la barra es sticky, así que si el
+           menú fuera más alto que la pantalla (teléfono acostado) sus últimas
+           opciones quedarían fuera de alcance. -->
+      <div class="lg:hidden pb-4 flex flex-col gap-1 overflow-y-auto" style="max-height: calc(100dvh - 4rem);">
 
         <!-- Con quién se entró, también en móvil: aquí no cabe el avatar, así
              que el nombre y el tipo de cuenta encabezan el menú. -->

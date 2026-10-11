@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { CuidadosService, Cuidado } from '@core/services/cuidados/cuidados';
 import { TextosService } from '@core/services/textos/textos';
 import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-cuidados',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './cuidados.html',
   // styleUrls: ['./cuidados.scss'] // O comentado si usas el global
 })

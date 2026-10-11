@@ -23,7 +23,7 @@
     <!-- DATOS DEL PROFESIONAL -->
     <div class="form-card" style="max-width: none;">
       <h3 class="mt-0" style="color: var(--fono-texto-fuerte);">{{ t().pm_profesional_detalle.seccion_datos }}</h3>
-      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));">
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_nombre }}</strong><br>{{ profesional.nombres_profesional }} {{ profesional.apellidos_profesional }}</p>
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_rut }}</strong><br>{{ profesional.rut_profesional }}</p>
         <p class="m-0"><strong>{{ t().pm_profesional_detalle.label_email }}</strong><br>{{ profesional.email_profesional }}</p>

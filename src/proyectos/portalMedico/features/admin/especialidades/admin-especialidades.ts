@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { PortalMedicoService, Especialidad } from '@core/services/portal-medico/portal-medico';
 import { AdministracionService } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-pm-admin-especialidades',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TablaResponsivaDirective],
   templateUrl: './admin-especialidades.html'
 })
 export class PmAdminEspecialidadesComponent implements OnInit {

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AdministracionService, UsuarioItem } from '@core/services/administracion/administracion';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
     selector: 'app-administracion',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TablaResponsivaDirective],
     templateUrl: './administracion-usuarios.html'
 })
 export class AdministracionUsuarioComponent implements OnInit {

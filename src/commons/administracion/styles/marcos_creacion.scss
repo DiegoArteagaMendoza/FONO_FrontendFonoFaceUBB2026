@@ -49,6 +49,13 @@
   input[type="number"],
   input[type="url"],
   input[type="date"],
+  /* tel, datetime-local y time también: faltaban, y el teléfono al reservar,
+     la nueva fecha al posponer y las horas que publica el fono salían sin
+     borde ni relleno (24px de alto, difíciles de tocar en un teléfono). */
+  input[type="tel"],
+  input[type="datetime-local"],
+  input[type="time"],
+  input[type="search"],
   select,
   textarea {
     padding: 0.75rem 1rem;
@@ -128,8 +135,19 @@
   }
 }
 
+/* Cualquier input de archivo (videos del paciente, ejemplos del fono,
+   documentos) debe caber en su contenedor en pantallas angostas. */
+input[type="file"] {
+  max-width: 100%;
+  min-height: 2.5rem; /* 40px: el selector nativo medía 30, chico para el dedo */
+}
+
 .file-upload-section {
   .file-input {
+    /* El input de archivo tiene un ancho propio (botón + nombre del archivo)
+       que no se achica solo: en un teléfono se salía de la tarjeta. */
+    max-width: 100%;
+    min-width: 0;
     padding: 0.65rem;
     border: 1px dashed var(--fono-borde);
     border-radius: 6px;

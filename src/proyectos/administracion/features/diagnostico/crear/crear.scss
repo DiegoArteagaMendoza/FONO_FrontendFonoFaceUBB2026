@@ -83,6 +83,28 @@
   }
 }
 
+/* En un teléfono, la cabecera de cada subescala y cada rango de
+   interpretación se apilan: un campo por línea. Con los mínimos de ancho de
+   escritorio (flex-2: 300px) se salían de la tarjeta. */
+@media (max-width: 768px) {
+  .subescala-box { padding: 1rem; }
+
+  .subescala-header,
+  .interpretacion-row {
+    flex-direction: column;
+    align-items: stretch;
+
+    > .form-group,
+    > .flex-1,
+    > .flex-2,
+    > .flex-3 {
+      width: 100%;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+  }
+}
+
 /* --- Previsualización del formulario (pop up previo al registro) --- */
 .modal-content.modal-lg {
   max-width: 800px;

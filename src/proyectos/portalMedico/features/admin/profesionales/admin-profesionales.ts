@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PortalMedicoService, ProfesionalPerfil, EstadoVerificacion } from '@core/services/portal-medico/portal-medico';
 import { TextosService } from '@core/services/textos/textos';
+import { TablaResponsivaDirective } from '@core/directives/tabla-responsiva.directive';
 
 @Component({
   selector: 'app-pm-admin-profesionales',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TablaResponsivaDirective],
   templateUrl: './admin-profesionales.html'
 })
 export class PmAdminProfesionalesComponent implements OnInit {

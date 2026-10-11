@@ -3,6 +3,7 @@ export const TEXTOS_SITIO = {
     
     globales: {
         marca: "Vocare UBB",
+        abrir_menu: "Abrir el menú",
         boton_guardar: "Guardar Cambios",
         boton_cancelar: "Cancelar",
         boton_volver: "Volver",

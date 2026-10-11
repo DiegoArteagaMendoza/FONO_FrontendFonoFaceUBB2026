@@ -3,7 +3,18 @@
    ========================================================================== */
 @media (max-width: 768px) {
   .page-container { padding: 1rem; }
-  
+
+  /* En un teléfono, 2rem de relleno por lado se comen un tercio del ancho útil
+     de cada tarjeta. */
+  .form-card { padding: 1.25rem; }
+
+  /* Una insignia con texto largo ("Sección 1: 44 (Alterado / Con fatiga
+     vocal)") no cabe en una línea de 320px: aquí puede partirse. */
+  .badge {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .page-header { 
     flex-direction: column; 
     align-items: flex-start; 
@@ -20,9 +31,17 @@
   .form-row {
     flex-direction: column;
     gap: 1rem;
-  }
 
-  .flex-1, .flex-2 { min-width: 100%; }
+    /* Una columna por fila y del ancho de la tarjeta. Antes era
+       'min-width: 100%' sobre cualquier .flex-1, que dentro de este flex
+       anidado se resolvía más ancho que la tarjeta (el formulario se salía
+       por la derecha) y además alcanzaba a los flex-1 de Tailwind del layout. */
+    > .flex-1, > .flex-2 {
+      min-width: 0;
+      width: 100%;
+      flex: 1 1 auto;
+    }
+  }
 
   .form-actions {
     flex-direction: column-reverse;
