@@ -47,3 +47,5 @@ Thumbs.db
 .agents
 .claude
 .codex
+# Zips de deploy generados por deploy/scripts/empaquetar.sh
+/deploy/dist
