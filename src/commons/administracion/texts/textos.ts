@@ -1807,6 +1807,49 @@ export const TEXTOS_SITIO = {
         error_servidor: "No pudimos cargar tus horas. Inténtalo nuevamente."
     },
 
+    // LINK DE REUNIÓN ONLINE (Meet o Zoom) que agrega el fonoaudiólogo a sus horas y citas
+    pm_reunion: {
+        plataforma_MEET: "Google Meet",
+        plataforma_ZOOM: "Zoom",
+        // Formulario
+        titulo_publicar: "Link de la reunión online (opcional)",
+        ayuda_publicar: "Crea la reunión en Google Meet o Zoom y pega aquí el link. Se asignará a todas las horas que publiques ahora; después puedes cambiarlo en cada una.",
+        label_plataforma: "Plataforma",
+        sin_plataforma: "Elige una opción",
+        label_enlace: "Link de la reunión",
+        placeholder_MEET: "https://meet.google.com/abc-defg-hij",
+        placeholder_ZOOM: "https://us02web.zoom.us/j/123456789",
+        alerta_plataforma: "Indica si el link es de Google Meet o de Zoom.",
+        alerta_enlace: "Pega el link de la reunión.",
+        alerta_formato: "El link no corresponde a {plataforma}. Cópialo completo desde {plataforma} (debe empezar con https://).",
+        btn_guardar: "Guardar link",
+        btn_guardando: "Guardando...",
+        btn_cancelar: "Cancelar",
+        btn_agregar: "Agregar link de reunión",
+        btn_editar: "Cambiar link",
+        btn_quitar: "Quitar link",
+        confirmar_quitar: "¿Quitar el link de la reunión? El paciente ya no lo verá.",
+        exito_guardar: "Link de la reunión guardado.",
+        exito_quitar: "Se quitó el link de la reunión.",
+        error_guardar: "No pudimos guardar el link. Inténtalo nuevamente.",
+        // Estado en cada hora / cita
+        con_enlace: "Reunión por {plataforma}",
+        sin_enlace: "Sin link de reunión",
+        abrir: "Abrir link",
+        // Alertas de recordatorio para el fonoaudiólogo
+        alerta_publicar_sin_enlace: "Estás publicando horas sin link de reunión. Puedes hacerlo, pero recuerda agregarlo antes de la atención: sin él, el paciente no tiene cómo conectarse.",
+        alerta_horas_titulo: "Te faltan links de reunión",
+        alerta_horas_desc: "{cantidad} de tus próximas horas no tienen link de Meet o Zoom ({reservadas} ya reservadas por pacientes). Agrégalo en cada hora con el botón \"Agregar link de reunión\".",
+        alerta_citas_titulo: "Citas sin link de reunión",
+        alerta_citas_desc: "{cantidad} de tus próximas citas no tienen link de Meet o Zoom. Agrégalo para que tu paciente pueda conectarse a la atención.",
+        alerta_panel_desc: "Tienes {horas} horas publicadas y {citas} citas próximas sin link de Meet o Zoom. Agrégalo antes de la atención para que tus pacientes puedan conectarse.",
+        btn_ir_horas: "Agregar en mis horas",
+        btn_ir_agenda: "Agregar en mi agenda",
+        // Lado del paciente
+        unirse: "Unirse por {plataforma}",
+        paciente_sin_enlace: "Tu profesional aún no agrega el link de la reunión. Aparecerá aquí antes de la atención."
+    },
+
     // NAVEGACIÓN DEL PACIENTE (se suma al navbar del portal médico)
     pmc_navbar: {
         soy_paciente: "Soy paciente",

@@ -67,7 +67,8 @@
    en línea (y esos colores fijos no respetaban el modo oscuro). Estas dos
    clases usan las variables del tema, así que sirven en ambos temas. */
 .success-alert,
-.info-alert {
+.info-alert,
+.warning-alert {
   padding: 1rem;
   border-radius: 6px;
   margin-bottom: 1.5rem;
@@ -87,4 +88,13 @@
   background-color: var(--fono-info-fondo);
   color: var(--fono-info-texto);
   border-color: var(--fono-info-borde);
+}
+
+/* Algo pendiente que la persona debe completar (ej. el link de la reunión
+   online de una hora). Más llamativo que .info-alert, sin ser un error. */
+.warning-alert {
+  background-color: var(--fono-aviso-fondo);
+  color: var(--fono-aviso-texto);
+  border-color: var(--fono-aviso-borde);
+  border-left-width: 4px;
 }

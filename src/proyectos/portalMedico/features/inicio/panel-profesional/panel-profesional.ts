@@ -47,6 +47,8 @@ export class PmPanelProfesionalComponent implements OnInit {
 
   citasDeHoy: Cita[] = [];
   totalProximas = 0;
+  /** Próximas citas reservadas sin link de reunión online. */
+  citasSinEnlace = 0;
   cargandoAgenda = true;
   errorAgenda = false;
 
@@ -112,6 +114,9 @@ export class PmPanelProfesionalComponent implements OnInit {
       next: (citas) => {
         this.citasDeHoy = citas.filter(cita => this.esDeHoy(cita.fecha_hora));
         this.totalProximas = citas.filter(cita => this.dentroDeLaVentana(cita.fecha_hora)).length;
+        this.citasSinEnlace = citas.filter(
+          cita => cita.esta_activa && !cita.ya_paso && this.pmCitaService.faltaEnlaceReunion(cita)
+        ).length;
         this.cargandoAgenda = false;
         this.cdr.detectChanges();
       },
@@ -195,6 +200,9 @@ export class PmPanelProfesionalComponent implements OnInit {
           reservadas: bloques.filter(bloque => bloque.esta_reservado).length,
           libresProximos: bloques.filter(
             bloque => bloque.esta_disponible && this.dentroDeLaVentana(bloque.fecha_hora)
+          ).length,
+          sinEnlace: bloques.filter(
+            bloque => bloque.estado && !bloque.ya_paso && this.pmCitaService.faltaEnlaceReunion(bloque)
           ).length
         };
         this.cargandoHoras = false;
@@ -205,6 +213,18 @@ export class PmPanelProfesionalComponent implements OnInit {
         this.errorHoras = true;
         this.cdr.detectChanges();
       }
+    });
+  }
+
+  /** Recordatorio de links de reunión pendientes, en horas publicadas o en citas. */
+  get faltanEnlaces(): boolean {
+    return (this.horas?.sinEnlace ?? 0) > 0 || this.citasSinEnlace > 0;
+  }
+
+  get textoFaltanEnlaces(): string {
+    return this.textosService.reemplazarVariables(this.t().pm_reunion.alerta_panel_desc, {
+      horas: (this.horas?.sinEnlace ?? 0) + '',
+      citas: this.citasSinEnlace + ''
     });
   }
 

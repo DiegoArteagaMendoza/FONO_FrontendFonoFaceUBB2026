@@ -12,7 +12,19 @@ export type EstadoCita = 'RE' | 'CC' | 'CM' | 'RZ';
 /** Quién originó una cancelación o una reprogramación (PmCita.Origen). */
 export type OrigenCambio = 'CLIENTE' | 'PROFESIONAL';
 
-export interface Cita {
+/** Plataforma de la reunión online (PmCita.models.PlataformaReunion). */
+export type PlataformaReunion = 'MEET' | 'ZOOM';
+
+/**
+ * Link de la reunión online que genera el propio fonoaudiólogo en Meet o Zoom.
+ * Ambos null = todavía sin link.
+ */
+export interface EnlaceReunion {
+  plataforma_reunion: PlataformaReunion | null;
+  enlace_reunion: string | null;
+}
+
+export interface Cita extends EnlaceReunion {
   id_cita: number;
   cliente: number;
   profesional: number;
@@ -54,7 +66,7 @@ export interface Cita {
  * aquí los nombres ya resueltos y omite los ids internos, así que esta forma
  * NO coincide con la de Cita.
  */
-export interface CitaSeguimiento {
+export interface CitaSeguimiento extends EnlaceReunion {
   codigo_seguimiento: string;
   fecha_hora: string;
   duracion_minutos: number;
@@ -85,7 +97,7 @@ export interface DisponibilidadPublica {
 }
 
 /** La misma hora vista por el profesional dueño, que sí sabe si ya fue tomada. */
-export interface Disponibilidad extends DisponibilidadPublica {
+export interface Disponibilidad extends DisponibilidadPublica, EnlaceReunion {
   cita: number | null;
   estado: boolean;
   fecha_creacion: string;

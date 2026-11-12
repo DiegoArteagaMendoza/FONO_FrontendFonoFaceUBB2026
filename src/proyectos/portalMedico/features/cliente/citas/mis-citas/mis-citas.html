@@ -62,6 +62,20 @@
         <span class="badge" [ngClass]="pmCitaService.claseEstado(cita)">{{ etiquetaEstado(cita) }}</span>
       </div>
 
+      <!-- Reunión online: link que agrega el fonoaudiólogo (Meet o Zoom).
+           Se muestra mientras la cita siga reservada, también durante la atención. -->
+      <div class="mt-3" *ngIf="cita.esta_activa">
+        <a *ngIf="cita.enlace_reunion" class="btn-primary inline-block" [href]="cita.enlace_reunion"
+           target="_blank" rel="noopener noreferrer">
+          {{ textosService.reemplazarVariables(t().pm_reunion.unirse, {
+               plataforma: cita.plataforma_reunion === 'ZOOM' ? t().pm_reunion.plataforma_ZOOM : t().pm_reunion.plataforma_MEET
+             }) }}
+        </a>
+        <div class="info-alert mb-0" *ngIf="!cita.enlace_reunion && !cita.ya_paso">
+          {{ t().pm_reunion.paciente_sin_enlace }}
+        </div>
+      </div>
+
       <!-- Motivo de consulta -->
       <p class="text-sm mt-3 mb-0" style="color: var(--fono-texto-cuerpo);">
         <strong>{{ t().pmc_mis_citas.motivo }}</strong>
