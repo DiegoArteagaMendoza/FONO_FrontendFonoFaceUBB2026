@@ -132,6 +132,8 @@ export const API_ENDPOINTS = {
     profesionalCancelar: (idCita: number) => `/${idCita}/profesional/cancelar/`,
     profesionalPosponer: (idCita: number) => `/${idCita}/profesional/posponer/`,
     profesionalMarcarRealizada: (idCita: number) => `/${idCita}/profesional/marcar-realizada/`,
+    // Link de la reunión online (Meet o Zoom) de una cita
+    profesionalEnlace: (idCita: number) => `/${idCita}/profesional/enlace/`,
 
     // Detalle: lo puede pedir el paciente dueño, el profesional que atiende o un admin
     detalle: (idCita: number) => `/${idCita}/`,
@@ -145,6 +147,8 @@ export const API_ENDPOINTS = {
     disponibilidadMias: '/disponibilidad/mias/',
     disponibilidadMiasTodas: '/disponibilidad/mias/?todas=true',
     disponibilidadRetirar: (idDisponibilidad: number) => `/disponibilidad/${idDisponibilidad}/retirar/`,
+    // Link de la reunión online (Meet o Zoom) de una hora publicada
+    disponibilidadEnlace: (idDisponibilidad: number) => `/disponibilidad/${idDisponibilidad}/enlace/`,
     disponibilidadDeProfesional: (idProfesional: number) => `/disponibilidad/profesional/${idProfesional}/`,
 
     // Seguimiento por código: para quien reservó sin cuenta. El código que

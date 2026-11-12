@@ -1,0 +1,31 @@
+<div class="custom-form" [formGroup]="formulario">
+  <div class="flex flex-wrap gap-3">
+    <div class="form-group" style="flex: 0 1 12rem; min-width: 10rem;">
+      <label [attr.for]="idCampos + '-plataforma'">{{ t().pm_reunion.label_plataforma }}</label>
+      <select [id]="idCampos + '-plataforma'" formControlName="plataforma_reunion">
+        <option [ngValue]="null">{{ t().pm_reunion.sin_plataforma }}</option>
+        <option *ngFor="let plataforma of plataformas" [ngValue]="plataforma">
+          {{ nombrePlataforma(plataforma) }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group" style="flex: 1 1 18rem; min-width: 0;">
+      <label [attr.for]="idCampos + '-enlace'">{{ t().pm_reunion.label_enlace }}</label>
+      <input [id]="idCampos + '-enlace'" type="url" formControlName="enlace_reunion"
+             [placeholder]="placeholder" [maxlength]="largoMaximo" inputmode="url" autocomplete="off"
+             (keydown.enter)="$event.preventDefault(); conAcciones && enviar()">
+    </div>
+  </div>
+
+  <small class="error-text" *ngIf="mostrarError">{{ error }}</small>
+
+  <div class="form-actions" *ngIf="conAcciones">
+    <button type="button" class="btn-primary" [disabled]="guardando" (click)="enviar()">
+      {{ guardando ? t().pm_reunion.btn_guardando : t().pm_reunion.btn_guardar }}
+    </button>
+    <button type="button" class="btn-secondary" [disabled]="guardando" (click)="cancelar.emit()">
+      {{ t().pm_reunion.btn_cancelar }}
+    </button>
+  </div>
+</div>

@@ -12,4 +12,6 @@ export interface ResumenHoras {
   libres: number;
   reservadas: number;
   libresProximos: number;
+  /** Próximas horas vigentes sin link de reunión online (Meet o Zoom). */
+  sinEnlace: number;
 }

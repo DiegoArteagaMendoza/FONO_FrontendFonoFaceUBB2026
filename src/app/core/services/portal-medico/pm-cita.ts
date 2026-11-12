@@ -13,11 +13,14 @@ import {
   ResultadoPublicacion,
   ReservarCitaPayload,
   PosponerCitaPayload,
-  CancelarCitaPayload
+  CancelarCitaPayload,
+  EnlaceReunion,
+  PlataformaReunion
 } from './interface/pm-cita.interface';
 import {
   CITA_HORAS_MINIMAS_ANTICIPACION,
-  CITA_REPROGRAMACIONES_MAXIMAS
+  CITA_REPROGRAMACIONES_MAXIMAS,
+  PATRONES_ENLACE_REUNION
 } from './constants/pm-cita.const';
 // Las mismas claves que usan PmClienteService y PortalMedicoService: se leen
 // desde aquí (igual que en auth.interceptor.ts) porque este servicio atiende a
@@ -146,6 +149,15 @@ export class PmCitaService {
     );
   }
 
+  /** Agrega, cambia o quita (ambos null) el link de la reunión online de una cita. */
+  actualizarEnlaceCita(idCita: number, datos: EnlaceReunion): Observable<Cita> {
+    return this.http.patch<Cita>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.profesionalEnlace(idCita)}`,
+      datos,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
   marcarRealizada(idCita: number): Observable<Cita> {
     return this.http.patch<Cita>(
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.profesionalMarcarRealizada(idCita)}`,
@@ -185,10 +197,21 @@ export class PmCitaService {
   /**
    * Publica varias horas de una vez. La respuesta separa las creadas de las
    * rechazadas: un solape en una hora no debe obligar a repetir la jornada.
+   * El link de reunión, si se indica, queda en todas las horas publicadas.
    */
-  publicarDisponibilidad(fechasHora: string[], duracionMinutos?: number): Observable<ResultadoPublicacion> {
-    const cuerpo: { fechas_hora: string[]; duracion_minutos?: number } = { fechas_hora: fechasHora };
+  publicarDisponibilidad(
+    fechasHora: string[],
+    duracionMinutos?: number,
+    enlace?: EnlaceReunion | null
+  ): Observable<ResultadoPublicacion> {
+    const cuerpo: { fechas_hora: string[]; duracion_minutos?: number } & Partial<EnlaceReunion> = {
+      fechas_hora: fechasHora
+    };
     if (duracionMinutos) cuerpo.duracion_minutos = duracionMinutos;
+    if (enlace?.plataforma_reunion && enlace.enlace_reunion) {
+      cuerpo.plataforma_reunion = enlace.plataforma_reunion;
+      cuerpo.enlace_reunion = enlace.enlace_reunion;
+    }
 
     return this.http.post<ResultadoPublicacion>(
       `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadPublicar}`,
@@ -206,6 +229,32 @@ export class PmCitaService {
     return this.http.get<Disponibilidad[]>(`${this.apiCitas}${ruta}`, {
       headers: this.getProfesionalAuthHeaders()
     });
+  }
+
+  /**
+   * Agrega, cambia o quita (ambos null) el link de la reunión online de una
+   * hora publicada. Si ya tiene paciente, la cita recibe el mismo link.
+   */
+  actualizarEnlaceDisponibilidad(idDisponibilidad: number, datos: EnlaceReunion): Observable<Disponibilidad> {
+    return this.http.patch<Disponibilidad>(
+      `${this.apiCitas}${API_ENDPOINTS.portalMedicoCitas.disponibilidadEnlace(idDisponibilidad)}`,
+      datos,
+      { headers: this.getProfesionalAuthHeaders() }
+    );
+  }
+
+  /**
+   * True si el link corresponde a la plataforma indicada. Es solo un aviso
+   * temprano: el backend aplica la misma regla y es quien decide.
+   */
+  enlaceReunionValido(plataforma: PlataformaReunion | null, enlace: string | null): boolean {
+    if (!plataforma || !enlace) return false;
+    return PATRONES_ENLACE_REUNION[plataforma].test(enlace.trim());
+  }
+
+  /** Una hora o cita sin link, a la que todavía le falta para que el paciente entre. */
+  faltaEnlaceReunion(item: EnlaceReunion): boolean {
+    return !item.enlace_reunion;
   }
 
   /** Retira una hora publicada. El backend rechaza las que ya tienen cita. */

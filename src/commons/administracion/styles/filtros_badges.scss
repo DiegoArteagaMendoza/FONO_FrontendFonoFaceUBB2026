@@ -61,6 +61,8 @@
      públicos objetivo de Cuidados: mismos colores, pero un nombre que no decía
      nada del estado y que se rompería al cambiar la paleta de Cuidados. */
   &.badge-pendiente { background-color: #cff4fc; color: #055160; }
+  /* Falta completar algo (ej. una hora sin link de reunión) */
+  &.badge-aviso { background-color: var(--fono-aviso-fondo); color: var(--fono-aviso-texto); }
   &.badge-revision  { background-color: #fff3cd; color: #856404; }
   &.badge-aprobado  { background-color: #d1e7dd; color: #0f5132; }
   &.badge-rechazado { background-color: #f8d7da; color: #721c24; }

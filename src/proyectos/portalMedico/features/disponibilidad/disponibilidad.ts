@@ -5,12 +5,18 @@ import { Router, RouterModule } from '@angular/router';
 
 import { PortalMedicoService } from '@core/services/portal-medico/portal-medico';
 import { PmCitaService } from '@core/services/portal-medico/pm-cita';
-import { Disponibilidad } from '@core/services/portal-medico/interface/pm-cita.interface';
+import {
+  Disponibilidad,
+  EnlaceReunion,
+  PlataformaReunion
+} from '@core/services/portal-medico/interface/pm-cita.interface';
 import {
   CITA_DURACIONES_SUGERIDAS,
   CITA_DURACION_MINUTOS_DEFECTO
 } from '@core/services/portal-medico/constants/pm-cita.const';
 import { TextosService } from '@core/services/textos/textos';
+import { EnlaceReunionComponent } from '../../components/enlace-reunion/enlace-reunion';
+import { CambioEnlaceReunion } from '../../components/enlace-reunion/interface/enlace-reunion.interface';
 
 /**
  * Horas que el fonoaudiólogo publica para que los pacientes reserven.
@@ -23,7 +29,7 @@ import { TextosService } from '@core/services/textos/textos';
 @Component({
   selector: 'app-pm-disponibilidad',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, EnlaceReunionComponent],
   templateUrl: './disponibilidad.html'
 })
 export class PmDisponibilidadComponent implements OnInit {
@@ -49,6 +55,20 @@ export class PmDisponibilidadComponent implements OnInit {
   rechazados: { fecha_hora: string; motivo: string }[] = [];
 
   acreditacionPendiente = false;
+
+  // --- Link de la reunión online (Meet o Zoom) ---
+  /** Link que se asignará a las horas que se publiquen (opcional). */
+  enlacePublicar: CambioEnlaceReunion = {
+    valor: { plataforma_reunion: null, enlace_reunion: null },
+    valido: true
+  };
+  /** Hora cuyo link se está agregando o cambiando. */
+  bloqueEditandoEnlace: number | null = null;
+  guardandoEnlace = false;
+  errorEnlace: string | null = null;
+  /** Hora donde mostrar el aviso de "guardado": junto a ella, no arriba de la página. */
+  enlaceGuardadoEn: number | null = null;
+  mensajeEnlace: string | null = null;
 
   readonly duraciones = CITA_DURACIONES_SUGERIDAS;
 
@@ -129,7 +149,8 @@ export class PmDisponibilidadComponent implements OnInit {
 
   get puedePublicar(): boolean {
     return this.formulario.valid && !this.rangoInvalido
-      && this.horasCalculadas.length > 0 && !this.publicando;
+      && this.horasCalculadas.length > 0 && !this.publicando
+      && this.enlacePublicar.valido;
   }
 
   campoInvalido(campo: string): boolean {
@@ -159,7 +180,8 @@ export class PmDisponibilidadComponent implements OnInit {
 
     this.pmCitaService.publicarDisponibilidad(
       fechas,
-      Number(this.formulario.value.duracion_minutos)
+      Number(this.formulario.value.duracion_minutos),
+      this.enlacePublicar.valor
     ).subscribe({
       next: (resultado) => {
         this.publicando = false;
@@ -271,6 +293,85 @@ export class PmDisponibilidadComponent implements OnInit {
           err,
           this.t().pm_disponibilidad.error_retirar
         );
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // Link de la reunión online
+  // ---------------------------------------------------------------------
+
+  /** El link solo se puede gestionar en horas vigentes que todavía no ocurren. */
+  puedeEditarEnlace(bloque: Disponibilidad): boolean {
+    return bloque.estado && !bloque.ya_paso;
+  }
+
+  /** Próximas horas vigentes a las que les falta el link: motivo de la alerta. */
+  get bloquesSinEnlace(): Disponibilidad[] {
+    return this.bloques.filter(bloque =>
+      this.puedeEditarEnlace(bloque) && this.pmCitaService.faltaEnlaceReunion(bloque)
+    );
+  }
+
+  get textoAlertaSinEnlace(): string {
+    const sinEnlace = this.bloquesSinEnlace;
+    return this.textosService.reemplazarVariables(this.t().pm_reunion.alerta_horas_desc, {
+      cantidad: sinEnlace.length + '',
+      reservadas: sinEnlace.filter(bloque => bloque.esta_reservado).length + ''
+    });
+  }
+
+  nombrePlataforma(plataforma: PlataformaReunion | null): string {
+    return plataforma === 'ZOOM' ? this.t().pm_reunion.plataforma_ZOOM : this.t().pm_reunion.plataforma_MEET;
+  }
+
+  textoConEnlace(bloque: Disponibilidad): string {
+    return this.textosService.reemplazarVariables(this.t().pm_reunion.con_enlace, {
+      plataforma: this.nombrePlataforma(bloque.plataforma_reunion)
+    });
+  }
+
+  abrirEdicionEnlace(bloque: Disponibilidad): void {
+    this.bloqueEditandoEnlace = bloque.id_disponibilidad;
+    this.errorEnlace = null;
+    this.enlaceGuardadoEn = null;
+  }
+
+  cerrarEdicionEnlace(): void {
+    this.bloqueEditandoEnlace = null;
+    this.errorEnlace = null;
+  }
+
+  guardarEnlace(bloque: Disponibilidad, valor: EnlaceReunion): void {
+    this.enviarEnlace(bloque, valor, this.t().pm_reunion.exito_guardar);
+  }
+
+  quitarEnlace(bloque: Disponibilidad): void {
+    if (!confirm(this.t().pm_reunion.confirmar_quitar)) return;
+    this.enviarEnlace(bloque, { plataforma_reunion: null, enlace_reunion: null }, this.t().pm_reunion.exito_quitar);
+  }
+
+  private enviarEnlace(bloque: Disponibilidad, valor: EnlaceReunion, mensaje: string): void {
+    this.guardandoEnlace = true;
+    this.errorEnlace = null;
+    this.enlaceGuardadoEn = null;
+
+    this.pmCitaService.actualizarEnlaceDisponibilidad(bloque.id_disponibilidad, valor).subscribe({
+      next: (actualizado) => {
+        // Se reemplaza en el listado sin recargarlo todo.
+        this.bloques = this.bloques.map(b => b.id_disponibilidad === actualizado.id_disponibilidad ? actualizado : b);
+        this.guardandoEnlace = false;
+        this.bloqueEditandoEnlace = null;
+        this.enlaceGuardadoEn = actualizado.id_disponibilidad;
+        this.mensajeEnlace = mensaje;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.guardandoEnlace = false;
+        // Si falló al quitar (sin formulario abierto), el error se muestra en esa hora.
+        this.bloqueEditandoEnlace = bloque.id_disponibilidad;
+        this.errorEnlace = this.pmCitaService.extraerMensajeError(err, this.t().pm_reunion.error_guardar);
         this.cdr.detectChanges();
       }
     });

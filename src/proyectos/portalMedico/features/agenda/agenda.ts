@@ -7,7 +7,11 @@ import { PortalMedicoService } from '@core/services/portal-medico/portal-medico'
 import { PmClienteService } from '@core/services/portal-medico/pm-cliente';
 import { VideoSintomas } from '@core/services/portal-medico/interface/pm-cliente.interface';
 import { PmCitaService } from '@core/services/portal-medico/pm-cita';
-import { Cita } from '@core/services/portal-medico/interface/pm-cita.interface';
+import {
+  Cita,
+  EnlaceReunion,
+  PlataformaReunion
+} from '@core/services/portal-medico/interface/pm-cita.interface';
 import {
   CITA_HORAS_MINIMAS_ANTICIPACION,
   CITA_REPROGRAMACIONES_MAXIMAS
@@ -16,6 +20,7 @@ import { TextosService } from '@core/services/textos/textos';
 import { environment } from '../../../../environments/environment';
 
 import { AccionCita } from './interface/agenda.interface';
+import { EnlaceReunionComponent } from '../../components/enlace-reunion/enlace-reunion';
 
 /**
  * Agenda del fonoaudiólogo: las citas que sus pacientes reservaron con él.
@@ -28,7 +33,7 @@ import { AccionCita } from './interface/agenda.interface';
 @Component({
   selector: 'app-pm-agenda',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, EnlaceReunionComponent],
   templateUrl: './agenda.html'
 })
 export class PmAgendaComponent implements OnInit {
@@ -69,6 +74,14 @@ export class PmAgendaComponent implements OnInit {
   citasConVideosAbiertos = new Set<number>();
   cargandoVideosDe: number | null = null;
   errorVideosDe: number | null = null;
+
+  // --- Link de la reunión online (Meet o Zoom) ---
+  citaEditandoEnlace: number | null = null;
+  guardandoEnlace = false;
+  errorEnlace: string | null = null;
+  /** Cita donde mostrar el aviso de "guardado": junto a ella, no arriba de la página. */
+  enlaceGuardadoEn: number | null = null;
+  mensajeEnlace: string | null = null;
 
   readonly horasAnticipacion = CITA_HORAS_MINIMAS_ANTICIPACION;
   readonly reprogramacionesMaximas = CITA_REPROGRAMACIONES_MAXIMAS;
@@ -449,6 +462,80 @@ export class PmAgendaComponent implements OnInit {
    */
   irALaAcreditacion(): void {
     this.router.navigate(['/portalmedico/acreditacion']);
+  }
+
+  // ---------------------------------------------------------------------
+  // Link de la reunión online
+  // ---------------------------------------------------------------------
+
+  /** Solo tiene sentido en citas reservadas que todavía no ocurren. */
+  puedeEditarEnlace(cita: Cita): boolean {
+    return cita.esta_activa && !cita.ya_paso;
+  }
+
+  /** Próximas citas reservadas a las que les falta el link: motivo de la alerta. */
+  get citasSinEnlace(): Cita[] {
+    return this.citas.filter(cita => this.puedeEditarEnlace(cita) && this.pmCitaService.faltaEnlaceReunion(cita));
+  }
+
+  get textoAlertaSinEnlace(): string {
+    return this.textosService.reemplazarVariables(this.t().pm_reunion.alerta_citas_desc, {
+      cantidad: this.citasSinEnlace.length + ''
+    });
+  }
+
+  nombrePlataforma(plataforma: PlataformaReunion | null): string {
+    return plataforma === 'ZOOM' ? this.t().pm_reunion.plataforma_ZOOM : this.t().pm_reunion.plataforma_MEET;
+  }
+
+  textoConEnlace(cita: Cita): string {
+    return this.textosService.reemplazarVariables(this.t().pm_reunion.con_enlace, {
+      plataforma: this.nombrePlataforma(cita.plataforma_reunion)
+    });
+  }
+
+  abrirEdicionEnlace(cita: Cita): void {
+    this.citaEditandoEnlace = cita.id_cita;
+    this.errorEnlace = null;
+    this.enlaceGuardadoEn = null;
+  }
+
+  cerrarEdicionEnlace(): void {
+    this.citaEditandoEnlace = null;
+    this.errorEnlace = null;
+  }
+
+  guardarEnlace(cita: Cita, valor: EnlaceReunion): void {
+    this.enviarEnlace(cita, valor, this.t().pm_reunion.exito_guardar);
+  }
+
+  quitarEnlace(cita: Cita): void {
+    if (!confirm(this.t().pm_reunion.confirmar_quitar)) return;
+    this.enviarEnlace(cita, { plataforma_reunion: null, enlace_reunion: null }, this.t().pm_reunion.exito_quitar);
+  }
+
+  private enviarEnlace(cita: Cita, valor: EnlaceReunion, mensaje: string): void {
+    this.guardandoEnlace = true;
+    this.errorEnlace = null;
+    this.enlaceGuardadoEn = null;
+
+    this.pmCitaService.actualizarEnlaceCita(cita.id_cita, valor).subscribe({
+      next: (actualizada) => {
+        this.reemplazarCita(actualizada);
+        this.guardandoEnlace = false;
+        this.citaEditandoEnlace = null;
+        this.enlaceGuardadoEn = actualizada.id_cita;
+        this.mensajeEnlace = mensaje;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.guardandoEnlace = false;
+        // Si falló al quitar (sin formulario abierto), el error se muestra en esa cita.
+        this.citaEditandoEnlace = cita.id_cita;
+        this.errorEnlace = this.pmCitaService.extraerMensajeError(err, this.t().pm_reunion.error_guardar);
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   /** Al formulario del plan, que crea o ajusta según tenga o no uno activo. */
