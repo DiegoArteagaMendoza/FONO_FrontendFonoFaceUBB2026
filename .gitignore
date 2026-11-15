@@ -49,3 +49,9 @@ Thumbs.db
 .codex
 # Zips de deploy generados por deploy/scripts/empaquetar.sh
 /deploy/dist
+
+# Manual
+documentacion/
+
+# Imagenes
+documentacion/manual_usuario/img/*.jpg

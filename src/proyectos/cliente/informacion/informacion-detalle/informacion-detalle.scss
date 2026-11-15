@@ -57,12 +57,10 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 
-  /* Mapeo de colores */
-  &.NI { background-color: #d1e7dd; color: #0f5132; } 
-  &.PO { background-color: #fff3cd; color: #856404; } 
-  &.CA { background-color: #e2d9f3; color: #432874; } 
-  &.LO { background-color: #f8d7da; color: #721c24; } 
-  &.GE { background-color: #cff4fc; color: #055160; } 
+  /* Mapeo de colores por categoría de Información (FA, PE, PO) */
+  &.FA { background-color: #ede9fe; color: #5b21b6; } /* morado, igual que el listado de Fármacos */
+  &.PE { background-color: #ffa0a8; color: #b92231; }
+  &.PO { background-color: #ffe284; color: #a07a09; }
 }
 
 .hero-image {
