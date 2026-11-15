@@ -52,7 +52,8 @@ export const TEXTOS_SITIO = {
             subtitulo: "Administra los textos, títulos y enlaces que se muestran en el portal público.",
             nuevo_texto: "Nuevo Texto",
             filtrar_seccion: "Filtrar por Sección:",
-            seccion_todas: "Todas las secciones"
+            seccion_todas: "Todas las secciones",
+            mostrar_inactivos: "Mostrar elementos inactivos"
         },
     },
 
