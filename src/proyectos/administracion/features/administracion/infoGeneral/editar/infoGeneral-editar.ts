@@ -21,16 +21,9 @@ export class AdministracionInfoGeneralEditarComponent implements OnInit {
   cargandoDatos = true;
   errorMensaje = '';
 
-  // LISTA DE SECCIONES PERMITIDAS
-  seccionesDisponibles = [
-    { valor: 'inicio', etiqueta: 'Página de Inicio' },
-    { valor: 'farmacos', etiqueta: 'Módulo de Fármacos' },
-    { valor: 'prevencion', etiqueta: 'Módulo de Prevención' },
-    { valor: 'promocion', etiqueta: 'Módulo de Promoción' },
-    { valor: 'noticias', etiqueta: 'Módulo de Noticias' },
-    { valor: 'cuidados', etiqueta: 'Módulo de Cuidados' },
-    { valor: 'footer', etiqueta: 'Pie de Página (Footer)' }
-  ];
+  // Sección y clave no se editan: se conservan las del registro y se reenvían al guardar.
+  private seccionActual = '';
+  private claveActual = '';
 
   constructor(
     private fb: FormBuilder,
@@ -40,8 +33,6 @@ export class AdministracionInfoGeneralEditarComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     this.editarForm = this.fb.group({
-      seccion: ['', [Validators.required, Validators.maxLength(50)]],
-      clave: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z0-9_]+$')]],
       titulo: ['', [Validators.maxLength(150)]],
       descripcion: [''],
       enlace: ['', [Validators.maxLength(255)]],
@@ -64,9 +55,9 @@ export class AdministracionInfoGeneralEditarComponent implements OnInit {
       next: (datos: any[]) => {
         const infoActual = datos.find(item => item.id_info === this.idInfo);
         if (infoActual) {
+          this.seccionActual = infoActual.seccion;
+          this.claveActual = infoActual.clave;
           this.editarForm.patchValue({
-            seccion: infoActual.seccion,
-            clave: infoActual.clave,
             titulo: infoActual.titulo,
             descripcion: infoActual.descripcion,
             enlace: infoActual.enlace,
@@ -97,7 +88,11 @@ export class AdministracionInfoGeneralEditarComponent implements OnInit {
     this.isSubmitting = true;
     this.errorMensaje = '';
 
-    const payload = this.editarForm.value;
+    const payload = {
+      ...this.editarForm.value,
+      seccion: this.seccionActual,
+      clave: this.claveActual
+    };
 
     this.adminService.editarInfoGeneral(this.idInfo, payload).subscribe({
       next: (respuesta) => {

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AdministracionService } from '@core/services/administracion/administracion'; 
 import { TextosService } from '@core/services/textos/textos';
+import { PREFIJO_CLAVE, SECCION_INICIO } from './constants/infoGeneral-crear.const';
 
 @Component({
   selector: 'app-info-general-crear',
@@ -19,17 +20,6 @@ export class AdministracionInfoGeneralCrearComponent {
   isSubmitting = false;
   errorMensaje = '';
 
-  // LISTA DE SECCIONES PERMITIDAS
-  seccionesDisponibles = [
-    { valor: 'inicio', etiqueta: 'Página de Inicio' },
-    { valor: 'farmacos', etiqueta: 'Módulo de Fármacos' },
-    { valor: 'prevencion', etiqueta: 'Módulo de Prevención' },
-    { valor: 'promocion', etiqueta: 'Módulo de Promoción' },
-    { valor: 'noticias', etiqueta: 'Módulo de Noticias' },
-    { valor: 'cuidados', etiqueta: 'Módulo de Cuidados' },
-    { valor: 'footer', etiqueta: 'Pie de Página (Footer)' }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private adminService: AdministracionService,
@@ -37,8 +27,6 @@ export class AdministracionInfoGeneralCrearComponent {
     private cdr: ChangeDetectorRef
   ) {
     this.crearForm = this.fb.group({
-      seccion: ['', [Validators.required, Validators.maxLength(50)]],
-      clave: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z0-9_]+$')]], 
       titulo: ['', [Validators.maxLength(150)]],
       descripcion: [''],
       enlace: ['', [Validators.maxLength(255)]]
@@ -54,7 +42,11 @@ export class AdministracionInfoGeneralCrearComponent {
     this.isSubmitting = true;
     this.errorMensaje = '';
 
-    const payload = this.crearForm.value;
+    const payload = {
+      ...this.crearForm.value,
+      seccion: SECCION_INICIO,
+      clave: this.generarClave()
+    };
 
     this.adminService.crearInfoGeneral(payload).subscribe({
       next: (respuesta) => {
@@ -73,6 +65,13 @@ export class AdministracionInfoGeneralCrearComponent {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  /** Clave única: prefijo + marca de tiempo + sufijo aleatorio (solo [a-z0-9_], < 50 caracteres). */
+  private generarClave(): string {
+    const tiempo = Date.now().toString(36);
+    const aleatorio = Math.random().toString(36).slice(2, 8);
+    return `${PREFIJO_CLAVE}_${tiempo}_${aleatorio}`;
   }
 
   volver(): void {

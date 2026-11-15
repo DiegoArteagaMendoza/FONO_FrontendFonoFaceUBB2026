@@ -11,11 +11,14 @@
 
   <div class="filters-section" *ngIf="!cargando">
     <div class="filter-group">
-      <label for="filtroSeccion">{{ t().tablas.gestion_info_general.filtrar_seccion }}</label>
-      <select id="filtroSeccion" (change)="alCambiarFiltro($event)" [value]="filtroActual">
-        <option value="todas">{{ t().tablas.gestion_info_general.seccion_todas }}</option>
-        <option *ngFor="let sec of seccionesUnicas" [value]="sec">{{ sec }}</option>
-      </select>
+      <label for="mostrarInactivos">{{ t().tablas.gestion_info_general.mostrar_inactivos }}</label>
+      <input
+        id="mostrarInactivos"
+        type="checkbox"
+        [checked]="mostrarInactivos"
+        (change)="alternarInactivos($event)"
+        style="width: 1.2rem; height: 1.2rem; cursor: pointer;"
+      >
     </div>
   </div>
 
@@ -28,21 +31,17 @@
     <table class="data-table">
       <thead>
         <tr>
-          <th>Sección</th>
-          <th>Clave Única</th>
           <th>{{ t().tablas.titulo_tabla }}</th>
           <th>Estado</th>
           <th>{{ t().tablas.acciones_tabla }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="listaFiltrada.length === 0">
-          <td colspan="5" class="empty-state">{{ t().globales.sin_datos }}</td>
+        <tr *ngIf="listaVisible.length === 0">
+          <td colspan="3" class="empty-state">{{ t().globales.sin_datos }}</td>
         </tr>
 
-        <tr *ngFor="let item of listaFiltrada">
-          <td class="td-title"><strong>{{ item.seccion }}</strong></td>
-          <td><span class="badge" style="background: #f1f5f9; color: #475569;">{{ item.clave }}</span></td>
+        <tr *ngFor="let item of listaVisible">
           <td>{{ item.titulo || 'Sin título' }}</td>
           <td>
             <span class="badge" 
@@ -81,10 +80,6 @@
 
     <div class="modal-body">
       <div class="content-text">
-        <p>
-          <strong>Sección / Clave:</strong><br>
-          {{ itemSeleccionado.seccion }} / {{ itemSeleccionado.clave }}
-        </p>
         <p *ngIf="itemSeleccionado.titulo">
           <strong>{{ t().tablas.titulo_tabla }}:</strong><br>
           {{ itemSeleccionado.titulo }}
