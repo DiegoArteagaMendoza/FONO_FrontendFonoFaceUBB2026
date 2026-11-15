@@ -618,7 +618,11 @@ export const TEXTOS_SITIO = {
     portal_informacion_detalle: {
         volver: "← Volver a Información",
         cargando: "Cargando artículo...",
-        regresar: "Regresar"
+        regresar: "Regresar",
+        categoria_farmacos: "Fármacos",
+        categoria_prevencion: "Prevención",
+        categoria_promocion: "Promoción",
+        categoria_general: "General"
     },
 
     // VISTA DETALLE DE CUIDADO DEL PORTAL CLIENTE

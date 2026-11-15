@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InformacionService, Informacion } from '@core/services/informacion/informacion';
 import { TextosService } from '@core/services/textos/textos';
 import { obtenerUrlImagen as resolverUrlImagen } from '@core/utils/media-url.util';
+import { CATEGORIAS_INFORMACION, RUTA_INICIO_PORTAL } from './constants/informacion-detalle.const';
 
 @Component({
   selector: 'app-informacion-detalle',
@@ -19,16 +20,6 @@ export class InformacionDetalleComponent implements OnInit {
   articulo: Informacion | null = null;
   cargando = true;
   errorMensaje = '';
-
-  // 1. Agregamos el arreglo de categorías
-  categorias = [
-    { id: 'TODAS', nombre: 'Todas las áreas' },
-    { id: 'NI', nombre: 'Niños' },
-    { id: 'PO', nombre: 'Profesores' },
-    { id: 'CA', nombre: 'Cantantes y Actores' },
-    { id: 'LO', nombre: 'Locutores' },
-    { id: 'GE', nombre: 'Público General' }
-  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -72,13 +63,21 @@ export class InformacionDetalleComponent implements OnInit {
     return resolverUrlImagen(ruta);
   }
 
-  // 2. Agregamos el método para obtener el nombre completo
+  // Nombre visible de la categoría del artículo (FA, PE o PO), desde textos.ts
   obtenerNombreCategoria(id: string): string {
-    const cat = this.categorias.find(c => c.id === id);
-    return cat ? cat.nombre : 'General';
+    const textos = this.t().portal_informacion_detalle;
+    const categoria = this.categoriaDe(id);
+    return categoria ? textos[categoria.clave] : textos.categoria_general;
   }
 
+  // Vuelve al listado del apartado del artículo; sin artículo o con una
+  // categoría desconocida, al inicio del portal
   volver(): void {
-    this.router.navigate(['/portal/inicio']);
+    const categoria = this.articulo ? this.categoriaDe(this.articulo.categoria) : undefined;
+    this.router.navigate([categoria ? categoria.ruta : RUTA_INICIO_PORTAL]);
+  }
+
+  private categoriaDe(id: string) {
+    return CATEGORIAS_INFORMACION[id as keyof typeof CATEGORIAS_INFORMACION];
   }
 }
