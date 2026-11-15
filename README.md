@@ -33,8 +33,9 @@ En modo desarrollo, el frontend apunta a `src/environments/environment.developme
 
 La URL del backend se define en `src/environments/`:
 
-- `environment.development.ts` → usada por `ng serve` y por `ng build --configuration development`.
-- `environment.ts` → usada por el build de producción (`ng build` por defecto).
+- `environment.development.ts` → usada por `ng serve` y por `ng build --configuration development` (backends locales en `127.0.0.1:8000` / `8001`).
+- `environment.develop.ts` → usada por `ng build --configuration develop`: build optimizado para el entorno develop en cPanel (`dev.vocare-ubb.cl`, backends `dev-api` / `dev-portal`).
+- `environment.ts` → usada por el build de producción (`ng build` por defecto): `vocare-ubb.cl`, backends `api.vocare-ubb.cl` / `portal.vocare-ubb.cl`.
 
 Las rutas concretas de cada endpoint (login, informacion, cuidados, noticias, etc.) están centralizadas en [src/app/core/constants/api.constants.ts](src/app/core/constants/api.constants.ts), para no repetir strings de URLs en los servicios.
 
@@ -45,6 +46,12 @@ pnpm build
 ```
 
 Compila la aplicación y deja los artefactos en `dist/FrontendVocareUBB/`. Por defecto usa la configuración `production` (optimizada) y el `environment.ts` de producción.
+
+Para el entorno develop (`dev.vocare-ubb.cl`), mismo build optimizado pero apuntando a los backends de develop:
+
+```bash
+pnpm build --configuration develop
+```
 
 ## Tests
 
