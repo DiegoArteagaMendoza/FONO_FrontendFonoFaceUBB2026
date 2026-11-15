@@ -18,39 +18,6 @@
     <form [formGroup]="crearForm" (ngSubmit)="onSubmit()" class="custom-form">
       
       <div class="form-row">
-        
-        <!-- CAMBIO A SELECT -->
-        <div class="form-group flex-1">
-          <label for="seccion">{{ t().creacion_info_general.label_seccion }}</label>
-          <select 
-            id="seccion" 
-            formControlName="seccion" 
-            [class.is-invalid]="crearForm.get('seccion')?.invalid && crearForm.get('seccion')?.touched"
-          >
-            <option value="" disabled selected>Seleccione una sección...</option>
-            <option *ngFor="let sec of seccionesDisponibles" [value]="sec.valor">{{ sec.etiqueta }}</option>
-          </select>
-          <small class="error-text" *ngIf="crearForm.get('seccion')?.hasError('required') && crearForm.get('seccion')?.touched">
-            {{ t().creacion_info_general.alerta_seccion }}
-          </small>
-        </div>
-
-        <div class="form-group flex-1">
-          <label for="clave">{{ t().creacion_info_general.label_clave }}</label>
-          <input 
-            id="clave" 
-            type="text" 
-            formControlName="clave" 
-            [placeholder]="t().creacion_info_general.placeholder_clave"
-            [class.is-invalid]="crearForm.get('clave')?.invalid && crearForm.get('clave')?.touched"
-          >
-          <small class="error-text" *ngIf="crearForm.get('clave')?.invalid && crearForm.get('clave')?.touched">
-            {{ t().creacion_info_general.alerta_clave }}
-          </small>
-        </div>
-      </div>
-
-      <div class="form-row">
         <div class="form-group flex-2">
           <label for="titulo">{{ t().creacion_info_general.label_titulo_texto }}</label>
           <input 

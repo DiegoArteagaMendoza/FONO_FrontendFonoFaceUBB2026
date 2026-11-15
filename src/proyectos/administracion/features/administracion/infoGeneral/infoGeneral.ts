@@ -16,12 +16,10 @@ export class AdministracionInformacionGeneralComponent implements OnInit {
   public textosService = inject(TextosService);
   public t = this.textosService.t;
 
-  listaOriginal: InfoGeneralItem[] = [];
-  listaFiltrada: InfoGeneralItem[] = [];
-  seccionesUnicas: string[] = [];
-  
+  lista: InfoGeneralItem[] = [];
+  mostrarInactivos = false;
+
   cargando = true;
-  filtroActual = 'todas';
   itemSeleccionado: InfoGeneralItem | null = null;
 
   constructor(
@@ -38,12 +36,7 @@ export class AdministracionInformacionGeneralComponent implements OnInit {
     this.cargando = true;
     this.adminService.getInfoGeneralListarAdmin().subscribe({
       next: (datos) => {
-        this.listaOriginal = datos;
-        
-        // Extraemos las secciones únicas para el filtro
-        this.seccionesUnicas = [...new Set(datos.map(item => item.seccion))];
-        
-        this.aplicarFiltro();
+        this.lista = datos;
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -55,17 +48,13 @@ export class AdministracionInformacionGeneralComponent implements OnInit {
     });
   }
 
-  alCambiarFiltro(event: any): void {
-    this.filtroActual = event.target.value;
-    this.aplicarFiltro();
+  /** Por defecto solo los activos; los inactivos se ven al marcar "Mostrar elementos inactivos". */
+  get listaVisible(): InfoGeneralItem[] {
+    return this.mostrarInactivos ? this.lista : this.lista.filter(item => item.estado);
   }
 
-  aplicarFiltro(): void {
-    if (this.filtroActual === 'todas') {
-      this.listaFiltrada = [...this.listaOriginal];
-    } else {
-      this.listaFiltrada = this.listaOriginal.filter(item => item.seccion === this.filtroActual);
-    }
+  alternarInactivos(event: Event): void {
+    this.mostrarInactivos = (event.target as HTMLInputElement).checked;
     this.cdr.detectChanges();
   }
 
@@ -84,13 +73,13 @@ export class AdministracionInformacionGeneralComponent implements OnInit {
       this.adminService.eliminarInfoGeneral(id).subscribe({
         next: () => {
           // Borrado lógico visual
-          this.listaOriginal = this.listaOriginal.map(item => {
+          this.lista = this.lista.map(item => {
             if (item.id_info === id) {
               return { ...item, estado: false };
             }
             return item;
           });
-          this.aplicarFiltro();
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Error al eliminar', err);

@@ -1,0 +1,197 @@
+================================================================================
+  VOCARE UBB - FRONTEND
+  CÓMO HACER EL BUILD DE PRODUCCIÓN Y SUBIRLO A vocare-ubb.cl
+================================================================================
+
+Este documento explica, paso a paso, cómo generar una nueva versión del
+frontend para PRODUCCIÓN y publicarla en el hosting (cPanel de V2Networks).
+
+Entornos que existen:
+
+  Entorno       Frontend                     Backends que usa
+  -----------   --------------------------   -------------------------------------
+  Local         http://localhost:4200        127.0.0.1:8000 / 127.0.0.1:8001
+  Develop       https://dev.vocare-ubb.cl    dev-api / dev-portal.vocare-ubb.cl
+  PRODUCCIÓN    https://vocare-ubb.cl        api / portal.vocare-ubb.cl
+
+Cada entorno tiene su propio archivo de configuración en src/environments/:
+
+  environment.development.ts  -> local     (pnpm start)
+  environment.develop.ts      -> develop   (pnpm build --configuration develop)
+  environment.ts              -> PRODUCCIÓN (pnpm build)
+
+IMPORTANTE: "pnpm build" a secas SIEMPRE genera el build de PRODUCCIÓN.
+Para develop hay que agregar "--configuration develop".
+
+
+--------------------------------------------------------------------------------
+1. ANTES DE EMPEZAR
+--------------------------------------------------------------------------------
+
+  1.1  Estar en la rama correcta y con los últimos cambios aprobados:
+
+         git checkout master
+         git pull
+
+  1.2  Instalar o actualizar dependencias (solo si cambió package.json o es
+       la primera vez en este equipo):
+
+         pnpm install
+
+  1.3  Probar los cambios en local, como siempre:
+
+         pnpm start
+
+       Abrir http://localhost:4200 con los backends locales corriendo y
+       revisar que todo funcione. No se sube nada a producción sin probarlo
+       antes en local.
+
+  1.4  (Opcional) Probar la configuración de producción en local:
+
+         pnpm start --configuration production
+
+       En el navegador (F12 -> pestaña Network) las peticiones deben ir a
+       https://api.vocare-ubb.cl y https://portal.vocare-ubb.cl. Es NORMAL
+       que fallen con error de CORS: los backends de producción solo aceptan
+       peticiones desde https://vocare-ubb.cl. Lo que se comprueba aquí es
+       que las URLs sean las de producción.
+
+
+--------------------------------------------------------------------------------
+2. GENERAR EL BUILD
+--------------------------------------------------------------------------------
+
+  2.1  Desde la raíz del proyecto (Frontend_Fono/):
+
+         pnpm build
+
+  2.2  El resultado queda en:
+
+         dist/FrontendVocareUBB/browser/
+
+       Con estos archivos:
+
+         index.html
+         main-XXXXXXXX.js      (el nombre cambia en cada build)
+         styles-XXXXXXXX.css   (el nombre cambia en cada build)
+         favicon.ico
+         _redirects            (NO se sube, no se usa en cPanel)
+
+  2.3  Avisos esperables: el build puede mostrar "WARNING ... exceeded
+       maximum budget" y avisos "Deprecation" de Sass. Son solo
+       advertencias y no impiden el build. Si aparece "ERROR", el build
+       falló y no hay que subir nada.
+
+
+--------------------------------------------------------------------------------
+3. VERIFICAR QUE EL BUILD APUNTA A PRODUCCIÓN
+--------------------------------------------------------------------------------
+
+  Antes de armar el zip, confirmar que el bundle tiene las URLs correctas:
+
+    grep -ohE 'https://(dev-)?(api|portal)\.vocare-ubb\.cl|127\.0\.0\.1:800[01]' \
+      dist/FrontendVocareUBB/browser/main-*.js | sort -u
+
+  Resultado correcto (solo estas dos líneas):
+
+    https://api.vocare-ubb.cl
+    https://portal.vocare-ubb.cl
+
+  Si aparece "dev-api", "dev-portal" o "127.0.0.1", el build NO es de
+  producción: revisar el comando usado y src/environments/environment.ts.
+
+
+--------------------------------------------------------------------------------
+4. ARMAR EL ZIP
+--------------------------------------------------------------------------------
+
+  Los archivos tienen que quedar en la RAÍZ del zip, no dentro de una
+  carpeta "browser/":
+
+    cd dist/FrontendVocareUBB/browser
+    zip ../../../deploy/dist/frontend-vocare-produccion.zip \
+        index.html main-*.js styles-*.css favicon.ico
+    cd ../../..
+
+  Resultado: deploy/dist/frontend-vocare-produccion.zip
+
+  (Si ya existía un zip anterior con ese nombre, renombrarlo antes, por
+  ejemplo frontend-vocare-produccion-AAAA-MM-DD.zip, para tener respaldo.)
+
+  Sin terminal Linux: comprimir esos 4 archivos seleccionándolos
+  directamente (no la carpeta) con el compresor del sistema.
+
+
+--------------------------------------------------------------------------------
+5. SUBIR A cPanel (Administrador de archivos)
+--------------------------------------------------------------------------------
+
+  5.1  Entrar a cPanel -> Administrador de archivos -> /home/liloqkav/public_html
+       Activar "Settings -> Show Hidden Files" para ver los archivos ocultos.
+
+  5.2  "Cargar" -> subir frontend-vocare-produccion.zip a public_html.
+
+  5.3  Clic derecho sobre el zip -> "Extract" -> extraer en public_html.
+       Si pregunta, aceptar sobrescribir. Así:
+         - index.html y favicon.ico se reemplazan.
+         - los main-*.js y styles-*.css NUEVOS quedan junto a los viejos
+           (tienen otro nombre), así el sitio no se cae durante la subida.
+
+  5.4  Abrir https://vocare-ubb.cl y recargar sin caché (Ctrl + Shift + R).
+       Revisar que la versión nueva funcione.
+
+  5.5  Limpieza: borrar los main-*.js y styles-*.css VIEJOS y el .zip.
+       Para saber cuáles son los nuevos, abrir index.html con "View": ahí
+       aparecen los nombres de los archivos que usa. También se distinguen
+       por la fecha de modificación (los viejos son más antiguos).
+
+
+  NUNCA BORRAR en public_html:
+
+    .well-known/   -> la usa AutoSSL para renovar el certificado HTTPS.
+    cgi-bin/       -> carpeta del sistema de cPanel.
+    .htaccess      -> si existe y no lo subimos nosotros, puede tener
+                      reglas del hosting.
+
+  NO hace falta subir un .htaccess: la app usa rutas con "#"
+  (ej. https://vocare-ubb.cl/#/portalmedico), así que recargar en
+  cualquier página funciona sin reglas del servidor.
+
+
+--------------------------------------------------------------------------------
+6. SI ALGO SALE MAL
+--------------------------------------------------------------------------------
+
+  Síntoma                                   Qué revisar
+  ---------------------------------------   ------------------------------------
+  Se sigue viendo la versión anterior       Recargar con Ctrl + Shift + R.
+                                            Revisar que index.html se haya
+                                            reemplazado (fecha de modificación).
+
+  Pantalla en blanco                        F12 -> Console. Suele ser que falta
+                                            el main-*.js nuevo (no se extrajo
+                                            bien) o se borró el que no era.
+
+  Errores de CORS en la consola             Las variables CORS_ALLOWED_ORIGINS
+  (desde https://vocare-ubb.cl)             de AMBAS apps Python en cPanel
+                                            deben incluir https://vocare-ubb.cl.
+
+  Las peticiones van a dev-api/dev-portal   Se subió un build de develop. Volver
+                                            a generar con "pnpm build" (paso 2).
+
+  Volver a la versión anterior              Subir y extraer el zip de respaldo
+                                            del paso 4.
+
+
+--------------------------------------------------------------------------------
+7. BUILD PARA DEVELOP (dev.vocare-ubb.cl), POR REFERENCIA
+--------------------------------------------------------------------------------
+
+  Mismo proceso, cambiando solo el comando del paso 2:
+
+    pnpm build --configuration develop
+
+  En el paso 3 deben aparecer dev-api.vocare-ubb.cl y dev-portal.vocare-ubb.cl,
+  y el zip se sube a la carpeta pública de dev.vocare-ubb.cl, NO a public_html.
+
+================================================================================
